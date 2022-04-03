@@ -13,7 +13,7 @@ def fasta_generator(inp_number):
         upper = ''.join(random.choice('ATGC') for j in range(0, 7)) ## j is for how many upper-cased base you need
         line2 = '^NN' + lower + upper
         seq = line1 + line2
-        print(seq)
+        #print(seq)
         f.write('%s\n' % seq)
     f.close()
 
