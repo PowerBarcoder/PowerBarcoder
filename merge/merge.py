@@ -1,6 +1,8 @@
+from typing import List
 from Miseq import Miseq
 import subprocess
 from subprocess import PIPE
+from BlastRef import BlastRef
 # 會遇到bug的情況1：in、del與snp連續，即中間沒有被無變異點位隔開時，r1&ref_r1之間的點位計算會出錯(去Miseq.py改)
 # 會遇到bug的情況2：只有一個位點的indel偵測不到，r1&ref_r1之間的點位計算會出錯(去Miseq.py改)
 ######################################
@@ -19,12 +21,37 @@ from subprocess import PIPE
 ######################################
 
 
+# 變單行
+
+
+
+
+
 # 前置步驟
 # blast
 # parsing blast的結果(by XX.py，要找一下之前寫的)
+
+localBlast=BlastRef()
+localBlast.blastRef("C:/Users/123/")
+print(localBlast.refList)
+refList=localBlast.refList
+print(localBlast.qseqidList)
+qseqidList=localBlast.qseqidList
+
+
+
+
+
 # 在py裡面用shell script做mafft
 # 讀兩個.fs進來當r1、ref_r1、r2、ref_r2
     # 注意讀序列順序，如果mafft會斷行，要再拼一次
+
+
+# 全部做完試trnL-F
+
+# trim
+
+
 
 # 底下先暫時使用假資料當例子跑
 
@@ -307,6 +334,10 @@ elif(overlape==True):
         elif ((trim_0_overlap_align[i]=="-" ) or (trim_1_overlap_align[i]=="-")):# N A/G/C/T/-
             overlap_seq=overlap_seq+"N"
             gapNumInOverlap+=1
+
+            # gap+gap=N
+            # gap+ATCG=atcg
+
         else:
             print("出錯了GG")
     print("overlap_num_align",overlap_num_align)
