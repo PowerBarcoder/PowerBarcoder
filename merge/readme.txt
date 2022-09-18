@@ -4,9 +4,6 @@
 //home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/r1
 
 
-
-
-
 執行順序
  - '00_blastForRef.sh'：執行localBlast，獲得參考序列的檔案refResult.txt
  - 'BlastResult.py'：將localBlast結果轉換成物件(BlastRef)，並寫出成檔案blastResult.txt
