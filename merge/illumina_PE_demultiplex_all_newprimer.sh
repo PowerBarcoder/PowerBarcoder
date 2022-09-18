@@ -1,5 +1,8 @@
 #! /bin/bash
-
+set -o allexport
+. ./app.conf
+set +o allexport
+echo $targetFilePrefixConfig
 
 targetFilePrefix="HGT22043_2_DNAL1_000000000-KHMTG_L1"
 targetFileR1FileName="${targetFilePrefix}_R1.fastq.gz"
