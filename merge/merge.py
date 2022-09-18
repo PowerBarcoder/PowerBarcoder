@@ -304,3 +304,12 @@ for filename in candidate_list:
     merge_seq_text=">"+filename+"\n"+merge_seq
     with open(mergepath+filename,"w",encoding="UTF-8") as file:
         file.write(merge_seq_text)
+
+
+
+
+
+# 最終檔案要長這樣
+# /home/lykuo/lab_data/NGS_data/miseq/LIB720/rbcLN_demultiplex/denoice_best/r1
+# >Diplazium_sylvaticum_Wade4851_KTHU1447_01_r1_0.548_abundance_23_r2_0.548_abundance_23
+# GGCTGGTGTCAAAGATTACCGACTGAACTATTACACCCCCGAATACAAGACCAAAGATACTGACATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCAGCTGAGGAAGCCGGAGCTGCGGTAGCTGCGGAATCCTCCACGGGTACGTGGACCACTGTATGGACAGACGGGTTGACCAGTCTTGACCGTTACAAGGGCCGATGCTACGACATCGAACCTGTCGCTGGGGAGGAAAACCAGTATATCGCGTATGTAGCTT
