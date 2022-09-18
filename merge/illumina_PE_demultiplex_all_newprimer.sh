@@ -1,5 +1,6 @@
 #! /bin/bash
 
+
 targetFilePrefix="HGT22043_2_DNAL1_000000000-KHMTG_L1"
 targetFileR1FileName="${targetFilePrefix}_R1.fastq.gz"
 targetFileR2FileName="${targetFilePrefix}_R2.fastq.gz"
@@ -39,7 +40,13 @@ cd ${nameOfLoci}_demultiplex
 # # 做demultiplex
 # #"../barcodes_rbcLC_start_0.fasta" and "../barcodes_rbcLC_start2_0.fasta" are VARIABLEs (sequences of indexed primers)
 # #{name1} and {name2} are header names of fasta
-${myCutadapt}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:../barcodes_rbcL_start_0.fasta -G file:../barcodes_rbcLN_start2_0.fasta --action=none -o rbcLN_{name1}_{name2}_r1.fq -p rbcLN_{name1}_{name2}_r2.fq ../rbcLN_amplicon_r1.fq ../rbcLN_amplicon_r2.fq -j $threadNumber
+
+barcodesFile1='barcodes_rbcL_start_0.fasta'
+barcodesFile2='barcodes_rbcLN_start2_0.fasta'
+# AB test
+# ${myCutadapt}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:../barcodes_rbcL_start_0.fasta -G file:../barcodes_rbcLN_start2_0.fasta --action=none -o rbcLN_{name1}_{name2}_r1.fq -p rbcLN_{name1}_{name2}_r2.fq ../rbcLN_amplicon_r1.fq ../rbcLN_amplicon_r2.fq -j $threadNumber
+${myCutadapt}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:../${barcodesFile1} -G file:../${barcodesFile2} --action=none -o rbcLN_{name1}_{name2}_r1.fq -p rbcLN_{name1}_{name2}_r2.fq ../${amplicon_r1} ../${amplicon_r2} -j $threadNumber
+
 
 # # 迴圈去掉primer
 minimumLengthOfForLoop="150"
