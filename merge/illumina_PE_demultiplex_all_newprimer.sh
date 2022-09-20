@@ -1,8 +1,6 @@
 #! /bin/bash
-set -o allexport
-. ./app.conf
-set +o allexport
-echo $targetFilePrefixConfig
+. ./config.sh
+
 
 targetFilePrefix="HGT22043_2_DNAL1_000000000-KHMTG_L1"
 targetFileR1FileName="${targetFilePrefix}_R1.fastq.gz"
@@ -85,3 +83,7 @@ cd ..
 Rscript dada2_denoise_PE_newprimer.r > log_dada2.txt
 
 
+
+
+# # -----------------------nonmerge的要來執行python-----------------------------
+sh merge.sh
