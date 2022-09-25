@@ -1,21 +1,32 @@
+# ! /bin/bash
 
 # 20220918 現在所有人都要從這個路徑下開始工作  /home/lykuo/lab_data/NGS_data/miseq/test_LIB720
-
-blastdbDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
-
-targetLibraryFilePath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/fermalies_rbcL.fasta"
-
-# blastSequenceDir="/home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/rbcLC_demultiplex/denoice_best/"
-blastSequenceDir="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
+echo "00_blastForRef start"
 
 localBlastToolDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
 
+targetLibraryFilePath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/fermalies_rbcL.fasta"
 
-${blastdbdir}makeblastdb -in ${targetLibraryDir} -dbtype nucl -out refDB
+blastSequenceDir="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
 
-cat ${blastSequenceDir}r1/*.fas ${blastSequenceDir}r2/*.fas > catQuery.fas
 
-${localBlastToolDir}blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
+# TODO #2 這邊要考慮把前一次blast的東西刪掉，不然blastResult.txt會沒有
+
+
+# ${localBlastToolDir}makeblastdb -in ${targetLibraryFilePath} -dbtype nucl -out refDB
+# /home/lykuo/ncbi-blast-2.10.0+/bin/makeblastdb -in /home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/fermalies_rbcL.fasta -dbtype nucl -out refDB
+/home/lykuo/ncbi-blast-2.10.0+/bin/makeblastdb -in /home/lykuo/lab_data/NGS_data/miseq/test_LIB720/fermalies_rbcL.fasta -dbtype nucl -out refDB
+
+# cat ${blastSequenceDir}r1/*.fas ${blastSequenceDir}r2/*.fas > catQuery.fas
+# cat /home/sktang/powerBC/r1/*.fas /home/sktang/powerBC/r2/*.fas > catQuery.fas
+cat /home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/r1/*.fas /home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/r2/*.fas > catQuery.fas
+
+# ${localBlastToolDir}blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
+# /home/lykuo/ncbi-blast-2.10.0+/bin/blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
+/home/lykuo/ncbi-blast-2.10.0+/bin/blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
+
+
+
 
 
 # Blast輸出的結果

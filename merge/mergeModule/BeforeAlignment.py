@@ -1,20 +1,26 @@
 # -*- coding: utf-8 -*-
 
 from encodings import utf_8
+import subprocess
+from subprocess import PIPE
+import os
+
+print("BeforeAlignment.py running")
 
 # loadpath="/home/sktang/powerBC/"
-loadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
+localBlastLoadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/"
+outputLoadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
 
 
 # localblast完的序列
-fastaFileDir=loadpath+"blastResult/"
+fastaFileDir=localBlastLoadpath+"blastResult/"
 fastaFileName="blastResult.txt"
 fastaFile=fastaFileDir+fastaFileName
 # print(fastaFile)
 
 # 待測序列
-def qseqidFile(loadpath,rWho,fileName):
-    qseqidFileDir=loadpath+rWho+"/"
+def qseqidFile(outputLoadpath,rWho,fileName):
+    qseqidFileDir=outputLoadpath+rWho+"/"
     qseqidFileName=fileName
     qseqidFile=qseqidFileDir+qseqidFileName
     return qseqidFile
@@ -56,7 +62,12 @@ r1RowList=[]
 r2RowList=[]
 targetRowList=[]
 def createRefFile(rWho,rWhoRowList):
-    with open (loadpath+rWho+"Ref/"+qseqid,"w") as RefFile:
+    if(os.path.isdir(outputLoadpath+rWho+'Ref')==False):
+    # 沒資料夾就建一個資料夾
+        makedir_rWhoRef = 'mkdir '+ outputLoadpath+rWho+'Ref'
+        subprocess.run(makedir_rWhoRef, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+    # 資料夾有了再開始工作
+    with open (outputLoadpath+rWho+"Ref/"+qseqid,"w") as RefFile:
         finalRowList=rWhoRowList+targetRowList
         RefFile.writelines(finalRowList)
         # print(RefFile.read())
@@ -81,7 +92,7 @@ with open(fastaFile,"r")as file:
         # r1
 
         # 待測序列r1製作
-        qseqidFileStr=qseqidFile(loadpath,"r1",qseqid)
+        qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid)
         # print(qseqidFile(loadpath,forword,qseqid))
         r1RowList=[]
         with open (qseqidFileStr,"r") as qR1File:
@@ -91,7 +102,7 @@ with open(fastaFile,"r")as file:
             # print(r1RowList)
 
         # 待測序列r2製作
-        qseqidFileStr=qseqidFile(loadpath,"r2",qseqid)
+        qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid)
         # print(qseqidFile(loadpath,forword,qseqid))
         r2RowList=[]
         with open (qseqidFileStr,"r") as qR2File:

@@ -11,12 +11,13 @@
 
 sh ./mergeModule/00_blastForRef.sh
 python3 ./mergeModule/BlastResult.py
-# for File in *r1.fq
-# 	do
-#     python3 ./mergeModule/BeforeAlignment.py
-#     python3 ./mergeModule/Alignment.py
-#     python3 ./mergeModule/merge.py
-# 	done
+
+# # for File in *r1.fq
+# # 	do
+# #     python3 ./mergeModule/BeforeAlignment.py
+# #     python3 ./mergeModule/Alignment.py
+# #     python3 ./mergeModule/merge.py
+# # 	done
 python3 ./mergeModule/BeforeAlignment.py
-python3 ./mergeModule/Alignment.py
-python3 ./mergeModule/merge.py
+# python3 ./mergeModule/Alignment.py
+# python3 ./mergeModule/merge.py

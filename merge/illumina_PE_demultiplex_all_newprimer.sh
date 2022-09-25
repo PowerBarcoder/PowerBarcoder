@@ -1,4 +1,6 @@
 #! /bin/bash
+
+
 . ./config.sh
 
 
@@ -80,10 +82,12 @@ mkdir denoice_best/nonmerged/r2
 cd ..
 
 # # -----------------------轉去執行R-----------------------------
+echo "dada2_denoise_PE_newprimer.r"
 Rscript dada2_denoise_PE_newprimer.r > log_dada2.txt
 
 
 
 
 # # -----------------------nonmerge的要來執行python-----------------------------
-sh merge.sh
+echo "start merge.sh"
+bash merge.sh

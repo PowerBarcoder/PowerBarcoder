@@ -3,11 +3,16 @@
 # sktang@Kuo-fern-lab:~/powerBC$ python3 alignment.py
 
 from BlastRef import BlastRef
+import subprocess
+from subprocess import PIPE
+import os
+
+print("BlastResult.py running")
 
 localBlast=BlastRef()
 
 # loadpath="/home/sktang/powerBC/"
-loadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
+loadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/"
 
 localBlast.blastRef(loadpath)
 
@@ -92,6 +97,12 @@ rWhoList=localBlast.rWhoList
 def determineDirection(i):
     result=str(qseqidList[i]) +'\t'+str(sseqidList[i])+'\t'+str(pidentList[i]) +'\t'+str(lengthList[i])+'\t'+str(mismatchList[i])+'\t'+str(gapopenList[i])+'\t'+str(qstartList[i])+'\t'+str(qendList[i])+'\t'+str(sstartList[i])+'\t'+str(sendList[i])+'\t'+str(evalueList[i])+'\t'+str(bitscoreList[i])[:-2] +'\t'+str(qstartMinusQendList[i])+'\t'+str(sstartMinusSendList[i])+'\t'+str(rWhoList[i])
     return result
+
+
+if(os.path.isdir(loadpath +'blastResult')==False):
+    # 沒資料夾就建一個資料夾
+    makedir_blastResult = 'mkdir '+ loadpath +'blastResult'
+    subprocess.run(makedir_blastResult, shell=True, check=True, stdout=PIPE, stderr=PIPE)
 
 
 for i in range(0,len(qseqidList)):
