@@ -83,15 +83,15 @@ import subprocess
 from subprocess import PIPE
 import collections
 
-R1_ref = "Microlepia_substrigosa_CYH20090514-016_0514-016_01_r1.txt"
-R2_ref = "Microlepia_substrigosa_CYH20090514-016_0514-016_01_r2.txt"
+# R1_ref = "Microlepia_substrigosa_CYH20090514-016_0514-016_01_r1.txt"
+# R2_ref = "Microlepia_substrigosa_CYH20090514-016_0514-016_01_r2.txt"
 
-AligmentR1 = "mafft --thread 10 --maxiterate 16 --globalpair /home/sktang/powerBC/r1Ref/" + R1_ref + "> ./aligned/" + R1_ref + ".al"
-AligmentR2 = "mafft --thread 10 --maxiterate 16 --globalpair /home/sktang/powerBC/r2Ref/" + R2_ref + "> ./aligned/" + R2_ref + ".al"
+# AligmentR1 = "mafft --thread 10 --maxiterate 16 --globalpair /home/sktang/powerBC/r1Ref/" + R1_ref + "> ./aligned/" + R1_ref + ".al"
+# AligmentR2 = "mafft --thread 10 --maxiterate 16 --globalpair /home/sktang/powerBC/r2Ref/" + R2_ref + "> ./aligned/" + R2_ref + ".al"
 
-		try:
-			subprocess.run(AligmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
-            subprocess.run(AligmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
-		except Exception as e:
-			print(e)
+# 		try:
+# 			subprocess.run(AligmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+#             subprocess.run(AligmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+# 		except Exception as e:
+# 			print(e)
 
