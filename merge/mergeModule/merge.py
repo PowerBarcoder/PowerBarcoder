@@ -7,6 +7,8 @@ from FastaUnit import FastaUnit
 from os import listdir
 from os.path import isfile, isdir, join
 
+print("merge.py is running")
+
 ######################################
 # 運作流程
 # r1跟其align序列ref_r1比對，獲得r1_p2及其他點位資訊
@@ -17,9 +19,12 @@ from os.path import isfile, isdir, join
 ######################################
 
 # 指定要列出的檔案目錄
-loadpath="/home/sktang/powerBC/aligned/"
 # loadpath="C:/Users/kwz50/aligned/"
-mergepath="/home/sktang/powerBC/mergeSeq/"
+# loadpath="/home/sktang/powerBC/aligned/"
+loadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/aligned/"
+# mergepath="/home/sktang/powerBC/mergeSeq/"
+mergepath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/mergeSeq/"
+
 
 # 取得所有檔案與子目錄名稱
 files = listdir(loadpath)
@@ -116,12 +121,12 @@ for filename in candidate_list:
     # 步驟一
     # 先建立物件，再呼叫方法獲得拼接資訊
     r1Object = Miseq()
-    Miseq.stickSiteFinder(r1Object, r1, ref_r1, "r1")
+    Miseq.stickSiteFinder(r1Object,filename, r1, ref_r1, "r1")
     r2Object = Miseq()
-    Miseq.stickSiteFinder(r2Object, r2, ref_r2, "r2")
-    print(r1Object.show())
+    Miseq.stickSiteFinder(r2Object,filename, r2, ref_r2, "r2")
+    # print(r1Object.show())
     # forword: True, stickSite(r1_p2,r2_p1): 237, F_Rtrim: deprecated_parameter, delSite: {22: 7, 234: 2}, inSite: {45: 6, 230: 3, 237: 96}
-    print(r2Object.show())
+    # print(r2Object.show())
     # forword: False, stickSite(r1_p2,r2_p1): 221, F_Rtrim: deprecated_parameter, delSite: {227: 2, 326: 168}, inSite: {0: 221}
 
 
@@ -155,7 +160,7 @@ for filename in candidate_list:
             # print("add Ns1")
             overlape = False
         else:
-            print("something wrong")
+            print("merge.py 163: something wrong")
 
 
     # # 步驟三
@@ -204,20 +209,20 @@ for filename in candidate_list:
         # if(ovelap區間的序列內容跟長度完全一樣):
         # 不用align
         if(r1_for_align==r2_for_align):
-            print("序列長一樣，不用alignment")
+            # print("序列長一樣，不用alignment")
             r1_overlap = r1_for_align
             r2_overlap = r2_for_align
         # elif(ovelap區間的序列長度一樣):
         # 也不用align
         elif(len(r1_for_align)==len(r2_for_align)):
-            print("序列一樣長，不用alignment")
+            # print("序列一樣長，不用alignment")
             r1_overlap = r1_for_align
             r2_overlap = r2_for_align
         # else:
         # 在py裡做shell，先把overlap區段degap，然後r1 r2兩個overlap去align
         else:
             alignment = "mafft --thread 10 --maxiterate 16 --globalpair "+loadpath+"temp.fasta"  + "> "+loadpath+"temp.fasta"
-            print(alignment)
+            # print(alignment)
             try:
                 subprocess.run(alignment, shell=True, check=True, stdout=PIPE, stderr=PIPE)
             except Exception as e:
@@ -247,8 +252,8 @@ for filename in candidate_list:
         # print("Ns")
         ns_num=r1_p2_trimed - r2_p1_trimed-1
         ns_seq="N"*ns_num
-        print("ns_seq",ns_seq)
-        print("ns_num",ns_num)
+        # print("ns_seq",ns_seq)
+        # print("ns_num",ns_num)
         merge_seq=merge_seq+r1[:r1_p1].upper()+ns_seq+r2[r2_p2:].upper()
     elif(overlape==True):
         # print("overlap")
@@ -299,7 +304,7 @@ for filename in candidate_list:
         merge_seq=merge_seq.replace("-","")
         
     # 步驟六：收尾
-    print(merge_seq)
+    # print(merge_seq)
     filename.replace("_.fas","")
     merge_seq_text=">"+filename+"\n"+merge_seq
     with open(mergepath+filename,"w",encoding="UTF-8") as file:

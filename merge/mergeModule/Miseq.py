@@ -19,7 +19,7 @@ class Miseq:
 
 # 因為是用ref當中介序列，所以不如直接用ref紀錄接合點位
     # 定義一個方法用產出拼接位點
-    def stickSiteFinder(self, r, ref, rWho):
+    def stickSiteFinder(self, filename, r, ref, rWho):
         # 陣列1：重疊判定陣列
         r_arr_overlap = self.zeroListMaker(len(ref))
 
@@ -104,7 +104,7 @@ class Miseq:
                             site_number = 0
                             indel_start_site=0
                         else:
-                            print ("something wrong")
+                            print ("Miseq 107: something wrong. ",filename)
                     elif (site_status == 1)and (site_number != 0) :
                         # 非入口
                         if (r_arr_overlap[j] == r_arr_overlap[j+1]):
@@ -120,9 +120,9 @@ class Miseq:
                             site_number = 0
                             indel_start_site=0
                         else:
-                            print ("something wrong")
+                            print ("Miseq 123: something wrong. ",filename)
                     else:
-                        print ("something wrong")
+                        print ("Miseq 125: something wrong. ",filename)
 
                 elif (r_arr_overlap[j] == 2):
                     # deletion
@@ -144,7 +144,7 @@ class Miseq:
                             site_number = 0
                             indel_start_site=0
                         else:
-                            print ("something wrong")
+                            print ("Miseq 147: something wrong. ",filename)
                     elif (site_status == 2)and (site_number != 0) :
                         # 非入口
                         if (r_arr_overlap[j] == r_arr_overlap[j+1]):
@@ -160,9 +160,9 @@ class Miseq:
                             site_number = 0
                             indel_start_site=0
                         else:
-                            print ("something wrong")
+                            print ("Miseq 163: something wrong. ",filename)
                     else:
-                        print ("something wrong")
+                        print ("Miseq 165: something wrong. ",filename)
             # 位點是最後一位
             elif ((j+1) == len(ref)):
                 if (r_arr_overlap[j] == 1):
@@ -172,6 +172,6 @@ class Miseq:
                     site_number = site_number+1
                     self.delSite[indel_start_site] = site_number
                 else:
-                    print ("something wrong")
+                    print ("Miseq 175: something wrong. ",filename)
 
         return self
