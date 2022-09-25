@@ -17,9 +17,12 @@ from os.path import isfile, isdir, join
 ######################################
 
 # 指定要列出的檔案目錄
-loadpath="/home/sktang/powerBC/aligned/"
 # loadpath="C:/Users/kwz50/aligned/"
-mergepath="/home/sktang/powerBC/mergeSeq/"
+# loadpath="/home/sktang/powerBC/aligned/"
+loadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/aligned/"
+# mergepath="/home/sktang/powerBC/mergeSeq/"
+mergepath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/mergeSeq/"
+
 
 # 取得所有檔案與子目錄名稱
 files = listdir(loadpath)

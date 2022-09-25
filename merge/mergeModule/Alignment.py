@@ -6,7 +6,8 @@ import os
 
 # 執行："python3 Alignment.py"，用"python Alignment.py"會報錯，要把run改成call
 
-loadpath="/home/sktang/powerBC/"
+# loadpath="/home/sktang/powerBC/"
+loadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
 
 # localblast完的序列
 fastaFileDir=loadpath+"blastResult/"
@@ -24,6 +25,12 @@ if(os.path.isdir(loadpath +'aligned')==False):
     # 沒資料夾就建一個資料夾
     makedir_aligned = 'mkdir '+ loadpath +'aligned'
     subprocess.run(makedir_aligned, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+
+
+if(os.path.isdir(loadpath +'mergeSeq')==False):
+    # 沒資料夾就建一個資料夾
+    makedir_mergeSeq = 'mkdir '+ loadpath +'mergeSeq'
+    subprocess.run(makedir_mergeSeq, shell=True, check=True, stdout=PIPE, stderr=PIPE)
 
 
 with open(fastaFile,"r")as file:

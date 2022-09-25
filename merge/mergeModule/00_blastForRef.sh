@@ -2,9 +2,14 @@
 # 20220918 現在所有人都要從這個路徑下開始工作  /home/lykuo/lab_data/NGS_data/miseq/test_LIB720
 
 blastdbDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
+
 targetLibraryFilePath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/fermalies_rbcL.fasta"
-blastSequenceDir="/home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/rbcLC_demultiplex/denoice_best/"
+
+# blastSequenceDir="/home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/rbcLC_demultiplex/denoice_best/"
+blastSequenceDir="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
+
 localBlastToolDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
+
 
 ${blastdbdir}makeblastdb -in ${targetLibraryDir} -dbtype nucl -out refDB
 

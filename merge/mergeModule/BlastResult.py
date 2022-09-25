@@ -6,7 +6,8 @@ from BlastRef import BlastRef
 
 localBlast=BlastRef()
 
-loadpath="/home/sktang/powerBC/"
+# loadpath="/home/sktang/powerBC/"
+loadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
 
 localBlast.blastRef(loadpath)
 

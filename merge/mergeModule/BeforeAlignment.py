@@ -2,7 +2,9 @@
 
 from encodings import utf_8
 
-loadpath="/home/sktang/powerBC/"
+# loadpath="/home/sktang/powerBC/"
+loadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
+
 
 # localblast完的序列
 fastaFileDir=loadpath+"blastResult/"
@@ -18,12 +20,15 @@ def qseqidFile(loadpath,rWho,fileName):
     return qseqidFile
 
 # ref
-sseqidFileDir="/home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/"
+# sseqidFileDir="/home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/"
+sseqidFileDir="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/"
+# sseqidFileName="fermalies_rbcL.fasta"
 sseqidFileName="fermalies_rbcL.fasta"
+
 sseqidFile=sseqidFileDir+sseqidFileName
 
 
-# # 測試用路徑，上機時註解
+# # vscode測試用路徑，上機時註解
 # loadpath="C:/Users/kwz50/"
 # fastaFile=loadpath+"blastResult.txt"
 # sseqidFile=loadpath+"fermalies_rbcL.fasta"
