@@ -7,7 +7,7 @@ import subprocess
 from subprocess import PIPE
 import os
 
-print("BlastResult.py running")
+print("BlastResult.py is running")
 
 localBlast=BlastRef()
 

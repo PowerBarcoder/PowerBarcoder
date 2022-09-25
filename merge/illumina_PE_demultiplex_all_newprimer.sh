@@ -91,3 +91,5 @@ Rscript dada2_denoise_PE_newprimer.r > log_dada2.txt
 # # -----------------------nonmerge的要來執行python-----------------------------
 echo "start merge.sh"
 bash merge.sh
+
+echo "end of flow"

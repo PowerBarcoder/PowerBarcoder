@@ -50,7 +50,22 @@ class BlastRef:
             textList=text.split("	") #檔案是用tab分隔的
             qseqid=textList[0]
             qseqidSplitList=textList[0].split("_")
-            queryName=qseqidSplitList[3]+"_"+qseqidSplitList[2]+"_"+qseqidSplitList[0]+"_"+qseqidSplitList[1]+"_.fas"
+            
+            # 名稱案例：
+
+            # queryName=qseqidSplitList[3]+"_"+qseqidSplitList[2]+"_"+qseqidSplitList[0]+"_"+qseqidSplitList[1]+"_.fas"
+            # # LocalBlast內的：Asplenium_affine_Wade4208_KTHU1183_01_r1_1.000_abundance_65
+            # # 當前的名      ：KTHU1183_Wade4208_Asplenium_affine_.fas
+            # # 實際r1的名    ：KTHU1183_Wade4208_Asplenium_affine_.fas
+            
+            # queryName=qseqidSplitList[4]+"_"+qseqidSplitList[3]+"_"+qseqidSplitList[0]+"_"+qseqidSplitList[1]+"_"+qseqidSplitList[2]+"_.fas"
+            # # LocalBlast內的：Asplenium_aff._normale_Kuo3457_KTHU1185_01_r1_1.000_abundance_53
+            # # 當前的名      ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
+            # # 實際r1的名    ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
+
+            # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
+            queryName=qseqidSplitList[:-5][-1]+"_"+qseqidSplitList[:-5][-2]+"_"+"_".join(qseqidSplitList[:-5][:-2])+"_.fas"
+
 
             List.append(queryName)
             

@@ -5,7 +5,7 @@ import subprocess
 from subprocess import PIPE
 import os
 
-print("BeforeAlignment.py running")
+print("BeforeAlignment.py is running")
 
 # loadpath="/home/sktang/powerBC/"
 localBlastLoadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/"
