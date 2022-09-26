@@ -306,7 +306,7 @@ for filename in candidate_list:
     # 步驟六：收尾
     # print(merge_seq)
     filename.replace("_.fas","")
-    merge_seq_text=">"+filename+"\n"+merge_seq
+    merge_seq_text=">"+filename+"\n"+merge_seq+"\n"
     with open(mergepath+filename,"w",encoding="UTF-8") as file:
         file.write(merge_seq_text)
 
