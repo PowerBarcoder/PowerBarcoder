@@ -3,17 +3,18 @@
 import subprocess
 from subprocess import PIPE
 import os
+import sys
 
 print("Alignment.py is running")
 
 # 執行："python3 Alignment.py"，用"python Alignment.py"會報錯，要把run改成call
 
 # loadpath="/home/sktang/powerBC/"
-outputLoadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
+outputLoadpath=sys.argv[1]+"rbcLN_demultiplex/denoice_best/nonmerged/"
 
               # /home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/aligned
 
-localBlastLoadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/"
+localBlastLoadpath=sys.argv[1]
 
 # localblast完的序列
 fastaFileDir=localBlastLoadpath+"blastResult/"

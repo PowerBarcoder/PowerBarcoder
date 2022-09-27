@@ -7,13 +7,13 @@
 # python3 ./mergeModule/test.py $one $two $three
 # sh ./mergeModule/00_blastForRef.sh $one $two $three
 
-
+. ./config.sh
 
 sh ./mergeModule/00_blastForRef.sh
-python3 ./mergeModule/BlastResult.py
-python3 ./mergeModule/BeforeAlignment.py
-python3 ./mergeModule/Alignment.py
-python3 ./mergeModule/merge.py
+python3 ./mergeModule/BlastResult.py $mainDataPath
+python3 ./mergeModule/BeforeAlignment.py $mainDataPath $sseqidFileName
+python3 ./mergeModule/Alignment.py $mainDataPath
+python3 ./mergeModule/merge.py $mainDataPath
 
 
 

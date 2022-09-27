@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+args = commandArgs(trailingOnly=TRUE)
 
 # shell封裝的時候，要先裝好給這裡的R來用
 library("devtools")
@@ -10,13 +12,11 @@ library("dada2")
 #learn error rate illumina
 #path is a VARIABLE
 path_el <- "/home/lykuo/lab_data/NGS_data/miseq/LIB1202_S76/error_learn/SuperRed_35"  #指定資料，給dada2學error
-path_reads <- "/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/"                       #這才是我們的資料
+path_reads <- args[1]                       #這才是我們的資料
 fnFs <- sort(list.files(path_el, pattern=".r1.fq", full.names = TRUE))
 fnRs <- sort(list.files(path_el, pattern=".r2.fq", full.names = TRUE))
 errF <- learnErrors(fnFs, multithread=TRUE)
 errR <- learnErrors(fnRs, multithread=TRUE)
-
-
 
 # 準備一些變數
 numbers = c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)

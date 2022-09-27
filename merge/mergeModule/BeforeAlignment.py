@@ -4,12 +4,13 @@ from encodings import utf_8
 import subprocess
 from subprocess import PIPE
 import os
+import sys
 
 print("BeforeAlignment.py is running")
 
 # loadpath="/home/sktang/powerBC/"
-localBlastLoadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/"
-outputLoadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/"
+localBlastLoadpath=sys.argv[1]
+outputLoadpath=sys.argv[1]+"rbcLN_demultiplex/denoice_best/nonmerged/"
 
 
 # localblast完的序列
@@ -27,9 +28,9 @@ def qseqidFile(outputLoadpath,rWho,fileName):
 
 # ref
 # sseqidFileDir="/home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/"
-sseqidFileDir="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/"
+sseqidFileDir=sys.argv[1]
 # sseqidFileName="fermalies_rbcL.fasta"
-sseqidFileName="fermalies_rbcL.fasta"
+sseqidFileName=sys.argv[2]
 
 sseqidFile=sseqidFileDir+sseqidFileName
 
