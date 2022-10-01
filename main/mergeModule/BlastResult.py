@@ -6,13 +6,14 @@ from BlastRef import BlastRef
 import subprocess
 from subprocess import PIPE
 import os
+import sys
 
 print("BlastResult.py is running")
 
 localBlast=BlastRef()
 
 # loadpath="/home/sktang/powerBC/"
-loadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/"
+loadpath=sys.argv[1]
 
 localBlast.blastRef(loadpath)
 

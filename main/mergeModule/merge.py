@@ -6,6 +6,7 @@ from subprocess import PIPE
 from FastaUnit import FastaUnit
 from os import listdir
 from os.path import isfile, isdir, join
+import sys
 
 print("merge.py is running")
 
@@ -21,9 +22,9 @@ print("merge.py is running")
 # 指定要列出的檔案目錄
 # loadpath="C:/Users/kwz50/aligned/"
 # loadpath="/home/sktang/powerBC/aligned/"
-loadpath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/aligned/"
+loadpath=sys.argv[1]+"rbcLN_demultiplex/denoice_best/nonmerged/aligned/"
 # mergepath="/home/sktang/powerBC/mergeSeq/"
-mergepath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/mergeSeq/"
+mergepath=sys.argv[1]+"rbcLN_demultiplex/denoice_best/nonmerged/mergeSeq/"
 
 
 # 取得所有檔案與子目錄名稱
