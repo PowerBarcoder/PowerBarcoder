@@ -1,2 +1,2 @@
 # PowerBarcoder
-![pipeline](https://github.com/PowerBarcoder/PowerBarcoder/blob/main/pipeline.png)
+<center>![pipeline](https://github.com/PowerBarcoder/PowerBarcoder/blob/main/pipeline.png)</center>
