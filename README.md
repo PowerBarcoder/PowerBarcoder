@@ -1,13 +1,13 @@
 # PowerBarcoder
 
 ## Why PowerBarcoder ?
-**Comming soon**
+**Coming soon**
 
-## Features
-1. 
-2. 
-3. 
+## Features (we are trying to achieve)
+1. Comprehensive Illumina and Pacbio NGS data solution
+2. High performance
+3. Easy to use (maybe)
 
-## NGS data Pipiline
+## Flow Chart
 
 ![pipeline](https://github.com/PowerBarcoder/PowerBarcoder/blob/main/pipeline.png)
