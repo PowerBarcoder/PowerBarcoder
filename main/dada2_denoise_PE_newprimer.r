@@ -11,7 +11,7 @@ library("dada2")
 
 #learn error rate illumina
 #path is a VARIABLE
-path_el <- "/home/lykuo/lab_data/NGS_data/miseq/LIB1202_S76/error_learn/SuperRed_35"  #指定資料，給dada2學error
+path_el <- "/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB1202/error_learn/SuperRed_35"  #指定資料，給dada2學error
 path_reads <- args[1]                       #這才是我們的資料
 fnFs <- sort(list.files(path_el, pattern=".r1.fq", full.names = TRUE))
 fnRs <- sort(list.files(path_el, pattern=".r2.fq", full.names = TRUE))
@@ -27,8 +27,12 @@ rbcLN = c("fVGF", "rECL")
 trnLF = c("L5675", "F4121")   
 trnL = c("oneIf1", "L7556")
 
-# AP<-data.frame(rbcLC, rbcLN, trnLF, trnL)
-AP<-data.frame(rbcLN)
+#AP<-data.frame(rbcLC, rbcLN, trnLF, trnL)
+#AP<-data.frame(rbcLC)
+
+#yixuan modified
+AP_temp<-args[2:as.numeric(length(args[]))]
+AP<-data.frame(mget(AP_temp))
 
 multiplex <- read.table(
   "multiplex_cpDNAbarcode_clean.txt",
