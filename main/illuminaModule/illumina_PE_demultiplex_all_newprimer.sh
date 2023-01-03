@@ -1,7 +1,7 @@
 #! /bin/bash
 
 
-. ./config.sh
+. ./miseq.config
 
 
 #starting read miseq files "LIB810_S9_L001_R1_001.fastq.gz" "LIB810_S9_L001_R2_001.fastq.gz" at /home/lykuo/lab_data/NGS_data/miseq

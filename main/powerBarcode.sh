@@ -1,5 +1,5 @@
 # ! /bin/bash
-. ./config.sh
+. ./illuminaModule/config.txt
 
 # TODO #6錯誤處理
 echo "checking reuirement..."
@@ -75,4 +75,20 @@ fi
 echo "environment OK !"
 echo "Start running PowerBarcode !"
 
-bash illumina_PE_demultiplex_all_newprimer.sh
+# bash ./illuminaModule/illumina_PE_demultiplex_all_newprimer.sh
+
+
+
+
+# VAR1="Linuxize"
+# VAR2="Linuxize"
+
+# if [ "$VAR1" = "$VAR2" ]; then
+#     echo "Strings are equal."
+# else
+#     echo "Strings are not equal."
+# fi
+
+
+
+# . ./pacbio.config
