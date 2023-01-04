@@ -55,9 +55,9 @@ with open(fastaFile,"r")as file:
 
         print(qseqid) #20230104 mafft多執行續應在單檔多序列下處理才會有顯著的效能提升
         # 都寫絕對路徑，因為執行路徑可能會變
-        AligmentR1 = "mafft --thread 10 --maxiterate 16 --globalpair "+ outputLoadpath +"r1Ref/" + qseqid + "> "+outputLoadpath+"/aligned/" + qseqid +"_r1"+ ".al"
+        AligmentR1 = "mafft --thread 10 --maxiterate 16 --globalpair "+ outputLoadpath +"r1Ref/" + qseqid + "> "+outputLoadpath+"aligned/" + qseqid +"_r1"+ ".al"
         # print(AligmentR1)
-        AligmentR2 = "mafft --thread 10 --maxiterate 16 --globalpair "+ outputLoadpath +"r2Ref/" + qseqid + "> "+outputLoadpath+"/aligned/" + qseqid +"_r2"+ ".al"
+        AligmentR2 = "mafft --thread 10 --maxiterate 16 --globalpair "+ outputLoadpath +"r2Ref/" + qseqid + "> "+outputLoadpath+"aligned/" + qseqid +"_r2"+ ".al"
         # print(AligmentR2)
                     # mafft --thread 10 --maxiterate 16 --globalpair /home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/r1Ref/KTHU2241_Liu9823_Teratophyllum_koordersii_.fas> ./aligned/KTHU2241_Liu9823_Teratophyllum_koordersii_.fas_r1.al
         try:
