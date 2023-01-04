@@ -1,5 +1,7 @@
 import linecache as lc
 
+# blast參考物件，blastRef
+
 # load_dir="C:/Users/123/"
 
 #  1.	 qseqid	 query (e.g., gene) sequence id
@@ -36,13 +38,13 @@ class BlastRef:
             self.rWhoList=[]
             self.refList=[]
 
-    def blastRef(self, load_dir):
+    def blastRef(self, load_dir,loci_name):
         List=[]
         #製作所有key的清單
         i=1
-        text=lc.getline(load_dir+"refResult.txt",1)
+        text=lc.getline(load_dir+loci_name+"_refResult.txt",1)
         while len(text)>1:
-            text=lc.getline(load_dir+"refResult.txt",i)
+            text=lc.getline(load_dir+loci_name+"_refResult.txt",i)
             if (len(text)<1):
                 break
 
@@ -95,9 +97,9 @@ class BlastRef:
 
         #接上，將value一一貼到key的list裡
         i=1
-        text=lc.getline(load_dir+"refResult.txt",1)
+        text=lc.getline(load_dir+loci_name+"_refResult.txt",1)
         while len(text)>1:
-            text=lc.getline(load_dir+"refResult.txt",i)
+            text=lc.getline(load_dir+loci_name+"_refResult.txt",i)
             if (len(text)<1):
                 break
             
@@ -245,7 +247,7 @@ class BlastRef:
 
         bitscoreList=[]
         for key in cate:
-            bitscoreList.append(cate[key][11])
+            bitscoreList.append(cate[key][11].replace("\n",""))#這裡莫名其妙有個換行
         self.bitscoreList=bitscoreList
 
         qstartMinusQendList=[]

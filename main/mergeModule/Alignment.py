@@ -5,16 +5,16 @@ from subprocess import PIPE
 import os
 import sys
 
-print("Alignment.py is running")
+print("Alignment.py is running on loci: "+sys.argv[3])
 
 # 執行："python3 Alignment.py"，用"python Alignment.py"會報錯，要把run改成call
 
 # loadpath="/home/sktang/powerBC/"
-outputLoadpath=sys.argv[1]+"rbcLN_demultiplex/denoice_best/nonmerged/"
+outputLoadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/"
 
               # /home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/aligned
 
-localBlastLoadpath=sys.argv[1]
+localBlastLoadpath=sys.argv[2]
 
 # localblast完的序列
 fastaFileDir=localBlastLoadpath+"blastResult/"
@@ -53,7 +53,7 @@ with open(fastaFile,"r")as file:
         # forword=lineSplit[14]
         # print(qseqid+" "+sseqid+" "+sign+" "+forword)
 
-        print(qseqid)
+        print(qseqid) #20230104 mafft多執行續應在單檔多序列下處理才會有顯著的效能提升
         # 都寫絕對路徑，因為執行路徑可能會變
         AligmentR1 = "mafft --thread 10 --maxiterate 16 --globalpair "+ outputLoadpath +"r1Ref/" + qseqid + "> "+outputLoadpath+"/aligned/" + qseqid +"_r1"+ ".al"
         # print(AligmentR1)
@@ -68,3 +68,6 @@ with open(fastaFile,"r")as file:
 
 # 考慮不從blastResult再讀一次檔，可以合併到BeforeAlignment底下
 # mafft的結果要變單行且皆為大寫
+
+
+print("Alignment.py is ended on loci: "+sys.argv[3])

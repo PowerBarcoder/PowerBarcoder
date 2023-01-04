@@ -8,90 +8,90 @@ from subprocess import PIPE
 import os
 import sys
 
-print("BlastResult.py is running")
+print("BlastResult.py is running on loci: "+sys.argv[3])
 
 localBlast=BlastRef()
 
 # loadpath="/home/sktang/powerBC/"
-loadpath=sys.argv[1]
+loadpath=sys.argv[2]
 
-localBlast.blastRef(loadpath)
+localBlast.blastRef(loadpath,sys.argv[3])
 
 # 測試用
 # localBlast.blastRef("C:/Users/123/")
 
     #  1.	 qseqid	 query (e.g., gene) sequence id
-print(localBlast.qseqidList)
+# print(localBlast.qseqidList)
 qseqidList=localBlast.qseqidList
 # print(type(qseqidList))
 
     #  2.	 sseqid	 subject (e.g., reference genome) sequence id
-print(localBlast.sseqidList)
+# print(localBlast.sseqidList)
 sseqidList=localBlast.sseqidList
 # print(type(sseqidList))
 
     #  3.	 pident	 percentage of identical matches
-print(localBlast.pidentList)
+# print(localBlast.pidentList)
 pidentList=localBlast.pidentList
 # print(type(pidentList))
 
     #  4.	 length	 alignment length
-print(localBlast.lengthList)
+# print(localBlast.lengthList)
 lengthList=localBlast.lengthList
 # print(type(lengthList))
 
     #  5.	 mismatch	 number of mismatches
-print(localBlast.mismatchList)
+# print(localBlast.mismatchList)
 mismatchList=localBlast.mismatchList
 # print(type(mismatchList))
 
     #  6.	 gapopen	 number of gap openings
-print(localBlast.gapopenList)
+# print(localBlast.gapopenList)
 gapopenList=localBlast.gapopenList
 # print(type(gapopenList))
 
     #  7.	 qstart	 start of alignment in query
-print(localBlast.qstartList)
+# print(localBlast.qstartList)
 qstartList=localBlast.qstartList
 # print(type(qstartList))
 
     #  8.	 qend	 end of alignment in query
-print(localBlast.qendList)
+# print(localBlast.qendList)
 qendList=localBlast.qendList
 # print(type(qendList))
 
     #  9.	 sstart	 start of alignment in subject
-print(localBlast.sstartList)
+# print(localBlast.sstartList)
 sstartList=localBlast.sstartList
 # print(type(sstartList))
 
     #  10.	 send	 end of alignment in subject
-print(localBlast.sendList)
+# print(localBlast.sendList)
 sendList=localBlast.sendList
 # print(type(sendList))
 
     #  11.	 evalue	 expect value
-print(localBlast.evalueList)
+# print(localBlast.evalueList)
 evalueList=localBlast.evalueList
 # print(type(evalueList))
 
     #  12.	 bitscore	 bit score
-print(localBlast.bitscoreList)
+# print(localBlast.bitscoreList)
 bitscoreList=localBlast.bitscoreList
 # print(type(bitscoreList))
 
     #  13.   qstartMinusQend
-print(localBlast.qstartMinusQendList)
+# print(localBlast.qstartMinusQendList)
 qstartMinusQendList=localBlast.qstartMinusQendList
 # print(type(qstartMinusQendList))
 
     #  14.   sstartMinusSend
-print(localBlast.sstartMinusSendList)
+# print(localBlast.sstartMinusSendList)
 sstartMinusSendList=localBlast.sstartMinusSendList
 # print(type(sstartMinusSendList))
 
     #  15.   rWhoList(r1或r2)
-print(localBlast.rWhoList)
+# print(localBlast.rWhoList)
 rWhoList=localBlast.rWhoList
 # print(type(rWhoList))
 
@@ -107,7 +107,7 @@ if(os.path.isdir(loadpath +'blastResult')==False):
 
 
 for i in range(0,len(qseqidList)):
-    print(determineDirection(i))
+    # print(determineDirection(i))
     with open(loadpath+"blastResult/"+"blastResult.txt","a") as file:
         file.write(determineDirection(i)+"\n")
         pass
@@ -130,11 +130,4 @@ for i in range(0,len(qseqidList)):
     # str(rWhoList[i])
 
 
-
-
-
-
-
-
-
-
+print("BlastResult.py is ended on loci: "+sys.argv[3])

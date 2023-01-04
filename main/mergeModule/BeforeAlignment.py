@@ -6,11 +6,11 @@ from subprocess import PIPE
 import os
 import sys
 
-print("BeforeAlignment.py is running")
+print("BeforeAlignment.py is running on loci: "+sys.argv[4])
 
 # loadpath="/home/sktang/powerBC/"
-localBlastLoadpath=sys.argv[1]
-outputLoadpath=sys.argv[1]+"rbcLN_demultiplex/denoice_best/nonmerged/"
+localBlastLoadpath=sys.argv[3]
+outputLoadpath=sys.argv[3]+sys.argv[4]+"_demultiplex/denoice_best/nonmerged/"
 
 
 # localblast完的序列
@@ -142,7 +142,7 @@ with open(fastaFile,"r")as file:
         createRefFile("r2",r2RowList)
 
 
-
+print("BeforeAlignment.py is ended on loci: "+sys.argv[4])
 
 # 4.讀ref.fas
 # 5.讀r1.fas
