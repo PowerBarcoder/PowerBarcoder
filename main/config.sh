@@ -1,9 +1,15 @@
 # ! /bin/bash
 
-# where is your NGS Data ?
+# Where did is our PowerBarcoder ?
+workingDirectory="/home2/barcoder_test/RUN_sk_20230103/PowerBarcoder/main/"
+
+# Where is your NGS Data ?
 mainDataPath="/home2/barcoder_test/RUN1.5/"
 
-# where did you install fastp ?
+# Where do you want to generate the results ?
+resultDataPath="/home2/barcoder_test/RUN_sk_20230103/PowerBarcoder/result/"
+
+# Where did you install fastp ?
 myFastpPath="/home/lykuo/miniconda2/bin/"
 # where is your Miseq gz data ?
 #myRowR1Gz="/home/powerbarcoder/workshop/LIB214_S77_L001_R1_001.fastq.gz"
@@ -14,9 +20,13 @@ summaryJsonFileName="221229RUN1_5.json"
 summaryHtmlFileName="221229RUN1_5.html"
 
 
-# where did you install cutadapt ?
+# Where did you install cutadapt ?
 myCutadaptPath="/home/lykuo/cutadapt-venv/bin/"
+
+
 # Parameter in cutadaptor
+
+# first dataset (We need at least on dataset)
 nameOfLoci+=("rbcLC")
 errorRateCutadaptor+=(0.125)
 minimumLengthCutadaptor+=(70)
@@ -29,7 +39,7 @@ barcodesFile1+=('barcodes_rbcLC_start_0.fasta')
 barcodesFile2+=('barcodes_rbcLC_start2_0.fasta')
 minimumLengthCutadaptorInLoop+=(150)
 
-# yixuan modified
+# second dataset (Comment out if you don't need)
 nameOfLoci+=("rbcLN")
 errorRateCutadaptor+=(0.125)
 minimumLengthCutadaptor+=(70)
@@ -42,7 +52,7 @@ barcodesFile1+=('barcodes_rbcL_start_0.fasta')
 barcodesFile2+=('barcodes_rbcLN_start2_0.fasta')
 minimumLengthCutadaptorInLoop+=(150)
 
-# yixuan modified
+# third dataset (Comment out if you don't need)
 nameOfLoci+=("trnL")
 errorRateCutadaptor+=(0.125)
 minimumLengthCutadaptor+=(70)
@@ -55,7 +65,7 @@ barcodesFile1+=('barcodes_trnL_1If1_0.fasta')
 barcodesFile2+=('barcodes_trnL_3exonEND_0.fasta')
 minimumLengthCutadaptorInLoop+=(150)
 
-# yixuan modified
+# fourth dataset (Comment out if you don't need)
 nameOfLoci+=("trnLF")
 errorRateCutadaptor+=(0.125)
 minimumLengthCutadaptor+=(70)
@@ -69,11 +79,11 @@ barcodesFile2+=('barcodes_trnF_0.fasta')
 minimumLengthCutadaptorInLoop+=(150)
 
 
-# where did you unstall localBlast?
+# Where did you unstall localBlast?
 localBlastToolDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
 targetLibraryFilePath="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/fermalies_rbcL.fasta"
 blastSequenceDir="/home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLC_demultiplex/denoice_best/nonmerged/"
-# python params
+# Python params
 sseqidFileName="fermalies_rbcL.fasta"
 
 echo 'params imported!'

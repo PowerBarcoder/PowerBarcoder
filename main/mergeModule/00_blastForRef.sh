@@ -11,15 +11,15 @@ echo "00_blastForRef start"
 
 # ${localBlastToolDir}makeblastdb -in ${targetLibraryFilePath} -dbtype nucl -out refDB
 # /home/lykuo/ncbi-blast-2.10.0+/bin/makeblastdb -in /home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/fermalies_rbcL.fasta -dbtype nucl -out refDB
-${localBlastToolDir}makeblastdb -in ${mainDataPath}fermalies_rbcL.fasta -dbtype nucl -out refDB
+${localBlastToolDir}makeblastdb -in ${mainDataPath}fermalies_rbcL.fasta -dbtype nucl -out ${resultDataPath}refDB
 
 # cat ${blastSequenceDir}r1/*.fas ${blastSequenceDir}r2/*.fas > catQuery.fas
 # cat /home/sktang/powerBC/r1/*.fas /home/sktang/powerBC/r2/*.fas > catQuery.fas
-cat ${mainDataPath}rbcLN_demultiplex/denoice_best/nonmerged/r1/*.fas ${mainDataPath}rbcLN_demultiplex/denoice_best/nonmerged/r2/*.fas > catQuery.fas
+cat ${mainDataPath}rbcLN_demultiplex/denoice_best/nonmerged/r1/*.fas ${mainDataPath}rbcLN_demultiplex/denoice_best/nonmerged/r2/*.fas > ${resultDataPath}catQuery.fas
 
 # ${localBlastToolDir}blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
 # /home/lykuo/ncbi-blast-2.10.0+/bin/blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
-${localBlastToolDir}blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
+${localBlastToolDir}blastn -db refDB -query catQuery.fas -num_threads 20 -out ${resultDataPath}refResult.txt -outfmt 6
 
 
 
