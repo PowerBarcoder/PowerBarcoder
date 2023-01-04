@@ -74,7 +74,7 @@ done
 cd ${workingDirectory}
 # echo "$PWD"
 echo "start dada2_denoise_PE_newprimer.r"
-Rscript ${workingDirectory}dada2_denoise_PE_newprimer.r $mainDataPath ${nameOfLoci[@]} $workingDirectory $resultDataPath > log_dada2.txt
+Rscript ${workingDirectory}dada2_denoise_PE_newprimer.r $mainDataPath $workingDirectory $resultDataPath ${nameOfLoci[@]} > log_dada2.txt
 
 # # -----------------------nonmerge的要來執行python-----------------------------
 cd ${workingDirectory}
