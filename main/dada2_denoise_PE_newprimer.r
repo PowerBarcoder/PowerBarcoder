@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
+print("start2")
 args = commandArgs(trailingOnly=TRUE)
-
 # shell封裝的時候，要先裝好給這裡的R來用
 library("devtools")
 library("dada2")
@@ -13,6 +13,7 @@ library("dada2")
 #path is a VARIABLE
 path_el <- "/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB1202/error_learn/SuperRed_35"  #指定資料，給dada2學error
 path_reads <- args[1]                       #這才是我們的資料
+print("start16")
 fnFs <- sort(list.files(path_el, pattern=".r1.fq", full.names = TRUE))
 fnRs <- sort(list.files(path_el, pattern=".r2.fq", full.names = TRUE))
 errF <- learnErrors(fnFs, multithread=TRUE)
@@ -31,14 +32,16 @@ trnL = c("oneIf1", "L7556")
 #AP<-data.frame(rbcLC)
 
 #yixuan modified
+print("start35")
 AP_temp<-args[2:as.numeric(length(args[]))]
 AP<-data.frame(mget(AP_temp))
 
+print("start39")
 multiplex <- read.table(
   "multiplex_cpDNAbarcode_clean.txt",
   sep="\t", header = TRUE)
 
-
+print("start44")
 #1:ncol(AP) to loop all regions
 for (a in 1:ncol(AP)){
   colnames(AP[a]) -> region
@@ -168,3 +171,5 @@ for (a in 1:ncol(AP)){
               row.names = FALSE, col.names = FALSE)
 }
 
+
+print("start175")

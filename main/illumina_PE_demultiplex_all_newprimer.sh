@@ -1,6 +1,5 @@
 #! /bin/bash
 
-
 . ./config.sh
 
 #starting read miseq files "LIB810_S9_L001_R1_001.fastq.gz" "LIB810_S9_L001_R2_001.fastq.gz" at /home/lykuo/lab_data/NGS_data/miseq
@@ -34,53 +33,53 @@ cd ${resultDataPath}${nameOfLoci[i]}_demultiplex
 
 # AB test
 # ${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:../barcodes_rbcL_start_0.fasta -G file:../barcodes_rbcLC_start2_0.fasta --action=none -o rbcLC_{name1}_{name2}_r1.fq -p rbcLC_{name1}_{name2}_r2.fq ../rbcLC_amplicon_r1.fq ../rbcLC_amplicon_r2.fq -j $threadNumberCutadaptor
-${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:${mainDataPath}${barcodesFile1[i]} -G file:${mainDataPath}${barcodesFile2[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}_{name1}_{name2}_r1.fq -p ${resultDataPath}${nameOfLoci[i]}_{name1}_{name2}_r2.fq ${resultDataPath}${amplicon_r1[i]} ${resultDataPath}${amplicon_r2[i]} -j ${threadNumberCutadaptor[i]}
-
+${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:${mainDataPath}${barcodesFile1[i]} -G file:${mainDataPath}${barcodesFile2[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r1.fq -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r2.fq ${resultDataPath}${amplicon_r1[i]} ${resultDataPath}${amplicon_r2[i]} -j ${threadNumberCutadaptor[i]}
+																																														 
 
 # # 迴圈去掉primer (絕對路徑下，用$(basename $file)取檔名)
-for File in ${resultDataPath}*r1.fq
+mkdir ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed
+for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r1.fq
 	do
-	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerF[i]} -o ${resultDataPath}trim_$(basename $File) ${resultDataPath}$(basename $File) -j ${threadNumberCutadaptor[i]}
+	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerF[i]} -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename $File) ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename $File) -j ${threadNumberCutadaptor[i]}
 	done
 
-for file in ${resultDataPath}*r2.fq
+for file in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r2.fq
 	do
-	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerR[i]} -o ${resultDataPath}trim_$(basename $file) ${resultDataPath}$(basename $file) -j ${threadNumberCutadaptor[i]}
+	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerR[i]} -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename $file) ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename $file) -j ${threadNumberCutadaptor[i]}
 	done
 # -----------------demultiplex完成------------------------
 
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed
-echo 3
-mv ${resultDataPath}trim_* ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/r1
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/r2
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/r1
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/r2
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r1
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r2
-mkdir -p  ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2
+# # 直接把檔案寫到指定地點就不用再移動檔案了，所以這行不要
+# mv ${resultDataPath}${nameOfLoci[i]}_demultiplex/trim_${nameOfLoci[i]}* ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/
+
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/r2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/r2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2
 cd ..
 
 #yixuan modified for multiLoci
 done
 
 
+# # -----------------------轉去執行R-----------------------------
+cd ${workingDirectory}
+# echo "$PWD"
+echo "start dada2_denoise_PE_newprimer.r"
+Rscript ${workingDirectory}dada2_denoise_PE_newprimer.r $mainDataPath ${nameOfLoci[@]} $workingDirectory $resultDataPath > log_dada2.txt
 
+# # -----------------------nonmerge的要來執行python-----------------------------
+cd ${workingDirectory}
+# echo "$PWD"
+echo "start merge.sh"
+bash ${workingDirectory}merge.sh
 
-# # # -----------------------轉去執行R-----------------------------
-# echo "start dada2_denoise_PE_newprimer.r"
-# Rscript dada2_denoise_PE_newprimer.r $mainDataPath ${nameOfLoci[@]} > log_dada2.txt
-
-
-
-
-# # # -----------------------nonmerge的要來執行python-----------------------------
-# echo "start merge.sh"
-# bash merge.sh
-
-# echo "end of flow"
+echo "end of flow"
