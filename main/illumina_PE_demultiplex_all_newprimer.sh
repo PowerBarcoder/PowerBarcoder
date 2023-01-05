@@ -10,6 +10,33 @@
 for ((i=0; i<${#nameOfLoci[@]}; i++))
 do
 
+# create Layer 1 folder
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex
+# create Layer 2 folders
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best
+# create Layer 3 folders
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/r2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/r2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged
+# create Layer 4 folders
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r1Ref
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r2Ref
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/mergeSeq
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/aligned
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1Ref
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2Ref
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/mergeSeq
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/aligned
+
 #using (universal) primer sequences to demultiplex
 # rbcL C terminal
 # 先trim，再取出跟指定primer一致的序列出來，方向一拉同 (e error錯誤率)
@@ -23,7 +50,6 @@ ${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --discard-unt
 cat ${resultDataPath}${nameOfLoci[i]}.1_R1 ${resultDataPath}${nameOfLoci[i]}.2_R2 > ${resultDataPath}${amplicon_r1[i]}
 cat ${resultDataPath}${nameOfLoci[i]}.1_R2 ${resultDataPath}${nameOfLoci[i]}.2_R1 > ${resultDataPath}${amplicon_r2[i]}
 rm ${resultDataPath}${nameOfLoci[i]}*_R*
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex
 cd ${resultDataPath}${nameOfLoci[i]}_demultiplex
 
 # # 做demultiplex
@@ -37,7 +63,6 @@ ${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimme
 																																														 
 
 # # 迴圈去掉primer (絕對路徑下，用$(basename $file)取檔名)
-mkdir ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed
 for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r1.fq
 	do
 	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerF[i]} -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename $File) ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename $File) -j ${threadNumberCutadaptor[i]}
@@ -52,21 +77,8 @@ for file in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r2.fq
 # # 直接把檔案寫到指定地點就不用再移動檔案了，所以這行不要
 # mv ${resultDataPath}${nameOfLoci[i]}_demultiplex/trim_${nameOfLoci[i]}* ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/
 
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/r1
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/r2
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/r1
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/r2
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r1
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r2
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2
-cd ..
+cd .. # 應該不需要再切路徑了，因為底下有切
 
-#yixuan modified for multiLoci
 done
 
 
