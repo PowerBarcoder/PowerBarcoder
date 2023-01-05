@@ -15,7 +15,7 @@ outputLoadpath=sys.argv[3]+sys.argv[4]+"_demultiplex/denoice_best/nonmerged/"
 
 # localblast完的序列
 fastaFileDir=localBlastLoadpath+"blastResult/"
-fastaFileName="blastResult.txt"
+fastaFileName=sys.argv[4]+"_blastResult.txt"
 fastaFile=fastaFileDir+fastaFileName
 # print(fastaFile)
 
@@ -63,11 +63,11 @@ r1RowList=[]
 r2RowList=[]
 targetRowList=[]
 def createRefFile(rWho,rWhoRowList):
-    if(os.path.isdir(outputLoadpath+rWho+'Ref')==False):
-    # 沒資料夾就建一個資料夾
-        makedir_rWhoRef = 'mkdir '+ outputLoadpath+rWho+'Ref'
-        subprocess.run(makedir_rWhoRef, shell=True, check=True, stdout=PIPE, stderr=PIPE)
-    # 資料夾有了再開始工作
+    # if(os.path.isdir(outputLoadpath+rWho+'Ref')==False):
+    # # 沒資料夾就建一個資料夾
+    #     makedir_rWhoRef = 'mkdir '+ outputLoadpath+rWho+'Ref'
+    #     subprocess.run(makedir_rWhoRef, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+    # # 資料夾有了再開始工作
     with open (outputLoadpath+rWho+"Ref/"+qseqid,"w") as RefFile:
         finalRowList=rWhoRowList+targetRowList
         RefFile.writelines(finalRowList)
