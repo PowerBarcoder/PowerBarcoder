@@ -22,6 +22,7 @@ cat ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*.fa
 # ${localBlastToolDir}blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
 # /home/lykuo/ncbi-blast-2.10.0+/bin/blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
 ${localBlastToolDir}blastn -db ${resultDataPath}${nameOfLoci[i]}_refDB -query ${resultDataPath}${nameOfLoci[i]}_catQuery.fas -num_threads 20 -out ${resultDataPath}${nameOfLoci[i]}_refResult.txt -outfmt 6
+# 20230107 (如果改成接NNNNNN就可以忽略這條)-outfmt 可以選一種是幫你align.好的、但是你的output要重寫parsing方式，很麻煩  
 
 done
 
