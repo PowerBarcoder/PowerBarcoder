@@ -3,7 +3,7 @@
 
 . ./config.sh
 
-
+# 20230107這一步myRowR1Gz消失了需修正、另外可以用一個參數控制要不要做這步
 #starting read miseq files "LIB810_S9_L001_R1_001.fastq.gz" "LIB810_S9_L001_R2_001.fastq.gz" at /home/lykuo/lab_data/NGS_data/miseq
 # trim the reads
 ${myFastpPath}fastp -i $myRowR1Gz -I $myRowR2Gz -o $myTrimmedR1Gz -O $myTrimmedR2Gz -j $summaryJsonFileName -h $summaryHtmlFileName
