@@ -12,7 +12,7 @@ library("dada2")
 
 #learn error rate illumina
 #path is a VARIABLE
-path_el <- "/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB1202/error_learn/SuperRed_35"  #指定資料，給dada2學error
+path_el <- "/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB1202/error_learn/SuperRed_35"  #指定資料，給dada2學error # 預設讀這個，如果他想讀別的，要寫條件判斷去抓一個新的參數
 path_reads <- args[1]                        #cutadapt讀取資料的位置
 path_result <- args[3]                       #cutadapt輸出資料的位置
 fnFs <- sort(list.files(path_el, pattern=".r1.fq", full.names = TRUE))
@@ -23,6 +23,11 @@ errR <- learnErrors(fnRs, multithread=TRUE)
 # 準備一些變數
 numbers = c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
 
+
+
+# 這邊寫死了，要修改，
+# 策略一： multiplex...txt的table用loci.1、loci.2這樣的參數取代掉c("fNYG", "rVVG")內的兩個參數
+# 策略二：直接從config檔裡面傳參數近來，會遇到的問題是，你不知道他要傳幾組，所以可能要寫成向第41行的處理方式
 rbcLC = c("fNYG", "rVVG") #"rbcLC" and column names of primers, VARIABLEs; the first and second items corresponding to the order in demultiplex.sh
 rbcLN = c("fVGF", "rECL")
 # 多loci，要從sh傳參近來，搭配multiplex_clean.txt一起使用，後者是使用者自備的，所以格式很重要
@@ -36,7 +41,7 @@ trnL = c("oneIf1", "L7556")
 AP_temp<-args[4:as.numeric(length(args[]))]
 AP<-data.frame(mget(AP_temp))
 
-multiplex_cpDNAbarcode_clean_path = paste0(path_reads, "multiplex_cpDNAbarcode_clean.txt")
+multiplex_cpDNAbarcode_clean_path = paste0(path_reads, "multiplex_cpDNAbarcode_clean.txt") #20230107 "multiplex_cpDNAbarcode_clean.txt"請改成變數
 multiplex <- read.table(
   multiplex_cpDNAbarcode_clean_path,
   sep="\t", header = TRUE)
