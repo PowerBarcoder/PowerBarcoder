@@ -31,8 +31,9 @@ numbers = c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
 rbcLC = c("fNYG", "rVVG") #"rbcLC" and column names of primers, VARIABLEs; the first and second items corresponding to the order in demultiplex.sh
 rbcLN = c("fVGF", "rECL")
 # 多loci，要從sh傳參近來，搭配multiplex_clean.txt一起使用，後者是使用者自備的，所以格式很重要
-trnLF = c("L5675", "F4121")   
+trnLF = c("L5675", "F4121")
 trnL = c("oneIf1", "L7556")
+AP_minlength = 270
 
 #AP<-data.frame(rbcLC, rbcLN, trnLF, trnL)
 #AP<-data.frame(rbcLC)
@@ -56,7 +57,7 @@ for (a in 1:ncol(AP)){
 # 檢查amplicon欄為空，則刪除table內該列資料
   multiplex[!multiplex[,AP[,a][2]] %in% "",] -> amplicon
 
-  
+
   miss = c()
   seqtable = c()
   mergfail = c()
@@ -76,9 +77,9 @@ for (a in 1:ncol(AP)){
                     verbose=TRUE, matchIDs = TRUE)
                                                   }
 
-                                                  
 
-#pair好的檔案開始處理  
+
+#pair好的檔案開始處理
   #pair reads
   for (s in 1:nrow(amplicon)){
     s1 = paste0("filtered_trim_", region, "_", amplicon[s,Fp],"_", amplicon[s,Rp], "_r1.fq")
@@ -89,13 +90,13 @@ for (a in 1:ncol(AP)){
     seqname = paste(amplicon[s,3], amplicon[s,4], amplicon[s,2], amplicon[s,1], sep = "_")           #這個式header的文字
     header = paste0(">",seqname)                                                                     #加上了header的符號
     if (purrr::has_element(list.files(path= path_trim),s1)==TRUE){ #這邊只檢查了r1的名字有沒有對，有對boolean就是TRUE
-      
-       # 核心運行，運行後看要不要merge，不能merge的就交由我寫的來處理      
+
+       # 核心運行，運行後看要不要merge，不能merge的就交由我寫的來處理
       dadaFs <- dada(r1, err=errF, multithread=TRUE)
       dadaRs <- dada(r2, err=errR, multithread=TRUE)
-	
-       
-       
+
+
+
          paste0(rep(header, length(dadaFs[["clustering"]][["abundance"]])), "_", numbers[1:length(dadaFs[["clustering"]][["abundance"]])], rep("_r1_", length(dadaFs[["clustering"]][["abundance"]])), sprintf(dadaFs[["clustering"]][["abundance"]]/sum(dadaFs[["clustering"]][["abundance"]]), fmt = '%#.3f'), rep("_abundance_", length(dadaFs[["clustering"]][["abundance"]])), dadaFs[["clustering"]][["abundance"]])->r1list
 	  cbind(r1list,dadaFs[["clustering"]][["sequence"]],dadaFs[["clustering"]][["abundance"]])-> r1fas
       r1fas[order(as.numeric(r1fas[,3]), decreasing = TRUE),]-> r1fas
@@ -107,11 +108,11 @@ for (a in 1:ncol(AP)){
 
        # r1 r2要merge了
       try(mergers <- mergePairs(dadaFs, r1, dadaRs, r2, verbose=TRUE))
-      
-      
-      
-      
-      if (nrow(mergers)>0){
+
+
+
+
+      if (nrow(mergers)>0 & max(nchar(mergers$sequence))>AP_minlength & max(mergers$abundance)>20){
          sum(mergers$abundance)->clustersum
          paste0(rep(header, length(mergers$abundance)), "_", numbers[1:length(mergers$abundance)], rep("_", length(mergers$abundance)), sprintf(mergers$abundance/clustersum, fmt = '%#.3f'), rep("_abundance_", length(mergers$abundance)), mergers$abundance)->merglist
          cbind(merglist,mergers$sequence,mergers$abundance)-> fas
@@ -138,7 +139,7 @@ for (a in 1:ncol(AP)){
          write.table(r2fas[1,1:2], file = paste0(path_demultiplex, "/denoice_best/r2/",r0), append = FALSE, sep = "\n", quote = FALSE,
                 row.names = FALSE, col.names = FALSE)
       }
-      if (nrow(mergers)==0){
+      else {
          cbind(r1, r2, header)->fail
          rbind(mergfail, fail)-> mergfail
 		 write.table(r1fas[,1:2], file = paste0(path_demultiplex, "/denoice/nonmerged/r1/",filename), append = FALSE, sep = "\n", quote = FALSE,
