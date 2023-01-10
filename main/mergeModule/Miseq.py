@@ -80,6 +80,8 @@ class Miseq:
         site_status = 99
         site_number = 0
         indel_start_site=0
+        print(r)
+        print(ref)
         for j in range(0, len(ref)):
             # 迴圈逐點檢視，判定當前位點是否與下一點相同，
             if ((j+1) != len(ref)):
@@ -176,5 +178,5 @@ class Miseq:
                     print ("r_arr_overlap is",r_arr_overlap[j])
                     print ("site_number",site_number)
                     print ("self.inSite[indel_start_site]",self.inSite[indel_start_site])
-                    print ("self.delSite[indel_start_site]",self.delSite[indel_start_site])
+                    # print ("self.delSite[indel_start_site]",self.delSite[indel_start_site])
         return self
