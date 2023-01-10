@@ -173,5 +173,8 @@ class Miseq:
                     self.delSite[indel_start_site] = site_number
                 else:
                     print ("Miseq 175: something wrong. ",filename)
-
+                    print ("r_arr_overlap is",r_arr_overlap[j])
+                    print ("site_number",site_number)
+                    print ("self.inSite[indel_start_site]",self.inSite[indel_start_site])
+                    print ("self.delSite[indel_start_site]",self.delSite[indel_start_site])
         return self
