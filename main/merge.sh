@@ -2,7 +2,7 @@
 
 . ./config.sh
 
-bash ./mergeModule/00_blastForRef.sh #內部自帶迴圈處理
+# bash ./mergeModule/00_blastForRef.sh #內部自帶迴圈處理
 
 for ((i=0; i<${#nameOfLoci[@]}; i++))
 do
