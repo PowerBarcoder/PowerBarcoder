@@ -24,14 +24,14 @@ import sys
 # loadpath="/home/sktang/powerBC/aligned/"
 
 
-# loadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/aligned/"
-loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
+loadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/aligned/"
+# loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
 
 
 # mergepath="/home/sktang/powerBC/mergeSeq/"
 
-# mergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/mergeSeq/"
-mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
+mergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/mergeSeq/"
+# mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
 
 
 # 取得所有檔案與子目錄名稱
