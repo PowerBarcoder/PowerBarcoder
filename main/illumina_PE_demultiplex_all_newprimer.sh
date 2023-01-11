@@ -36,6 +36,7 @@
 # mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2Ref
 # mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/mergeSeq
 # mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/aligned
+# mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/aligned/mafft
 
 # #using (universal) primer sequences to demultiplex
 # # rbcL C terminal

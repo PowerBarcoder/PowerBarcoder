@@ -7,6 +7,8 @@ from FastaUnit import FastaUnit
 from os import listdir
 from os.path import isfile, isdir, join
 import sys
+from os import path
+import time
 
 # print("merge.py is running on loci: "+sys.argv[3])
 
@@ -220,7 +222,7 @@ for filename in candidate_list:
 
             # 看起來要寫個檔案先存起來 (20230111這步ok)
             aligntext=">r1\n"+r1_for_align+"\n"+">r2\n"+r2_for_align
-            with open(loadpath+"temp.fasta","w",encoding="UTF-8") as file:
+            with open(loadpath+"mafft/"+filename+"temp.fasta","w",encoding="UTF-8") as file:
                 file.write(aligntext)
 
 
@@ -240,15 +242,19 @@ for filename in candidate_list:
             # else:
             # 在py裡做shell，先把overlap區段degap，然後r1 r2兩個overlap去align
             else:
-                alignment = "mafft --thread 1 --maxiterate 16 --globalpair "+loadpath+"temp.fasta"  + "> "+loadpath+"tempAlign.fasta"
+                alignment = "mafft --thread 1 --maxiterate 16 --globalpair "+loadpath+"mafft/"+filename+"temp.fasta"  + "> "+loadpath+"mafft/"+filename+"tempAlign.fasta"
                 # print(alignment)
                 try:
                     subprocess.run(alignment, shell=True, check=True, stdout=PIPE, stderr=PIPE)
                 except Exception as e:
                     print("error occured:",e)
 
+                while ((path.exists(loadpath+"mafft/"+filename+"tempAlign.fasta")== False)):
+                    print(filename+"tempAlign.fasta未生成，等待一秒")
+                    time.sleep(1)
+
                 aligned_fastaUnit = FastaUnit()
-                aligned_fastaUnit.fastaUnit(loadpath+"tempAlign.fasta")
+                aligned_fastaUnit.fastaUnit(loadpath+"mafft/"+filename+"tempAlign.fasta")
                 aligned_seqMap = aligned_fastaUnit.seqMap
                 r1_overlap = ""
                 r2_overlap = ""
@@ -271,7 +277,7 @@ for filename in candidate_list:
 
         # 開始判斷並拼接
         if (overlape==False):
-            # print("non-overlap")# print("Ns")
+            print("non-overlap",filename)# print("Ns")
             ns_num=r1_p2_trimed - r2_p1_trimed-1
             ns_seq="N"*ns_num
             # print("ns_seq",ns_seq)
