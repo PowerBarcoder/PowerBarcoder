@@ -58,9 +58,9 @@ for filename in files:
 # 開始成對處理r1及r2
 for filename in candidate_list:
     
-    # DEBUG
-    if("KTHU1690_Wade4416" not in filename):
-        continue
+    # # DEBUG
+    # if("KTHU1690_Wade4416" not in filename):
+    #     continue
 
     try:
         # print (filename)
