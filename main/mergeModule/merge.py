@@ -24,14 +24,14 @@ import sys
 # loadpath="/home/sktang/powerBC/aligned/"
 
 
-loadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/aligned/"
-# loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
+# loadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/aligned/"
+loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
 
 
 # mergepath="/home/sktang/powerBC/mergeSeq/"
 
-mergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/mergeSeq/"
-# mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
+# mergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/mergeSeq/"
+mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
 
 
 # 取得所有檔案與子目錄名稱
@@ -255,80 +255,81 @@ for filename in candidate_list:
                         r1_overlap = value
                     else:
                         r2_overlap = value
-        print(aligned_seqMap)
-        print(r1_overlap)
-        print(r2_overlap)
+        # print(aligned_seqMap)
+        # print(r1_overlap)
+        # print(r2_overlap)
 
-        # # # 步驟五
-        # # # 依alignment結果拼接重疊區塊
+        # # 步驟五
+        # # 依alignment結果拼接重疊區塊
 
-        # merge_seq=""
-        # trim_0_overlap_align=""
-        # trim_1_overlap_align=""
+        merge_seq=""
+        trim_0_overlap_align=""
+        trim_1_overlap_align=""
 
-        # # 開始判斷並拼接
-        # if (overlape==False):
-        #     # print("Ns")
-        #     ns_num=r1_p2_trimed - r2_p1_trimed-1
-        #     ns_seq="N"*ns_num
-        #     # print("ns_seq",ns_seq)
-        #     # print("ns_num",ns_num)
-        #     merge_seq=merge_seq+r1[:r1_p1].upper()+ns_seq+r2[r2_p2:].upper()
-        # elif(overlape==True):
-        #     # print("overlap")
-        #     # 有overlap才需要merge
-        #     overlap_seq=""
-        #     trim_0_overlap_align=r1_overlap
-        #     trim_1_overlap_align=r2_overlap
-        #     overlap_num_align=len(trim_0_overlap_align)
-        #     gapNumInOverlap=0
-        #     for i in range(0,overlap_num_align):
-        #         # print(i+1,"and",j)
-        #         # print(trim_0_overlap_align[i],trim_1_overlap_align[i])
-        #         if (trim_0_overlap_align[i]=="a" and trim_1_overlap_align[i]=="a") :
-        #             overlap_seq=overlap_seq+"A"
-        #         elif (trim_0_overlap_align[i]=="t" and trim_1_overlap_align[i]=="t") :
-        #             overlap_seq=overlap_seq+"T"
-        #         elif (trim_0_overlap_align[i]=="c" and trim_1_overlap_align[i]=="c") :
-        #             overlap_seq=overlap_seq+"C"
-        #         elif (trim_0_overlap_align[i]=="g" and trim_1_overlap_align[i]=="g") :
-        #             overlap_seq=overlap_seq+"G"
-        #         elif ((trim_0_overlap_align[i]=="a" and trim_1_overlap_align[i]=="g") or (trim_0_overlap_align[i]=="g" and trim_1_overlap_align[i]=="a")):# R	A/G
-        #             overlap_seq=overlap_seq+"R"
-        #         elif ((trim_0_overlap_align[i]=="c" and trim_1_overlap_align[i]=="t") or (trim_0_overlap_align[i]=="t" and trim_1_overlap_align[i]=="c")):# Y C/T
-        #             overlap_seq=overlap_seq+"Y"
-        #         elif ((trim_0_overlap_align[i]=="a" and trim_1_overlap_align[i]=="c") or (trim_0_overlap_align[i]=="c" and trim_1_overlap_align[i]=="a")):# M A/C
-        #             overlap_seq=overlap_seq+"M"
-        #         elif ((trim_0_overlap_align[i]=="g" and trim_1_overlap_align[i]=="t") or (trim_0_overlap_align[i]=="t" and trim_1_overlap_align[i]=="g")):# K G/T
-        #             overlap_seq=overlap_seq+"K"
-        #         elif ((trim_0_overlap_align[i]=="g" and trim_1_overlap_align[i]=="c") or (trim_0_overlap_align[i]=="c" and trim_1_overlap_align[i]=="g")):# S G/C
-        #             overlap_seq=overlap_seq+"S"
-        #         elif ((trim_0_overlap_align[i]=="a" and trim_1_overlap_align[i]=="t") or (trim_0_overlap_align[i]=="t" and trim_1_overlap_align[i]=="a")):# W A/T
-        #             overlap_seq=overlap_seq+"W"
-        #         elif ((trim_0_overlap_align[i]=="-" ) and (trim_1_overlap_align[i]=="-")):# gap+gap=N
-        #             overlap_seq=overlap_seq+"N"
-        #             gapNumInOverlap+=1
-        #         elif ((trim_0_overlap_align[i]=="-" and trim_1_overlap_align[i]!="-")):
-        #             # gap+ATCG=atcg
-        #             overlap_seq=overlap_seq+trim_1_overlap_align[i]
-        #         elif ((trim_0_overlap_align[i]!="-" and trim_1_overlap_align[i]=="-")):
-        #             # ATCG+gap=atcg
-        #             overlap_seq=overlap_seq+trim_0_overlap_align[i]
-        #         # D G/A/T # V G/A/C # B G/T/C # H A/T/C 兩條序列不會出現
-        #         else:
-        #             print("出錯了GG")
-        #     # print("overlap_num_align",overlap_num_align)
-        #     # print("overlap_seq",overlap_seq)
-        #     merge_seq=merge_seq+r1[:r1_p1-1].upper()+overlap_seq+r2[r2_p2+1:].upper()
-        #     merge_seq=merge_seq.replace("-","")
+        # 開始判斷並拼接
+        if (overlape==False):
+            print("non-overlap")# print("Ns")
+            ns_num=r1_p2_trimed - r2_p1_trimed-1
+            ns_seq="N"*ns_num
+            # print("ns_seq",ns_seq)
+            # print("ns_num",ns_num)
+            merge_seq=merge_seq+r1[:r1_p1].upper()+ns_seq+r2[r2_p2:].upper()
+        elif(overlape==True):
+            print("overlap")
+            # 有overlap才需要merge
+            overlap_seq=""
+            trim_0_overlap_align=r1_overlap
+            trim_1_overlap_align=r2_overlap
+            overlap_num_align=len(trim_0_overlap_align)
+            gapNumInOverlap=0
+            for i in range(0,overlap_num_align):
+                # print(i+1,"and",j)
+                # print(trim_0_overlap_align[i],trim_1_overlap_align[i])
+                if (trim_0_overlap_align[i]=="a" and trim_1_overlap_align[i]=="a") :
+                    overlap_seq=overlap_seq+"A"
+                elif (trim_0_overlap_align[i]=="t" and trim_1_overlap_align[i]=="t") :
+                    overlap_seq=overlap_seq+"T"
+                elif (trim_0_overlap_align[i]=="c" and trim_1_overlap_align[i]=="c") :
+                    overlap_seq=overlap_seq+"C"
+                elif (trim_0_overlap_align[i]=="g" and trim_1_overlap_align[i]=="g") :
+                    overlap_seq=overlap_seq+"G"
+                elif ((trim_0_overlap_align[i]=="a" and trim_1_overlap_align[i]=="g") or (trim_0_overlap_align[i]=="g" and trim_1_overlap_align[i]=="a")):# R	A/G
+                    overlap_seq=overlap_seq+"R"
+                elif ((trim_0_overlap_align[i]=="c" and trim_1_overlap_align[i]=="t") or (trim_0_overlap_align[i]=="t" and trim_1_overlap_align[i]=="c")):# Y C/T
+                    overlap_seq=overlap_seq+"Y"
+                elif ((trim_0_overlap_align[i]=="a" and trim_1_overlap_align[i]=="c") or (trim_0_overlap_align[i]=="c" and trim_1_overlap_align[i]=="a")):# M A/C
+                    overlap_seq=overlap_seq+"M"
+                elif ((trim_0_overlap_align[i]=="g" and trim_1_overlap_align[i]=="t") or (trim_0_overlap_align[i]=="t" and trim_1_overlap_align[i]=="g")):# K G/T
+                    overlap_seq=overlap_seq+"K"
+                elif ((trim_0_overlap_align[i]=="g" and trim_1_overlap_align[i]=="c") or (trim_0_overlap_align[i]=="c" and trim_1_overlap_align[i]=="g")):# S G/C
+                    overlap_seq=overlap_seq+"S"
+                elif ((trim_0_overlap_align[i]=="a" and trim_1_overlap_align[i]=="t") or (trim_0_overlap_align[i]=="t" and trim_1_overlap_align[i]=="a")):# W A/T
+                    overlap_seq=overlap_seq+"W"
+                elif ((trim_0_overlap_align[i]=="-" ) and (trim_1_overlap_align[i]=="-")):# gap+gap=N
+                    overlap_seq=overlap_seq+"N"
+                    gapNumInOverlap+=1
+                elif ((trim_0_overlap_align[i]=="-" and trim_1_overlap_align[i]!="-")):
+                    # gap+ATCG=atcg
+                    overlap_seq=overlap_seq+trim_1_overlap_align[i]
+                elif ((trim_0_overlap_align[i]!="-" and trim_1_overlap_align[i]=="-")):
+                    # ATCG+gap=atcg
+                    overlap_seq=overlap_seq+trim_0_overlap_align[i]
+                # D G/A/T # V G/A/C # B G/T/C # H A/T/C 兩條序列不會出現
+                else:
+                    print("出錯了GG")
+            # print("overlap_num_align",overlap_num_align)
+            # print("overlap_seq",overlap_seq)
+            merge_seq=merge_seq+r1[:r1_p1-1].upper()+overlap_seq+r2[r2_p2+1:].upper()
+            # print(merge_seq)
+            merge_seq=merge_seq.replace("-","")
             
-        # # 步驟六：收尾
-        # # print(merge_seq)
-        # output_filename=filename.replace("_.fas","")
-        # output_filename=output_filename+"_"+r1_header_name+"_"+r2_header_name
-        # merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n"
-        # with open(mergepath+filename,"w",encoding="UTF-8") as file:
-        #     file.write(merge_seq_text)
+        # 步驟六：收尾
+        # print(merge_seq)
+        output_filename=filename.replace("_.fas","")
+        output_filename=output_filename+"_"+r1_header_name+"_"+r2_header_name
+        merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n"
+        with open(mergepath+filename,"w",encoding="UTF-8") as file:
+            file.write(merge_seq_text)
     except Exception as e:
         print("merge.py 319: something wrong.",filename)
 
