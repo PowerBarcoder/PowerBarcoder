@@ -237,7 +237,7 @@ for filename in candidate_list:
             # else:
             # 在py裡做shell，先把overlap區段degap，然後r1 r2兩個overlap去align
             else:
-                alignment = "mafft --thread 10 --maxiterate 16 --globalpair "+loadpath+"temp.fasta"  + "> "+loadpath+"temp.fasta"
+                alignment = "mafft --thread 10 --maxiterate 16 --globalpair "+loadpath+"temp.fasta"  + "> "+loadpath+"tempAlign.fasta"
                 # print(alignment)
                 try:
                     subprocess.run(alignment, shell=True, check=True, stdout=PIPE, stderr=PIPE)
@@ -245,7 +245,7 @@ for filename in candidate_list:
                     print("error occured:",e)
 
                 aligned_fastaUnit = FastaUnit()
-                aligned_fastaUnit.fastaUnit(loadpath+"temp.fasta")
+                aligned_fastaUnit.fastaUnit(loadpath+"tempAlign.fasta")
                 aligned_seqMap = aligned_fastaUnit.seqMap
                 r1_overlap = ""
                 r2_overlap = ""
@@ -255,7 +255,7 @@ for filename in candidate_list:
                         r1_overlap = value
                     else:
                         r2_overlap = value
-
+        print(aligned_seqMap)
         print(r1_overlap)
         print(r2_overlap)
 
