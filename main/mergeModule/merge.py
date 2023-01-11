@@ -237,7 +237,7 @@ for filename in candidate_list:
             # else:
             # 在py裡做shell，先把overlap區段degap，然後r1 r2兩個overlap去align
             else:
-                alignment = "mafft --thread 10 --maxiterate 16 --globalpair "+loadpath+"temp.fasta"  + "> "+loadpath+"tempAlign.fasta"
+                alignment = "mafft --thread 1 --maxiterate 16 --globalpair "+loadpath+"temp.fasta"  + "> "+loadpath+"tempAlign.fasta"
                 # print(alignment)
                 try:
                     subprocess.run(alignment, shell=True, check=True, stdout=PIPE, stderr=PIPE)
@@ -268,14 +268,14 @@ for filename in candidate_list:
 
         # 開始判斷並拼接
         if (overlape==False):
-            print("non-overlap")# print("Ns")
+            # print("non-overlap")# print("Ns")
             ns_num=r1_p2_trimed - r2_p1_trimed-1
             ns_seq="N"*ns_num
             # print("ns_seq",ns_seq)
             # print("ns_num",ns_num)
             merge_seq=merge_seq+r1[:r1_p1].upper()+ns_seq+r2[r2_p2:].upper()
         elif(overlape==True):
-            print("overlap")
+            # print("overlap")
             # 有overlap才需要merge
             overlap_seq=""
             trim_0_overlap_align=r1_overlap
@@ -331,6 +331,7 @@ for filename in candidate_list:
         with open(mergepath+filename,"w",encoding="UTF-8") as file:
             file.write(merge_seq_text)
     except Exception as e:
+        print(e)
         print("merge.py 319: something wrong.",filename)
 
 
