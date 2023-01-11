@@ -42,6 +42,8 @@ candidate_list=set()
 
 # 以迴圈處理
 for filename in files:
+  if ("tempAlign.fasta_r1.al" in filename) or ("temp.fasta" in filename):
+    continue  
   # 產生檔案的絕對路徑
   fullpath = join(loadpath, filename)
   # 判斷 fullpath 是檔案還是目錄
