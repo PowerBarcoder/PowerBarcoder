@@ -1,17 +1,35 @@
 # Issue Undone
+
+## 優先
+
+1. "log_dada2.txt" 應該要跟其他result files 放一起比較合理
+2. DADA2的10N
+
+## Pending
+
 1. dada2 的 chimera killing 功能 看能不加進去
-2. "log_dada2.txt" 應該要跟其他result files 放一起比較合理 
-3. 可能有人 不 清楚 要先cd 去那裏執行 powerbarcoder.sh，最好全都改寫成傳參寫法的絕對路徑 
-4. 看要不要寫一個 powerbarcoder.py 來將 config 的設定讀進去，讓他們(設定檔、執行檔)兩個人的功能是分開清楚的
-5. powerbarcode.sh的執行方式是powerbarcoder -config XXX/路徑/XXX/pbc.config
-6. secondary merge ： rbcLC + rbcLN (deadline 20230215)
-7. create new result files
-   - merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n"
-   - merge_seq這裡把"N"跟"-"取代掉，然後存一個新的檔案，可以直接給別人用來做樹，之前在mergeSeq的是用來確認序列有沒有拼對的
-8. DADA2的10N
+2. create new result files
+    - merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n"
+    - merge_seq這裡把"N"跟"-"取代掉，然後存一個新的檔案，可以直接給別人用來做樹，之前在mergeSeq的是用來確認序列有沒有拼對的
+3. secondary merge ： rbcLC + rbcLN (deadline 20230215)
+4. powerbarcode.sh的執行方式是powerbarcoder -config XXX/路徑/XXX/pbc.config
+5. 可能有人 不 清楚 要先cd 去那裏執行 powerbarcoder.sh，最好全都改寫成傳參寫法的絕對路徑
+6. 看要不要寫一個 powerbarcoder.py 來將 config 的設定讀進去，讓他們(設定檔、執行檔)兩個人的功能是分開清楚的
 
 
-# 前置步驟
+## Done
+
+### [features-dada10N_20230111] 20230111
+1. 參數替換成變數
+2. add checkDirectory.sh
+
+### [features-multiLoci_20230103] 20230104
+1. 可一次執行多位點的barcode，從config.sh檔可以增減位點(感謝亦烜處理前半段)
+2. 將讀檔區與產生檔案的路徑設為變數，使用者可以在powerbarcoder主檔路徑外內產出結果
+
+
+
+# 運行邏輯
 取出denoise best的nonmerge資料夾內的r1跟r2
 從r1及r2資料夾中取出來blast(所以第一步的路徑要抽換成今天的)
 //home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/r1
