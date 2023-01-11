@@ -42,7 +42,7 @@ candidate_list=set()
 
 # 以迴圈處理
 for filename in files:
-  if ("tempAlign.fasta_r1.al" in filename) or ("temp.fasta" in filename):
+  if ("tempAlign.fasta_r1.al" in filename) or ("temp.fasta" in filename):#跳過中繼檔，有必要之後可以每run完刪除一次
     continue  
   # 產生檔案的絕對路徑
   fullpath = join(loadpath, filename)
