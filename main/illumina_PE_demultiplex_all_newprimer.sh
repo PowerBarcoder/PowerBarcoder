@@ -61,19 +61,19 @@ cd ${resultDataPath}${nameOfLoci[i]}_demultiplex
 
 
 # AB test
-# ${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:../barcodes_rbcL_start_0.fasta -G file:../barcodes_rbcLC_start2_0.fasta --action=none -o rbcLC_{name1}_{name2}_r1.fq -p rbcLC_{name1}_{name2}_r2.fq ../rbcLC_amplicon_r1.fq ../rbcLC_amplicon_r2.fq -j $threadNumberCutadaptor
-${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:${ampliconInfo}${barcodesFile1[i]} -G file:${mainDataPath}${barcodesFile2[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r1.fq -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r2.fq ${resultDataPath}${amplicon_r1[i]} ${resultDataPath}${amplicon_r2[i]} -j ${threadNumberCutadaptor[i]}
+# ${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:../barcodes_rbcL_start_0.fasta -G file:../barcodes_rbcLC_start2_0.fasta --action=none -o rbcLC_{name1}_{name2}_r1.fq -p rbcLC_{name1}_{name2}_r2.fq ../rbcLC_amplicon_r1.fq ../rbcLC_amplicon_r2.fq -j $customizedThreadNumber
+${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:${ampliconInfo}${barcodesFile1[i]} -G file:${mainDataPath}${barcodesFile2[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r1.fq -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r2.fq ${resultDataPath}${amplicon_r1[i]} ${resultDataPath}${amplicon_r2[i]} -j ${customizedThreadNumber[i]}
 
 
 # # 迴圈去掉primer (絕對路徑下，用$(basename $file)取檔名)
 for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r1.fq
 	do
-	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerF[i]} -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename $File) ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename $File) -j ${threadNumberCutadaptor[i]}
+	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerF[i]} -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename $File) ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename $File) -j ${customizedThreadNumber[i]}
 	done
 
 for file in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r2.fq
 	do
-	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerR[i]} -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename $file) ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename $file) -j ${threadNumberCutadaptor[i]}
+	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerR[i]} -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename $file) ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename $file) -j ${customizedThreadNumber[i]}
 	done
 # -----------------demultiplex完成------------------------
 
