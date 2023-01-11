@@ -1,4 +1,4 @@
-
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 from Miseq import Miseq
 import subprocess
@@ -10,7 +10,7 @@ import sys
 from os import path
 import time
 
-# print("merge.py is running on loci: "+sys.argv[3])
+print("merge.py is running on loci: "+sys.argv[3])
 
 ######################################
 # 運作流程
@@ -25,13 +25,10 @@ import time
 # loadpath="C:/Users/kwz50/aligned/"
 # loadpath="/home/sktang/powerBC/aligned/"
 
-
 loadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/aligned/"
 # loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
 
-
 # mergepath="/home/sktang/powerBC/mergeSeq/"
-
 mergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/mergeSeq/"
 # mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
 
@@ -62,13 +59,7 @@ for filename in files:
 
 # 開始成對處理r1及r2
 for filename in candidate_list:
-    
-    # # DEBUG
-    # if("KTHU1690_Wade4416" not in filename):
-    #     continue
-
     try:
-        # print (filename)
         #  把alignment好的r1跟r2讀進來變單行
         r1_fastaUnit = FastaUnit()
         # r1_loadpath = loadpath+0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r1.al
@@ -106,12 +97,10 @@ for filename in candidate_list:
 
         # print(r1)
         # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------tagagctgtctatgaatgccttcgtggtggacttgatttcacaaaagatgatgagaacgtaaattcccaaccattcatgcgttggagggatcgtttcttattcgtggcagaagctcttttcaaatcccaggctgaaacaggcgaaattaagggacattacttaaatgccaccgcaggtacatgtgaagagatgttgaagagagctgtttttgctagagaattgggtgcaccaattgtcatgcacgactacctgaccggagggttca-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        # print(ref_r1)
-        # atgtcaccacaaacggagactaaagcaggtgctggattcaaagctggtgttaaagattatcgattgacctattacactcccgaatataagaccaaagacactgatattttagcagccttccgaatgaccccacaacctggagtaccagctgaggaagccggagctgcggtagctgcggaatcctccacgggtacatggaccactgtatggacagatgggcttaccagtctcgatcgttacaagggccggtgctacgatatcgaacccgtcgctggagaagaaaaccagtatattgcatatgtagcttatcccttggatctattcgaagaaggttctgtaaccaatttgttcacttcaattgtaggtaatgttttcggattcaaggccctacgcgctctacgcctagaagaccttcgaattccccccgcttattctaaaactttcattggaccgcctcacggtattcaggtcgaaagggataaactgaacaaatatggacgtcccttattggggtgtacaatcaagccaaaattgggcttgtctgctaagaattatggtagagccgtctatgaatgccttcgtggtggacttgatttcacaaaagacgatgaaaacgtaaattcccaaccattcatgcgttggagagatcgcttcttattcgtagcagaagctcttttcaaatcccaggctgaaacaggtgaaatcaagggacattacttaaatgccactgcaggtacgtgtgaagaaatgatgaagagagctgtttttgctagagaattgggtgcaccaattgtcatgcatgactacctgaccgggggatttaccgcaaataccagcttagcttattattgcagagacaatgggctgcttcttcatattcaccgtgcaatgcatgctgtcatcgatagacaacgaaatcatggtatgcacttccgtgtattggccaaagcgttacgcatgtccggcggagaccacatccacgccggaaccgtagtaggcaaactagagggggagcgagacgtcaccttgggttttgtcgatttgcttcgcgatgattacatcgaaaaagatcgtagccgcggcatctatttcacgcaggattgggtatctatgccgggtgtactccccgtagcttcagggggtatccacgtctggcacatgcccgccctaaccgaaatcttcggggacgattctgtcttacagttcggtggcggaactttgggacatccctggggaaatgcgcccggtgccgtagctaaccgagtcgcattagaagcttgtgtacaagctcgtaatgagggccgcgacctcgctcgtgaaggtaatgagatcattcgtgaagcttctaagtggagtccggaattggctgctgcatgcgaaatatggaaagccatcaaatttgagttcgagacaatcgatacgttgtaa
+        # print(ref_r1)# atgtcaccacaaacggagactaaagcaggtgctggattcaaagctggtgttaaagattatcgattgacctattacactcccgaatataagaccaaagacactgatattttagcagccttccgaatgaccccacaacctggagtaccagctgaggaagccggagctgcggtagctgcggaatcctccacgggtacatggaccactgtatggacagatgggcttaccagtctcgatcgttacaagggccggtgctacgatatcgaacccgtcgctggagaagaaaaccagtatattgcatatgtagcttatcccttggatctattcgaagaaggttctgtaaccaatttgttcacttcaattgtaggtaatgttttcggattcaaggccctacgcgctctacgcctagaagaccttcgaattccccccgcttattctaaaactttcattggaccgcctcacggtattcaggtcgaaagggataaactgaacaaatatggacgtcccttattggggtgtacaatcaagccaaaattgggcttgtctgctaagaattatggtagagccgtctatgaatgccttcgtggtggacttgatttcacaaaagacgatgaaaacgtaaattcccaaccattcatgcgttggagagatcgcttcttattcgtagcagaagctcttttcaaatcccaggctgaaacaggtgaaatcaagggacattacttaaatgccactgcaggtacgtgtgaagaaatgatgaagagagctgtttttgctagagaattgggtgcaccaattgtcatgcatgactacctgaccgggggatttaccgcaaataccagcttagcttattattgcagagacaatgggctgcttcttcatattcaccgtgcaatgcatgctgtcatcgatagacaacgaaatcatggtatgcacttccgtgtattggccaaagcgttacgcatgtccggcggagaccacatccacgccggaaccgtagtaggcaaactagagggggagcgagacgtcaccttgggttttgtcgatttgcttcgcgatgattacatcgaaaaagatcgtagccgcggcatctatttcacgcaggattgggtatctatgccgggtgtactccccgtagcttcagggggtatccacgtctggcacatgcccgccctaaccgaaatcttcggggacgattctgtcttacagttcggtggcggaactttgggacatccctggggaaatgcgcccggtgccgtagctaaccgagtcgcattagaagcttgtgtacaagctcgtaatgagggccgcgacctcgctcgtgaaggtaatgagatcattcgtgaagcttctaagtggagtccggaattggctgctgcatgcgaaatatggaaagccatcaaatttgagttcgagacaatcgatacgttgtaa
         # print(r2)
         # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ccaccgcaggtacatgtgaagagatgttgaagagagctgtttttgctagagaattgggtgcaccaattgtcatgcacgactacctgaccggagggttcaccgcaaataccagcttagcttatcactgcagagacaatgggctacttcttcatattcaccgcgcgatgcatgctgtcattgatagacaacgaaatcacggtatgcatttccgcgtattggctaaagcattacgcatgtccggcggagatcatatccatgccggaact------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        # print(ref_r2)
-        # atgtcaccacaaacggagactaaagcaggtgctggattcaaagctggtgttaaagattatcgattgacctattacactcccgaatataagaccaaagacactgatattttagcagccttccgaatgaccccacaacctggagtaccagctgaggaagccggagctgcggtagctgcggaatcctccacgggtacatggaccactgtatggacagatgggcttaccagtctcgatcgttacaagggccggtgctacgatatcgaacccgtcgctggagaagaaaaccagtatattgcatatgtagcttatcccttggatctattcgaagaaggttctgtaaccaatttgttcacttcaattgtaggtaatgttttcggattcaaggccctacgcgctctacgcctagaagaccttcgaattccccccgcttattctaaaactttcattggaccgcctcacggtattcaggtcgaaagggataaactgaacaaatatggacgtcccttattggggtgtacaatcaagccaaaattgggcttgtctgctaagaattatggtagagccgtctatgaatgccttcgtggtggacttgatttcacaaaagacgatgaaaacgtaaattcccaaccattcatgcgttggagagatcgcttcttattcgtagcagaagctcttttcaaatcccaggctgaaacaggtgaaatcaagggacattacttaaatgccactgcaggtacgtgtgaagaaatgatgaagagagctgtttttgctagagaattgggtgcaccaattgtcatgcatgactacctgaccgggggatttaccgcaaataccagcttagcttattattgcagagacaatgggctgcttcttcatattcaccgtgcaatgcatgctgtcatcgatagacaacgaaatcatggtatgcacttccgtgtattggccaaagcgttacgcatgtccggcggagaccacatccacgccggaaccgtagtaggcaaactagagggggagcgagacgtcaccttgggttttgtcgatttgcttcgcgatgattacatcgaaaaagatcgtagccgcggcatctatttcacgcaggattgggtatctatgccgggtgtactccccgtagcttcagggggtatccacgtctggcacatgcccgccctaaccgaaatcttcggggacgattctgtcttacagttcggtggcggaactttgggacatccctggggaaatgcgcccggtgccgtagctaaccgagtcgcattagaagcttgtgtacaagctcgtaatgagggccgcgacctcgctcgtgaaggtaatgagatcattcgtgaagcttctaagtggagtccggaattggctgctgcatgcgaaatatggaaagccatcaaatttgagttcgagacaatcgatacgttgtaa
+        # print(ref_r2)# atgtcaccacaaacggagactaaagcaggtgctggattcaaagctggtgttaaagattatcgattgacctattacactcccgaatataagaccaaagacactgatattttagcagccttccgaatgaccccacaacctggagtaccagctgaggaagccggagctgcggtagctgcggaatcctccacgggtacatggaccactgtatggacagatgggcttaccagtctcgatcgttacaagggccggtgctacgatatcgaacccgtcgctggagaagaaaaccagtatattgcatatgtagcttatcccttggatctattcgaagaaggttctgtaaccaatttgttcacttcaattgtaggtaatgttttcggattcaaggccctacgcgctctacgcctagaagaccttcgaattccccccgcttattctaaaactttcattggaccgcctcacggtattcaggtcgaaagggataaactgaacaaatatggacgtcccttattggggtgtacaatcaagccaaaattgggcttgtctgctaagaattatggtagagccgtctatgaatgccttcgtggtggacttgatttcacaaaagacgatgaaaacgtaaattcccaaccattcatgcgttggagagatcgcttcttattcgtagcagaagctcttttcaaatcccaggctgaaacaggtgaaatcaagggacattacttaaatgccactgcaggtacgtgtgaagaaatgatgaagagagctgtttttgctagagaattgggtgcaccaattgtcatgcatgactacctgaccgggggatttaccgcaaataccagcttagcttattattgcagagacaatgggctgcttcttcatattcaccgtgcaatgcatgctgtcatcgatagacaacgaaatcatggtatgcacttccgtgtattggccaaagcgttacgcatgtccggcggagaccacatccacgccggaaccgtagtaggcaaactagagggggagcgagacgtcaccttgggttttgtcgatttgcttcgcgatgattacatcgaaaaagatcgtagccgcggcatctatttcacgcaggattgggtatctatgccgggtgtactccccgtagcttcagggggtatccacgtctggcacatgcccgccctaaccgaaatcttcggggacgattctgtcttacagttcggtggcggaactttgggacatccctggggaaatgcgcccggtgccgtagctaaccgagtcgcattagaagcttgtgtacaagctcgtaatgagggccgcgacctcgctcgtgaaggtaatgagatcattcgtgaagcttctaagtggagtccggaattggctgctgcatgcgaaatatggaaagccatcaaatttgagttcgagacaatcgatacgttgtaa
 
 
         # # # # 之前的假資料
@@ -187,12 +176,10 @@ for filename in candidate_list:
         # # 步驟三
         # # 開始拼接，若有重疊才於第四步進行alignment
 
-        # 不用拼(跳步驟五)
-        if (overlape == False):
+        if (overlape == False):# 不用拼(跳步驟五)
             pass
 
-        # 要拼
-        elif(overlape == True):
+        elif(overlape == True):# 要拼
             # 先取出需要align的兩個片段(r1_p1~r1_p2、r2_p1~r2_p2)
             # 獲得ref內的拼接長度
 
@@ -213,12 +200,8 @@ for filename in candidate_list:
             r1_p1=r1_p2-align_length_in_ref-r1_delSite_in_overlap_seq+modify_index
             r2_p2=r2_p1+align_length_in_ref+r2_delSite_in_overlap_seq-modify_index
             
-            r1_for_align=r1[r1_p1-1:r1_p2]
-            r2_for_align=r2[r2_p1:r2_p2+1]
-
-            # print(r1_for_align)
-            # print(r2_for_align)
-
+            r1_for_align=r1[r1_p1-1:r1_p2] # print(r1_for_align)
+            r2_for_align=r2[r2_p1:r2_p2+1] # print(r2_for_align)
 
             # 看起來要寫個檔案先存起來 (20230111這步ok)
             aligntext=">r1\n"+r1_for_align+"\n"+">r2\n"+r2_for_align
@@ -264,9 +247,7 @@ for filename in candidate_list:
                         r1_overlap = value
                     else:
                         r2_overlap = value
-        # print(aligned_seqMap)
-        # print(r1_overlap)
-        # print(r2_overlap)
+        # print(aligned_seqMap) # print(r1_overlap) # print(r2_overlap)
 
         # # 步驟五
         # # 依alignment結果拼接重疊區塊
@@ -277,23 +258,19 @@ for filename in candidate_list:
 
         # 開始判斷並拼接
         if (overlape==False):
-            print("non-overlap",filename)# print("Ns")
-            ns_num=r1_p2_trimed - r2_p1_trimed-1
+            # 沒overlap就補NNNNN   # print("non-overlap",filename)# print("Ns")
+            ns_num=abs(r2Object.stickSite[1]-r1Object.stickSite[1])# 原本這樣寫，有問題 ns_num=r1_p2_trimed - r2_p1_trimed-1
             ns_seq="N"*ns_num
-            # print("ns_seq",ns_seq)
-            # print("ns_num",ns_num)
-            merge_seq=merge_seq+r1[:r1_p1].upper()+ns_seq+r2[r2_p2:].upper()
+            merge_seq=merge_seq+r1[:r1Object.stickSite[1]].upper()+ns_seq+r2[r2Object.stickSite[1]:].upper()
         elif(overlape==True):
-            # print("overlap")
-            # 有overlap才需要merge
+            # 有overlap才需要merge # print("overlap")
             overlap_seq=""
             trim_0_overlap_align=r1_overlap
             trim_1_overlap_align=r2_overlap
             overlap_num_align=len(trim_0_overlap_align)
             gapNumInOverlap=0
             for i in range(0,overlap_num_align):
-                # print(i+1,"and",j)
-                # print(trim_0_overlap_align[i],trim_1_overlap_align[i])
+                # print(i+1,"and",j) # print(trim_0_overlap_align[i],trim_1_overlap_align[i])
                 if (trim_0_overlap_align[i]=="a" and trim_1_overlap_align[i]=="a") :
                     overlap_seq=overlap_seq+"A"
                 elif (trim_0_overlap_align[i]=="t" and trim_1_overlap_align[i]=="t") :
@@ -328,12 +305,10 @@ for filename in candidate_list:
                     print("出錯了GG")
             # print("overlap_num_align",overlap_num_align)
             # print("overlap_seq",overlap_seq)
-            merge_seq=merge_seq+r1[:r1_p1-1].upper()+overlap_seq+r2[r2_p2+1:].upper()
-            # print(merge_seq)
+            merge_seq=merge_seq+r1[:r1_p1-1].upper()+overlap_seq+r2[r2_p2+1:].upper() # print(merge_seq)
             merge_seq=merge_seq.replace("-","")
             
-        # 步驟六：收尾
-        # print(merge_seq)
+        # 步驟六：收尾  # print(merge_seq)
         output_filename=filename.replace("_.fas","")
         output_filename=output_filename+"_"+r1_header_name+"_"+r2_header_name
         merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n"
@@ -343,13 +318,10 @@ for filename in candidate_list:
         print(e)
         print("merge.py 319: something wrong.",filename)
 
-
-
 # 20220918
 # 最終檔案要長這樣(注意最後的header名要修改：r1_0.548_abundance_23_r2_0.548_abundance_23)
 # /home/lykuo/lab_data/NGS_data/miseq/LIB720/rbcLN_demultiplex/denoice_best/r1
 # >Diplazium_sylvaticum_Wade4851_KTHU1447_01_r1_0.548_abundance_23_r2_0.548_abundance_23
 # GGCTGGTGTCAAAGATTACCGACTGAACTATTACACCCCCGAATACAAGACCAAAGATACTGACATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCAGCTGAGGAAGCCGGAGCTGCGGTAGCTGCGGAATCCTCCACGGGTACGTGGACCACTGTATGGACAGACGGGTTGACCAGTCTTGACCGTTACAAGGGCCGATGCTACGACATCGAACCTGTCGCTGGGGAGGAAAACCAGTATATCGCGTATGTAGCTT
 
-
-# print("merge.py is ended on loci: "+sys.argv[3])
+print("merge.py is ended on loci: "+sys.argv[3])
