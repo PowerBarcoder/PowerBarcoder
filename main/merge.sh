@@ -1,31 +1,32 @@
 #! /bin/bash
 
-# 傳參寫法
-# one=1
-# two=2
-# three=3
-# python3 ./mergeModule/test.py $one $two $three
-# sh ./mergeModule/00_blastForRef.sh $one $two $three
-
 . ./config.sh
 
-sh ./mergeModule/00_blastForRef.sh
-python3 ./mergeModule/BlastResult.py $mainDataPath
-python3 ./mergeModule/BeforeAlignment.py $mainDataPath $sseqidFileName
-python3 ./mergeModule/Alignment.py $mainDataPath
-python3 ./mergeModule/merge.py $mainDataPath
+bash ./mergeModule/00_blastForRef.sh #內部自帶迴圈處理
 
+for ((i=0; i<${#nameOfLoci[@]}; i++))
+do
 
+    count=0
+    for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*
+    do
+    ((count = $count+1))
+    done
 
+    if [ ${count} -gt 1 ] 
+    then #有檔案的才做
+    echo "${count} pairs nonmerged files found in ${nameOfLoci[i]}"
+        python3 ./mergeModule/BlastResult.py $mainDataPath $resultDataPath ${nameOfLoci[i]}
+        
+        
+        # 20230107接NNNNN的話，底下這兩部就要改成一個檔案，用來把NNNNNN拆掉，然後按blast的結果做reverse complement後，輸出正確方向的ref
+        python3 ./mergeModule/BeforeAlignment.py $mainDataPath ${sseqidFileName[i]} $resultDataPath ${nameOfLoci[i]}
+        python3 ./mergeModule/Alignment.py $mainDataPath $resultDataPath ${nameOfLoci[i]}
+      
+        
+        python3 ./mergeModule/merge.py $mainDataPath $resultDataPath ${nameOfLoci[i]}
+    else #沒有的就跳過
+    echo "no nonmerged files found in ${nameOfLoci[i]}"
+    fi
 
-
-
-
-# # 不需要For loop，我裡面已經處理好了
-# # for File in *r1.fq
-# # 	do
-# #     python3 ./mergeModule/BeforeAlignment.py
-# #     python3 ./mergeModule/Alignment.py
-# #     python3 ./mergeModule/merge.py
-# # 	done
-# # 不需要For loop，我裡面已經處理好了
+done

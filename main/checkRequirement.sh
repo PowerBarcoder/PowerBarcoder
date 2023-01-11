@@ -1,5 +1,4 @@
 # ! /bin/bash
-. ./config.sh
 
 
 echo "checking reuirement..."
