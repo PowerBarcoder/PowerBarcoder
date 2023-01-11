@@ -57,6 +57,11 @@ for filename in files:
 
 # 開始成對處理r1及r2
 for filename in candidate_list:
+    
+    # DEBUG
+    if("KTHU1690_Wade4416" not in filename):
+        continue
+
     try:
         # print (filename)
         #  把alignment好的r1跟r2讀進來變單行
@@ -176,6 +181,9 @@ for filename in candidate_list:
 
         # # 步驟三
         # # 開始拼接，若有重疊才於第四步進行alignment
+
+        # DEBUG
+        print(overlape)
 
         # 不用拼(跳步驟五)
         if (overlape == False):
