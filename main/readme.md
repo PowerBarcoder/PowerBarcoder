@@ -1,9 +1,7 @@
 # Issue Undone
 
 ## 優先
-
-
-2. DADA2的10N
+1. DADA2的10N
 
 ## Pending
 
@@ -13,7 +11,7 @@
     - merge_seq這裡把"N"跟"-"取代掉，然後存一個新的檔案，可以直接給別人用來做樹，之前在mergeSeq的是用來確認序列有沒有拼對的
 3. secondary merge ： rbcLC + rbcLN (deadline 20230215)
 4. powerbarcode.sh的執行方式是powerbarcoder -config XXX/路徑/XXX/pbc.config
-5. 可能有人 不 清楚 要先cd 去那裏執行 powerbarcoder.sh，最好全都改寫成傳參寫法的絕對路徑
+5. 可能有人 不清楚 要先cd 去那裏執行 powerbarcoder.sh，最好全都改寫成傳參寫法的絕對路徑
 6. 看要不要寫一個 powerbarcoder.py 來將 config 的設定讀進去，讓他們(設定檔、執行檔)兩個人的功能是分開清楚的
 
 
