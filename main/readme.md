@@ -2,7 +2,7 @@
 
 ## 優先
 
-1. "log_dada2.txt" 應該要跟其他result files 放一起比較合理
+
 2. DADA2的10N
 
 ## Pending
@@ -22,6 +22,7 @@
 ### [features-dada10N_20230111] 20230111
 1. 參數替換成變數
 2. add checkDirectory.sh
+3. "log_dada2.txt" 應該要跟其他result files 放一起比較合理
 
 ### [features-multiLoci_20230103] 20230104
 1. 可一次執行多位點的barcode，從config.sh檔可以增減位點(感謝亦烜處理前半段)
