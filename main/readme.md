@@ -5,6 +5,7 @@
 
 ## Pending
 
+### release v 1.0
 1. DADA2的10N
 2. create new result files
     - merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n"
@@ -13,10 +14,15 @@
 4. powerbarcode.sh的執行方式是powerbarcoder -config XXX/路徑/XXX/pbc.config
 5. 可能有人 不清楚 要先cd 去那裏執行 powerbarcoder.sh，最好全都改寫成傳參寫法的絕對路徑
 6. 看要不要寫一個 powerbarcoder.py 來將 config 的設定讀進去，讓他們(設定檔、執行檔)兩個人的功能是分開清楚的
-7. dada2 的 chimera killing 功能 看能不加進去
-8. 自動化blast
-8. 納入pacbio流程
-8. GUI
+7. QC 
+8. dada2 的 chimera killing 功能 看能不加進去
+
+### release v 2.0
+1. 納入pacbio流程
+2. 接上雲端blast instance (https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast)自動化blast
+
+### release v 3.0
+1. GUI
 
 
 ## Done
