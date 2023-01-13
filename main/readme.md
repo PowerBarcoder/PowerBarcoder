@@ -1,7 +1,7 @@
 # Issue Undone
 
 ## 優先
-1. alignment方式調優
+1. alignment方式調優 
 
 ## Pending
 
