@@ -15,6 +15,7 @@ do
 
     if [ ${count} -gt 1 ] 
     then #有檔案的才做
+    ((count = $count/2))
     echo "${count} pairs nonmerged files found in ${nameOfLoci[i]}"
         python3 ./mergeModule/BlastResult.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
         

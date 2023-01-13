@@ -2,10 +2,7 @@
 
 ## 優先
 1. alignment方式調優 
-2. create new result files (de-gaps and de-Ns merge files)
-    - merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n"
-    - merge_seq這裡把"N"跟"-"取代掉，然後存一個新的檔案，可以直接給別人用來做樹，之前在mergeSeq的是用來確認序列有沒有拼對的
-3. secondary merge ： rbcLC + rbcLN (deadline 20230215)
+2. secondary merge ： rbcLC + rbcLN (deadline 20230215)
 ## Pending
 
 ### release v 1.0
@@ -30,6 +27,8 @@
 1. 參數替換成變數
 2. add checkDirectory.sh
 3. "log_dada2.txt" 應該要跟其他result files 放一起比較合理
+4. create new result files (de-gaps and de-Ns merge files for making tree)
+
 
 ### [features-multiLoci_20230103] 20230104
 1. 可一次執行多位點的barcode，從config.sh檔可以增減位點(感謝亦烜處理前半段)
