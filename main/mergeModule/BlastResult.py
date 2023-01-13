@@ -15,7 +15,7 @@ localBlast=BlastRef()
 # loadpath="/home/sktang/powerBC/"
 loadpath=sys.argv[2]
 
-localBlast.blastRef(loadpath,sys.argv[3])
+localBlast.blastRef(loadpath+"blastResult/",sys.argv[3])
 
 # 測試用
 # localBlast.blastRef("C:/Users/123/")

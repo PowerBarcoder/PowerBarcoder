@@ -12,7 +12,10 @@ import time
 
 print("merge2nd.py is running on loci: "+sys.argv[3])
 
+# nonmerge的
 loadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/deGapMergeSeq/"
+# dada2 merge的
+loadpath2=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/deGapMergeSeq/"
 mergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/mergeResult/"
 
 # 取得所有檔案與子目錄名稱
