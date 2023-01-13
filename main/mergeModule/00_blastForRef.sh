@@ -13,15 +13,15 @@ do
 
 # ${localBlastToolDir}makeblastdb -in ${targetLibraryFilePath} -dbtype nucl -out refDB
 # /home/lykuo/ncbi-blast-2.10.0+/bin/makeblastdb -in /home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/fermalies_rbcL.fasta -dbtype nucl -out refDB
-${localBlastToolDir}makeblastdb -in ${ampliconInfo}${sseqidFileName[i]} -dbtype nucl -out ${resultDataPath}${nameOfLoci[i]}_refDB
+${localBlastToolDir}makeblastdb -in ${ampliconInfo}${sseqidFileName[i]} -dbtype nucl -out ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_refDB
 
 # cat ${blastSequenceDir}r1/*.fas ${blastSequenceDir}r2/*.fas > catQuery.fas
 # cat /home/sktang/powerBC/r1/*.fas /home/sktang/powerBC/r2/*.fas > catQuery.fas
-cat ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*.fas ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2/*.fas > ${resultDataPath}${nameOfLoci[i]}_catQuery.fas
+cat ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*.fas ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2/*.fas > ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_catQuery.fas
 
 # ${localBlastToolDir}blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
 # /home/lykuo/ncbi-blast-2.10.0+/bin/blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
-${localBlastToolDir}blastn -db ${resultDataPath}${nameOfLoci[i]}_refDB -query ${resultDataPath}${nameOfLoci[i]}_catQuery.fas -num_threads 20 -out ${resultDataPath}${nameOfLoci[i]}_refResult.txt -outfmt 6
+${localBlastToolDir}blastn -db ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_refDB -query ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_catQuery.fas -num_threads 20 -out ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_refResult.txt -outfmt 6
 # 20230107 (如果改成接NNNNNN就可以忽略這條)-outfmt 可以選一種是幫你align.好的、但是你的output要重寫parsing方式，很麻煩  TODO
 
 done
