@@ -24,11 +24,11 @@
 ## Done
 
 ### [features-dada10N_20230111] 20230111
-1. 參數替換成變數
-2. add checkDirectory.sh
-3. "log_dada2.txt" 應該要跟其他result files 放一起比較合理
-4. create new result files (de-gaps and de-Ns merge files for making tree)
-
+1. 參數替換成變數 (20230111)
+2. add checkDirectory.sh (20230111)
+3. "log_dada2.txt" 應該要跟其他result files 放一起比較合理 (20230111)
+4. create new result files (de-gaps and de-Ns merge files for making tree) (20230113)
+5. blast相關中繼檔 放到 ${resultDataPath}/blastResult內 (20230113)
 
 ### [features-multiLoci_20230103] 20230104
 1. 可一次執行多位點的barcode，從config.sh檔可以增減位點(感謝亦烜處理前半段)
