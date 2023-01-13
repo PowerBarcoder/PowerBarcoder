@@ -32,6 +32,7 @@ loadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/aligned/"
 mergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/mergeSeq/"
 # mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
 
+degapMergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/deGapMergeSeq/"
 
 # 取得所有檔案與子目錄名稱
 files = listdir(loadpath)
@@ -311,9 +312,16 @@ for filename in candidate_list:
         # 步驟六：收尾  # print(merge_seq)
         output_filename=filename.replace("_.fas","")
         output_filename=output_filename+"_"+r1_header_name+"_"+r2_header_name
-        merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n"
+
+        merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n" #處理mergeseq
         with open(mergepath+filename,"w",encoding="UTF-8") as file:
             file.write(merge_seq_text)
+
+        de_gap_merge_seq=merge_seq.replace("N","").replace("-","")#處理degapmergeseq
+        de_gap_merge_seq_text=">"+output_filename+"\n"+de_gap_merge_seq+"\n"
+        with open(degapMergepath+filename,"w",encoding="UTF-8") as file:
+            file.write(de_gap_merge_seq_text)
+
     except Exception as e:
         print(e)
         print("merge.py 319: something wrong.",filename)

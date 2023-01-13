@@ -20,6 +20,8 @@ mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/r1
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/r2
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/mergeResult
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/mergeResult #目前只做這個
 # create Layer 4th folders
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r1
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice/nonmerged/r2
@@ -31,8 +33,9 @@ mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1Ref
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2Ref
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/mergeSeq
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/aligned
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/mergeSeq
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/deGapMergeSeq
 # create Layer 5th folders
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/aligned/mafft
 
