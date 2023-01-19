@@ -28,19 +28,26 @@ numbers = c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
 # 這邊寫死了，要修改， TODO
 # 策略一： multiplex...txt的table用loci.1、loci.2這樣的參數取代掉c("fNYG", "rVVG")內的兩個參數
 # 策略二：直接從config檔裡面傳參數近來，會遇到的問題是，你不知道他要傳幾組，所以可能要寫成向第41行的處理方式
-rbcLC = c("fNYG", "rVVG") #"rbcLC" and column names of primers, VARIABLEs; the first and second items corresponding to the order in demultiplex.sh
-rbcLN = c("fVGF", "rECL")
+# rbcLC = c("fNYG", "rVVG") #"rbcLC" and column names of primers, VARIABLEs; the first and second items corresponding to the order in demultiplex.sh
+# rbcLN = c("fVGF", "rECL")
 # 多loci，要從sh傳參近來，搭配multiplex_clean.txt一起使用，後者是使用者自備的，所以格式很重要
-trnLF = c("L5675", "F4121")
-trnL = c("oneIf1", "L7556")
+# trnLF = c("L5675", "F4121")
+# trnL = c("oneIf1", "L7556")
 AP_minlength = 270
 
 #AP<-data.frame(rbcLC, rbcLN, trnLF, trnL)
 #AP<-data.frame(rbcLC)
 
-#yixuan modified
-AP_temp<-args[6:as.numeric(length(args[]))]
-AP<-data.frame(mget(AP_temp))
+#yixuan modified(使用策略一，所以multiplex_cpDNAbarcode_clean那份檔案的欄位名稱要記得改)
+#AP as below
+#nameOfloci[1]    nameOfloci[2]   ...
+#nameOfloci[1]_1  nameOfloci[2]_1 ...
+#nameOfloci[1]_2  nameOfloci[2]_2 ...
+AP = data.frame(matrix(nrow = 2, ncol = 0))
+for(i in 6:(as.numeric(length(args[])))){
+  AP_temp = c(paste0(args[i],"_1"), paste0(args[i],"_2"))
+  AP[ ,paste0(args[i])] <- AP_temp
+}
 
 multiplex_cpDNAbarcode_clean_path = paste0(path_reads, args[5]) #20230107 "multiplex_cpDNAbarcode_clean.txt"請改成變數 done
 multiplex <- read.table(
