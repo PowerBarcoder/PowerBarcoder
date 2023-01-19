@@ -45,8 +45,7 @@ AP_minlength = 270
 #nameOfloci[1]_2  nameOfloci[2]_2 ...
 AP = data.frame(matrix(nrow = 2, ncol = 0))
 for(i in 6:(as.numeric(length(args[])))){
-  AP_temp = c(paste0(args[i],"_1"), paste0(args[i],"_2"))
-  AP[ ,paste0(args[i])] <- AP_temp
+  AP[ ,paste0(args[i])] <- c(paste0(args[i],"_1"), paste0(args[i],"_2"))
 }
 
 multiplex_cpDNAbarcode_clean_path = paste0(path_reads, args[5]) #20230107 "multiplex_cpDNAbarcode_clean.txt"請改成變數 done
