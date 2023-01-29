@@ -12,8 +12,8 @@ errR <- learnErrors(fnRs, multithread=TRUE)
 numbers = c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
 
 rbcLN = c("fVGF", "rECL")
-AP_minlength = 500
-minoverlap = 4
+AP_minlength = 500  # 這個也變參數
+minoverlap = 4 # 這個也變參數
 
 AP<-data.frame(rbcLN)
 
@@ -52,8 +52,8 @@ for (a in 1:ncol(AP)){
     seqname = paste(amplicon[s,3], amplicon[s,4], amplicon[s,2], amplicon[s,1], sep = "_")           #這個式header的文字
     header = paste0(">",seqname)                                                                     #加上了header的符號
     if (purrr::has_element(list.files(path= path_trim),s1)==TRUE){ #這邊只檢查了r1的名字有沒有對，有對boolean就是TRUE
-      
-      # 核心運行，運行後看要不要merge，不能merge的就交由我寫的來處理      
+
+      # 核心運行，運行後看要不要merge，不能merge的就交由我寫的來處理
       dadaFs <- dada(r1, err=errF, multithread=TRUE)
       dadaRs <- dada(r2, err=errR, multithread=TRUE)
       paste0(rep(header, length(dadaFs[["clustering"]][["abundance"]])), "_", numbers[1:length(dadaFs[["clustering"]][["abundance"]])], rep("_r1_", length(dadaFs[["clustering"]][["abundance"]])), sprintf(dadaFs[["clustering"]][["abundance"]]/sum(dadaFs[["clustering"]][["abundance"]]), fmt = '%#.3f'), rep("_abundance_", length(dadaFs[["clustering"]][["abundance"]])), dadaFs[["clustering"]][["abundance"]])->r1list
@@ -103,7 +103,7 @@ for (a in 1:ncol(AP)){
         cbind(r1, r2, header)->fail
         rbind(dadamergfail, fail)-> dadamergfail
       }
-      
+
       try(nonmergers <- mergePairs(dadaFs, r1, dadaRs, r2, verbose=TRUE, justConcatenate=TRUE))#Kuo_modified in following lines else
       if (nrow(nonmergers)>0 ){
         sum(nonmergers$abundance)->clustersum
@@ -119,7 +119,7 @@ for (a in 1:ncol(AP)){
         write.table(fascat[1,1:2], file = paste0(path_demultiplex, "/denoice_best/nonmerged/",filename), append = FALSE, sep = "\n", quote = FALSE,
                     row.names = FALSE, col.names = FALSE)
         }
-      
+
       cbind(rep(r1, length(dadaFs[["clustering"]][["abundance"]])),r1list)-> seqtable01
       cbind(rep(r2, length(dadaRs[["clustering"]][["abundance"]])),r2list)-> seqtable02
       rbind(seqtable, seqtable01, seqtable02)-> seqtable
@@ -142,26 +142,26 @@ for (a in 1:ncol(AP)){
 
 
 
-r1 = "./rbcLN_demultiplex/trimmed/filtered_trim_rbcLN_fVGF_br18_rECL_br13_r1.fq" #Adiantum_hosei_Wade5667_KTHU1824_01_1.000_abundance_60
-r2 = "./rbcLN_demultiplex/trimmed/filtered_trim_rbcLN_fVGF_br18_rECL_br13_r2.fq"
-
-
-r1 = "./rbcLN_demultiplex/trimmed/filtered_trim_rbcLN_fVGF_br08_rECL_br06_r1.fq" #Dicranopteris_linearis_Wade5644_KTHU2005_01_0.274_abundance_45
-r2 = "./rbcLN_demultiplex/trimmed/filtered_trim_rbcLN_fVGF_br08_rECL_br06_r2.fq"
-
-
-dadaFs <- dada(r1, err=errF, multithread=TRUE)
-dadaRs <- dada(r2, err=errR, multithread=TRUE)
-try(nonmergers <- mergePairs(dadaFs, r1, dadaRs, r2, verbose=TRUE, justConcatenate=TRUE))
-as.matrix(nonmergers)-> nonmergers.table
-mergers.table[order(mergers.table[,2],decreasing=TRUE),]
-library("stringr")
-split_r1 = rep("", nrow(nonmergers.table))
-split_r2r = rep("", nrow(nonmergers.table))
-cbind(nonmergers.table,split_r1,split_r2r)
-for (si in 1:nrow(nonmergers.table)){
-  str_split(nonmergers.table2[si,1], "NNNNNNNNNN")[[si]] -> rr
-  nonmergers.table2[si,10] <- rr[1]
-  nonmergers.table2[si,11] <- rr[2]
-}
-cbind(nonmerglist,nonmergers.table2)-> nonmergers.table3
+# r1 = "./rbcLN_demultiplex/trimmed/filtered_trim_rbcLN_fVGF_br18_rECL_br13_r1.fq" #Adiantum_hosei_Wade5667_KTHU1824_01_1.000_abundance_60
+# r2 = "./rbcLN_demultiplex/trimmed/filtered_trim_rbcLN_fVGF_br18_rECL_br13_r2.fq"
+#
+#
+# r1 = "./rbcLN_demultiplex/trimmed/filtered_trim_rbcLN_fVGF_br08_rECL_br06_r1.fq" #Dicranopteris_linearis_Wade5644_KTHU2005_01_0.274_abundance_45
+# r2 = "./rbcLN_demultiplex/trimmed/filtered_trim_rbcLN_fVGF_br08_rECL_br06_r2.fq"
+#
+#
+# dadaFs <- dada(r1, err=errF, multithread=TRUE)
+# dadaRs <- dada(r2, err=errR, multithread=TRUE)
+# try(nonmergers <- mergePairs(dadaFs, r1, dadaRs, r2, verbose=TRUE, justConcatenate=TRUE))
+# as.matrix(nonmergers)-> nonmergers.table
+# mergers.table[order(mergers.table[,2],decreasing=TRUE),]
+# library("stringr")
+# split_r1 = rep("", nrow(nonmergers.table))
+# split_r2r = rep("", nrow(nonmergers.table))
+# cbind(nonmergers.table,split_r1,split_r2r)
+# for (si in 1:nrow(nonmergers.table)){
+#   str_split(nonmergers.table2[si,1], "NNNNNNNNNN")[[si]] -> rr
+#   nonmergers.table2[si,10] <- rr[1]
+#   nonmergers.table2[si,11] <- rr[2]
+# }
+# cbind(nonmerglist,nonmergers.table2)-> nonmergers.table3

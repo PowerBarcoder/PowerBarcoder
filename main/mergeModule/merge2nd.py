@@ -1,5 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
+
+
+# 這個不是PB裡面應該要有的，因為不是每個人的序列都有rbcLN跟rbcLC
+
+
+
 from Miseq import Miseq
 import subprocess
 from subprocess import PIPE

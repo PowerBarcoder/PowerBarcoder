@@ -205,6 +205,9 @@ for filename in candidate_list:
             r2_for_align=r2[r2_p1:r2_p2+1] # print(r2_for_align)
 
             # 看起來要寫個檔案先存起來 (20230111這步ok)
+
+            # r1_for_align跟r2_for_align要先degap
+
             aligntext=">r1\n"+r1_for_align+"\n"+">r2\n"+r2_for_align
             with open(loadpath+"mafft/"+filename+"temp.fasta","w",encoding="UTF-8") as file:
                 file.write(aligntext)
@@ -218,13 +221,21 @@ for filename in candidate_list:
                 r1_overlap = r1_for_align
                 r2_overlap = r2_for_align
             # elif(ovelap區間的序列長度一樣):
-            # 也不用align
+            # 也不用align (未來可能trnLF有問題的話，可以考慮一併alignment)
             elif(len(r1_for_align)==len(r2_for_align)):
                 # print("序列一樣長，不用alignment")
                 r1_overlap = r1_for_align
                 r2_overlap = r2_for_align
             # else:
-            # 在py裡做shell，先把overlap區段degap，然後r1 r2兩個overlap去align
+            # 在py裡做shell，
+            #
+            #
+            # 先把overlap區段degap(XXX不是在這邊做)
+            #
+            #
+            #
+            #
+            # ，然後r1 r2兩個overlap去align
             else:
                 alignment = "mafft --thread 1 --maxiterate 16 --globalpair "+loadpath+"mafft/"+filename+"temp.fasta"  + "> "+loadpath+"mafft/"+filename+"tempAlign.fasta"
                 # print(alignment)
