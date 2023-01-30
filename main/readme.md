@@ -55,3 +55,15 @@
  1. 'BlastRef.py' (localblast結果的物件)
  2. 'FastaUnit.py' (fasta檔的物件)
  3. 'Miseq.py' (要拼接的r1或r2的物件)
+ 
+```mermaid
+ graph TD
+    A[start] -->B[checkRequirement.sh]
+    B --> C[checkDirectory.sh]
+    C --> D[illumina_PE_demultiplex_all_newprimer.sh]
+    D --> E[dada2_denoise_PE_newprimer.r]
+    E -->F[00_blastForRef.sh]
+    F --> G[BeforeAlignment.py]
+    G --> H[Alignment.py]
+    H --> I[merge.py]
+```
