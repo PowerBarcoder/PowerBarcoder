@@ -57,13 +57,68 @@
  3. 'Miseq.py' (要拼接的r1或r2的物件)
  
 ```mermaid
+---
+title: Execution order
+---
  graph TD
     A[start] -->B[checkRequirement.sh]
     B --> C[checkDirectory.sh]
     C --> D[illumina_PE_demultiplex_all_newprimer.sh]
     D --> E[dada2_denoise_PE_newprimer.r]
-    E -->F[00_blastForRef.sh]
-    F --> G[BeforeAlignment.py]
-    G --> H[Alignment.py]
-    H --> I[merge.py]
+    E --> F[00_blastForRef.sh]
+    F --> G[BlastResult]
+    G --> H[BeforeAlignment.py]
+    H --> I[Alignment.py]
+    I --> J[merge.py]
 ```
+
+
+ 
+```mermaid
+---
+title: Example Data Flow (single loci)
+---
+%%{init: {
+    'gitGraph': {'mainBranchName': 'loci-A'},
+    'themeVariables':{'commitLabelFontSize': '20px'}
+     } }%%
+gitGraph
+    commit id:" "
+    commit id:"Demultiplex"
+    branch loci-A-r1
+    branch loci-A-r2
+    checkout loci-A-r1
+    commit id:"trim primer"
+    checkout loci-A-r2
+    commit id:"trim primer "
+    checkout loci-A-r1
+    commit id:"denoise"
+    checkout loci-A-r2
+    commit id:"denoise "
+    checkout loci-A
+    merge loci-A-r1
+    merge loci-A-r2
+    commit id:"  "
+    checkout loci-A
+    commit id:"10N merge"
+    commit id:"Blast loci"
+    commit id:"filter Blast Result"
+    commit id:"split 10N"
+    branch loci-A-r1-split
+    branch loci-A-r2-split
+    checkout loci-A-r1-split
+    commit id:"prepare r-info"
+    checkout loci-A-r2-split
+    commit id:"prepare r-info "
+    checkout loci-A-r1-split
+    commit id:"alignment r and ref"
+    checkout loci-A-r2-split
+    commit id:"alignment r and ref "
+    checkout loci-A
+    commit id:"   "
+    merge loci-A-r1-split
+    merge loci-A-r2-split
+    commit id:"merge r1 and r2"
+    commit id:"end of flow"
+```
+
