@@ -80,7 +80,7 @@ title: Example Data Flow (single loci)
 ---
 %%{init: {
     'gitGraph': {'mainBranchName': 'loci-A'},
-    'themeVariables':{'commitLabelFontSize': '20px'}
+    'themeVariables':{'textColor':'#333','commitLabelFontSize': '20px'}
      } }%%
 gitGraph
     commit id:" "
@@ -98,7 +98,6 @@ gitGraph
     checkout loci-A
     merge loci-A-r1
     merge loci-A-r2
-    commit id:"  "
     checkout loci-A
     commit id:"10N merge"
     commit id:"Blast loci"
@@ -115,7 +114,6 @@ gitGraph
     checkout loci-A-r2-split
     commit id:"alignment r and ref "
     checkout loci-A
-    commit id:"   "
     merge loci-A-r1-split
     merge loci-A-r2-split
     commit id:"merge r1 and r2"
