@@ -5,7 +5,7 @@ from subprocess import PIPE
 import os
 import sys
 
-print("alignmenter.py is running on loci: "+sys.argv[3])
+print("[INFO] alignmenter.py is running on loci: "+sys.argv[3])
 
 # 執行："python3 alignmenter.py"，用"python alignmenter.py"會報錯，要把run改成call
 
@@ -57,4 +57,4 @@ with open(fastaFile,"r")as file:
 # 考慮不從blastResult再讀一次檔，可以合併到BeforeAlignment底下
 # mafft的結果要變單行且皆為大寫
 
-print("alignmenter.py is ended on loci: "+sys.argv[3])
+print("[INFO] alignmenter.py is ended on loci: "+sys.argv[3])

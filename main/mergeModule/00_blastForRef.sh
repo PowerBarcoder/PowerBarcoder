@@ -7,7 +7,7 @@
 
 
 
-echo "00_blastForRef is running"
+echo "[INFO] 00_blastForRef is running"
 
 
 # TODO #2 這邊要考慮把前一次blast的東西刪掉，不然blastResult.txt會沒有
@@ -41,7 +41,7 @@ ${localBlastToolDir}blastn -db ${resultDataPath}blastResult/${nameOfLoci[i]}_ref
 
 done
 
-echo "00_blastForRef is ended"
+echo "[INFO] 00_blastForRef is ended"
 
 # blast完之後要用10N拆掉，檔名可以在10Ncat後加r1(N前)或r2(N後)，後面就可以接著之前寫的，
 

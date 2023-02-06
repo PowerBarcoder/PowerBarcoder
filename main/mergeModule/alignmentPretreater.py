@@ -18,9 +18,9 @@ def qseqidFile(outputLoadpath,rWho,fileName):
 # 先定義一個判斷正負的方法
 2022年的做法是看12跟13相乘：
 相乘為正就是positive，為負就是negative
-20230206-10N：(沒很懂)
+20230206-10N：(沒很懂，但好像跟之前的概念一樣)
 用 subject start 與 end 相減 正值或負值
- 再與 （query start 與 end 相減）相乘決定 是否方向一至
+再與（query start 與 end 相減）相乘決定 是否方向一至
 """
 def negativeTest(a,b):
     if ((a[0]=="-")and(b[0]=="-"))or ((a[0]!="-")and(b[0]!="-")):
@@ -46,7 +46,7 @@ def createRefFile(rWho,rWhoRowList):
         RefFile.writelines(finalRowList)
         # print(RefFile.read())
 
-print("alignmentPretreater.py is running on loci: "+sys.argv[4])
+print("[INFO] alignmentPretreater.py is running on loci: "+sys.argv[4])
 
 # loadpath="/home/sktang/powerBC/"
 localBlastLoadpath=sys.argv[3]
@@ -122,23 +122,34 @@ with open(fastaFile,"r")as file:
             targetRowList+=(lines[targetRowNumber:targetRowNumber+2])    
             # print(targetRowList)
 
-        # if else判斷，如果多行的fasta在處理成一行的
-        if ((sign=="negative")and(forword=="r1")):
+
+        # if else判斷方向(多行的fasta之後再處理成一行的)
+
+        # 2022年舊版
+        # if ((sign=="negative")and(forword=="r1")):
+        #     targetRowList[1]=ReverseComplement(targetRowList[1])
+        #     r2RowList[1]=ReverseComplement(r2RowList[1])
+        # elif ((sign=="positive")and(forword=="r1")):
+        #     r2RowList[1]=ReverseComplement(r2RowList[1])
+        # elif ((sign=="negative")and(forword=="r2")):
+        #     r2RowList[1]=ReverseComplement(r2RowList[1])
+        # elif ((sign=="positive")and(forword=="r2")):
+        #     targetRowList[1]=ReverseComplement(targetRowList[1])
+        #     r2RowList[1]=ReverseComplement(r2RowList[1])
+
+        # 20230206-10N新版
+        if ((sign=="negative")):
             targetRowList[1]=ReverseComplement(targetRowList[1])
-            r2RowList[1]=ReverseComplement(r2RowList[1])
-        elif ((sign=="positive")and(forword=="r1")):
-            r2RowList[1]=ReverseComplement(r2RowList[1])    
-        elif ((sign=="negative")and(forword=="r2")):
-            r2RowList[1]=ReverseComplement(r2RowList[1])   
-        elif ((sign=="positive")and(forword=="r2")):
-            targetRowList[1]=ReverseComplement(targetRowList[1])   
-            r2RowList[1]=ReverseComplement(r2RowList[1])
+        elif ((sign=="positive")):
+            pass
+
+
 
         createRefFile("r1",r1RowList)
         createRefFile("r2",r2RowList)
 
 
-print("alignmentPretreater.py is ended on loci: "+sys.argv[4])
+print("[INFO] alignmentPretreater.py is ended on loci: "+sys.argv[4])
 
 # 4.讀ref.fas
 # 5.讀r1.fas

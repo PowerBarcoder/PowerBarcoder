@@ -10,7 +10,7 @@ import sys
 from os import path
 import time
 
-print("merge.py is running on loci: "+sys.argv[3])
+print("[INFO] merge.py is running on loci: "+sys.argv[3])
 
 ######################################
 # 運作流程
@@ -343,4 +343,4 @@ for filename in candidate_list:
 # >Diplazium_sylvaticum_Wade4851_KTHU1447_01_r1_0.548_abundance_23_r2_0.548_abundance_23
 # GGCTGGTGTCAAAGATTACCGACTGAACTATTACACCCCCGAATACAAGACCAAAGATACTGACATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCAGCTGAGGAAGCCGGAGCTGCGGTAGCTGCGGAATCCTCCACGGGTACGTGGACCACTGTATGGACAGACGGGTTGACCAGTCTTGACCGTTACAAGGGCCGATGCTACGACATCGAACCTGTCGCTGGGGAGGAAAACCAGTATATCGCGTATGTAGCTT
 
-print("merge.py is ended on loci: "+sys.argv[3])
+print("[INFO] merge.py is ended on loci: "+sys.argv[3])

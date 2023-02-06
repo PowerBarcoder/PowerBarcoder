@@ -23,7 +23,7 @@ from os.path import isfile, join
 import sys
 import linecache
 
-print("nnSpliter.py is running on loci: " + sys.argv[2])
+print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
 
 loadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/"
 r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/r1/"

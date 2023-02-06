@@ -12,7 +12,7 @@
 import sys
 from BlastRef import BlastRef
 
-print("blastResultParser.py is running on loci: " + sys.argv[3])
+print("[INFO] blastResultParser.py is running on loci: " + sys.argv[3])
 
 localBlast = BlastRef()
 
@@ -135,4 +135,4 @@ with open(loadpath + "blastResult/" + sys.argv[3] + "_blastResult.txt", "w") as 
 # str(rWhoList[i])
 
 
-print("blastResultParser.py is ended on loci: " + sys.argv[3])
+print("[INFO] blastResultParser.py is ended on loci: " + sys.argv[3])
