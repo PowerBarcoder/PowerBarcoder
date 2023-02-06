@@ -11,9 +11,18 @@ bash ./mergeModule/00_blastForRef.sh #內部自帶迴圈處理
 for ((i=0; i<${#nameOfLoci[@]}; i++))
 do
     count=0
-    for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*
+#    for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*
+    for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/*
     do
-    ((count = $count+1))
+    if [[ -d $PASSED ]]; then
+        echo "$PASSED is a directory"
+    elif [[ -f $PASSED ]]; then
+        echo "$PASSED is a file"
+        ((count = $count+1))
+    else
+        echo "$PASSED is not valid"
+        exit 1
+    fi
     done
 
     if [ ${count} -gt 1 ] 
