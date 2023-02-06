@@ -14,6 +14,7 @@ do
 #    for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*
     for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/*
     do
+    echo $File
     if [ "${file: -4}" == ".fas" ]; then
         echo "${File} is a fasta file"
         ((count = ${count}+1))
