@@ -121,4 +121,4 @@ for i in range(0,len(qseqidList)):
     # str(rWhoList[i])
 
 
-print("blastResultParser.pyy is ended on loci: "+sys.argv[3])
+print("blastResultParser.py is ended on loci: "+sys.argv[3])

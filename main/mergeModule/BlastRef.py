@@ -3,19 +3,18 @@ import linecache as lc
 # blast參考物件，blastRef
 
 # load_dir="C:/Users/123/"
-
-#  1.	 qseqid	 query (e.g., gene) sequence id
-#  2.	 sseqid	 subject (e.g., reference genome) sequence id
-#  3.	 pident	 percentage of identical matches
-#  4.	 length	 alignment length
-#  5.	 mismatch	 number of mismatches
-#  6.	 gapopen	 number of gap openings
-#  7.	 qstart	 start of alignment in query
-#  8.	 qend	 end of alignment in query
-#  9.	 sstart	 start of alignment in subject
-#  10.	 send	 end of alignment in subject
-#  11.	 evalue	 expect value
-#  12.	 bitscore	 bit score
+#  1.	 qseqid	 query (e.g., gene) sequence id                Microlepia_substrigosa_CYH20090514.016_514.016_01_0.997_abundance_2026_10Ncat
+#  2.	 sseqid	 subject (e.g., reference genome) sequence id  MH319942_Dennstaedtiaceae_Histiopteris_incisa
+#  3.	 pident	 percentage of identical matches               94.656
+#  4.	 length	 alignment length                              262
+#  5.	 mismatch	 number of mismatches                      13
+#  6.	 gapopen	 number of gap openings                    1
+#  7.	 qstart	 start of alignment in query                   1
+#  8.	 qend	 end of alignment in query                     262
+#  9.	 sstart	 start of alignment in subject                 558
+#  10.	 send	 end of alignment in subject                   818
+#  11.	 evalue	 expect value                                  3.03e-115
+#  12.	 bitscore	 bit score                                 405
 
 
 class BlastRef:
@@ -38,6 +37,11 @@ class BlastRef:
             self.rWhoList=[]
             self.refList=[]
 
+    """
+    Step 1 O(N)製作所有key清單
+    Step 2 O(N)按key塞入所有refBlast的12個值+自己新增的四個值
+    Step 3 迴圈跑dict裡的所有key，取出值放進個別欄位的list裡(所以回傳出來16個list，每個list都是Object的一個properties)
+    """
     def blastRef(self, load_dir,loci_name):
         List=[]
         #製作所有key的清單
@@ -67,7 +71,6 @@ class BlastRef:
 
             # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
             queryName=qseqidSplitList[:-5][-1]+"_"+qseqidSplitList[:-5][-2]+"_"+"_".join(qseqidSplitList[:-5][:-2])+"_.fas"
-
 
             List.append(queryName)
             
@@ -146,7 +149,9 @@ class BlastRef:
             bitscore=textList[11]
             qstartMinusQend=(int(textList[6])-int(textList[7]))
             sstartMinusSend=(int(textList[8])-int(textList[9]))
-            rWho=qseqidSplitList[-4] #從後面取過來，因為後綴是dada2加的，固定四個"Nephrolepis_sp._Lu30199_Co262_01_r1_0.976_abundance_280"
+            # 20230206 10N 處理下，棄用rWho直接寫死，在下一步再按順序判斷
+            # rWho=qseqidSplitList[-4] #從後面取過來，因為後綴是dada2加的，固定四個"Nephrolepis_sp._Lu30199_Co262_01_r1_0.976_abundance_280"
+            rWho="rWho" #從後面取過來，因為後綴是dada2加的，固定四個"Nephrolepis_sp._Lu30199_Co262_01_r1_0.976_abundance_280"
 
 
 
@@ -271,6 +276,3 @@ class BlastRef:
         self.rWhoList=rWhoList
 
         return self
-
-
-
