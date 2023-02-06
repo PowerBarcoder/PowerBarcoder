@@ -33,20 +33,20 @@ def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     pattern_for_split = r'NNNNNNNNNN'
     seqHeader = linecache.getline(loadpath+filename, 1)
     seqText = linecache.getline(loadpath+filename, 2)
-    print(loadpath+filename)
-    print(seqHeader)
-    print(seqText)
+    # print(loadpath+filename)
+    # print(seqHeader)
+    # print(seqText)
     seqTextSplitted = re.split(pattern_for_split, seqText, maxsplit=1)
-    print(seqTextSplitted)
+    # print(seqTextSplitted)
     seqTextr1 = seqTextSplitted[0]
     seqTextr2 = seqTextSplitted[1]
 
-    with open(r1_outputLoadpath) as r1_file:
-        r1_file.write(seqHeader + "_r1" + "\n")
+    with open(r1_outputLoadpath+seqHeader + "_r1") as r1_file:
+        r1_file.write(seqHeader + "_r1")
         r1_file.write(seqTextr1)
 
-    with open(r2_outputLoadpath) as r2_file:
-        r2_file.write(seqHeader + "_r2" + "\n")
+    with open(r2_outputLoadpath+seqHeader + "_r2") as r2_file:
+        r2_file.write(seqHeader + "_r2")
         r2_file.write(seqTextr2)
 
 
