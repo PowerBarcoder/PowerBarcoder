@@ -12,15 +12,10 @@ for ((i=0; i<${#nameOfLoci[@]}; i++))
 do
     count=0
 #    for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*
-    for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/*
-    do
-    echo $File
-    if [ "${file: -4}" == ".fas" ]; then
-        echo "${File} is a fasta file"
-        ((count = ${count}+1))
-    fi
-    done
-    echo ${count}
+    dir=${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/
+    # get a list of files in the directory and count the number of ".txt" files
+    count=$(ls -1 $dir | grep ".fas" | wc -l)
+    echo "Number of '.fas' files: $count"
 
 
     if [ ${count} -gt 1 ] 
