@@ -10,6 +10,7 @@ print("blastResultParser.py is running on loci: "+sys.argv[3])
 localBlast=BlastRef()
 
 # loadpath="/home/sktang/powerBC/"
+# "/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_rbcL/"
 loadpath=sys.argv[2]
 
 localBlast.blastRef(loadpath+"blastResult/",sys.argv[3])

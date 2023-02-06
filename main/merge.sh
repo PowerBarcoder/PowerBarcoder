@@ -21,15 +21,18 @@ do
     then #有檔案的才做
 #    ((count = $count/2))
         echo "${count} nonmerged files found in ${nameOfLoci[i]}"
-        #  就是這裡拆NN到原先的nonmerged/r1,r2資料夾裡
-        python3 ./mergeModule/nnSpliter.py $resultDataPath ${nameOfLoci[i]} #blast完，需要拆10N
 
         #  準備parsing各loci local blast的結果
+        #  TODO 似乎需要把blastResultParser.py的input改一下，要吃10N的
         python3 ./mergeModule/blastResultParser.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
 
-        # TODO 20230107接NNNNN的話，底下這兩部就要改成一個檔案，用來把NNNNNN拆掉，然後按blast的結果做reverse complement後，輸出正確方向的ref
-        python3 ./mergeModule/alignmentPretreater.py $ampliconInfo ${sseqidFileName[i]} $resultDataPath ${nameOfLoci[i]}
-        python3 ./mergeModule/alignmenter.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
+#        #  就是這裡拆NN到原先的nonmerged/r1,r2資料夾裡
+#        python3 ./mergeModule/nnSpliter.py $resultDataPath ${nameOfLoci[i]} #blast完，需要拆10N
+#
+#
+#        # TODO 20230107接NNNNN的話，底下這兩部就要改成一個檔案，用來把NNNNNN拆掉，然後按blast的結果做reverse complement後，輸出正確方向的ref
+#        python3 ./mergeModule/alignmentPretreater.py $ampliconInfo ${sseqidFileName[i]} $resultDataPath ${nameOfLoci[i]}
+#        python3 ./mergeModule/alignmenter.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
 #        python3 ./mergeModule/merge.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
 
     else #沒有的就跳過
