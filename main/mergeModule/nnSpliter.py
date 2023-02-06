@@ -62,7 +62,7 @@ for filename in files:
         # print("檔案：", filename)
         nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath)  # 切檔
     else:
-        print(filename,"is not a file or the filename is not end with .fas")
+        print("[WARNING]"+filename,"is not a file or the filename is not end with .fas")
 
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
 

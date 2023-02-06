@@ -27,19 +27,6 @@ fastaFile=fastaFileDir+fastaFileName
 # fastaFile=loadpath+"blastResult.txt"
 # sseqidFile=loadpath+"fermalies_rbcL.fasta"
 
-
-# if(os.path.isdir(outputLoadpath +'aligned')==False):
-#     # 沒資料夾就建一個資料夾
-#     makedir_aligned = 'mkdir '+ outputLoadpath +'aligned'
-#     subprocess.run(makedir_aligned, shell=True, check=True, stdout=PIPE, stderr=PIPE)
-
-
-# if(os.path.isdir(outputLoadpath +'mergeSeq')==False):
-#     # 沒資料夾就建一個資料夾
-#     makedir_mergeSeq = 'mkdir '+ outputLoadpath +'mergeSeq'
-#     subprocess.run(makedir_mergeSeq, shell=True, check=True, stdout=PIPE, stderr=PIPE)
-
-
 with open(fastaFile,"r")as file:
     lines=file.readlines()
     for line in lines:

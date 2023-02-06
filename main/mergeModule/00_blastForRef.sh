@@ -1,7 +1,7 @@
 # ! /bin/bash
 
 . ./config.sh
-
+# refResult.txt是localBlast的結果，blastResult.txt是我們parsing後的結果，在blastResultParser.py產生的
 
 # 所以2/5前把10N的東西拆開來，即可
 

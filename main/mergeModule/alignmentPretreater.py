@@ -63,11 +63,6 @@ r1RowList=[]
 r2RowList=[]
 targetRowList=[]
 def createRefFile(rWho,rWhoRowList):
-    # if(os.path.isdir(outputLoadpath+rWho+'Ref')==False):
-    # # 沒資料夾就建一個資料夾
-    #     makedir_rWhoRef = 'mkdir '+ outputLoadpath+rWho+'Ref'
-    #     subprocess.run(makedir_rWhoRef, shell=True, check=True, stdout=PIPE, stderr=PIPE)
-    # # 資料夾有了再開始工作
     with open (outputLoadpath+rWho+"Ref/"+qseqid,"w") as RefFile:
         finalRowList=rWhoRowList+targetRowList
         RefFile.writelines(finalRowList)
