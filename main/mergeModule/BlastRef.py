@@ -38,7 +38,7 @@ class BlastRef:
             self.refList=[]
 
     """
-    Step 1 O(N)製作所有key清單
+    Step 1 O(N)製作所有key(queryName)清單
     Step 2 O(N)按key塞入所有refBlast的12個值+自己新增的四個值
     Step 3 迴圈跑dict裡的所有key，取出值放進個別欄位的list裡(所以回傳出來16個list，每個list都是Object的一個properties)
     """
@@ -195,9 +195,8 @@ class BlastRef:
 
             i=i+1
 
-
         # print(cate)
-        # print(cate.keys())
+        print(len(cate.keys())) #這個數應該要跟nonmerge裡面的檔案數量一致
         # print(len(cate.keys()))
 
         qseqidList=[]

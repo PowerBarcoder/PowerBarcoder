@@ -1,4 +1,11 @@
-# 這個檔案先呼叫blastref物件，把blastForRef執行的結果parsing好，完成後再底下的"方法們"
+# (!/usr/bin/python)
+# -*- coding: utf-8 -*-
+
+"""
+這個檔案先呼叫blastref物件，
+把00_blastForRef執行的結果(refBlast.txt)parsing成blastResult.txt，
+完成後再底下的"方法們"
+"""
 
 # sktang@Kuo-fern-lab:~/powerBC$ python3 alignmenter.py
 
