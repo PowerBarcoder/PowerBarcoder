@@ -82,4 +82,4 @@ customizedThreadNumber+=(30) # customized thread numbers
 # Where is our PowerBarcoder ?
 workingDirectory="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/main/" #20230107 移到最底下、用參數傳進來 done
 
-echo 'params imported!'
+echo '[INFO] params imported!'

@@ -10,7 +10,7 @@ def qseqidFile(outputLoadpath,rWho,fileName):
     return qseqidFile
 
 """
-# 先定義一個判斷正負的方法
+# 判斷正負的方法
 2022年的做法是看12跟13相乘：
 相乘為正就是positive，為負就是negative
 20230206-10N：(沒很懂，但好像跟之前的概念一樣)
@@ -25,6 +25,7 @@ def negativeTest(a,b):
 
 # 反轉序列的方法
 def ReverseComplement(seq):
+    print("hi 28")
     # """Return reverse complement fastaID_seq_dic, ignore gaps"""
     seq = seq.replace(' ','') #Remove space
     seq = seq.replace('\n','') #Remove LF
@@ -136,10 +137,9 @@ with open(fastaFile,"r")as file:
         # 20230206-10N新版
         if ((sign=="negative")):
             targetRowList[1]=ReverseComplement(targetRowList[1])
-            print(fastaFile)
+            print("negative: "+fastaFile)
         elif ((sign=="positive")):
-            pass
-
+            print("positive: "+fastaFile)
 
 
         createRefFile("r1",r1RowList)

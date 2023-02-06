@@ -40,7 +40,7 @@ with open(fastaFile,"r")as file:
         # forword=lineSplit[14]
         # print(qseqid+" "+sseqid+" "+sign+" "+forword)
 
-        print(qseqid) #20230104 mafft多執行續應在單檔多序列下處理才會有顯著的效能提升
+        print("[INFO] aligning: "+qseqid) #20230104 mafft多執行續應在單檔多序列下處理才會有顯著的效能提升
         # 都寫絕對路徑，因為執行路徑可能會變
         AligmentR1 = "mafft --thread 10 --maxiterate 16 --globalpair "+ outputLoadpath +"r1Ref/" + qseqid + "> "+outputLoadpath+"aligned/" + qseqid +"_r1"+ ".al"
         # print(AligmentR1)
@@ -52,7 +52,7 @@ with open(fastaFile,"r")as file:
             subprocess.run(AligmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
             subprocess.run(AligmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
         except Exception as e:
-            print(e)
+            print("[ERROR] "+e)
 
 # 考慮不從blastResult再讀一次檔，可以合併到BeforeAlignment底下
 # mafft的結果要變單行且皆為大寫
