@@ -9,7 +9,7 @@ localBlastToolDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
 # Where is your NGS Data ?
 ampliconInfo="/home2/barcoder_test/RUN1.5/" #20230107可以改成ampliconInfo  done
 # Where do you want to generate the results ?
-resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB1202"
+resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB214/"
 
 #/home/lykuo/lab_data/NGS_data/miseq/HGT21038_LIB810/rbcLC_demultiplex/denoice/nonmerged
 #/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB214/rbcLC_demultiplex/denoice/nonmerged
