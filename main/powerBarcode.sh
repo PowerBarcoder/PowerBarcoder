@@ -5,7 +5,7 @@
 #
 #echo "[INFO] environment OK !"
 #
-#bash checkDirectory.sh
+bash checkDirectory.sh
 #
 #echo "[INFO] file directories are created !"
 #

@@ -9,7 +9,7 @@ localBlastToolDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
 # Where is your NGS Data ?
 ampliconInfo="/home2/barcoder_test/RUN1.5/" #20230107可以改成ampliconInfo  done
 # Where do you want to generate the results ?
-resultDataPath="/home/lykuo/lab_data/NGS_data/miseq/HGT21038_LIB810/"
+resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21038_LIB810/"
 
 #/home/lykuo/lab_data/NGS_data/miseq/HGT21038_LIB810/rbcLC_demultiplex/denoice/nonmerged
 #/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB214/rbcLC_demultiplex/denoice/nonmerged
@@ -44,19 +44,19 @@ sseqidFileName+=("fermalies_rbcL.fasta") # local blast reference file name  # un
 minimumLengthCutadaptorInLoop+=(150) # minimum output sequence length in cutadaptor
 customizedThreadNumber+=(30) # customized thread numbers
 
-## second dataset (Comment out if you don't need)
-#nameOfLoci+=("rbcLN")
-#errorRateCutadaptor+=(0.125)
-#minimumLengthCutadaptor+=(70)
-#primerF+=("GAGACTAAAGCAGGTGTTGGATTCA")
-#primerR+=("TCAAGTCCACCRCGAAGRCATTC")
-#amplicon_r1+=("rbcLN_amplicon_r1.fq")
-#amplicon_r2+=("rbcLN_amplicon_r2.fq")
-#barcodesFile1+=('barcodes_rbcL_start_0.fasta')
-#barcodesFile2+=('barcodes_rbcLN_start2_0.fasta')
-#sseqidFileName+=("fermalies_rbcL.fasta")
-#minimumLengthCutadaptorInLoop+=(150)
-#customizedThreadNumber+=(30)
+# second dataset (Comment out if you don't need)
+nameOfLoci+=("rbcLN")
+errorRateCutadaptor+=(0.125)
+minimumLengthCutadaptor+=(70)
+primerF+=("GAGACTAAAGCAGGTGTTGGATTCA")
+primerR+=("TCAAGTCCACCRCGAAGRCATTC")
+amplicon_r1+=("rbcLN_amplicon_r1.fq")
+amplicon_r2+=("rbcLN_amplicon_r2.fq")
+barcodesFile1+=('barcodes_rbcL_start_0.fasta')
+barcodesFile2+=('barcodes_rbcLN_start2_0.fasta')
+sseqidFileName+=("fermalies_rbcL.fasta")
+minimumLengthCutadaptorInLoop+=(150)
+customizedThreadNumber+=(30)
 #
 ## third dataset (Comment out if you don't need)
 #nameOfLoci+=("trnL")
