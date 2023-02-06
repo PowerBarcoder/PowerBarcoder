@@ -14,16 +14,13 @@ do
 #    for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*
     for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/*
     do
-    echo ${File}
-    if [[ -d $PASSED ]]; then
-        echo "$PASSED is a directory"
-    elif [[ -f $PASSED ]]; then
-        echo "$PASSED is a file"
-        ((count = $count+1))
-    else
-        echo "$PASSED is not valid"
+    if [ "$File" == "*.fas" ]; then
+        echo "${File} is a fasta file"
+        ((count = ${count}+1))
     fi
     done
+    echo ${count}
+
 
     if [ ${count} -gt 1 ] 
     then #有檔案的才做
