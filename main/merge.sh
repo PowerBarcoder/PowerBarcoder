@@ -14,6 +14,7 @@ do
 #    for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*
     for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/*
     do
+    echo ${File}
     if [[ -d $PASSED ]]; then
         echo "$PASSED is a directory"
     elif [[ -f $PASSED ]]; then
