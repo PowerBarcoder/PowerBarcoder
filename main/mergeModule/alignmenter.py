@@ -52,7 +52,7 @@ with open(fastaFile,"r")as file:
             subprocess.run(AligmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
             subprocess.run(AligmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
         except Exception as e:
-            print("[ERROR] "+e)
+            print("[ERROR] ",e)
 
 # 考慮不從blastResult再讀一次檔，可以合併到BeforeAlignment底下
 # mafft的結果要變單行且皆為大寫

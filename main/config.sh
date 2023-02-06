@@ -9,7 +9,7 @@ localBlastToolDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
 # Where is your NGS Data ?
 ampliconInfo="/home2/barcoder_test/RUN1.5/" #20230107可以改成ampliconInfo  done
 # Where do you want to generate the results ?
-resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_RUN1_POOLED_new/"
+resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT22061_Amplicon_RUN2/"
 
 #/home/lykuo/lab_data/NGS_data/miseq/HGT21038_LIB810/rbcLC_demultiplex/denoice/nonmerged/
 #/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB214/rbcLC_demultiplex/denoice/nonmerged/
@@ -32,6 +32,20 @@ resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result202
 #cp -r /home2/barcoder_test/RUN1_POOLED_new/result/rbcLC_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_RUN1_POOLED_new/rbcLC_demultiplex/denoice_best/
 #cp -r /home2/barcoder_test/RUN1_POOLED_new/result/rbcLN_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_RUN1_POOLED_new/rbcLN_demultiplex/denoice_best/
 
+#/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21038_LIB810/
+#/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21038_LIB810/
+#
+#/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB214/
+#/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB214/
+#
+#/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB1202/
+#/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB1202/
+#
+#/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT22061_Amplicon_RUN2/
+#/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT22061_Amplicon_RUN2/
+#
+#/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_RUN1_POOLED_new/
+#/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_RUN1_POOLED_new/
 
 
 # where is your Miseq gz data ?
