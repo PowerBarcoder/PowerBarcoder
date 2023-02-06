@@ -38,7 +38,7 @@ def ReverseComplement(seq):
 def createRefFile(rWho,rWhoRowList):
     with open (outputLoadpath+rWho+"Ref/"+qseqid,"w") as RefFile:
         finalRowList=rWhoRowList+targetRowList
-        print(finalRowList)
+        # print(finalRowList) #TODO 20230206 這邊r1開頭就少n了
         RefFile.writelines(finalRowList)
         # print(RefFile.read())
 
@@ -136,6 +136,7 @@ with open(fastaFile,"r")as file:
         # 20230206-10N新版
         if ((sign=="negative")):
             targetRowList[1]=ReverseComplement(targetRowList[1])
+            print(fastaFile)
         elif ((sign=="positive")):
             pass
 
