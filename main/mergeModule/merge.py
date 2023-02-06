@@ -206,9 +206,9 @@ for filename in candidate_list:
 
             # 看起來要寫個檔案先存起來 (20230111這步ok)
 
-            # r1_for_align跟r2_for_align要先degap
-
-            aligntext=">r1\n"+r1_for_align+"\n"+">r2\n"+r2_for_align
+            # TODO r1_for_align跟r2_for_align要先degap
+            # 20230206 我決定在這邊做degap(所以下一行多加了".replace("-","")")
+            aligntext=">r1\n"+r1_for_align.replace("-","")+"\n"+">r2\n"+r2_for_align.replace("-","")
             with open(loadpath+"mafft/"+filename+"temp.fasta","w",encoding="UTF-8") as file:
                 file.write(aligntext)
 
@@ -221,7 +221,7 @@ for filename in candidate_list:
                 r1_overlap = r1_for_align
                 r2_overlap = r2_for_align
             # elif(ovelap區間的序列長度一樣):
-            # 也不用align (未來可能trnLF有問題的話，可以考慮一併alignment)
+            # TODO 也不用align (未來可能trnLF有問題的話，可以考慮一併alignment)
             elif(len(r1_for_align)==len(r2_for_align)):
                 # print("序列一樣長，不用alignment")
                 r1_overlap = r1_for_align
@@ -230,7 +230,7 @@ for filename in candidate_list:
             # 在py裡做shell，
             #
             #
-            # 先把overlap區段degap(XXX不是在這邊做)
+            # TODO 先把overlap區段degap(XXX不是在這邊做)
             #
             #
             #

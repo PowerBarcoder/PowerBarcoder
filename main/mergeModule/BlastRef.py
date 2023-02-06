@@ -110,7 +110,7 @@ class BlastRef:
                 break
 
             # 第一個是sseqid，第二個是pident，第三個是qstartMinusQend
-
+            # TODO
             # 1.用3排序，取最高者出來，pident=textList[2]  #現在是取最高，可是實際上產出的序列可能%很低，所以把%家在檔名上
             #     如果之後要做篩選，可以從檔名判斷，只要abundance或%有一個過低，就列進清單裡
             # 2.用abs(7-8)取最大，qstartMinusQend=abs(textList[6]-textList[7])
@@ -136,7 +136,7 @@ class BlastRef:
             # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
             queryName = qseqidSplitList[:-5][-1] + "_" + qseqidSplitList[:-5][-2] + "_" + "_".join(
                 qseqidSplitList[:-5][:-2]) + "_.fas"
-            # 這邊取出abundance最高的
+            # TODO 這邊取出abundance最高的
 
             qseqid = queryName
             sseqid = textList[1]
@@ -156,6 +156,7 @@ class BlastRef:
             # rWho=qseqidSplitList[-4] #從後面取過來，因為後綴是dada2加的，固定四個"Nephrolepis_sp._Lu30199_Co262_01_r1_0.976_abundance_280"
             rWho = "rWho"  # 從後面取過來，因為後綴是dada2加的，固定四個"Nephrolepis_sp._Lu30199_Co262_01_r1_0.976_abundance_280"
 
+            # TODO
             # 1.用3排序，取最高者出來，(改成只做>90的，下限90當參數可設，全部做完再挑最高的當best，其他當others) # 判斷順序：%>abundance>orders
             # 2.用abs(7-8)取最大，
             if (float(cate[queryName][2]) < float(pident)):

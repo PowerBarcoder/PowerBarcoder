@@ -12,8 +12,8 @@ errR <- learnErrors(fnRs, multithread=TRUE)
 numbers = c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
 
 rbcLN = c("fVGF", "rECL")
-AP_minlength = 500  # 這個也變參數
-minoverlap = 4 # 這個也變參數
+AP_minlength = 500  #TODO 這個也變參數
+minoverlap = 4 #TODO 這個也變參數
 
 AP<-data.frame(rbcLN)
 
@@ -53,7 +53,7 @@ for (a in 1:ncol(AP)){
     header = paste0(">",seqname)                                                                     #加上了header的符號
     if (purrr::has_element(list.files(path= path_trim),s1)==TRUE){ #這邊只檢查了r1的名字有沒有對，有對boolean就是TRUE
 
-      # 核心運行，運行後看要不要merge，不能merge的就交由我寫的來處理
+      # TODO 核心運行，運行後看要不要merge，不能merge的就交由我寫的來處理
       dadaFs <- dada(r1, err=errF, multithread=TRUE)
       dadaRs <- dada(r2, err=errR, multithread=TRUE)
       paste0(rep(header, length(dadaFs[["clustering"]][["abundance"]])), "_", numbers[1:length(dadaFs[["clustering"]][["abundance"]])], rep("_r1_", length(dadaFs[["clustering"]][["abundance"]])), sprintf(dadaFs[["clustering"]][["abundance"]]/sum(dadaFs[["clustering"]][["abundance"]]), fmt = '%#.3f'), rep("_abundance_", length(dadaFs[["clustering"]][["abundance"]])), dadaFs[["clustering"]][["abundance"]])->r1list
