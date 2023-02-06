@@ -9,7 +9,7 @@ localBlastToolDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
 # Where is your NGS Data ?
 ampliconInfo="/home2/barcoder_test/RUN1.5/" #20230107可以改成ampliconInfo  done
 # Where do you want to generate the results ?
-resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result/"
+resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_rbcL"
 # where is your Miseq gz data ?
 R1FastqGz="/home/lykuo/lab_data/NGS_data/miseq/HGT22070_Amplicon_RUN1.5/trim_RUN1.5_R1.fq.gz" #20230107可以改成R1FastqGz done
 R2FastqGz="/home/lykuo/lab_data/NGS_data/miseq/HGT22070_Amplicon_RUN1.5/trim_RUN1.5_R2.fq.gz" #20230107可以改成R2FastqGz done
