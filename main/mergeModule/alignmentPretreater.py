@@ -138,11 +138,10 @@ with open(fastaFile,"r")as file:
         # 20230206-10N新版
         if ((sign=="negative")):
             targetRowList[1]=ReverseComplement(targetRowList[1])
-            # print("negative: "+fastaFile)
+            print("negative: "+fastaFile)
         elif ((sign=="positive")):
             # print("positive: "+fastaFile)
             pass
-
 
         createRefFile("r1",r1RowList)
         createRefFile("r2",r2RowList)
