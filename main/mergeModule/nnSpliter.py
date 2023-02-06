@@ -2,7 +2,11 @@
 
 # -*- coding: utf-8 -*-
 import re
-# print("merge.py is running on loci: "+sys.argv[3])
+from os import listdir
+from os.path import isfile, join
+import sys
+
+print("nnSpliter.py is running on loci: "+sys.argv[4])
 
 # TODO 拆分10N file into 2 seperated files
 # TODO
@@ -15,14 +19,42 @@ import re
 #       output ???(還需要alignment嗎)
 
 
-# loadpath=""
+loadpath=sys.argv[3]+sys.argv[4]+"_demultiplex/denoice_best/nonmerged/"
+r1_outputLoadpath=sys.argv[3]+sys.argv[4]+"_demultiplex/denoice_best/nonmerged/r1/"
+r2_outputLoadpath=sys.argv[3]+sys.argv[4]+"_demultiplex/denoice_best/nonmerged/r2/"
 # outputLoadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/nnSplited/"
 # loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
 
+# sample data
 target="AAGCTGGTGTCAAAGATTACCGACTGACCTACTACACCCCCGAATACAAGACCAAAGATACCGATATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCAGCTGAAGAAGCCGGAGCTGCGGTAGCTGCAGAATCCTCTACGGGTACGTGGACCACTGTATGGACAGATGGATTGACCAATCTTGACCGTTACAAGGGCCGATGCTACGACATTGAACCCGTCGCTGGGGAAGAGAACCAGTATATCGCGTATGTAGCTNNNNNNNNNNAGCTTATCCTTTGGATCTATTCGAAGAAGGTTCTGTCACCAATTTGTTCACCTCCATTGTAGGTAATGTCTTCGGATTTAAGGCTCTACGCGCCTTACGCTTGGAAGACCTTCGAATCCCTCCTGCTTATTCTAAAACTTTTATCGGACCGCCTCATGGTATTCAGGTCGAAAGGGATAAACTGAACAAATATGGACGTCCTTTATTGGGATGTACAATCAAGCCAAAATTAGGTCTGTCTGCTAAGAATTATGGTAGAGCCGTCTAT"
 r1="AAGCTGGTGTCAAAGATTACCGACTGACCTACTACACCCCCGAATACAAGACCAAAGATACCGATATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCAGCTGAAGAAGCCGGAGCTGCGGTAGCTGCAGAATCCTCTACGGGTACGTGGACCACTGTATGGACAGATGGATTGACCAATCTTGACCGTTACAAGGGCCGATGCTACGACATTGAACCCGTCGCTGGGGAAGAGAACCAGTATATCGCGTATGTAGCT"
 r2="AGCTTATCCTTTGGATCTATTCGAAGAAGGTTCTGTCACCAATTTGTTCACCTCCATTGTAGGTAATGTCTTCGGATTTAAGGCTCTACGCGCCTTACGCTTGGAAGACCTTCGAATCCCTCCTGCTTATTCTAAAACTTTTATCGGACCGCCTCATGGTATTCAGGTCGAAAGGGATAAACTGAACAAATATGGACGTCCTTTATTGGGATGTACAATCAAGCCAAAATTAGGTCTGTCTGCTAAGAATTATGGTAGAGCCGTCTAT"
 filename="Teratophyllum_koordersii_Liu9823_KTHU2241_01_1.000_abundance_121_10Ncat"
+
+
+# 取得所有檔案與子目錄名稱
+files = listdir(loadpath)
+# 創建要處理的清單
+candidate_list=set()
+# 以迴圈處理
+for filename in files:
+    if ("tempAlign.fasta" in filename) or ("temp.fasta" in filename):#跳過中繼檔，有必要之後可以每run完刪除一次
+        continue
+    # 產生檔案的絕對路徑
+    fullpath = join(loadpath, filename)
+    # 判斷 fullpath 是檔案還是目錄
+    if isfile(fullpath) and (filename!="temp.fasta"):
+        print("檔案：", filename)
+        filename_trim=str(filename)
+        # filename_trim=filename_trim.replace("_r1.al","")
+        # filename_trim=filename_trim.replace("_r2.al","")
+        # candidate_list.add(filename_trim)
+#   elif isdir(fullpath):
+#     print("目錄：", filename)
+# print (candidate_list)
+
+
+
 
 def nn_spliter(target,r1,r2,filename):
     pattern_for_split = r'NNNNNNNNNN'
