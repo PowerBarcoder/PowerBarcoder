@@ -40,12 +40,12 @@ def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     # print(seqTextSplitted)
     seqTextr1 = seqTextSplitted[0]
     seqTextr2 = seqTextSplitted[1]
-
-    with open(r1_outputLoadpath+filename + "_r1","w",encoding="UTF-8") as r1_file:
+    filenameForSave=filename.replace(".fas","")
+    with open(r1_outputLoadpath+filenameForSave + "r1.fas","w",encoding="UTF-8") as r1_file:
         r1_file.write(seqHeader + "_r1")
         r1_file.write(seqTextr1)
 
-    with open(r2_outputLoadpath+filename + "_r2","w",encoding="UTF-8") as r2_file:
+    with open(r2_outputLoadpath+filenameForSave + "r2.fas","w",encoding="UTF-8") as r2_file:
         r2_file.write(seqHeader + "_r2")
         r2_file.write(seqTextr2)
 
@@ -63,7 +63,7 @@ for filename in files:
         # print("檔案：", filename)
         nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath)  # 切檔
     else:
-        print("something wrong in", filename)
+        print(filename,"is not a file or the filename is not end with .fas")
 
 print("nnSpliter.py is running on loci: " + sys.argv[4])
 
