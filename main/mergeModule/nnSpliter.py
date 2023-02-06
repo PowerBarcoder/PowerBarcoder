@@ -29,10 +29,11 @@ loadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/"
 r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/r1/"
 r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/r2/"
 
+
 def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     pattern_for_split = r'NNNNNNNNNN'
-    seqHeader = linecache.getline(loadpath+filename, 1).replace("\n","")
-    seqText = linecache.getline(loadpath+filename, 2)
+    seqHeader = linecache.getline(loadpath + filename, 1).replace("\n", "")
+    seqText = linecache.getline(loadpath + filename, 2)
     # print(loadpath+filename)
     # print(seqHeader)
     # print(seqText)
@@ -40,11 +41,11 @@ def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     # print(seqTextSplitted)
     seqTextr1 = seqTextSplitted[0]
     seqTextr2 = seqTextSplitted[1]
-    with open(r1_outputLoadpath+filename,"w",encoding="UTF-8") as r1_file:
+    with open(r1_outputLoadpath + filename, "w", encoding="UTF-8") as r1_file:
         r1_file.write(seqHeader + "_r1" + "\n")
         r1_file.write(seqTextr1)
 
-    with open(r2_outputLoadpath+filename,"w",encoding="UTF-8") as r2_file:
+    with open(r2_outputLoadpath + filename, "w", encoding="UTF-8") as r2_file:
         r2_file.write(seqHeader + "_r2" + "\n")
         r2_file.write(seqTextr2)
 
@@ -62,11 +63,9 @@ for filename in files:
         # print("檔案：", filename)
         nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath)  # 切檔
     else:
-        print("[WARNING]"+filename,"is not a file or the filename is not end with .fas")
+        print("[WARNING]" + filename, "is not a file or the filename is not end with .fas")
 
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
-
-
 
 # --------------------------------prototype--------------------------------
 # # sample data
