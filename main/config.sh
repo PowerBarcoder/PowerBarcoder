@@ -9,13 +9,28 @@ localBlastToolDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
 # Where is your NGS Data ?
 ampliconInfo="/home2/barcoder_test/RUN1.5/" #20230107可以改成ampliconInfo  done
 # Where do you want to generate the results ?
-resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB1202/"
+resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21038_LIB810/"
 
-#/home/lykuo/lab_data/NGS_data/miseq/HGT21038_LIB810/rbcLC_demultiplex/denoice/nonmerged
-#/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB214/rbcLC_demultiplex/denoice/nonmerged
-#/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB1202/rbcLC_demultiplex/denoice/nonmerged
-#/home/lykuo/lab_data/NGS_data/miseq/HGT22061_Amplicon_RUN2/rbcLC_demultiplex/denoice/nonmerged
-#/home2/barcoder_test/RUN1_POOLED_new/result/rbcLC_demultiplex/denoice/nonmerged
+#/home/lykuo/lab_data/NGS_data/miseq/HGT21038_LIB810/rbcLC_demultiplex/denoice/nonmerged/
+#/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB214/rbcLC_demultiplex/denoice/nonmerged/
+#/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB1202/rbcLC_demultiplex/denoice/nonmerged/
+#/home/lykuo/lab_data/NGS_data/miseq/HGT22061_Amplicon_RUN2/rbcLC_demultiplex/denoice/nonmerged/
+#/home2/barcoder_test/RUN1_POOLED_new/result/rbcLC_demultiplex/denoice/nonmerged/
+
+#cp -r /home/lykuo/lab_data/NGS_data/miseq/HGT21038_LIB810/rbcLC_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21038_LIB810/rbcLC_demultiplex/denoice_best/
+#cp -r /home/lykuo/lab_data/NGS_data/miseq/HGT21038_LIB810/rbcLN_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21038_LIB810/rbcLN_demultiplex/denoice_best/
+#
+#cp -r /home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB214/rbcLC_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB214/rbcLC_demultiplex/denoice_best/
+#cp -r /home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB214/rbcLN_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB214/rbcLN_demultiplex/denoice_best/
+#
+#cp -r /home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB1202/rbcLC_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB1202/rbcLC_demultiplex/denoice_best/
+#cp -r /home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB1202/rbcLN_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT21056_LIB1202/rbcLN_demultiplex/denoice_best/
+#
+#cp -r /home/lykuo/lab_data/NGS_data/miseq/HGT22061_Amplicon_RUN2/rbcLC_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT22061_Amplicon_RUN2/rbcLC_demultiplex/denoice_best/
+#cp -r /home/lykuo/lab_data/NGS_data/miseq/HGT22061_Amplicon_RUN2/rbcLN_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_HGT22061_Amplicon_RUN2/rbcLN_demultiplex/denoice_best/
+#
+#cp -r /home2/barcoder_test/RUN1_POOLED_new/result/rbcLC_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_RUN1_POOLED_new/rbcLC_demultiplex/denoice_best/
+#cp -r /home2/barcoder_test/RUN1_POOLED_new/result/rbcLN_demultiplex/denoice/nonmerged/ /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_RUN1_POOLED_new/rbcLN_demultiplex/denoice_best/
 
 
 
