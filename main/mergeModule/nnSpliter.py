@@ -31,8 +31,9 @@ r2_outputLoadpath = sys.argv[3] + sys.argv[4] + "_demultiplex/denoice_best/nonme
 
 def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     pattern_for_split = r'NNNNNNNNNN'
-    seqHeader = linecache.getline(loadpath, 1)
-    seqText = linecache.getline(loadpath, 2)
+    seqHeader = linecache.getline(loadpath+filename, 1)
+    seqText = linecache.getline(loadpath+filename, 2)
+    print(loadpath+filename)
     print(seqHeader)
     print(seqText)
     seqTextSplitted = re.split(pattern_for_split, seqText, maxsplit=1)
