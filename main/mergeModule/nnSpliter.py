@@ -43,7 +43,7 @@ def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     seqTextr2 = seqTextSplitted[1]
     with open(r1_outputLoadpath + filename, "w", encoding="UTF-8") as r1_file:
         r1_file.write(seqHeader + "_r1" + "\n")
-        r1_file.write(seqTextr1)
+        r1_file.write(seqTextr1+ "\n") # r1結尾需要多補一個換行
 
     with open(r2_outputLoadpath + filename, "w", encoding="UTF-8") as r2_file:
         r2_file.write(seqHeader + "_r2" + "\n")
