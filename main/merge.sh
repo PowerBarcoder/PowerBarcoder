@@ -26,14 +26,12 @@ do
 
         #  準備parsing各loci local blast的結果
         python3 ./mergeModule/blastResultParser.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
-#
-#        # TODO
-#        # 20230107接NNNNN的話，底下這兩部就要改成一個檔案，用來把NNNNNN拆掉，然後按blast的結果做reverse complement後，輸出正確方向的ref
-#        python3 ./mergeModule/BeforeAlignment.py $ampliconInfo ${sseqidFileName[i]} $resultDataPath ${nameOfLoci[i]}
-#        python3 ./mergeModule/Alignment.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
-#
-#
+
+        # TODO 20230107接NNNNN的話，底下這兩部就要改成一個檔案，用來把NNNNNN拆掉，然後按blast的結果做reverse complement後，輸出正確方向的ref
+        python3 ./mergeModule/alignmentPretreater.py $ampliconInfo ${sseqidFileName[i]} $resultDataPath ${nameOfLoci[i]}
+        python3 ./mergeModule/Alignment.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
 #        python3 ./mergeModule/merge.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
+
     else #沒有的就跳過
     echo "no nonmerged files found in ${nameOfLoci[i]}"
     fi
