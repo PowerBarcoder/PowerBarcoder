@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from encodings import utf_8
-import subprocess
-from subprocess import PIPE
-import os
 import sys
 
 # 製造待測序列路徑的方法
@@ -12,7 +8,6 @@ def qseqidFile(outputLoadpath,rWho,fileName):
     qseqidFileName=fileName
     qseqidFile=qseqidFileDir+qseqidFileName
     return qseqidFile
-
 
 """
 # 先定義一個判斷正負的方法
@@ -43,6 +38,7 @@ def ReverseComplement(seq):
 def createRefFile(rWho,rWhoRowList):
     with open (outputLoadpath+rWho+"Ref/"+qseqid,"w") as RefFile:
         finalRowList=rWhoRowList+targetRowList
+        print(finalRowList)
         RefFile.writelines(finalRowList)
         # print(RefFile.read())
 

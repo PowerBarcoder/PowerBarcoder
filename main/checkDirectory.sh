@@ -1,7 +1,7 @@
 # ! /bin/bash
 . ./config.sh
 
-echo "checking file directories..."
+echo "[INFO] checking file directories..."
 
 #yixuan modified for multiLoci
 for ((i=0; i<${#nameOfLoci[@]}; i++))

@@ -15,12 +15,12 @@ do
     count=0
     dir=${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/
     count=$(ls -1 $dir | grep ".fas" | wc -l) #計算檔案結尾是.fas的數量
-    echo "Number of '.fas' files: $count"
+    echo "[INFO] Number of '.fas' files: $count"
 
     if [ ${count} -gt 1 ] 
     then #有檔案的才做
 #    ((count = $count/2))
-        echo "${count} nonmerged files found in ${nameOfLoci[i]}"
+        echo "[INFO] ${count} nonmerged files found in ${nameOfLoci[i]}"
 
         #  準備parsing各loci local blast的結果 --- input：10N seq 的 blast refResult; output：10N blastResult
         python3 ./mergeModule/blastResultParser.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
@@ -34,7 +34,7 @@ do
 #        python3 ./mergeModule/merge.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
 
     else #沒有的就跳過
-    echo "no nonmerged files found in ${nameOfLoci[i]}"
+    echo "[WARNING] no nonmerged files found in ${nameOfLoci[i]}"
     fi
 
 done

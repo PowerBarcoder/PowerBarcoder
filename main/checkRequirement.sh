@@ -1,7 +1,7 @@
 # ! /bin/bash
 
 
-echo "checking reuirement..."
+echo "[INFO] checking reuirement..."
 
 # # check fastp 先跳過，看起來要切路徑到miniconda
 # currentPath=$(pwd)
@@ -27,9 +27,9 @@ lengthOfCutadapt=10
 # echo $(whereis cutadapt|#)
 if [ $checkCutadapt -le $lengthOfCutadapt ]; 
 then
-    exit "Pipeline terminated because cutadapt is not found"
+    exit "[WARNING] Pipeline terminated because cutadapt is not found"
 else
-    echo "cutadapt installed"
+    echo "[INFO] cutadapt installed"
 fi
 
 
@@ -40,9 +40,9 @@ lengthOfMakeblastdb=12
 # echo $(whereis cutadapt|#)
 if [ $checkMakeblastdb -le $lengthOfMakeblastdb ]; 
 then
-    exit "Pipeline terminated because makeblastdb is not found"
+    exit "[WARNING] Pipeline terminated because makeblastdb is not found"
 else
-    echo "makeblastdb installed"
+    echo "[INFO] makeblastdb installed"
 fi
 
 
@@ -53,9 +53,9 @@ lengthOfBlastn=7
 # echo $(whereis cutadapt|#)
 if [ $checkBlastn -le $lengthOfBlastn ]; 
 then
-    exit "Pipeline terminated because blastn is not found"
+    exit "[WARNING] Pipeline terminated because blastn is not found"
 else
-    echo "blastn installed"
+    echo "[INFO] blastn installed"
 fi
 
 
@@ -66,8 +66,8 @@ lengthOfMafft=6
 # echo $(whereis cutadapt|#)
 if [ $checkMafft -le $lengthOfMafft ]; 
 then
-    exit "Pipeline terminated because mafft is not found"
+    exit "[WARNING] Pipeline terminated because mafft is not found"
 else
-    echo "mafft installed"
+    echo "[INFO] mafft installed"
 fi
 
