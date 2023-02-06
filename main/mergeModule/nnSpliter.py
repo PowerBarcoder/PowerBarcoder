@@ -23,11 +23,11 @@ from os.path import isfile, join
 import sys
 import linecache
 
-print("nnSpliter.py is running on loci: " + sys.argv[4])
+print("nnSpliter.py is running on loci: " + sys.argv[2])
 
-loadpath = sys.argv[3] + sys.argv[4] + "_demultiplex/denoice_best/nonmerged/"
-r1_outputLoadpath = sys.argv[3] + sys.argv[4] + "_demultiplex/denoice_best/nonmerged/r1/"
-r2_outputLoadpath = sys.argv[3] + sys.argv[4] + "_demultiplex/denoice_best/nonmerged/r2/"
+loadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/"
+r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/r1/"
+r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/r2/"
 
 def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     pattern_for_split = r'NNNNNNNNNN'
@@ -65,7 +65,7 @@ for filename in files:
     else:
         print(filename,"is not a file or the filename is not end with .fas")
 
-print("nnSpliter.py is running on loci: " + sys.argv[4])
+print("nnSpliter.py is running on loci: " + sys.argv[2])
 
 
 

@@ -13,21 +13,19 @@ do
     count=0
 #    for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*
     dir=${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/
-    # get a list of files in the directory and count the number of ".txt" files
-    count=$(ls -1 $dir | grep ".fas" | wc -l) #計算檔案數量
+    count=$(ls -1 $dir | grep ".fas" | wc -l) #計算檔案結尾是.fas的數量
     echo "Number of '.fas' files: $count"
 
 
     if [ ${count} -gt 1 ] 
     then #有檔案的才做
 #    ((count = $count/2))
-    echo "${count} nonmerged files found in ${nameOfLoci[i]}"
+        echo "${count} nonmerged files found in ${nameOfLoci[i]}"
+        #  就是這裡拆NN到原先的nonmerged/r1,r2資料夾裡
+        python3 ./mergeModule/nnSpliter.py $resultDataPath ${nameOfLoci[i]} #內部需要拆10N
 
-         #  就是這裡拆NN到原先的r1,r2資料夾裡
-         python3 ./mergeModule/nnSpliter.py $ampliconInfo ${sseqidFileName[i]} $resultDataPath ${nameOfLoci[i]} #內部需要拆10N
-
-#        準備parsing各loci local blast的結果
-#        python3 ./mergeModule/BlastResult.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
+        #  準備parsing各loci local blast的結果
+        python3 ./mergeModule/blastResultParser.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
 #
 #        # TODO
 #        # 20230107接NNNNN的話，底下這兩部就要改成一個檔案，用來把NNNNNN拆掉，然後按blast的結果做reverse complement後，輸出正確方向的ref
