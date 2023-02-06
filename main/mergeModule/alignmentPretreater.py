@@ -25,7 +25,6 @@ def negativeTest(a,b):
 
 # 反轉序列的方法
 def ReverseComplement(seq):
-    print("hi 28")
     # """Return reverse complement fastaID_seq_dic, ignore gaps"""
     seq = seq.replace(' ','') #Remove space
     seq = seq.replace('\n','') #Remove LF
@@ -95,7 +94,7 @@ with open(fastaFile,"r")as file:
             lines=qR1File.readlines()
             # print(lines)
             r1RowList+=lines
-            # print(r1RowList)
+            print(r1RowList)
 
         # 待測序列r2製作
         qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid)
@@ -137,9 +136,10 @@ with open(fastaFile,"r")as file:
         # 20230206-10N新版
         if ((sign=="negative")):
             targetRowList[1]=ReverseComplement(targetRowList[1])
-            print("negative: "+fastaFile)
+            # print("negative: "+fastaFile)
         elif ((sign=="positive")):
-            print("positive: "+fastaFile)
+            # print("positive: "+fastaFile)
+            pass
 
 
         createRefFile("r1",r1RowList)
