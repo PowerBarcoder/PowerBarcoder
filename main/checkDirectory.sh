@@ -8,6 +8,7 @@ for ((i=0; i<${#nameOfLoci[@]}; i++))
 do
 
 # create Layer 1st folder
+mkdir -p ${resultDataPath}blastResult
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex
 # create Layer 2nd folders
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed

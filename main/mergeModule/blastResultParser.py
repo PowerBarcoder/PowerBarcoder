@@ -100,17 +100,16 @@ def determineDirection(i):
     return result
 
 
-if(os.path.isdir(loadpath +'blastResult')==False):
-    # 沒資料夾就建一個資料夾
-    makedir_blastResult = 'mkdir '+ loadpath +'blastResult'
-    subprocess.run(makedir_blastResult, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+# if(os.path.isdir(loadpath +'blastResult')==False):
+#     # 沒資料夾就建一個資料夾
+#     makedir_blastResult = 'mkdir '+ loadpath +'blastResult'
+#     subprocess.run(makedir_blastResult, shell=True, check=True, stdout=PIPE, stderr=PIPE)
 
 
 for i in range(0,len(qseqidList)):
     # print(determineDirection(i))
     with open(loadpath+"blastResult/"+sys.argv[3]+"_blastResult.txt","a") as file:
         file.write(determineDirection(i)+"\n")
-        pass
 
 # column info：
     # str(qseqidList[i]) +'\t'+
