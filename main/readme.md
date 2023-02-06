@@ -49,7 +49,7 @@
  從這裡開始需要執行for迴圈，希望可以只讀一次blastResult
  1. 'nnSpliter.py'：DADA2生成的r1-10N-r2要做切分，切成/nonmerged/r1資料夾跟/nonmerged/r2資料夾
  2. 'alignmentPretreater.py'：align前我們需要在此利用r1 r2製作他們的r1Ref及r2Ref的序列
- 3. 'Alignment.py'：將r1 r2序列align
+ 3. 'alignmenter.py'：將r1 r2序列align
  4. 'merge.py'：開始合併align好的r1 r2從物件(Miseq、FastaUnit)寫出成檔案
 
  調用的類別(當資料有多個key:value時，用物件存比較方便操作)
@@ -69,7 +69,7 @@ title: Execution order
     E --> F[00_blastForRef.sh]
     F --> G[blastResultParser.py]
     G --> H[alignmentPretreater.py]
-    H --> I[Alignment.py]
+    H --> I[alignmenter.py]
     I --> J[merge.py]
 ```
 

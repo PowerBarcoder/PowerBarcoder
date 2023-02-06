@@ -171,7 +171,7 @@ for filename in candidate_list:
                 # print("add Ns1")
                 overlape = False
             else:
-                print("merge.py 163: something wrong")
+                print("[WARNING] merge.py 163: something wrong")
 
 
         # # 步驟三
@@ -242,10 +242,10 @@ for filename in candidate_list:
                 try:
                     subprocess.run(alignment, shell=True, check=True, stdout=PIPE, stderr=PIPE)
                 except Exception as e:
-                    print("error occured:",e)
+                    print("[WARNING] error occured:",e)
 
                 while ((path.exists(loadpath+"mafft/"+filename+"tempAlign.fasta")== False)):
-                    print(filename+"tempAlign.fasta未生成，等待一秒")
+                    print("[WARNING]"+filename+"tempAlign.fasta未生成，等待一秒")
                     time.sleep(1)
 
                 aligned_fastaUnit = FastaUnit()
@@ -314,7 +314,7 @@ for filename in candidate_list:
                     overlap_seq=overlap_seq+trim_0_overlap_align[i]
                 # D G/A/T # V G/A/C # B G/T/C # H A/T/C 兩條序列不會出現
                 else:
-                    print("出錯了GG")
+                    print("[ERROR] 出錯了GG")
             # print("overlap_num_align",overlap_num_align)
             # print("overlap_seq",overlap_seq)
             merge_seq=merge_seq+r1[:r1_p1-1].upper()+overlap_seq+r2[r2_p2+1:].upper() # print(merge_seq)
@@ -335,7 +335,7 @@ for filename in candidate_list:
 
     except Exception as e:
         print(e)
-        print("merge.py 319: something wrong.",filename)
+        print("[WARNING] merge.py 319: something wrong.",filename)
 
 # 20220918
 # 最終檔案要長這樣(注意最後的header名要修改：r1_0.548_abundance_23_r2_0.548_abundance_23)
