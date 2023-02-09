@@ -2,12 +2,14 @@
 
 import sys
 
+
 # 製造待測序列路徑的方法
-def qseqidFile(outputLoadpath,rWho,fileName):
-    qseqidFileDir=outputLoadpath+rWho+"/"
-    qseqidFileName=fileName
-    qseqidFile=qseqidFileDir+qseqidFileName
+def qseqidFile(outputLoadpath, rWho, fileName):
+    qseqidFileDir = outputLoadpath + rWho + "/"
+    qseqidFileName = fileName
+    qseqidFile = qseqidFileDir + qseqidFileName
     return qseqidFile
+
 
 """
 # 判斷正負的方法
@@ -17,137 +19,144 @@ def qseqidFile(outputLoadpath,rWho,fileName):
 用 subject start 與 end 相減 正值或負值
 再與（query start 與 end 相減）相乘決定 是否方向一至
 """
-def negativeTest(a,b):
-    if ((a[0]=="-")and(b[0]=="-"))or ((a[0]!="-")and(b[0]!="-")):
+
+
+def negativeTest(a, b):
+    if ((a[0] == "-") and (b[0] == "-")) or ((a[0] != "-") and (b[0] != "-")):
         return "positive"
-    elif ((a[0]!="-")and(b[0]=="-")) or ((a[0]=="-")and(b[0]!="-")):
+    elif ((a[0] != "-") and (b[0] == "-")) or ((a[0] == "-") and (b[0] != "-")):
         return "negative"
+
 
 # 反轉序列的方法
 def ReverseComplement(seq):
     # """Return reverse complement fastaID_seq_dic, ignore gaps"""
-    seq = seq.replace(' ','') #Remove space
-    seq = seq.replace('\n','') #Remove LF
-    seq = seq[::-1] #Reverse the fastaID_seq_dic
-    basecomplement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'N': 'N', 'R': 'Y', 'Y':'R', 'M': 'K', 'K': 'M', 'S': 'S', 'W': 'W', 'H': 'D', 'B': 'V'} #Make a dictionary for complement
-    letters = list(seq) #Turn the fastaID_seq_dic into a list
+    seq = seq.replace(' ', '')  # Remove space
+    seq = seq.replace('\n', '')  # Remove LF
+    seq = seq[::-1]  # Reverse the fastaID_seq_dic
+    basecomplement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'N': 'N', 'R': 'Y', 'Y': 'R', 'M': 'K', 'K': 'M',
+                      'S': 'S', 'W': 'W', 'H': 'D', 'B': 'V'}  # Make a dictionary for complement
+    letters = list(seq)  # Turn the fastaID_seq_dic into a list
     letters = [basecomplement[base] for base in letters]
-    return ''.join(letters)+'\n' #Turn the list into a string
+    return ''.join(letters) + '\n'  # Turn the list into a string
+
 
 # 兩條序列匯出成一檔的方法
-def createRefFile(rWho,rWhoRowList):
-    with open (outputLoadpath+rWho+"Ref/"+qseqid,"w") as RefFile:
-        finalRowList=rWhoRowList+targetRowList
+def createRefFile(rWho, rWhoRowList):
+    with open(outputLoadpath + rWho + "Ref/" + qseqid, "w") as RefFile:
+        finalRowList = rWhoRowList + targetRowList
         # print(finalRowList) #TODO 20230206 這邊r1開頭就少n了
         RefFile.writelines(finalRowList)
         # print(RefFile.read())
 
-print("[INFO] alignmentPretreater.py is running on loci: "+sys.argv[4])
+
+print("[INFO] alignmentPretreater.py is running on loci: " + sys.argv[4])
 
 # loadpath="/home/sktang/powerBC/"
-localBlastLoadpath=sys.argv[3]
-outputLoadpath=sys.argv[3]+sys.argv[4]+"_demultiplex/denoice_best/nonmerged/"
-
+localBlastLoadpath = sys.argv[3]
+outputLoadpath = sys.argv[3] + sys.argv[4] + "_demultiplex/denoice_best/nonmerged/"
 
 # localblast完的序列檔案
-fastaFileDir=localBlastLoadpath+"blastResult/"
-fastaFileName=sys.argv[4]+"_blastResult.txt"
-fastaFile=fastaFileDir+fastaFileName
+fastaFileDir = localBlastLoadpath + "blastResult/"
+fastaFileName = sys.argv[4] + "_blastResult.txt"
+fastaFile = fastaFileDir + fastaFileName
 # print(fastaFile)
 
 # ref
 # sseqidFileDir="/home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/"
-sseqidFileDir=sys.argv[1]
+sseqidFileDir = sys.argv[1]
 # sseqidFileName="fermalies_rbcL.fasta"
-sseqidFileName=sys.argv[2]
+sseqidFileName = sys.argv[2]
 
-sseqidFile=sseqidFileDir+sseqidFileName
+sseqidFile = sseqidFileDir + sseqidFileName
 
-r1RowList=[]
-r2RowList=[]
-targetRowList=[]
+r1RowList = []
+r2RowList = []
+targetRowList = []
 
-with open(fastaFile,"r")as file:
-    lines=file.readlines()
-    for line in lines:
-        # print (line)
-        line=line.replace("\n","")
-        lineSplit=line.split("\t")
-        # print(lineSplit)
-        qseqid=lineSplit[0]
-        sseqid=lineSplit[1]
-        sign=negativeTest(lineSplit[12],lineSplit[13])
-        forword=lineSplit[14]
-        # print(qseqid+" "+sseqid+" "+sign+" "+forword)
+try:
+    with open(fastaFile, "r") as file:
+        lines = file.readlines()
+        for line in lines:
+            # print (line)
+            line = line.replace("\n", "")
+            lineSplit = line.split("\t")
+            # print(lineSplit)
+            qseqid = lineSplit[0]
+            sseqid = lineSplit[1]
+            sign = negativeTest(lineSplit[12], lineSplit[13])
+            forword = lineSplit[14]
+            # print(qseqid+" "+sseqid+" "+sign+" "+forword)
 
-        # 已獲得所有資訊，開始分四狀況來寫alignment了
-        # 0514-016_CYH20090514-016_Microlepia_substrigosa_.fas 
-        # MH319942_Dennstaedtiaceae_Histiopteris_incisa 
-        # positive 
-        # r1
+            # 已獲得所有資訊，開始分四狀況來寫alignment了
+            # 0514-016_CYH20090514-016_Microlepia_substrigosa_.fas
+            # MH319942_Dennstaedtiaceae_Histiopteris_incisa
+            # positive
+            # r1
 
-        # 待測序列r1製作
-        qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid)
-        # print(qseqidFile(loadpath,forword,qseqid))
-        r1RowList=[]
-        with open (qseqidFileStr,"r") as qR1File:
-            # print(qseqidFileStr)
-            lines=qR1File.readlines()
-            # print(lines)
-            r1RowList+=lines
-            # print(r1RowList)
+            # 待測序列r1製作
+            qseqidFileStr = qseqidFile(outputLoadpath, "r1", qseqid)
+            # print(qseqidFile(loadpath,forword,qseqid))
+            r1RowList = []
+            with open(qseqidFileStr, "r") as qR1File:
+                # print(qseqidFileStr)
+                lines = qR1File.readlines()
+                # print(lines)
+                r1RowList += lines
+                # print(r1RowList)
 
-        # 待測序列r2製作
-        qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid)
-        # print(qseqidFile(loadpath,forword,qseqid))
-        r2RowList=[]
-        with open (qseqidFileStr,"r") as qR2File:
-            # print(qseqidFileStr)
-            lines=qR2File.readlines()
-            # print(lines)
-            r2RowList+=lines
-            # print(r2RowList)
+            # 待測序列r2製作
+            qseqidFileStr = qseqidFile(outputLoadpath, "r2", qseqid)
+            # print(qseqidFile(loadpath,forword,qseqid))
+            r2RowList = []
+            with open(qseqidFileStr, "r") as qR2File:
+                # print(qseqidFileStr)
+                lines = qR2File.readlines()
+                # print(lines)
+                r2RowList += lines
+                # print(r2RowList)
 
-        # ref seq製作
-        targetRowList=[]
-        targetRowNumber=int(-1)
-        with open (sseqidFile,"r")as sFile :
-            lines=sFile.readlines()
-            for line in lines:
-                targetRowNumber+=1
-                if line.find(sseqid)!=-1:
-                    break
-            targetRowList+=(lines[targetRowNumber:targetRowNumber+2])    
-            # print(targetRowList)
+            # ref seq製作
+            targetRowList = []
+            targetRowNumber = int(-1)
+            with open(sseqidFile, "r") as sFile:
+                lines = sFile.readlines()
+                for line in lines:
+                    targetRowNumber += 1
+                    if line.find(sseqid) != -1:
+                        break
+                targetRowList += (lines[targetRowNumber:targetRowNumber + 2])
+                # print(targetRowList)
 
+            # if else判斷方向(多行的fasta之後再處理成一行的)
 
-        # if else判斷方向(多行的fasta之後再處理成一行的)
+            # 2022年舊版
+            # if ((sign=="negative")and(forword=="r1")):
+            #     targetRowList[1]=ReverseComplement(targetRowList[1])
+            #     r2RowList[1]=ReverseComplement(r2RowList[1])
+            # elif ((sign=="positive")and(forword=="r1")):
+            #     r2RowList[1]=ReverseComplement(r2RowList[1])
+            # elif ((sign=="negative")and(forword=="r2")):
+            #     r2RowList[1]=ReverseComplement(r2RowList[1])
+            # elif ((sign=="positive")and(forword=="r2")):
+            #     targetRowList[1]=ReverseComplement(targetRowList[1])
+            #     r2RowList[1]=ReverseComplement(r2RowList[1])
 
-        # 2022年舊版
-        # if ((sign=="negative")and(forword=="r1")):
-        #     targetRowList[1]=ReverseComplement(targetRowList[1])
-        #     r2RowList[1]=ReverseComplement(r2RowList[1])
-        # elif ((sign=="positive")and(forword=="r1")):
-        #     r2RowList[1]=ReverseComplement(r2RowList[1])
-        # elif ((sign=="negative")and(forword=="r2")):
-        #     r2RowList[1]=ReverseComplement(r2RowList[1])
-        # elif ((sign=="positive")and(forword=="r2")):
-        #     targetRowList[1]=ReverseComplement(targetRowList[1])
-        #     r2RowList[1]=ReverseComplement(r2RowList[1])
+            # 20230206-10N新版
+            if ((sign == "negative")):
+                targetRowList[1] = ReverseComplement(targetRowList[1])
+                print("negative: " + fastaFile)
+            elif ((sign == "positive")):
+                # print("positive: "+fastaFile)
+                pass
 
-        # 20230206-10N新版
-        if ((sign=="negative")):
-            targetRowList[1]=ReverseComplement(targetRowList[1])
-            print("negative: "+fastaFile)
-        elif ((sign=="positive")):
-            # print("positive: "+fastaFile)
-            pass
+            createRefFile("r1", r1RowList)
+            createRefFile("r2", r2RowList)
+except Exception:
+    print("[ERROR An exception happen]")
+    print(Exception)
 
-        createRefFile("r1",r1RowList)
-        createRefFile("r2",r2RowList)
-
-
-print("[INFO] alignmentPretreater.py is ended on loci: "+sys.argv[4])
+print("[INFO] alignmentPretreater.py is ended on loci: " + sys.argv[4])
 
 # 4.讀ref.fas
 # 5.讀r1.fas
