@@ -93,28 +93,31 @@ try:
             # MH319942_Dennstaedtiaceae_Histiopteris_incisa
             # positive
             # r1
+            try:
+                # 待測序列r1製作
+                qseqidFileStr = qseqidFile(outputLoadpath, "r1", qseqid)
+                # print(qseqidFile(loadpath,forword,qseqid))
+                r1RowList = []
+                with open(qseqidFileStr, "r") as qR1File:
+                    # print(qseqidFileStr)
+                    lines = qR1File.readlines()
+                    # print(lines)
+                    r1RowList += lines
+                    # print(r1RowList)
 
-            # 待測序列r1製作
-            qseqidFileStr = qseqidFile(outputLoadpath, "r1", qseqid)
-            # print(qseqidFile(loadpath,forword,qseqid))
-            r1RowList = []
-            with open(qseqidFileStr, "r") as qR1File:
-                # print(qseqidFileStr)
-                lines = qR1File.readlines()
-                # print(lines)
-                r1RowList += lines
-                # print(r1RowList)
-
-            # 待測序列r2製作
-            qseqidFileStr = qseqidFile(outputLoadpath, "r2", qseqid)
-            # print(qseqidFile(loadpath,forword,qseqid))
-            r2RowList = []
-            with open(qseqidFileStr, "r") as qR2File:
-                # print(qseqidFileStr)
-                lines = qR2File.readlines()
-                # print(lines)
-                r2RowList += lines
-                # print(r2RowList)
+                # 待測序列r2製作
+                qseqidFileStr = qseqidFile(outputLoadpath, "r2", qseqid)
+                # print(qseqidFile(loadpath,forword,qseqid))
+                r2RowList = []
+                with open(qseqidFileStr, "r") as qR2File:
+                    # print(qseqidFileStr)
+                    lines = qR2File.readlines()
+                    # print(lines)
+                    r2RowList += lines
+                    # print(r2RowList)
+            except Exception:
+                print(Exception)
+                continue
 
             # ref seq製作
             targetRowList = []
@@ -152,6 +155,7 @@ try:
 
             createRefFile("r1", r1RowList)
             createRefFile("r2", r2RowList)
+
 except Exception:
     print("[ERROR An exception happen]")
     print(Exception)
