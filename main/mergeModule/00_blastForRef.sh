@@ -1,17 +1,8 @@
 # ! /bin/bash
-
 . ./config.sh
 # refResult.txt是localBlast的結果，blastResult.txt是我們parsing後的結果，在blastResultParser.py產生的
 
-# 所以2/5前把10N的東西拆開來，即可
-
-
-
 echo "[INFO] 00_blastForRef is running"
-
-
-# TODO #2 這邊要考慮把前一次blast的東西刪掉，不然blastResult.txt會沒有
-
 
 for ((i=0; i<${#nameOfLoci[@]}; i++)) #迴圈處理，若dada2出來的nonmerge資料夾內為空，則須停止後續步驟
 do
@@ -37,7 +28,6 @@ cat ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/*.fas >
 # ${localBlastToolDir}blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
 # /home/lykuo/ncbi-blast-2.10.0+/bin/blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
 ${localBlastToolDir}blastn -db ${resultDataPath}blastResult/${nameOfLoci[i]}_refDB -query ${resultDataPath}blastResult/${nameOfLoci[i]}_catQuery.fas -num_threads 20 -out ${resultDataPath}blastResult/${nameOfLoci[i]}_refResult.txt -outfmt 6
-# 20230107 (如果改成接NNNNNN就可以忽略這條)-outfmt 可以選一種是幫你align.好的、但是你的output要重寫parsing方式，很麻煩  TODO
 
 done
 

@@ -116,6 +116,7 @@ try:
                     r2RowList += lines
                     # print(r2RowList)
             except Exception:
+                print("[ERROR] An exception happen in "+sys.argv[4]+"： "+qseqid+" before alignment")
                 print(Exception)
                 continue
 
@@ -145,7 +146,7 @@ try:
             #     targetRowList[1]=ReverseComplement(targetRowList[1])
             #     r2RowList[1]=ReverseComplement(r2RowList[1])
 
-            # 20230206-10N新版
+            # 20230206-10N新版 TODO 需要用trnLF測試正確性
             if ((sign == "negative")):
                 targetRowList[1] = ReverseComplement(targetRowList[1])
                 print("negative: " + fastaFile)
@@ -157,7 +158,7 @@ try:
             createRefFile("r2", r2RowList)
 
 except Exception:
-    print("[ERROR An exception happen]")
+    print("[ERROR] An exception happen in "+sys.argv[4]+" before alignment")
     print(Exception)
 
 print("[INFO] alignmentPretreater.py is ended on loci: " + sys.argv[4])

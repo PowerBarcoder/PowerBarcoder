@@ -9,7 +9,7 @@ from os.path import isfile, isdir, join
 import sys
 from os import path
 import time
-
+# TODO missList 的加入
 print("[INFO] merge.py is running on loci: "+sys.argv[3])
 
 ######################################
@@ -206,7 +206,7 @@ for filename in candidate_list:
 
             # 看起來要寫個檔案先存起來 (20230111這步ok)
 
-            # TODO r1_for_align跟r2_for_align要先degap
+            # 10N： r1_for_align跟r2_for_align要先degap
             # 20230206 我決定在這邊做degap(所以下一行多加了".replace("-","")")
             aligntext=">r1\n"+r1_for_align.replace("-","")+"\n"+">r2\n"+r2_for_align.replace("-","")
             with open(loadpath+"mafft/"+filename+"temp.fasta","w",encoding="UTF-8") as file:
@@ -217,26 +217,17 @@ for filename in candidate_list:
             # if(ovelap區間的序列內容跟長度完全一樣):
             # 不用align
             if(r1_for_align==r2_for_align):
-                # print("序列長一樣，不用alignment")
+                # print("序列長得一模一樣，不用alignment")
                 r1_overlap = r1_for_align
                 r2_overlap = r2_for_align
             # elif(ovelap區間的序列長度一樣):
-            # TODO 也不用align (未來可能trnLF有問題的話，可以考慮一併alignment)
-            elif(len(r1_for_align)==len(r2_for_align)):
-                # print("序列一樣長，不用alignment")
-                r1_overlap = r1_for_align
-                r2_overlap = r2_for_align
-            # else:
-            # 在py裡做shell，
-            #
-            #
-            # TODO 先把overlap區段degap(XXX不是在這邊做)
-            #
-            #
-            #
-            #
-            # ，然後r1 r2兩個overlap去align
-            else:
+            # 10N： 也不用align
+            # (考慮到trnLF的複雜性，還是拿去下面else區塊做alignment)
+            # elif(len(r1_for_align)==len(r2_for_align)):
+            #     # print("序列一樣長，不用alignment")
+            #     r1_overlap = r1_for_align
+            #     r2_overlap = r2_for_align
+            else:# 在py裡做shell，然後r1 r2兩個overlap去align
                 alignment = "mafft --thread 1 --maxiterate 16 --globalpair "+loadpath+"mafft/"+filename+"temp.fasta"  + "> "+loadpath+"mafft/"+filename+"tempAlign.fasta"
                 # print(alignment)
                 try:
