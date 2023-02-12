@@ -23,30 +23,11 @@ errR <- learnErrors(fnRs, multithread=TRUE)
 # 準備一些變數
 numbers = c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
 
-
-
-# 這邊寫死了，要修改， TODO
-# 策略一： multiplex...txt的table用loci.1、loci.2這樣的參數取代掉c("fNYG", "rVVG")內的兩個參數
-# 策略二：直接從config檔裡面傳參數近來，會遇到的問題是，你不知道他要傳幾組，所以可能要寫成向第41行的處理方式
-# rbcLC = c("fNYG", "rVVG") #"rbcLC" and column names of primers, VARIABLEs; the first and second items corresponding to the order in demultiplex.sh
-# rbcLN = c("fVGF", "rECL")
-# 多loci，要從sh傳參近來，搭配multiplex_clean.txt一起使用，後者是使用者自備的，所以格式很重要
-# trnLF = c("L5675", "F4121")
-# trnL = c("oneIf1", "L7556")
+rbcLN = c("fVGF", "rECL")
 AP_minlength = 500  #TODO 這個也變參數
 minoverlap = 4 #TODO 這個也變參數
-#AP<-data.frame(rbcLC, rbcLN, trnLF, trnL)
-#AP<-data.frame(rbcLC)
 
-#yixuan modified(使用策略一，所以multiplex_cpDNAbarcode_clean那份檔案的欄位名稱要記得改)
-#AP as below
-#nameOfloci[1]    nameOfloci[2]   ...
-#nameOfloci[1]_1  nameOfloci[2]_1 ...
-#nameOfloci[1]_2  nameOfloci[2]_2 ...
-AP = data.frame(matrix(nrow = 2, ncol = 0))
-for(i in 6:(as.numeric(length(args[])))){
-  AP[ ,paste0(args[i])] <- c(paste0(args[i],"_1"), paste0(args[i],"_2"))
-}
+AP<-data.frame(rbcLN)
 
 multiplex_cpDNAbarcode_clean_path = paste0(path_reads, args[5]) #20230107 "multiplex_cpDNAbarcode_clean.txt"請改成變數 done
 multiplex <- read.table(
@@ -55,7 +36,6 @@ multiplex <- read.table(
 
 #1:ncol(AP) to loop all regions
 for (a in 1:ncol(AP)){
-  colnames(AP[a]) -> region
   colnames(AP[a]) -> region
   AP[,a][1] -> Fp
   AP[,a][2] -> Rp
@@ -91,7 +71,7 @@ for (a in 1:ncol(AP)){
     header = paste0(">",seqname)                                                                     #加上了header的符號
     if (purrr::has_element(list.files(path= path_trim),s1)==TRUE){ #這邊只檢查了r1的名字有沒有對，有對boolean就是TRUE
 
-      # 核心運行，運行後看要不要merge，不能merge的就交由我寫的來處理
+      # TODO 核心運行，運行後看要不要merge，不能merge的就交由我寫的來處理
       dadaFs <- dada(r1, err=errF, multithread=TRUE)
       dadaRs <- dada(r2, err=errR, multithread=TRUE)
       paste0(rep(header, length(dadaFs[["clustering"]][["abundance"]])), "_", numbers[1:length(dadaFs[["clustering"]][["abundance"]])], rep("_r1_", length(dadaFs[["clustering"]][["abundance"]])), sprintf(dadaFs[["clustering"]][["abundance"]]/sum(dadaFs[["clustering"]][["abundance"]]), fmt = '%#.3f'), rep("_abundance_", length(dadaFs[["clustering"]][["abundance"]])), dadaFs[["clustering"]][["abundance"]])->r1list
@@ -102,7 +82,6 @@ for (a in 1:ncol(AP)){
       cbind(r2list,dadaRs[["clustering"]][["sequence"]],dadaRs[["clustering"]][["abundance"]])-> r2fas
       r2fas[order(as.numeric(r2fas[,3]), decreasing = TRUE),]-> r2fas
       matrix(r2fas, ncol = 3)-> r2fas
-
       write.table(r1fas[,1:2], file = paste0(path_demultiplex, "/denoice/r1/",filename), append = FALSE, sep = "\n", quote = FALSE,
                   row.names = FALSE, col.names = FALSE)
       write.table(r1fas[,1:2], file = paste0(path_demultiplex, "/denoice/r1/",r0), append = FALSE, sep = "\n", quote = FALSE,
