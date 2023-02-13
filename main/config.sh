@@ -9,7 +9,7 @@ localBlastToolDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
 # Where is your NGS Data ?
 ampliconInfo="/home2/barcoder_test/RUN1.5/" #20230107可以改成ampliconInfo  done
 # Where do you want to generate the results ?
-resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result_20230212/"
+resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result_rbcL_final/"
 # Somehow several sequence might not be able to be merged, we will list them in a file, where do you want to store it ?
 missList="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result_20230212/missingList.txt"
 
