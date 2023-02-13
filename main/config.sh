@@ -50,6 +50,10 @@ missList="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result_20230212
 #/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_RUN1_POOLED_new/
 
 
+#cp -r /home2/analyses/BIFA/rbcL_for_merge/rbcLN_single/* /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result_rbcL_final/rbcLN_demultiplex/denoice_best/nonmerged/mergeSeq/
+#cp -r /home2/analyses/BIFA/rbcL_for_merge/rbcLC_single/* /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result_rbcL_final/rbcLC_demultiplex/denoice_best/nonmerged/mergeSeq/
+
+
 # where is your Miseq gz data ?
 R1FastqGz="/home/lykuo/lab_data/NGS_data/miseq/HGT22070_Amplicon_RUN1.5/trim_RUN1.5_R1.fq.gz" #20230107可以改成R1FastqGz done
 R2FastqGz="/home/lykuo/lab_data/NGS_data/miseq/HGT22070_Amplicon_RUN1.5/trim_RUN1.5_R2.fq.gz" #20230107可以改成R2FastqGz done
@@ -61,19 +65,19 @@ summaryHtmlFileName="221229RUN1_5.html"
 dada2LearnErrorFile="/home/lykuo/lab_data/NGS_data/miseq/HGT21056_LIB1202/error_learn/SuperRed_35"
 dada2BarcodeFile="multiplex_cpDNAbarcode_clean.txt" # under dir. ampliconInfo
 
-## first dataset (We need at least on dataset)
-#nameOfLoci+=("rbcLC") # name of loci
-#errorRateCutadaptor+=(0.125) # error rate in cutadaptor
-#minimumLengthCutadaptor+=(70) # minimum output sequence length in cutadaptor
-#primerF+=("TAGGTCTGTCTGCYAARAATTATGG") # front-end primer
-#primerR+=("GTTCCCCYTCTAGTTTRCCTACTAC") # back-end primer
-#amplicon_r1+=("rbcLC_amplicon_r1.fq") # amplicon files name  # under dir. ampliconInfo
-#amplicon_r2+=("rbcLC_amplicon_r2.fq") # amplicon files name  # under dir. ampliconInfo
-#barcodesFile1+=('barcodes_rbcLC_start_0.fasta') # barcode files name  # under dir. ampliconInfo
-#barcodesFile2+=('barcodes_rbcLC_start2_0.fasta') # barcode files name  # under dir. ampliconInfo
-#sseqidFileName+=("fermalies_rbcL.fasta") # local blast reference file name  # under dir. ampliconInfo
-#minimumLengthCutadaptorInLoop+=(150) # minimum output sequence length in cutadaptor
-#customizedThreadNumber+=(30) # customized thread numbers
+# first dataset (We need at least on dataset)
+nameOfLoci+=("rbcLC") # name of loci
+errorRateCutadaptor+=(0.125) # error rate in cutadaptor
+minimumLengthCutadaptor+=(70) # minimum output sequence length in cutadaptor
+primerF+=("TAGGTCTGTCTGCYAARAATTATGG") # front-end primer
+primerR+=("GTTCCCCYTCTAGTTTRCCTACTAC") # back-end primer
+amplicon_r1+=("rbcLC_amplicon_r1.fq") # amplicon files name  # under dir. ampliconInfo
+amplicon_r2+=("rbcLC_amplicon_r2.fq") # amplicon files name  # under dir. ampliconInfo
+barcodesFile1+=('barcodes_rbcLC_start_0.fasta') # barcode files name  # under dir. ampliconInfo
+barcodesFile2+=('barcodes_rbcLC_start2_0.fasta') # barcode files name  # under dir. ampliconInfo
+sseqidFileName+=("fermalies_rbcL.fasta") # local blast reference file name  # under dir. ampliconInfo
+minimumLengthCutadaptorInLoop+=(150) # minimum output sequence length in cutadaptor
+customizedThreadNumber+=(30) # customized thread numbers
 
 # second dataset (Comment out if you don't need)
 nameOfLoci+=("rbcLN")
