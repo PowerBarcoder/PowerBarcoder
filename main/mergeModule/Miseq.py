@@ -28,7 +28,10 @@ class Miseq:
         OVERLAP_INSERT=1     # 1  A  - (in)    # OVERLAP_INSERT=r_arr_overlap[j] 1=r空  
         OVERLAP_DELETE=2     # 2  -  A (del)   # OVERLAP_DELET=r_arr_overlap[j] 2=ref空  
         OVERLAP_NONE=3       # 3  -  - (none)  # OVERLAP_NONE=r_arr_overlap[j] 3=皆空
-        OVERLAP_UNKNOWN=99    
+        OVERLAP_UNKNOWN=99
+
+        print(filename)
+        print(rWho)
 
         print(ref)
         print("hi")
