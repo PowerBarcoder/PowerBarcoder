@@ -113,7 +113,7 @@ with open(fastaFile,"r")as file:
             r1RowList=[]
             newName1=qseqid
             newName1=newName1.replace("_.fas","")
-            r1RowList+=(newName1+"_r1\n")
+            r1RowList+=(">"+newName1+"_r1\n")
             with open (qseqidFileStr,"r") as qR1File:
                 # lines=qR1File.readlines()
                 lines=qR1File.readline()
@@ -136,7 +136,7 @@ with open(fastaFile,"r")as file:
             r2RowList=[]
             newName2=qseqid
             newName2=newName2.replace("_.fas","")
-            r2RowList+=(newName2+"_r2\n")
+            r2RowList+=(">"+newName2+"_r2\n")
             with open (qseqidFileStr,"r") as qR2File:
                 # lines=qR2File.readlines()
                 lines=qR2File.readline()
