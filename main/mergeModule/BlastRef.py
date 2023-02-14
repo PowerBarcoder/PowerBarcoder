@@ -68,8 +68,8 @@ class BlastRef:
             # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
             # print(qseqidSplitList)
             # queryName=qseqidSplitList[:-5][-1]+"_"+qseqidSplitList[:-5][-2]+"_"+"_".join(qseqidSplitList[:-5][:-2])+"_.fas"
-            queryName=qseqidSplitList[0]+qseqidSplitList[1]+qseqidSplitList[2]+qseqidSplitList[3]+"_.fas"#專案訂製
-
+            queryName=qseqidSplitList[0]+"_"+qseqidSplitList[1]+"_"+qseqidSplitList[2]+"_"+qseqidSplitList[3]+"_.fas"#專案訂製
+            # Tectaria_devexa_BH00033.1_KTHU1636
 
             List.append(queryName)
             
@@ -129,8 +129,8 @@ class BlastRef:
 
             # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
             # queryName=qseqidSplitList[:-5][-1]+"_"+qseqidSplitList[:-5][-2]+"_"+"_".join(qseqidSplitList[:-5][:-2])+"_.fas"
-            queryName=qseqidSplitList[0]+qseqidSplitList[1]+qseqidSplitList[2]+qseqidSplitList[3]+"_.fas"#專案訂製
-
+            queryName=qseqidSplitList[0]+"_"+qseqidSplitList[1]+"_"+qseqidSplitList[2]+"_"+qseqidSplitList[3]+"_.fas"#專案訂製
+            # Tectaria_devexa_BH00033.1_KTHU1636
 
             qseqid=queryName
             sseqid=textList[1]
