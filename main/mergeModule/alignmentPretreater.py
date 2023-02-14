@@ -135,24 +135,24 @@ try:
             # if else判斷方向(多行的fasta之後再處理成一行的)
 
             # 2022年舊版
-            # if ((sign=="negative")and(forword=="r1")):
-            #     targetRowList[1]=ReverseComplement(targetRowList[1])
-            #     r2RowList[1]=ReverseComplement(r2RowList[1])
-            # elif ((sign=="positive")and(forword=="r1")):
-            #     r2RowList[1]=ReverseComplement(r2RowList[1])
-            # elif ((sign=="negative")and(forword=="r2")):
-            #     r2RowList[1]=ReverseComplement(r2RowList[1])
-            # elif ((sign=="positive")and(forword=="r2")):
-            #     targetRowList[1]=ReverseComplement(targetRowList[1])
-            #     r2RowList[1]=ReverseComplement(r2RowList[1])
+            if ((sign=="negative")and(forword=="r1")):
+                targetRowList[1]=ReverseComplement(targetRowList[1])
+                r2RowList[1]=ReverseComplement(r2RowList[1])
+            elif ((sign=="positive")and(forword=="r1")):
+                r2RowList[1]=ReverseComplement(r2RowList[1])
+            elif ((sign=="negative")and(forword=="r2")):
+                r2RowList[1]=ReverseComplement(r2RowList[1])
+            elif ((sign=="positive")and(forword=="r2")):
+                targetRowList[1]=ReverseComplement(targetRowList[1])
+                r2RowList[1]=ReverseComplement(r2RowList[1])
 
             # 20230206-10N新版 TODO 需要用trnLF測試正確性
-            if ((sign == "negative")):
-                targetRowList[1] = ReverseComplement(targetRowList[1])
-                print("negative: " + fastaFile)
-            elif ((sign == "positive")):
-                # print("positive: "+fastaFile)
-                pass
+#             if ((sign == "negative")):
+#                 targetRowList[1] = ReverseComplement(targetRowList[1])
+#                 print("negative: " + fastaFile)
+#             elif ((sign == "positive")):
+#                 # print("positive: "+fastaFile)
+#                 pass
 
             createRefFile("r1", r1RowList)
             createRefFile("r2", r2RowList)
