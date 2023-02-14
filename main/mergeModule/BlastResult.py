@@ -106,11 +106,12 @@ if(os.path.isdir(loadpath +'blastResult')==False):
     subprocess.run(makedir_blastResult, shell=True, check=True, stdout=PIPE, stderr=PIPE)
 
 
-for i in range(0,len(qseqidList)):
-    # print(determineDirection(i))
-    with open(loadpath+"blastResult/"+sys.argv[3]+"_blastResult.txt","w") as file:
-        file.write(determineDirection(i)+"\n")
-        pass
+#20230206 似乎不需要用append了，因為先前已經按loci區分了
+#20230206 之前應該是因為迴圈位置的關係，所以才用append的
+with open(loadpath + "blastResult/" + sys.argv[3] + "_blastResult.txt", "w") as file:
+    for i in range(0, len(qseqidList)):
+        # print(determineDirection(i))
+        file.write(determineDirection(i) + "\n")
 
 # column info：
     # str(qseqidList[i]) +'\t'+
