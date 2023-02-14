@@ -111,7 +111,7 @@ with open(fastaFile,"r")as file:
 
             # print(qseqidFile(loadpath,forword,qseqid))
             r1RowList=[]
-            r1RowList+=qseqid+"_r1"
+            r1RowList+=qseqid+"_r1\n"
             with open (qseqidFileStr,"r") as qR1File:
                 # lines=qR1File.readlines()
                 lines=qR1File.readline()
@@ -130,7 +130,7 @@ with open(fastaFile,"r")as file:
 
             # print(qseqidFile(loadpath,forword,qseqid))
             r2RowList=[]
-            r2RowList+=qseqid+"_r2"
+            r2RowList+=qseqid+"_r2\n"
             with open (qseqidFileStr,"r") as qR2File:
                 # lines=qR2File.readlines()
                 lines=qR2File.readline()
