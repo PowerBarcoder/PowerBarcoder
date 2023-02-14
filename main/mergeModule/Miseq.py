@@ -31,8 +31,9 @@ class Miseq:
         OVERLAP_UNKNOWN=99    
 
         print(ref)
+        print("hi")
         print(r)
-        print(ref)
+        print("hi2")
         for j in range(0, len(ref)):
             if ((r[j] == "-") and (ref[j] == "-")):
                 r_arr_overlap[j] = OVERLAP_NONE
