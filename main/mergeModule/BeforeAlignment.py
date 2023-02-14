@@ -101,8 +101,9 @@ with open(fastaFile,"r")as file:
         # r1
 
         # 待測序列r1製作
-        qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid)
+        # qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid)
         qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid.split("_")[2])
+        qseqidFileStr+='.fas'
         # BH00033.1
         # Tectaria_devexa_BH00033.1_KTHU1636_.fas
 
@@ -116,8 +117,9 @@ with open(fastaFile,"r")as file:
             # print(r1RowList)
 
         # 待測序列r2製作
-        qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid)
+        # qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid)
         qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid.split("_")[2])
+        qseqidFileStr+='.fas'
         # BH00033.1
         # Tectaria_devexa_BH00033.1_KTHU1636_.fas
 
