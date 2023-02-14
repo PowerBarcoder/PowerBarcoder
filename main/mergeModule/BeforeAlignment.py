@@ -5,6 +5,7 @@ import subprocess
 from subprocess import PIPE
 import os
 import sys
+from os import listdir
 
 print("BeforeAlignment.py is running on loci: "+sys.argv[4])
 
@@ -73,6 +74,13 @@ def createRefFile(rWho,rWhoRowList):
         RefFile.writelines(finalRowList)
         # print(RefFile.read())
 
+
+# 取得所有檔案與子目錄名稱
+# files = listdir(outputLoadpath+"r1/")
+# BH00033.1
+# Tectaria_devexa_BH00033.1_KTHU1636_.fas
+
+
 with open(fastaFile,"r")as file:
     lines=file.readlines()
     for line in lines:
@@ -94,6 +102,11 @@ with open(fastaFile,"r")as file:
 
         # 待測序列r1製作
         qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid)
+        qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid.split("_")[2])
+        # BH00033.1
+        # Tectaria_devexa_BH00033.1_KTHU1636_.fas
+
+
         # print(qseqidFile(loadpath,forword,qseqid))
         r1RowList=[]
         with open (qseqidFileStr,"r") as qR1File:
@@ -104,6 +117,11 @@ with open(fastaFile,"r")as file:
 
         # 待測序列r2製作
         qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid)
+        qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid.split("_")[2])
+        # BH00033.1
+        # Tectaria_devexa_BH00033.1_KTHU1636_.fas
+
+
         # print(qseqidFile(loadpath,forword,qseqid))
         r2RowList=[]
         with open (qseqidFileStr,"r") as qR2File:
