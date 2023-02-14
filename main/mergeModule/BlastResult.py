@@ -108,7 +108,7 @@ if(os.path.isdir(loadpath +'blastResult')==False):
 
 for i in range(0,len(qseqidList)):
     # print(determineDirection(i))
-    with open(loadpath+"blastResult/"+sys.argv[3]+"_blastResult.txt","a") as file:
+    with open(loadpath+"blastResult/"+sys.argv[3]+"_blastResult.txt","w") as file:
         file.write(determineDirection(i)+"\n")
         pass
 

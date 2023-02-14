@@ -68,13 +68,13 @@ for filename in candidate_list:
         # /home/sktang/powerBC/aligned/0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r1.al
         r1_fastaUnit.fastaUnit(r1_loadpath)
         r1_seqMap = r1_fastaUnit.seqMap
-        print(r1_fastaUnit.seqMap)
+        # print(r1_fastaUnit.seqMap)
         r2_fastaUnit = FastaUnit()
         # r2_loadpath = "C:/Users/kwz50/aligned/0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r2.al"
         r2_loadpath = loadpath+filename+"_r2.al"
         r2_fastaUnit.fastaUnit(r2_loadpath)
         r2_seqMap = r2_fastaUnit.seqMap
-        print(r2_fastaUnit.seqMap)
+        # print(r2_fastaUnit.seqMap)
         # 讀兩個.fs進來當r1、ref_r1、r2、ref_r2(20220423)
         r1 = ""
         r1_header_name=""

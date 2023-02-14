@@ -30,13 +30,13 @@ class Miseq:
         OVERLAP_NONE=3       # 3  -  - (none)  # OVERLAP_NONE=r_arr_overlap[j] 3=皆空
         OVERLAP_UNKNOWN=99
 
-        print(filename)
-        print(rWho)
-
-        print(ref)
-        print("hi")
-        print(r)
-        print("hi2")
+        # print(filename)
+        # print(rWho)
+        #
+        # print(ref)
+        # print("hi")
+        # print(r)
+        # print("hi2")
         for j in range(0, len(ref)):
             if ((r[j] == "-") and (ref[j] == "-")):
                 r_arr_overlap[j] = OVERLAP_NONE
