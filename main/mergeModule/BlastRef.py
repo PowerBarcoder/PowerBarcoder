@@ -68,7 +68,7 @@ class BlastRef:
             # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
             print(qseqidSplitList)
             # queryName=qseqidSplitList[:-5][-1]+"_"+qseqidSplitList[:-5][-2]+"_"+"_".join(qseqidSplitList[:-5][:-2])+"_.fas"
-            queryName=qseqidSplitList[:-5][-1]+"_"+qseqidSplitList[:-5][-2]+"_"+"_".join(qseqidSplitList[:-5][:-2])+"_.fas"
+            queryName=qseqidSplitList[:4]+"_.fas"
 
 
             List.append(queryName)
