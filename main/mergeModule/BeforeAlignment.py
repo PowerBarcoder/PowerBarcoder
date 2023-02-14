@@ -161,8 +161,8 @@ with open(fastaFile,"r")as file:
 
             createRefFile("r1",r1RowList)
             createRefFile("r2",r2RowList)
-        except:
-            pass
+        except Exception:
+            print(Exception)
 
 
 print("BeforeAlignment.py is ended on loci: "+sys.argv[4])
