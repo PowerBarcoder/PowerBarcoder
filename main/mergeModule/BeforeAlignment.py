@@ -101,17 +101,19 @@ with open(fastaFile,"r")as file:
             # MH319942_Dennstaedtiaceae_Histiopteris_incisa
             # positive
             # r1
-
+            mySplit1=qseqid
             # 待測序列r1製作
             # qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid)
-            qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid.split("_")[2])
+            qseqidFileStr=qseqidFile(outputLoadpath,"r1",mySplit1.split("_")[2])
             qseqidFileStr+='.fas'
             # BH00033.1
             # Tectaria_devexa_BH00033.1_KTHU1636_.fas
 
             # print(qseqidFile(loadpath,forword,qseqid))
             r1RowList=[]
-            r1RowList+=(qseqid.replace("_.fas","")+"_r1\n")
+            newName1=qseqid
+            newName1=newName1.replace("_.fas","")
+            r1RowList+=(newName1+"_r1\n")
             with open (qseqidFileStr,"r") as qR1File:
                 # lines=qR1File.readlines()
                 lines=qR1File.readline()
@@ -120,9 +122,11 @@ with open(fastaFile,"r")as file:
                 r1RowList+=lines
                 # print(r1RowList)
 
+            mySplit2=qseqid
+
             # 待測序列r2製作
             # qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid)
-            qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid.split("_")[2])
+            qseqidFileStr=qseqidFile(outputLoadpath,"r2",mySplit2.split("_")[2])
             qseqidFileStr+='.fas'
             # BH00033.1
             # Tectaria_devexa_BH00033.1_KTHU1636_.fas
@@ -130,7 +134,9 @@ with open(fastaFile,"r")as file:
 
             # print(qseqidFile(loadpath,forword,qseqid))
             r2RowList=[]
-            r2RowList+=(qseqid.replace("_.fas","")+"_r2\n")
+            newName2=qseqid
+            newName2=newName2.replace("_.fas","")
+            r2RowList+=(newName2+"_r2\n")
             with open (qseqidFileStr,"r") as qR2File:
                 # lines=qR2File.readlines()
                 lines=qR2File.readline()
