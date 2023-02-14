@@ -60,7 +60,7 @@ for filename in files:
 
 # 開始成對處理r1及r2
 for filename in candidate_list:
-    try:
+    # try:
         #  把alignment好的r1跟r2讀進來變單行
         r1_fastaUnit = FastaUnit()
         # r1_loadpath = loadpath+0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r1.al
@@ -322,9 +322,9 @@ for filename in candidate_list:
         with open(degapMergepath+filename,"w",encoding="UTF-8") as file:
             file.write(de_gap_merge_seq_text)
 
-    except Exception as e:
-        print(e)
-        print("merge.py 319: something wrong.",filename)
+    # except Exception as e:
+    #     print(e)
+    #     print("merge.py 319: something wrong.",filename)
 
 # 20220918
 # 最終檔案要長這樣(注意最後的header名要修改：r1_0.548_abundance_23_r2_0.548_abundance_23)
