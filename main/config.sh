@@ -80,6 +80,7 @@ customizedThreadNumber+=(30)
 #customizedThreadNumber+=(30)
 
 # Where is our PowerBarcoder ?
-workingDirectory="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/main/" #20230107 移到最底下、用參數傳進來 done
+#workingDirectory="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/main/" #20230107 移到最底下、用參數傳進來 done
+workingDirectory="/home2/barcoder_test/RUN_sk_20230214_rbcL/PowerBarcoder/main/" #20230214 rbcL急件
 
 echo 'params imported!'
