@@ -185,3 +185,10 @@ print("[INFO] alignmentPretreater.py is ended on loci: " + sys.argv[4])
 # 10.把轉好的rwho-2跟ref轉存成fas
 # ------------------------------------------------
 # 11.就可以alignment
+
+
+# 20230214
+# 判讀方向從4整情況改為2種情況，
+# 因為r1跟r2已經是定向了，
+# 所以只需要在sign=="negative"時，把ref反轉即可
+
