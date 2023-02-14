@@ -84,82 +84,85 @@ def createRefFile(rWho,rWhoRowList):
 with open(fastaFile,"r")as file:
     lines=file.readlines()
     for line in lines:
+        try:
+
         # print (line)
-        line=line.replace("\n","")
-        lineSplit=line.split("\t")
-        # print(lineSplit)
-        qseqid=lineSplit[0]
-        sseqid=lineSplit[1]
-        sign=negativeTest(lineSplit[12],lineSplit[13])
-        forword=lineSplit[14]
-        # print(qseqid+" "+sseqid+" "+sign+" "+forword)
+            line=line.replace("\n","")
+            lineSplit=line.split("\t")
+            # print(lineSplit)
+            qseqid=lineSplit[0]
+            sseqid=lineSplit[1]
+            sign=negativeTest(lineSplit[12],lineSplit[13])
+            forword=lineSplit[14]
+            # print(qseqid+" "+sseqid+" "+sign+" "+forword)
 
-        # 已獲得所有資訊，開始分四狀況來寫alignment了
-        # 0514-016_CYH20090514-016_Microlepia_substrigosa_.fas 
-        # MH319942_Dennstaedtiaceae_Histiopteris_incisa 
-        # positive 
-        # r1
+            # 已獲得所有資訊，開始分四狀況來寫alignment了
+            # 0514-016_CYH20090514-016_Microlepia_substrigosa_.fas
+            # MH319942_Dennstaedtiaceae_Histiopteris_incisa
+            # positive
+            # r1
 
-        # 待測序列r1製作
-        # qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid)
-        qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid.split("_")[2])
-        qseqidFileStr+='.fas'
-        # BH00033.1
-        # Tectaria_devexa_BH00033.1_KTHU1636_.fas
+            # 待測序列r1製作
+            # qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid)
+            qseqidFileStr=qseqidFile(outputLoadpath,"r1",qseqid.split("_")[2])
+            qseqidFileStr+='.fas'
+            # BH00033.1
+            # Tectaria_devexa_BH00033.1_KTHU1636_.fas
 
+            # print(qseqidFile(loadpath,forword,qseqid))
+            r1RowList=[]
+            with open (qseqidFileStr,"r") as qR1File:
+                lines=qR1File.readlines()
+                # print(lines)
+                r1RowList+=lines
+                # print(r1RowList)
 
-        # print(qseqidFile(loadpath,forword,qseqid))
-        r1RowList=[]
-        with open (qseqidFileStr,"r") as qR1File:
-            lines=qR1File.readlines()
-            # print(lines)
-            r1RowList+=lines
-            # print(r1RowList)
-
-        # 待測序列r2製作
-        # qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid)
-        qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid.split("_")[2])
-        qseqidFileStr+='.fas'
-        # BH00033.1
-        # Tectaria_devexa_BH00033.1_KTHU1636_.fas
-
-
-        # print(qseqidFile(loadpath,forword,qseqid))
-        r2RowList=[]
-        with open (qseqidFileStr,"r") as qR2File:
-            lines=qR2File.readlines()
-            # print(lines)
-            r2RowList+=lines
-            # print(r2RowList)
-
-        # ref seq製作
-        targetRowList=[]
-        targetRowNumber=int(-1)
-        with open (sseqidFile,"r")as sFile :
-            lines=sFile.readlines()
-            for line in lines:
-                targetRowNumber+=1
-                if line.find(sseqid)!=-1:
-                    break
-            targetRowList+=(lines[targetRowNumber:targetRowNumber+2])    
-            # print(targetRowList)
-
-# if else判斷，如果多行的fasta在處理成一行的
+            # 待測序列r2製作
+            # qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid)
+            qseqidFileStr=qseqidFile(outputLoadpath,"r2",qseqid.split("_")[2])
+            qseqidFileStr+='.fas'
+            # BH00033.1
+            # Tectaria_devexa_BH00033.1_KTHU1636_.fas
 
 
-        if ((sign=="negative")and(forword=="r1")):
-            targetRowList[1]=ReverseComplement(targetRowList[1])
-            r2RowList[1]=ReverseComplement(r2RowList[1])
-        elif ((sign=="positive")and(forword=="r1")):
-            r2RowList[1]=ReverseComplement(r2RowList[1])    
-        elif ((sign=="negative")and(forword=="r2")):
-            r2RowList[1]=ReverseComplement(r2RowList[1])   
-        elif ((sign=="positive")and(forword=="r2")):
-            targetRowList[1]=ReverseComplement(targetRowList[1])   
-            r2RowList[1]=ReverseComplement(r2RowList[1])
+            # print(qseqidFile(loadpath,forword,qseqid))
+            r2RowList=[]
+            with open (qseqidFileStr,"r") as qR2File:
+                lines=qR2File.readlines()
+                # print(lines)
+                r2RowList+=lines
+                # print(r2RowList)
 
-        createRefFile("r1",r1RowList)
-        createRefFile("r2",r2RowList)
+            # ref seq製作
+            targetRowList=[]
+            targetRowNumber=int(-1)
+            with open (sseqidFile,"r")as sFile :
+                lines=sFile.readlines()
+                for line in lines:
+                    targetRowNumber+=1
+                    if line.find(sseqid)!=-1:
+                        break
+                targetRowList+=(lines[targetRowNumber:targetRowNumber+2])
+                # print(targetRowList)
+
+    # if else判斷，如果多行的fasta在處理成一行的
+
+
+            if ((sign=="negative")and(forword=="r1")):
+                targetRowList[1]=ReverseComplement(targetRowList[1])
+                r2RowList[1]=ReverseComplement(r2RowList[1])
+            elif ((sign=="positive")and(forword=="r1")):
+                r2RowList[1]=ReverseComplement(r2RowList[1])
+            elif ((sign=="negative")and(forword=="r2")):
+                r2RowList[1]=ReverseComplement(r2RowList[1])
+            elif ((sign=="positive")and(forword=="r2")):
+                targetRowList[1]=ReverseComplement(targetRowList[1])
+                r2RowList[1]=ReverseComplement(r2RowList[1])
+
+            createRefFile("r1",r1RowList)
+            createRefFile("r2",r2RowList)
+        except:
+            pass
 
 
 print("BeforeAlignment.py is ended on loci: "+sys.argv[4])
