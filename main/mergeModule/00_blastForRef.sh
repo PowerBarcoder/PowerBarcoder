@@ -17,12 +17,12 @@ ${localBlastToolDir}makeblastdb -in ${ampliconInfo}${sseqidFileName[i]} -dbtype 
 # cat ${blastSequenceDir}r1/*.fas ${blastSequenceDir}r2/*.fas > catQuery.fas
 #cat r2
 # cat /home/sktang/powerBC/r1/*.fas /home/sktang/powerBC/r2/*.fas > catQuery.fas  #
-#cat r1 r2 (20230214應急處理)
-cat ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*.fas ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2/*.fas > ${resultDataPath}blastResult/${nameOfLoci[i]}_catQuery.fas
+#cat r1 r2
+#cat ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/*.fas ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r2/*.fas > ${resultDataPath}blastResult/${nameOfLoci[i]}_catQuery.fas
 
-# #cat 10N
-# # 這步驟改成直接Cnonmerge資料夾裡所有的檔案
-# cat ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/*.fas > ${resultDataPath}blastResult/${nameOfLoci[i]}_catQuery.fas
+#cat 10N
+# 這步驟改成直接Cnonmerge資料夾裡所有的檔案
+cat ${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/*.fas > ${resultDataPath}blastResult/${nameOfLoci[i]}_catQuery.fas
 
 
 # ${localBlastToolDir}blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
