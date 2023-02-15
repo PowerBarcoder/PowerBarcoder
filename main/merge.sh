@@ -27,7 +27,7 @@ do
         python3 ./mergeModule/blastResultParser.py $ampliconInfo $resultDataPath ${nameOfLoci[i]}
 
         #  就是這裡拆NN到原先的nonmerged/r1,r2資料夾裡(只負責拆，判斷方向交給下一步驟)
-#         python3 ./mergeModule/nnSpliter.py $resultDataPath ${nameOfLoci[i]} #blast完，需要拆10N
+        python3 ./mergeModule/nnSpliter.py $resultDataPath ${nameOfLoci[i]} #blast完，需要拆10N
 
         # TODO 20230107 10N，需按blast的結果做reverse complement後，輸出正確方向的ref(改動的部分不太確定有沒有對，因為這整批好像都沒有在做reverse compliment)
         python3 ./mergeModule/alignmentPretreater.py $ampliconInfo ${sseqidFileName[i]} $resultDataPath ${nameOfLoci[i]}
