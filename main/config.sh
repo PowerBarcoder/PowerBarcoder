@@ -53,8 +53,6 @@ missList="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result_20230212
 #cp -r /home2/analyses/BIFA/rbcL_for_merge/rbcLN_single/* /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result_rbcL_final/rbcLN_demultiplex/denoice_best/nonmerged/mergeSeq/
 #cp -r /home2/analyses/BIFA/rbcL_for_merge/rbcLC_single/* /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result_rbcL_final/rbcLC_demultiplex/denoice_best/nonmerged/mergeSeq/
 
-# head -n1 -q *.txt > new-file
-
 
 # where is your Miseq gz data ?
 R1FastqGz="/home/lykuo/lab_data/NGS_data/miseq/HGT22070_Amplicon_RUN1.5/trim_RUN1.5_R1.fq.gz" #20230107可以改成R1FastqGz done
