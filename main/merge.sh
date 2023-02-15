@@ -13,8 +13,7 @@ bash ./mergeModule/00_blastForRef.sh #先blast，內部自帶迴圈處理
 for ((i=0; i<${#nameOfLoci[@]}; i++))
 do
     count=0
-#     dir=${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/
-    dir=${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/r1/ #應急處理
+    dir=${resultDataPath}${nameOfLoci[i]}_demultiplex/denoice_best/nonmerged/
     count=$(ls -1 $dir | grep ".fas" | wc -l) #計算檔案結尾是.fas的數量
     echo "[INFO] Number of '.fas' files: $count"
 
