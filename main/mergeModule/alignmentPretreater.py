@@ -3,6 +3,9 @@
 import sys
 
 
+POSITIVE_DIRECTION = "positive"
+NEGATIVE_DIRECTION = "negative"
+
 # 製造待測序列路徑的方法
 def qseqidFile(outputLoadpath, rWho, fileName):
     qseqidFileDir = outputLoadpath + rWho + "/"
@@ -23,9 +26,9 @@ def qseqidFile(outputLoadpath, rWho, fileName):
 
 def negativeTest(a, b):
     if ((a[0] == "-") and (b[0] == "-")) or ((a[0] != "-") and (b[0] != "-")):
-        return "positive"
+        return POSITIVE_DIRECTION
     elif ((a[0] != "-") and (b[0] == "-")) or ((a[0] == "-") and (b[0] != "-")):
-        return "negative"
+        return NEGATIVE_DIRECTION
 
 
 # 反轉序列的方法
@@ -115,9 +118,9 @@ try:
                     # print(lines)
                     r2RowList += lines
                     # print(r2RowList)
-            except Exception:
+            except Exception as e:
                 print("[ERROR] An exception happen in "+sys.argv[4]+"： "+qseqid+" before alignment")
-                print(Exception)
+                print(e)
                 continue
 
             # ref seq製作
@@ -147,19 +150,19 @@ try:
             #     r2RowList[1]=ReverseComplement(r2RowList[1])
 
             # 20230206-10N新版 TODO 需要用trnLF測試正確性
-            if ((sign == "negative")):
+            if ((sign == NEGATIVE_DIRECTION)):
                 targetRowList[1] = ReverseComplement(targetRowList[1])
-                print("negative: " + fastaFile)
-            elif ((sign == "positive")):
+                # print("negative: " + fastaFile)
+            elif ((sign == POSITIVE_DIRECTION)):
                 # print("positive: "+fastaFile)
                 pass
 
             createRefFile("r1", r1RowList)
             createRefFile("r2", r2RowList)
 
-except Exception:
+except Exception as e:
     print("[ERROR] An exception happen in "+sys.argv[4]+" before alignment")
-    print(Exception)
+    print(e)
 
 print("[INFO] alignmentPretreater.py is ended on loci: " + sys.argv[4])
 
