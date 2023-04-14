@@ -38,7 +38,7 @@ wherewIsMakeblastdb=$(whereis makeblastdb)
 checkMakeblastdb=${#wherewIsMakeblastdb}
 lengthOfMakeblastdb=12
 # echo $(whereis cutadapt|#)
-if [ $checkMakeblastdb -le $lengthOfMakeblastdb ]; 
+if [ $checkMakeblastdb -le $lengthOfMakeblastdb ];
 then
     exit "[WARNING] Pipeline terminated because makeblastdb is not found"
 else
@@ -51,7 +51,7 @@ wherewIsBlastn=$(whereis blastn)
 checkBlastn=${#wherewIsBlastn}
 lengthOfBlastn=7
 # echo $(whereis cutadapt|#)
-if [ $checkBlastn -le $lengthOfBlastn ]; 
+if [ $checkBlastn -le $lengthOfBlastn ];
 then
     exit "[WARNING] Pipeline terminated because blastn is not found"
 else
@@ -64,7 +64,7 @@ wherewIsMafft=$(whereis mafft)
 checkMafft=${#wherewIsMafft}
 lengthOfMafft=6
 # echo $(whereis cutadapt|#)
-if [ $checkMafft -le $lengthOfMafft ]; 
+if [ $checkMafft -le $lengthOfMafft ];
 then
     exit "[WARNING] Pipeline terminated because mafft is not found"
 else
