@@ -65,7 +65,7 @@ for filename in files:
     if isfile(fullpath) and ('.fas' in filename[-4:]):
         # print("檔案：", filename)
         nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath)  # 切檔
-    else:
+    else: #20230415 可以考慮把r1,r2,r1ref,r2ref,mergeSeq,deGapMergeSeq,align都先排除
         print("[WARNING]" + filename, "is not a file or the filename is not end with .fas")
 
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])

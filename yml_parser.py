@@ -29,7 +29,7 @@ def parsingYmlToShell():
     script += f"R2FastqGz={config['R2FastqGz']}\n"# R2FastqGz
     script += f"summaryJsonFileName=221229RUN1_5.json\n"
     script += f"summaryHtmlFileName=221229RUN1_5.html\n"
-    script += f"dada2LearnErrorFile=/PowerBarcoder/data/dada2LearnErrorFile/\n" # dada2LearnErrorFile
+    script += f"dada2LearnErrorFile={config['dada2LearnErrorFile']}\n" # dada2LearnErrorFile
     script += f"dada2BarcodeFile={config['dada2BarcodeFile']}\n"# dada2BarcodeFile
     # loci
     script += f"nameOfLoci=({','.join(config['nameOfLoci'])})\n"# nameOfLoci
