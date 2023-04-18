@@ -16,7 +16,7 @@
           crossorigin="anonymous">
 
     <!--  Beautify output  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/obsidian.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
 
     <title>PowerBarcoder</title>
@@ -406,7 +406,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 d-md-flex justify-content-md-end">
-                            <input type="beautify" id="beautify" class=" btn btn-primary" value="Beautify">
+                            <input type="beautify" id="beautify" class=" btn btn-success" value="Dark Mode">
                         </div>
                     </div>
                 </div>
@@ -415,7 +415,7 @@
                 </div>
                 <div>
                 <pre>
-                    <code class="apache" id="console">
+                    <code class="shellsession" id="console">
                     </code>
                 </pre>
                 </div>
@@ -501,12 +501,6 @@
                         socket.emit('run-procedure', formData);
                     });
                 </script>
-                <div class="text-center d-none" id="success-content">
-                    <i class="bi bi-check-circle-fill text-success"></i>
-                    <p class="my-3">Your request has been submitted successfully.</p>
-                    <p class="my-3">You can find the results in:</p>
-                    <a href="C:\Users\kwz50" target="_blank">C:\Users\kwz50</a>
-                </div>
             </div>
         </div>
     </div>

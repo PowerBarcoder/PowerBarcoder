@@ -1,10 +1,10 @@
+import subprocess
 import time
 
-import yaml
+from flask import Flask, render_template
+from flask_cors import CORS
 from flask_socketio import SocketIO
-from flask_cors import CORS, cross_origin
-import subprocess
-from flask import Flask, Response, stream_with_context, render_template, request, jsonify
+
 import yml_parser
 
 app = Flask(__name__)
@@ -27,9 +27,23 @@ def run_procedure(data):
 
     cmd = 'cd /PowerBarcoder/main && bash powerBarcode.sh 2>&1'
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1)
+
+    # throttle detection, we don't need virtual scrolling anymore
+    line_number = 0
+    throttle_seconds = int(time.time())
+    temp_line = ""
+
     for line in iter(p.stdout.readline, b''):
         # Process each line of output
-        socketio.emit('procedure-result', line.decode('utf-8'))
+        if line_number > 5 and int(time.time()) - throttle_seconds > 2:
+            temp_line += line.decode('utf-8')
+            socketio.emit('procedure-result', temp_line)
+            temp_line = ""
+            line_number = 0
+            throttle_seconds = int(time.time())
+        else:
+            temp_line += line.decode('utf-8')
+            line_number += 1
 
     socketio.emit('procedure-result', 'done<br>')
     socketio.emit('procedure-result',
