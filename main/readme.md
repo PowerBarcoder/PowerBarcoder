@@ -18,7 +18,11 @@
 2. 接上雲端blast instance (https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast)自動化blast
 
 ### release v 3.0
-1. GUI
+1. GUI with docker
+
+### release v 4.0
+1. GUI html page virtual scrolling or socket emit optimization
+2. fine-tuning the parameters
 
 
 ## Done

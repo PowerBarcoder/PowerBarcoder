@@ -25,25 +25,63 @@ def parsingYmlToShell():
     script += f"ampliconInfo=/PowerBarcoder/data/amplicon_data/\n"
     script += f"resultDataPath=/PowerBarcoder/data/result/\n"
     script += f"missList=/PowerBarcoder/data/missingList.txt\n"
-    script += f"R1FastqGz={config['R1FastqGz']}\n"# R1FastqGz
-    script += f"R2FastqGz={config['R2FastqGz']}\n"# R2FastqGz
+    script += f"R1FastqGz={config['R1FastqGz']}\n"  # R1FastqGz
+    script += f"R2FastqGz={config['R2FastqGz']}\n"  # R2FastqGz
     script += f"summaryJsonFileName=221229RUN1_5.json\n"
     script += f"summaryHtmlFileName=221229RUN1_5.html\n"
-    script += f"dada2LearnErrorFile={config['dada2LearnErrorFile']}\n" # dada2LearnErrorFile
-    script += f"dada2BarcodeFile={config['dada2BarcodeFile']}\n"# dada2BarcodeFile
+    script += f"dada2LearnErrorFile={config['dada2LearnErrorFile']}\n"  # dada2LearnErrorFile
+    script += f"dada2BarcodeFile={config['dada2BarcodeFile']}\n"  # dada2BarcodeFile
+
     # loci
-    script += f"nameOfLoci=({','.join(config['nameOfLoci'])})\n"# nameOfLoci
-    script += f"errorRateCutadaptor=({','.join(str(x) for x in config['errorRateCutadaptor'])})\n"# errorRateCutadaptor
-    script += f"minimumLengthCutadaptor=({','.join(str(x) for x in config['minimumLengthCutadaptor'])})\n"# minimumLengthCutadaptor
-    script += f"primerF=({','.join(f'{x}' for x in config['primerF'])})\n"# primerF
-    script += f"primerR=({','.join(f'{x}' for x in config['primerR'])})\n"# primerR
-    script += f"amplicon_r1=({','.join(f'{x}' for x in config['amplicon_r1'])})\n"# amplicon_r1
-    script += f"amplicon_r2=({','.join(f'{x}' for x in config['amplicon_r2'])})\n"# amplicon_r2
-    script += f"barcodesFile1=({','.join(f'{x}' for x in config['barcodesFile1'])})\n"# barcodesFile1
-    script += f"barcodesFile2=({','.join(f'{x}' for x in config['barcodesFile2'])})\n"# barcodesFile2
-    script += f"sseqidFileName=({','.join(f'{x}' for x in config['sseqidFileName'])})\n"# sseqidFileName
-    script += f"minimumLengthCutadaptorInLoop=({','.join(str(x) for x in config['minimumLengthCutadaptorInLoop'])})\n"# minimumLengthCutadaptorInLoop
-    script += f"customizedThreadNumber=({','.join(str(x) for x in config['customizedThreadNumber'])})\n"# customizedThreadNumber
+    for i in range(len(config['nameOfLoci'])):
+        script += f"nameOfLoci+=({config['nameOfLoci'][i]})\n"  # nameOfLoci
+
+    for i in range(len(config['errorRateCutadaptor'])):
+        script += f"errorRateCutadaptor+=({config['errorRateCutadaptor'][i]})\n"  # errorRateCutadaptor
+
+    for i in range(len(config['minimumLengthCutadaptor'])):
+        script += f"minimumLengthCutadaptor+=({config['minimumLengthCutadaptor'][i]})\n"  # minimumLengthCutadaptor
+
+    for i in range(len(config['primerF'])):
+        script += f"primerF+=({config['primerF'][i]})\n"  # primerF
+
+    for i in range(len(config['primerR'])):
+        script += f"primerR+=({config['primerR'][i]})\n"  # primerR
+
+    for i in range(len(config['amplicon_r1'])):
+        script += f"amplicon_r1+=({config['amplicon_r1'][i]})\n"  # amplicon_r1
+
+    for i in range(len(config['amplicon_r2'])):
+        script += f"amplicon_r2+=({config['amplicon_r2'][i]})\n"  # amplicon_r2
+
+    for i in range(len(config['barcodesFile1'])):
+        script += f"barcodesFile1+=({config['barcodesFile1'][i]})\n"  # barcodesFile1
+
+    for i in range(len(config['barcodesFile2'])):
+        script += f"barcodesFile2+=({config['barcodesFile2'][i]})\n"  # barcodesFile2
+
+    for i in range(len(config['sseqidFileName'])):
+        script += f"sseqidFileName+=({config['sseqidFileName'][i]})\n"  # sseqidFileName
+
+    for i in range(len(config['minimumLengthCutadaptorInLoop'])):
+        script += f"minimumLengthCutadaptorInLoop+=({config['minimumLengthCutadaptorInLoop'][i]})\n"  # minimumLengthCutadaptorInLoop
+
+    for i in range(len(config['customizedThreadNumber'])):
+        script += f"customizedThreadNumber+=({config['customizedThreadNumber'][i]})\n"  # customizedThreadNumber
+
+    # script += f"nameOfLoci=({','.join(config['nameOfLoci'])})\n"# nameOfLoci
+    # script += f"errorRateCutadaptor=({','.join(str(x) for x in config['errorRateCutadaptor'])})\n"# errorRateCutadaptor
+    # script += f"minimumLengthCutadaptor=({','.join(str(x) for x in config['minimumLengthCutadaptor'])})\n"# minimumLengthCutadaptor
+    # script += f"primerF=({','.join(f'{x}' for x in config['primerF'])})\n"# primerF
+    # script += f"primerR=({','.join(f'{x}' for x in config['primerR'])})\n"# primerR
+    # script += f"amplicon_r1=({','.join(f'{x}' for x in config['amplicon_r1'])})\n"# amplicon_r1
+    # script += f"amplicon_r2=({','.join(f'{x}' for x in config['amplicon_r2'])})\n"# amplicon_r2
+    # script += f"barcodesFile1=({','.join(f'{x}' for x in config['barcodesFile1'])})\n"# barcodesFile1
+    # script += f"barcodesFile2=({','.join(f'{x}' for x in config['barcodesFile2'])})\n"# barcodesFile2
+    # script += f"sseqidFileName=({','.join(f'{x}' for x in config['sseqidFileName'])})\n"# sseqidFileName
+    # script += f"minimumLengthCutadaptorInLoop=({','.join(str(x) for x in config['minimumLengthCutadaptorInLoop'])})\n"# minimumLengthCutadaptorInLoop
+    # script += f"customizedThreadNumber=({','.join(str(x) for x in config['customizedThreadNumber'])})\n"# customizedThreadNumber
+
     script += f"workingDirectory=/PowerBarcoder/main/\n"
 
     script += 'echo \'[INFO] config imported!\'\n'
@@ -53,7 +91,6 @@ def parsingYmlToShell():
         f.write(script)
 
     print('Config file has been exported as a shell script.')
-
 
 # # Access values in YAML file
 # myCutadaptPath = config['myCutadaptPath']
