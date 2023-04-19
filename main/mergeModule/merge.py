@@ -9,8 +9,8 @@ from os.path import isfile, isdir, join
 import sys
 from os import path
 import time
-
-print("merge.py is running on loci: "+sys.argv[3])
+# TODO missList 的加入
+print("[INFO] merge.py is running on loci: "+sys.argv[3])
 
 ######################################
 # 運作流程
@@ -32,6 +32,7 @@ loadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/aligned/"
 mergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/mergeSeq/"
 # mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
 
+degapMergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/deGapMergeSeq/"
 
 # 取得所有檔案與子目錄名稱
 files = listdir(loadpath)
@@ -170,7 +171,7 @@ for filename in candidate_list:
                 # print("add Ns1")
                 overlape = False
             else:
-                print("merge.py 163: something wrong")
+                print("[WARNING] merge.py 163: something wrong")
 
 
         # # 步驟三
@@ -204,7 +205,10 @@ for filename in candidate_list:
             r2_for_align=r2[r2_p1:r2_p2+1] # print(r2_for_align)
 
             # 看起來要寫個檔案先存起來 (20230111這步ok)
-            aligntext=">r1\n"+r1_for_align+"\n"+">r2\n"+r2_for_align
+
+            # 10N： r1_for_align跟r2_for_align要先degap
+            # 20230206 我決定在這邊做degap(所以下一行多加了".replace("-","")")
+            aligntext=">r1\n"+r1_for_align.replace("-","")+"\n"+">r2\n"+r2_for_align.replace("-","")
             with open(loadpath+"mafft/"+filename+"temp.fasta","w",encoding="UTF-8") as file:
                 file.write(aligntext)
 
@@ -213,27 +217,26 @@ for filename in candidate_list:
             # if(ovelap區間的序列內容跟長度完全一樣):
             # 不用align
             if(r1_for_align==r2_for_align):
-                # print("序列長一樣，不用alignment")
+                # print("序列長得一模一樣，不用alignment")
                 r1_overlap = r1_for_align
                 r2_overlap = r2_for_align
             # elif(ovelap區間的序列長度一樣):
-            # 也不用align
-            elif(len(r1_for_align)==len(r2_for_align)):
-                # print("序列一樣長，不用alignment")
-                r1_overlap = r1_for_align
-                r2_overlap = r2_for_align
-            # else:
-            # 在py裡做shell，先把overlap區段degap，然後r1 r2兩個overlap去align
-            else:
+            # 10N： 也不用align
+            # (考慮到trnLF的複雜性，還是拿去下面else區塊做alignment)
+            # elif(len(r1_for_align)==len(r2_for_align)):
+            #     # print("序列一樣長，不用alignment")
+            #     r1_overlap = r1_for_align
+            #     r2_overlap = r2_for_align
+            else:# 在py裡做shell，然後r1 r2兩個overlap去align
                 alignment = "mafft --thread 1 --maxiterate 16 --globalpair "+loadpath+"mafft/"+filename+"temp.fasta"  + "> "+loadpath+"mafft/"+filename+"tempAlign.fasta"
                 # print(alignment)
                 try:
                     subprocess.run(alignment, shell=True, check=True, stdout=PIPE, stderr=PIPE)
                 except Exception as e:
-                    print("error occured:",e)
+                    print("[WARNING] error occured:",e)
 
                 while ((path.exists(loadpath+"mafft/"+filename+"tempAlign.fasta")== False)):
-                    print(filename+"tempAlign.fasta未生成，等待一秒")
+                    print("[WARNING]"+filename+"tempAlign.fasta未生成，等待一秒")
                     time.sleep(1)
 
                 aligned_fastaUnit = FastaUnit()
@@ -302,7 +305,7 @@ for filename in candidate_list:
                     overlap_seq=overlap_seq+trim_0_overlap_align[i]
                 # D G/A/T # V G/A/C # B G/T/C # H A/T/C 兩條序列不會出現
                 else:
-                    print("出錯了GG")
+                    print("[ERROR] 出錯了GG")
             # print("overlap_num_align",overlap_num_align)
             # print("overlap_seq",overlap_seq)
             merge_seq=merge_seq+r1[:r1_p1-1].upper()+overlap_seq+r2[r2_p2+1:].upper() # print(merge_seq)
@@ -311,12 +314,19 @@ for filename in candidate_list:
         # 步驟六：收尾  # print(merge_seq)
         output_filename=filename.replace("_.fas","")
         output_filename=output_filename+"_"+r1_header_name+"_"+r2_header_name
-        merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n"
+
+        merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n" #處理mergeseq
         with open(mergepath+filename,"w",encoding="UTF-8") as file:
             file.write(merge_seq_text)
+
+        de_gap_merge_seq=merge_seq.replace("N","").replace("-","")#處理degapmergeseq
+        de_gap_merge_seq_text=">"+output_filename+"\n"+de_gap_merge_seq+"\n"
+        with open(degapMergepath+filename,"w",encoding="UTF-8") as file:
+            file.write(de_gap_merge_seq_text)
+
     except Exception as e:
         print(e)
-        print("merge.py 319: something wrong.",filename)
+        print("[WARNING] merge.py 319: something wrong.",filename)
 
 # 20220918
 # 最終檔案要長這樣(注意最後的header名要修改：r1_0.548_abundance_23_r2_0.548_abundance_23)
@@ -324,4 +334,4 @@ for filename in candidate_list:
 # >Diplazium_sylvaticum_Wade4851_KTHU1447_01_r1_0.548_abundance_23_r2_0.548_abundance_23
 # GGCTGGTGTCAAAGATTACCGACTGAACTATTACACCCCCGAATACAAGACCAAAGATACTGACATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCAGCTGAGGAAGCCGGAGCTGCGGTAGCTGCGGAATCCTCCACGGGTACGTGGACCACTGTATGGACAGACGGGTTGACCAGTCTTGACCGTTACAAGGGCCGATGCTACGACATCGAACCTGTCGCTGGGGAGGAAAACCAGTATATCGCGTATGTAGCTT
 
-print("merge.py is ended on loci: "+sys.argv[3])
+print("[INFO] merge.py is ended on loci: "+sys.argv[3])
