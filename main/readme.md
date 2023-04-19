@@ -2,30 +2,46 @@
 
 ## 優先
 1. alignment方式調優 
-2. secondary merge ： rbcLC + rbcLN (deadline 20230215)
+2. fine-tuning the parameters
+
 ## Pending
 
 ### release v 1.0
-1. DADA2的10N
-2. powerbarcode.sh的執行方式是powerbarcoder -config XXX/路徑/XXX/pbc.config
-3. 可能有人 不清楚 要先cd 去那裏執行 powerbarcoder.sh，最好全都改寫成傳參寫法的絕對路徑
-4. 看要不要寫一個 powerbarcoder.py 來將 config 的設定讀進去，讓他們(設定檔、執行檔)兩個人的功能是分開清楚的
-5. QC 
-6. dada2 的 chimera killing 功能 看能不加進去
+1. QC 
+2. English comments
+3. secondary merge module
+4. dada2 的 chimera killing 功能 看能不加進去
 
 ### release v 2.0
-1. 納入pacbio流程
-2. 接上雲端blast instance (https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast)自動化blast
+1. 20230328 meeting 
+   1. R1 r2如何取，讓merge module更好用，可以接受更多元的input，更robust
+   2. Grep??
+   3. Regex??
+2. 20200314 meeting
+   1. ~~10n可以先拼起來~~
+   2. Tandem repeat要注意一下(之前說的dada2)
+   3. Trnlf 測試用run1 pool的即可，那筆最可靠
+   4. pacbio可以不用 
 
 ### release v 3.0
-1. GUI with docker
-
-### release v 4.0
-1. GUI html page virtual scrolling or socket emit optimization
-2. fine-tuning the parameters
+1. 接上雲端blast instance (https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=CloudBlast)自動化blast
 
 
 ## Done
+
+### [features-fineTuningParametersWithTrnLF_20230420] 20230328
+1. TODO
+
+### [features-dada10N_20230111] 20230420
+1. DADA2的10N 
+2. With the work of GUI with docker, the following requirements are deprecated:
+   1. ~~powerbarcode.sh的執行方式是powerbarcoder -config XXX/路徑/XXX/pbc.config~~
+   2. ~~可能有人 不清楚 要先cd 去那裏執行 powerbarcoder.sh，最好全都改寫成傳參寫法的絕對路徑~~
+   3. ~~看要不要寫一個 powerbarcoder.py 來將 config 的設定讀進去，讓他們(設定檔、執行檔)兩個人的功能是分開清楚的~~
+3. GUI html page virtual scrolling or socket emit optimization (we choose throttle the socket emit)
+
+### [features-multiLoci_20230103] 20230215
+1. secondary merge ： rbcLC + rbcLN (deadline 20230215)
 
 ### [features-dada10N_20230111] 20230111
 1. 參數替換成變數 (20230111)
