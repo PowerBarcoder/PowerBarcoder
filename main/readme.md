@@ -23,6 +23,7 @@
 ### release v 4.0
 1. GUI html page virtual scrolling or socket emit optimization
 2. fine-tuning the parameters
+3. English comments
 
 
 ## Done
