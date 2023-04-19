@@ -657,6 +657,12 @@
         newDiv.innerHTML = content;
         // Append the new div element to the container element
         container.appendChild(newDiv);
+
+        // disable the add button if the number of locus container is 4
+        if (locusContainerCount===4){
+            addButton.disabled = true;
+        }
+
     });
 
 </script>
