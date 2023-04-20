@@ -29,21 +29,18 @@ def run_procedure(data):
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1)
 
     # throttle detection, we don't need virtual scrolling anymore
-    line_number = 0
     throttle_seconds = int(time.time())
     temp_line = ""
 
     for line in iter(p.stdout.readline, b''):
         # Process each line of output
-        if line_number > 5 and int(time.time()) - throttle_seconds > 2:
+        if int(time.time()) - throttle_seconds > 2:
             temp_line += line.decode('utf-8')
             socketio.emit('procedure-result', temp_line)
             temp_line = ""
-            line_number = 0
             throttle_seconds = int(time.time())
         else:
             temp_line += line.decode('utf-8')
-            line_number += 1
 
     socketio.emit('procedure-result', 'done<br>')
     socketio.emit('procedure-result',
