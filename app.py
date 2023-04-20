@@ -1,5 +1,6 @@
 import subprocess
 import time
+from datetime import datetime
 
 from flask import Flask, render_template
 from flask_cors import CORS
@@ -13,17 +14,21 @@ socketio = SocketIO(app, cors_allowed_origins='*')
 app.debug = True  # set debug flag to True
 
 
+def socketio_emit_procedure_result(msg):
+    socketio.emit('procedure-result', "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+msg)
+
+
 @socketio.on('run-procedure')
 def run_procedure(data):
-    socketio.emit('procedure-result', '<br>')
-    socketio.emit('procedure-result', 'Generating config file...<br>')
+    # socketio.emit('procedure-result', '<br>')
+    socketio_emit_procedure_result('Generating config file...<br>')
 
     # Access form data
     form_data = data
     yml_parser.parsingFormDataToYml(form_data)
     yml_parser.parsingYmlToShell()
 
-    socketio.emit('procedure-result', 'Data procedure started<br>')
+    socketio_emit_procedure_result('Data procedure started<br>')
 
     cmd = 'cd /PowerBarcoder/main && bash powerBarcode.sh 2>&1'
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1)
@@ -35,16 +40,15 @@ def run_procedure(data):
     for line in iter(p.stdout.readline, b''):
         # Process each line of output
         if int(time.time()) - throttle_seconds > 2:
-            temp_line += line.decode('utf-8')
+            temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8')
             socketio.emit('procedure-result', temp_line)
             temp_line = ""
             throttle_seconds = int(time.time())
         else:
-            temp_line += line.decode('utf-8')
+            temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8')
 
-    socketio.emit('procedure-result', 'done<br>')
-    socketio.emit('procedure-result',
-                  'Find your results in data/result/ folder<br>')
+    socketio_emit_procedure_result('done<br>')
+    socketio_emit_procedure_result('Find your results in data/result/ folder<br>')
 
 
 @app.route('/')
