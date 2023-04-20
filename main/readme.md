@@ -3,6 +3,9 @@
 ## 優先
 1. alignment方式調優 
 2. fine-tuning the parameters
+3. 應先建立QC方法(base-on sanger's)，以加速驗證每次optimization的成果
+4. 當前效能瓶頸出現在dada2及cutadapt，mergeModule的效能已處理完畢(by coroutine)
+5. 區分advance parameter跟normal parameter
 
 ## Pending
 

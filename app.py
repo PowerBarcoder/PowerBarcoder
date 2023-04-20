@@ -47,6 +47,12 @@ def run_procedure(data):
         else:
             temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8')
 
+    # [For Debug]
+    # for line in iter(p.stdout.readline, b''):
+    #     # Process each line of output
+    #     socketio.emit('procedure-result', "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8'))
+
+
     socketio_emit_procedure_result('done<br>')
     socketio_emit_procedure_result('Find your results in data/result/ folder<br>')
 

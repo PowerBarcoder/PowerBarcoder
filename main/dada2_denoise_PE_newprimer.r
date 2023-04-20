@@ -82,7 +82,7 @@ for (a in 1:ncol(AP)){
 
 #pair好的檔案開始處理
   #pair reads
-  for (s in 1:nrow(amplicon)){
+  for (s in 1:nrow(amplicon)){ #TODO 20230421 we can use multi-thread to speed up
     s1 = paste0("filtered_trim_", region, "_", amplicon[s,Fp],"_", amplicon[s,Rp], "_r1.fq")
     r1 = paste0(path_trim, "/filtered_trim_", region, "_", amplicon[s,Fp],"_", amplicon[s,Rp], "_r1.fq")
     r2 = paste0(path_trim, "/filtered_trim_", region, "_", amplicon[s,Fp],"_", amplicon[s,Rp], "_r2.fq")

@@ -28,6 +28,9 @@ WORKDIR /PowerBarcoder
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+## install parallel for multi-threading in bash (deprecated temporarily)
+#RUN apt-get install -y parallel
+
 COPY . .
 
 EXPOSE 5000

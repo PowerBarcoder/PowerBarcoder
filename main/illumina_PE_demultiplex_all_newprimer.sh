@@ -33,19 +33,40 @@ rm ${resultDataPath}${nameOfLoci[i]}*_R*
 # ${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:../barcodes_rbcL_start_0.fasta -G file:../barcodes_rbcLC_start2_0.fasta --action=none -o rbcLC_{name1}_{name2}_r1.fq -p rbcLC_{name1}_{name2}_r2.fq ../rbcLC_amplicon_r1.fq ../rbcLC_amplicon_r2.fq -j $customizedThreadNumber
 ${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:${ampliconInfo}${barcodesFile1[i]} -G file:${ampliconInfo}${barcodesFile2[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r1.fq -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r2.fq ${resultDataPath}${amplicon_r1[i]} ${resultDataPath}${amplicon_r2[i]} -j ${customizedThreadNumber[i]}
 
-# # 迴圈去掉primer (絕對路徑下，用$(basename $file)取檔名)
-for File in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r1.fq
-	do
-	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerF[i]} -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename $File) ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename $File) -j ${customizedThreadNumber[i]}
-	done
+## If we iterate the file with "&" and "wait", which means we can run the loop in parallel, it will be faster.
+## Also, the "threads = 4" can be test to see if it is the best number.
+## (The logic of the loop doesn't change, we just beautify the code.)
+# Set the number of threads to use
+threads=4
 
-for file in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r2.fq
-	do
-	${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerR[i]} -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename $file) ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename $file) -j ${customizedThreadNumber[i]}
-	done
+# Loop over r1 files
+for r1_file in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r1.fq; do
+    # Define the output file name
+    out_file="${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename ${r1_file})"
+
+    # Run cutadapt with parallel processing
+    ${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerF[i]} -o ${out_file} ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename ${r1_file}) -j ${threads} &
+done
+
+# Loop over r2 files
+for r2_file in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r2.fq; do
+    # Define the output file name
+    out_file="${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename ${r2_file})"
+
+    # Run cutadapt with parallel processing
+    ${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerR[i]} -o ${out_file} ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename ${r2_file}) -j ${threads} &
+done
+
+# Wait for all processes to finish
+wait
 # -----------------demultiplex完成------------------------
 
-# # 直接把檔案寫到指定地點就不用再移動檔案了，所以這行不要
-# mv ${resultDataPath}${nameOfLoci[i]}_demultiplex/trim_${nameOfLoci[i]}* ${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/
+# [20230421][test] 648 ASV in in AMD Ryzen 5 5600U with Radeon Graphics, 32GB RAM
+# for loop for r1 and r2, 2 minutes 52 seconds
+# [2023-04-20 17:47:37]This is cutadapt 4.3 with Python 3.10.6
+# [2023-04-20 17:50:29]done
+# multi-threading for r1 and r2, 25 seconds
+# [2023-04-20 19:03:58]This is cutadapt 4.3 with Python 3.10.6
+# [2023-04-20 19:04:23]done
 
 done
