@@ -33,8 +33,8 @@ rm ${resultDataPath}${nameOfLoci[i]}*_R*
 # ${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:../barcodes_rbcL_start_0.fasta -G file:../barcodes_rbcLC_start2_0.fasta --action=none -o rbcLC_{name1}_{name2}_r1.fq -p rbcLC_{name1}_{name2}_r2.fq ../rbcLC_amplicon_r1.fq ../rbcLC_amplicon_r2.fq -j $customizedThreadNumber
 ${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:${ampliconInfo}${barcodesFile1[i]} -G file:${ampliconInfo}${barcodesFile2[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r1.fq -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r2.fq ${resultDataPath}${amplicon_r1[i]} ${resultDataPath}${amplicon_r2[i]} -j ${customizedThreadNumber[i]}
 
-## If we iterate the file with "&" and "wait", which means we can run the loop in parallel, it will be faster.
-## Also, the "threads = 4" can be test to see if it is the best number.
+## If we iterate the file with "&" and "wait", which means we can run the loop in parallel processes, it will be faster.
+## Also, in each cutadapt instance, the "threads = 4" can be test to see if it is the best number of multi-thread.
 ## (The logic of the loop doesn't change, we just beautify the code.)
 # Set the number of threads to use
 threads=4
