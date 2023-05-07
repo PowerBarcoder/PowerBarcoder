@@ -5,7 +5,7 @@
 myCutadaptPath="/venv/cutadapt-venv/bin/"
 # Where did you install fastp ?
 myFastpPath="/home/lykuo/miniconda2/bin/"
-# Where did you install localBlast? 
+# Where did you install localBlast?
 #localBlastToolDir="/home/lykuo/ncbi-blast-2.10.0+/bin/"
 localBlastToolDir="/usr/local/bin/"
 # Where is your NGS Data ?
@@ -39,7 +39,7 @@ barcodesFile1+=('barcodes_rbcLC_start_0.fasta') # barcode files name  # under di
 barcodesFile2+=('barcodes_rbcLC_start2_0.fasta') # barcode files name  # under dir. ampliconInfo
 sseqidFileName+=("fermalies_rbcL.fasta") # local blast reference file name  # under dir. ampliconInfo
 minimumLengthCutadaptorInLoop+=(150) # minimum output sequence length in cutadaptor
-customizedThreadNumber+=(30) # customized thread numbers
+customizedCoreNumber+=(30) # customized core numbers
 
 # second dataset (Comment out if you don't need)
 nameOfLoci+=("rbcLN")
@@ -53,7 +53,7 @@ barcodesFile1+=('barcodes_rbcL_start_0.fasta')
 barcodesFile2+=('barcodes_rbcLN_start2_0.fasta')
 sseqidFileName+=("fermalies_rbcL.fasta")
 minimumLengthCutadaptorInLoop+=(150)
-customizedThreadNumber+=(30)
+customizedCoreNumber+=(30)
 
 
 # Where is our PowerBarcoder ?

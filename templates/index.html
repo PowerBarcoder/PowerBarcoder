@@ -322,14 +322,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="customizedThreadNumber">Customized Thread
+                    <label for="customizedCoreNumber">Customized Core
                         Number:</label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control customizedThreadNumber"
-                                   id="customizedThreadNumber"
-                                   name="customizedThreadNumber"
-                                   placeholder="{{default_customizedThreadNumber}}">
+                            <input type="text" class="form-control customizedCoreNumber"
+                                   id="customizedCoreNumber"
+                                   name="customizedCoreNumber"
+                                   placeholder="{{default_customizedCoreNumber}}">
                         </div>
                     </div>
                 </div>
@@ -358,7 +358,7 @@
                 document.getElementById('barcodesFile2').value = '{{default_barcodesFile2}}'
                 document.getElementById('sseqidFileName').value = '{{default_sseqidFileName}}'
                 document.getElementById('minimumLengthCutadaptorInLoop').value = '{{default_minimumLengthCutadaptorInLoop}}'
-                document.getElementById('customizedThreadNumber').value = '{{default_customizedThreadNumber}}'
+                document.getElementById('customizedCoreNumber').value = '{{default_customizedCoreNumber}}'
             }
         </script>
 
@@ -487,7 +487,7 @@
                             'minimumLengthCutadaptorInLoop': $('.minimumLengthCutadaptorInLoop').map(function () {
                                 return $(this).val();
                             }).get(),
-                            'customizedThreadNumber': $('.customizedThreadNumber').map(function () {
+                            'customizedCoreNumber': $('.customizedCoreNumber').map(function () {
                                 return $(this).val();
                             }).get(),
                         }
@@ -639,13 +639,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="customizedThreadNumber">Customized Thread
+                    <label for="customizedCoreNumber">Customized Core
                         Number:</label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control customizedThreadNumber"
-                                   id="customizedThreadNumber"
-                                   name="customizedThreadNumber">
+                            <input type="text" class="form-control customizedCoreNumber"
+                                   id="customizedCoreNumber"
+                                   name="customizedCoreNumber">
                         </div>
                     </div>
                 </div>

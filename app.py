@@ -87,7 +87,7 @@ def home():
     default_barcodesFile2 = "barcodes_rbcLN_start2_0.fasta"
     default_sseqidFileName = "fermalies_rbcL.fasta"
     default_minimumLengthCutadaptorInLoop = 150
-    default_customizedThreadNumber = 30
+    default_customizedCoreNumber = 30
 
     return render_template('index.html',
                            default_myCutadaptPath=default_myCutadaptPath,
@@ -113,7 +113,7 @@ def home():
                            default_barcodesFile2=default_barcodesFile2,
                            default_sseqidFileName=default_sseqidFileName,
                            default_minimumLengthCutadaptorInLoop=default_minimumLengthCutadaptorInLoop,
-                           default_customizedThreadNumber=default_customizedThreadNumber
+                           default_customizedCoreNumber=default_customizedCoreNumber
                            )
 
 

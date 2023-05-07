@@ -66,8 +66,8 @@ def parsingYmlToShell():
     for i in range(len(config['minimumLengthCutadaptorInLoop'])):
         script += f"minimumLengthCutadaptorInLoop+=({config['minimumLengthCutadaptorInLoop'][i]})\n"  # minimumLengthCutadaptorInLoop
 
-    for i in range(len(config['customizedThreadNumber'])):
-        script += f"customizedThreadNumber+=({config['customizedThreadNumber'][i]})\n"  # customizedThreadNumber
+    for i in range(len(config['customizedCoreNumber'])):
+        script += f"customizedCoreNumber+=({config['customizedCoreNumber'][i]})\n"  # customizedCoreNumber
 
     # script += f"nameOfLoci=({','.join(config['nameOfLoci'])})\n"# nameOfLoci
     # script += f"errorRateCutadaptor=({','.join(str(x) for x in config['errorRateCutadaptor'])})\n"# errorRateCutadaptor
@@ -80,7 +80,7 @@ def parsingYmlToShell():
     # script += f"barcodesFile2=({','.join(f'{x}' for x in config['barcodesFile2'])})\n"# barcodesFile2
     # script += f"sseqidFileName=({','.join(f'{x}' for x in config['sseqidFileName'])})\n"# sseqidFileName
     # script += f"minimumLengthCutadaptorInLoop=({','.join(str(x) for x in config['minimumLengthCutadaptorInLoop'])})\n"# minimumLengthCutadaptorInLoop
-    # script += f"customizedThreadNumber=({','.join(str(x) for x in config['customizedThreadNumber'])})\n"# customizedThreadNumber
+    # script += f"customizedCoreNumber=({','.join(str(x) for x in config['customizedCoreNumber'])})\n"# customizedCoreNumber
 
     script += f"workingDirectory=/PowerBarcoder/main/\n"
 
@@ -118,7 +118,7 @@ def parsingYmlToShell():
 # barcodesFile2 = config['barcodesFile2']
 # sseqidFileName = config['sseqidFileName']
 # minimumLengthCutadaptorInLoop = config['minimumLengthCutadaptorInLoop']
-# customizedThreadNumber = config['customizedThreadNumber']
+# customizedCoreNumber = config['customizedCoreNumber']
 # workingDirectory = config['workingDirectory']
 
 

@@ -19,8 +19,8 @@ do
 #"TAGGTCTGTCTGCYAARAATTATGG" and "GTTCCCCYTCTAGTTTRCCTACTAC" are VARIABLEs (sequences of rbcLC primers)
 #"rbcLC" the name of the amplicon, which is a VARIABLE too
 
-${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --discard-untrimmed --pair-filter=both --minimum-length ${minimumLengthCutadaptor[i]} --pair-adapters -g ${primerF[i]} -G ${primerR[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}.1_R1 -p ${resultDataPath}${nameOfLoci[i]}.1_R2 $R1FastqGz $R2FastqGz -j ${customizedThreadNumber[i]}
-${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --discard-untrimmed --pair-filter=both --minimum-length ${minimumLengthCutadaptor[i]} --pair-adapters -g ${primerR[i]} -G ${primerF[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}.2_R1 -p ${resultDataPath}${nameOfLoci[i]}.2_R2 $R1FastqGz $R2FastqGz -j ${customizedThreadNumber[i]}
+${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --discard-untrimmed --pair-filter=both --minimum-length ${minimumLengthCutadaptor[i]} --pair-adapters -g ${primerF[i]} -G ${primerR[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}.1_R1 -p ${resultDataPath}${nameOfLoci[i]}.1_R2 $R1FastqGz $R2FastqGz -j ${customizedCoreNumber[i]}
+${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --discard-untrimmed --pair-filter=both --minimum-length ${minimumLengthCutadaptor[i]} --pair-adapters -g ${primerR[i]} -G ${primerF[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}.2_R1 -p ${resultDataPath}${nameOfLoci[i]}.2_R2 $R1FastqGz $R2FastqGz -j ${customizedCoreNumber[i]}
 cat ${resultDataPath}${nameOfLoci[i]}.1_R1 ${resultDataPath}${nameOfLoci[i]}.2_R2 > ${resultDataPath}${amplicon_r1[i]}
 cat ${resultDataPath}${nameOfLoci[i]}.1_R2 ${resultDataPath}${nameOfLoci[i]}.2_R1 > ${resultDataPath}${amplicon_r2[i]}
 rm ${resultDataPath}${nameOfLoci[i]}*_R*
@@ -30,14 +30,14 @@ rm ${resultDataPath}${nameOfLoci[i]}*_R*
 # #{name1} and {name2} are header names of fasta
 
 # AB test
-# ${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:../barcodes_rbcL_start_0.fasta -G file:../barcodes_rbcLC_start2_0.fasta --action=none -o rbcLC_{name1}_{name2}_r1.fq -p rbcLC_{name1}_{name2}_r2.fq ../rbcLC_amplicon_r1.fq ../rbcLC_amplicon_r2.fq -j $customizedThreadNumber
-${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:${ampliconInfo}${barcodesFile1[i]} -G file:${ampliconInfo}${barcodesFile2[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r1.fq -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r2.fq ${resultDataPath}${amplicon_r1[i]} ${resultDataPath}${amplicon_r2[i]} -j ${customizedThreadNumber[i]}
+# ${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:../barcodes_rbcL_start_0.fasta -G file:../barcodes_rbcLC_start2_0.fasta --action=none -o rbcLC_{name1}_{name2}_r1.fq -p rbcLC_{name1}_{name2}_r2.fq ../rbcLC_amplicon_r1.fq ../rbcLC_amplicon_r2.fq -j $customizedCoreNumber
+${myCutadaptPath}cutadapt -e 0 --no-indels --pair-filter=both --discard-untrimmed -g file:${ampliconInfo}${barcodesFile1[i]} -G file:${ampliconInfo}${barcodesFile2[i]} --action=none -o ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r1.fq -p ${resultDataPath}${nameOfLoci[i]}_demultiplex/${nameOfLoci[i]}_{name1}_{name2}_r2.fq ${resultDataPath}${amplicon_r1[i]} ${resultDataPath}${amplicon_r2[i]} -j ${customizedCoreNumber[i]}
 
 ## If we iterate the file with "&" and "wait", which means we can run the loop in parallel processes, it will be faster.
-## Also, in each cutadapt instance, the "threads = 4" can be test to see if it is the best number of multi-thread.
+## Also, in each cutadapt instance, the "core_numbers = 4" can be test to see if it is the best number of multiprocessing.
 ## (The logic of the loop doesn't change, we just beautify the code.)
-# Set the number of threads to use
-threads=4
+# Set the number of core_numbers to use
+core_numbers=4
 
 # Loop over r1 files
 for r1_file in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r1.fq; do
@@ -45,7 +45,7 @@ for r1_file in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r1.fq; do
     out_file="${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename ${r1_file})"
 
     # Run cutadapt with parallel processing
-    ${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerF[i]} -o ${out_file} ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename ${r1_file}) -j ${threads} &
+    ${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerF[i]} -o ${out_file} ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename ${r1_file}) -j ${core_numbers} &
 done
 
 # Loop over r2 files
@@ -54,7 +54,7 @@ for r2_file in ${resultDataPath}${nameOfLoci[i]}_demultiplex/*r2.fq; do
     out_file="${resultDataPath}${nameOfLoci[i]}_demultiplex/trimmed/trim_$(basename ${r2_file})"
 
     # Run cutadapt with parallel processing
-    ${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerR[i]} -o ${out_file} ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename ${r2_file}) -j ${threads} &
+    ${myCutadaptPath}cutadapt -e ${errorRateCutadaptor[i]} --no-indels --minimum-length ${minimumLengthCutadaptorInLoop[i]} -g ${primerR[i]} -o ${out_file} ${resultDataPath}${nameOfLoci[i]}_demultiplex/$(basename ${r2_file}) -j ${core_numbers} &
 done
 
 # Wait for all processes to finish
@@ -65,7 +65,7 @@ wait
 # for loop for r1 and r2, 2 minutes 52 seconds
 # [2023-04-20 17:47:37]This is cutadapt 4.3 with Python 3.10.6
 # [2023-04-20 17:50:29]done
-# multi-threading for r1 and r2, 25 seconds
+# multiprocessing for r1 and r2, 25 seconds
 # [2023-04-20 19:03:58]This is cutadapt 4.3 with Python 3.10.6
 # [2023-04-20 19:04:23]done
 

@@ -9,7 +9,7 @@ barcodesFile1:
 - barcodes_rbcL_start_0.fasta
 barcodesFile2:
 - barcodes_rbcLN_start2_0.fasta
-customizedThreadNumber:
+customizedCoreNumber:
 - '30'
 dada2BarcodeFile: multiplex_cpDNAbarcode_clean.txt
 dada2LearnErrorFile: /PowerBarcoder/data/dada2LearnErrorFile/

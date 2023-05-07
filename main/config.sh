@@ -22,6 +22,6 @@ barcodesFile1+=(barcodes_rbcL_start_0.fasta)
 barcodesFile2+=(barcodes_rbcLN_start2_0.fasta)
 sseqidFileName+=(fermalies_rbcL.fasta)
 minimumLengthCutadaptorInLoop+=(150)
-customizedThreadNumber+=(30)
+customizedCoreNumber+=(30)
 workingDirectory=/PowerBarcoder/main/
 echo '[INFO] config imported!'
