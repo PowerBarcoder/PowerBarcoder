@@ -13,12 +13,19 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/local/bin
-# install blast and mafft
-RUN curl -O ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.13.0+-x64-linux.tar.gz && \
-    tar -zxvf ncbi-blast-2.13.0+-x64-linux.tar.gz && \
+# install blast
+RUN curl -O ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.13.0/ncbi-blast-2.13.0+-x64-linux.tar.gz
+RUN tar -zxvf ncbi-blast-2.13.0+-x64-linux.tar.gz && \
     rm ncbi-blast-2.13.0+-x64-linux.tar.gz && \
-    ln -s /usr/local/bin/ncbi-blast-2.13.0+/bin/* /usr/local/bin/ && \
-    apt-get update && \
+    ln -s /usr/local/bin/ncbi-blast-2.13.0+/bin/* /usr/local/bin/
+
+# install fastp
+RUN wget http://opengene.org/fastp/fastp.0.23.1 && \
+    mv fastp.0.23.1 fastp && \
+    chmod a+x ./fastp
+
+# install mafft
+RUN apt-get update && \
     apt-get install -y rpm && \
     curl -O https://mafft.cbrc.jp/alignment/software/mafft-7.520-gcc_fc6.x86_64.rpm && \
     rpm -Uvh mafft-7.520-gcc_fc6.x86_64.rpm
