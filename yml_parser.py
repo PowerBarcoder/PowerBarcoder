@@ -20,15 +20,15 @@ def parsingYmlToShell():
     # path
     script = '#!/bin/bash\n'
     script += f"myCutadaptPath=/venv/cutadapt-venv/bin/\n"
-    script += f"myFastpPath=deprecated\n"
+    script += f"myFastpPath=/usr/local/bin/\n"
     script += f"localBlastToolDir=/usr/local/bin/\n"
     script += f"ampliconInfo=/PowerBarcoder/data/amplicon_data/\n"
     script += f"resultDataPath=/PowerBarcoder/data/result/\n"
     script += f"missList=/PowerBarcoder/data/missingList.txt\n"
     script += f"R1FastqGz={config['R1FastqGz']}\n"  # R1FastqGz
     script += f"R2FastqGz={config['R2FastqGz']}\n"  # R2FastqGz
-    script += f"summaryJsonFileName=221229RUN1_5.json\n"
-    script += f"summaryHtmlFileName=221229RUN1_5.html\n"
+    script += f"summaryJsonFileName=quality.json\n"
+    script += f"summaryHtmlFileName=quality.html\n"
     script += f"dada2LearnErrorFile={config['dada2LearnErrorFile']}\n"  # dada2LearnErrorFile
     script += f"dada2BarcodeFile={config['dada2BarcodeFile']}\n"  # dada2BarcodeFile
 

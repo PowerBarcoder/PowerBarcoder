@@ -3,21 +3,17 @@
 
 echo "[INFO] checking reuirement..."
 
-# # check fastp 先跳過，看起來要切路徑到miniconda
-# currentPath=$(pwd)
-# echo $(pwd)
-# cd $myFastpPath
-# cd $myFastpPath
-# echo $currentPath
-
-# wherewIsCutadapt=$(cd /home/lykuo/miniconda2/bin/)
-# checkCutadapt=${#wherewIsCutadapt}
-# lengthOfCutadapt=10
-# echo ${checkCutadapt}
-# # echo $(whereis cutadapt|#)
-# if [ $checkCutadapt -le $lengthOfCutadapt ]; then
-#     exit "Pipeline terminated because cutadapt is not found"
-# fi
+ # check fastp
+wherewIsFastp=$(whereis fastp)
+checkFastp=${#wherewIsFastp}
+lengthOfFastp=10
+# echo $(whereis fastp|#)
+if [ $checkFastp -le $lengthOfFastp ];
+then
+    exit "[WARNING] Pipeline terminated because fastp is not found"
+else
+    echo "[INFO] fastp installed"
+fi
 
 
 # check cutadapt
