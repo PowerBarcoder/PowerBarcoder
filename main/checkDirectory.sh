@@ -4,6 +4,10 @@
 
 echo "[INFO] checking file directories..."
 
+mkdir -p ${resultDataPath}blastResult
+
+
+
 #yixuan modified for multiLoci
 for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
   # create Layer 0 folder
