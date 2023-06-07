@@ -420,7 +420,7 @@
                 </pre>
                 </div>
                 <script>
-                    var socket = io.connect('http://localhost:5000', {
+                    var socket = io.connect('{{ request.host_url }}', {
                         withCredentials: true,
                     });
 
