@@ -2,6 +2,7 @@
 
 ## 優先
 
+0. 沒有result目錄，這次搬到server上是手動建的，應當要自動建出result及其第一層子目錄
 1. fastp環境建置，給trim用，trim完的report要放到result，給user檢查一下定序品質 (V 已完成)
 2. alignment方式調優 (V 已加速、已處理保留字誤入command)
 3. 應先建立QC方法(base-on sanger's)，以加速驗證每次optimization的成果
