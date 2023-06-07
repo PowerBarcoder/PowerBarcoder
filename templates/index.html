@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/obsidian.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
 
+    <!-- font awesome   -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <title>PowerBarcoder</title>
     <style>
         .dropdown-toggle::after {
@@ -31,6 +34,25 @@
             border-bottom: 0;
             border-left: .3em solid transparent;
         }
+
+        .information{display:none;}
+        #tooltip0:hover + .information{display:block;}
+        #tooltip1:hover + .information{display:block;}
+        #tooltip2:hover + .information{display:block;}
+        #tooltip3:hover + .information{display:block;}
+        #tooltip4:hover + .information{display:block;}
+        #tooltip5:hover + .information{display:block;}
+        #tooltip6:hover + .information{display:block;}
+        #tooltip7:hover + .information{display:block;}
+        #tooltip8:hover + .information{display:block;}
+        #tooltip9:hover + .information{display:block;}
+        #tooltip10:hover + .information{display:block;}
+        #tooltip11:hover + .information{display:block;}
+        #tooltip12:hover + .information{display:block;}
+        #tooltip13:hover + .information{display:block;}
+        #tooltip14:hover + .information{display:block;}
+        #tooltip15:hover + .information{display:block;}
+
     </style>
 
 </head>
@@ -114,7 +136,14 @@
                 <!--                    </div>-->
                 <!--                </div>-->
                 <div class="form-group">
-                    <label for="R1FastqGz">R1 fastq.gz file path:</label>
+                    <label for="R1FastqGz">
+                        <span id="tooltip0">R1 fastq.gz file path: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Raw data (.gz) path within the mounted folder "../amplicon_data/"
+                            </i>
+                        </span>
+                    </label>
                     <div class="row ">
                         <div class="col-12">
                             <input type="text" class="form-control" id="R1FastqGz" name="R1FastqGz"
@@ -123,7 +152,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="R2FastqGz">R2 fastq.gz file path:</label>
+                    <label for="R2FastqGz">
+                        <span id="tooltip1">R2 fastq.gz file path: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Raw data (.gz) path within the mounted folder "../amplicon_data/"
+                            </i>
+                        </span>
+                    </label>
                     <div class="row ">
                         <div class="col-12">
                             <input type="text" class="form-control" id="R2FastqGz" name="R2FastqGz"
@@ -131,26 +167,15 @@
                         </div>
                     </div>
                 </div>
-                <!--                <div class="form-group">-->
-                <!--                    <label for="summaryJsonFileName">Summary Json File Name:</label>-->
-                <!--                    <div class="row ">-->
-                <!--                        <div class="col-12">-->
-                <!--                            <input type="text" class="form-control" id="summaryJsonFileName" name="summaryJsonFileName"-->
-                <!--                                   placeholder="{{default_summaryJsonFileName}}" disabled>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="form-group">-->
-                <!--                    <label for="summaryHtmlFileName">Summary Html File Name:</label>-->
-                <!--                    <div class="row ">-->
-                <!--                        <div class="col-12">-->
-                <!--                            <input type="text" class="form-control" id="summaryHtmlFileName" name="summaryHtmlFileName"-->
-                <!--                                   placeholder="{{default_summaryHtmlFileName}}" disabled>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
                 <div class="form-group">
-                    <label for="dada2LearnErrorFile">Dada2 Error File:</label>
+                     <label for="dada2LearnErrorFile">
+                        <span id="tooltip2">Dada2 Error File: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                File path within the mounted folder for DADA2 learning error, remember to put the fastq files under this path
+                            </i>
+                        </span>
+                    </label>
                     <div class="row ">
                         <div class="col-12">
                             <input type="text" class="form-control" id="dada2LearnErrorFile" name="dada2LearnErrorFile"
@@ -159,7 +184,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="dada2BarcodeFile">Dada2 Barcode File:</label>
+                     <label for="dada2BarcodeFile">
+                        <span id="tooltip3">Dada2 Barcode File: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                File name within the mounted folder "../amplicon_data/" for DADA2 learning error
+                            </i>
+                        </span>
+                    </label>
                     <div class="row ">
                         <div class="col-12">
                             <input type="text" class="form-control" id="dada2BarcodeFile" name="dada2BarcodeFile"
@@ -209,7 +241,15 @@
             </div>
             <div id="locusFormContainer" class="mt-3  collapse">
                 <div class="form-group">
-                    <label for="nameOfLoci">Name of Loci:</label>
+                    <label for="nameOfLoci">
+                        <span id="tooltip4">Name of Loci: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Locus name for your data
+                            </i>
+                        </span>
+                    </label>
+
                     <div class="row ">
                         <div class="col-12">
                             <input type="text" class="form-control nameOfLoci" id="nameOfLoci" name="nameOfLoci"
@@ -218,7 +258,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="errorRateCutadaptor">Error Rate Cutadaptor:</label>
+                    <label for="errorRateCutadaptor">
+                        <span id="tooltip5">Error Rate Cutadaptor: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Trimming sensitivity for cutadapt, details can be found in cutadapt manual
+                            </i>
+                        </span>
+                    </label>
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control errorRateCutadaptor" id="errorRateCutadaptor"
@@ -228,7 +275,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="minimumLengthCutadaptor">Minimum Length Cutadaptor:</label>
+                    <label for="minimumLengthCutadaptor">
+                        <span id="tooltip6">Minimum Length Cutadaptor: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Trimming length threshold for cutadapt, details can be found in cutadapt manual
+                            </i>
+                        </span>
+                    </label>
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control minimumLengthCutadaptor" id="minimumLengthCutadaptor"
@@ -238,7 +292,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="primerF">Primer F:</label>
+                    <label for="primerF">
+                        <span id="tooltip7">Primer F: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Primer F sequence for this locus
+                            </i>
+                        </span>
+                    </label>
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control primerF" id="primerF" name="primerF"
@@ -247,7 +308,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="primerR">Primer R:</label>
+                    <label for="primerR">
+                        <span id="tooltip8">Primer R: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Primer R sequence for this locus
+                            </i>
+                        </span>
+                    </label>
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control primerR" id="primerR" name="primerR"
@@ -256,8 +324,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-
-                    <label for="amplicon_r1">Amplicon R1:</label>
+                    <label for="amplicon_r1">
+                        <span id="tooltip9">Amplicon R1: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Filename for R1 fastq generated after demultiplex the gz file by cutadapt (not an important name actually)
+                            </i>
+                        </span>
+                    </label>
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control amplicon_r1" id="amplicon_r1"
@@ -267,7 +341,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="amplicon_r2">Amplicon R2:</label>
+                    <label for="amplicon_r2">
+                        <span id="tooltip10">Amplicon R2: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Filename for R2 fastq generated after demultiplex the gz file by cutadapt (not an important name actually)
+                            </i>
+                        </span>
+                    </label>
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control amplicon_r2" id="amplicon_r2"
@@ -277,7 +358,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="barcodesFile1">Barcodes File 1:</label>
+                    <label for="barcodesFile1">
+                        <span id="tooltip11">Barcodes File 1: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Barcodes file within the mounted folder "../amplicon_data/" for R1 fastq, should be prepared by yourself
+                            </i>
+                        </span>
+                    </label>
+
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control barcodesFile1" id="barcodesFile1"
@@ -287,7 +376,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="barcodesFile2">Barcodes File 2:</label>
+                    <label for="barcodesFile2">
+                        <span id="tooltip12">Barcodes File 2: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Barcodes file within the mounted folder "../amplicon_data/" for R2 fastq, should be prepared by yourself
+                            </i>
+                        </span>
+                    </label>
+
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control barcodesFile2"
@@ -298,7 +395,17 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="sseqidFileName">Sseqid File Name:</label>
+                    <label for="sseqidFileName">
+                        <span id="tooltip13">Sseqid File Name: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Library file within the mounted folder "../amplicon_data/" for local BLAST,
+                                should be prepared by yourself.
+                                We suggest user to use close related species as the library.
+                            </i>
+                        </span>
+                    </label>
+
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control sseqidFileName"
@@ -309,9 +416,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="minimumLengthCutadaptorInLoop">Minimum Length
-                        Cutadaptor In
-                        Loop:</label>
+                    <label for="minimumLengthCutadaptorInLoop">
+                        <span id="tooltip14">Minimum Length Cutadaptor In Loop: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                I'm thinking about to remove this parameter, but I'm not sure yet.
+                            </i>
+                        </span>
+                    </label>
+
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control minimumLengthCutadaptorInLoop"
@@ -322,8 +435,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="customizedCoreNumber">Customized Core
-                        Number:</label>
+                    <label for="customizedCoreNumber">
+                        <span id="tooltip15">Customized Core Number: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                PowerBarcoder supports multi-threading, set proper core number to speed up the analysis.
+                            </i>
+                        </span>
+                    </label>
+
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control customizedCoreNumber"

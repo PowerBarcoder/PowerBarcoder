@@ -6,7 +6,7 @@
 # 20230604啟用fastp #FIXME fastp按以下指令操作，跟之前給的trim檔案大小不同 184MB & 224MB -> 167MB & 208MB
 #starting read miseq files "LIB810_S9_L001_R1_001.fastq.gz" "LIB810_S9_L001_R2_001.fastq.gz" at /home/lykuo/lab_data/NGS_data/miseq
 # trim the reads
-${myFastpPath}fastp -i ${R1FastqGz} -I ${R2FastqGz} -o ${resultDataPath}trim_R1FastqGz.gz -O ${resultDataPath}trim_R2FastqGz.gz -j ${resultDataPath}summaryJsonFileName -h ${resultDataPath}summaryHtmlFileName
+${myFastpPath}fastp -i ${R1FastqGz} -I ${R2FastqGz} -o ${resultDataPath}trim_R1FastqGz.gz -O ${resultDataPath}trim_R2FastqGz.gz -j ${resultDataPath}summaryJsonFileName.json -h ${resultDataPath}summaryHtmlFileName.html
 
 #yixuan modified for multiLoci
 for ((i=0; i<${#nameOfLoci[@]}; i++))
