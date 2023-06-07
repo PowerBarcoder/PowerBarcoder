@@ -63,15 +63,15 @@ def home():
     # and are hard-coded in parsingYmlToShell() method)
     # Path
     default_myCutadaptPath = "/venv/cutadapt-venv/bin/"
-    default_myFastpPath = "deprecated"
+    default_myFastpPath = "/usr/local/bin/"
     default_localBlastToolDir = "/usr/local/bin/"
     default_ampliconInfo = "/PowerBarcoder/data/amplicon_data/"
     default_resultDataPath = "/PowerBarcoder/data/result/"
     default_missList = "/PowerBarcoder/data/missingList.txt"
-    default_R1FastqGz = "/PowerBarcoder/data/amplicon_data/trim_RUN1.5_R1.fq.gz"
-    default_R2FastqGz = "/PowerBarcoder/data/amplicon_data/trim_RUN1.5_R2.fq.gz"
-    default_summaryJsonFileName = "221229RUN1_5.json"
-    default_summaryHtmlFileName = "221229RUN1_5.html"
+    default_R1FastqGz = "/PowerBarcoder/data/amplicon_data/RUN1-5_R1.fastq.gz"
+    default_R2FastqGz = "/PowerBarcoder/data/amplicon_data/RUN1-5_R2.fastq.gz"
+    default_summaryJsonFileName = "quality.json"
+    default_summaryHtmlFileName = "quality.html"
     default_dada2LearnErrorFile = "/PowerBarcoder/data/dada2LearnErrorFile/"
     default_dada2BarcodeFile = "multiplex_cpDNAbarcode_clean.txt"
 

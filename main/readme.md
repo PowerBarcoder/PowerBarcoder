@@ -2,15 +2,22 @@
 
 ## 優先
 
-1. fastp環境建置，給trim用，trim完的report要放到result，給user檢查一下定序品質
-2. alignment方式調優
-2. fine-tuning the parameters
+1. fastp環境建置，給trim用，trim完的report要放到result，給user檢查一下定序品質 (V 已完成)
+2. alignment方式調優 (V 已加速、已處理保留字誤入command)
 3. 應先建立QC方法(base-on sanger's)，以加速驗證每次optimization的成果
-4. 當前效能瓶頸出現在dada2及cutadapt，mergeModule的效能已處理完畢(by coroutine)
-5. 區分advance parameter跟normal parameter
-6. 時區調整
+   1. 按20230605結論處理目錄結構，清除不必要內容
+   2. 按20230605結論處理QC方法(僅針對目錄檢查)
+   3. 序列正確性比對(需與sanger's比對)
+4. fine-tuning the parameters
+5. 效能瓶頸排除：
+   1. dada2
+   2. cutadapt(V done by parallel computing)
+   3. mergeModule(V done by coroutine)
 
 ## Pending
+
+1. 區分advance parameter跟normal parameter
+2. 時區調整
 
 ### release v 1.0
 
