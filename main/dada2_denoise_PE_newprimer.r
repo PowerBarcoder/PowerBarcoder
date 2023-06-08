@@ -34,8 +34,8 @@ rbcLN = c("fVGF", "rECL")
 trnLF = c("L5675", "F4121")
 trnL = c("oneIf1", "L7556")
 pgiC = c("fIQQ","rESN")
-co1 = c("CI46","rLAG")
-AP_minlength = 500  #TODO 這個也變參數
+CO1 = c("CI46","rLAG")
+AP_minlength = 1  #TODO 這個也變參數
 minoverlap = 4 #TODO 這個也變參數
 
 #AP<-data.frame(rbcLC, rbcLN, trnLF, trnL)
