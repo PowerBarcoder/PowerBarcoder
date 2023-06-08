@@ -33,6 +33,8 @@ rbcLN = c("fVGF", "rECL")
 # 多loci，要從sh傳參近來，搭配multiplex_clean.txt一起使用，後者是使用者自備的，所以格式很重要
 trnLF = c("L5675", "F4121")
 trnL = c("oneIf1", "L7556")
+pgiC = c("fIQQ","rESN")
+co1 = c("CI46","rLAG")
 AP_minlength = 500  #TODO 這個也變參數
 minoverlap = 4 #TODO 這個也變參數
 
