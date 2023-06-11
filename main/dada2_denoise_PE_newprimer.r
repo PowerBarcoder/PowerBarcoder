@@ -5,7 +5,8 @@ args = commandArgs(trailingOnly=TRUE)
 # shell封裝的時候，要先裝好給這裡的R來用
 library("devtools")
 library("dada2")
-
+library("foreach")
+library("doParallel")
 
 # shell包一個錯誤處理，如果r1r2沒有配起來的話，loop會直接停掉
 # 兩個list要1對1 pair，看是要用map還是讓list塞一個空值，針對file size==0的
@@ -75,11 +76,19 @@ for (a in 1:ncol(AP)){
   paste0(path_trim, "/filtered_", R1.names)-> filtFs
   paste0(path_trim, "/filtered_", R2.names)-> filtRs
 
-   # 這一步做pair，先用了r1的seq_along來迭代，可以改成指定數字，
-  for(i in seq_along(R1)) {
-   fastqPairedFilter(c(R1[i], R2[i]), c(filtFs[i], filtRs[i]),
-                     verbose=TRUE, matchIDs = TRUE)
+  # 這一步做pair，先用了r1的seq_along來迭代，可以改成指定數字， (this step is really slow)
+  # 64s vs. 24s
+  # Set the number of cores to utilize
+  numCores <- detectCores()
+  # Register parallel backend
+  registerDoParallel(cores = numCores)
+  # Create a parallelized version of the loop using foreach
+  foreach(i = seq_along(R1), .packages = c("dada2")) %dopar% {
+    fastqPairedFilter(c(R1[i], R2[i]), c(filtFs[i], filtRs[i]),
+                      verbose = TRUE, matchIDs = TRUE, compress = FALSE)
   }
+  # Stop the parallel backend
+  stopImplicitCluster()
 
 
   # TODO 20230604 這裡開始不知道怎麼把"_"改成"_splitter_"，先擱置
