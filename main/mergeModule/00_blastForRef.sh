@@ -7,7 +7,6 @@ echo "[INFO] 00_blastForRef is running"
 for ((i=0; i<${#nameOfLoci[@]}; i++)) #迴圈處理，若dada2出來的nonmerge資料夾內為空，則須停止後續步驟
 do
 
-# ${localBlastToolDir}makeblastdb -in ${targetLibraryFilePath} -dbtype nucl -out refDB
 # /home/lykuo/ncbi-blast-2.10.0+/bin/makeblastdb -in /home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/fermalies_rbcL.fasta -dbtype nucl -out refDB
 ${localBlastToolDir}makeblastdb -in ${ampliconInfo}${sseqidFileName[i]} -dbtype nucl -out ${resultDataPath}${nameOfLoci[i]}_result/blastResult/${nameOfLoci[i]}_refDB
 
@@ -21,11 +20,10 @@ ${localBlastToolDir}makeblastdb -in ${ampliconInfo}${sseqidFileName[i]} -dbtype 
 #cat ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/r1/*.fas ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/r2/*.fas > ${resultDataPath}${nameOfLoci[i]}_result/blastResult/${nameOfLoci[i]}_catQuery.fas
 
 #cat 10N
-# 這步驟改成直接Cnonmerge資料夾裡所有的檔案
-cat ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/*.fas > ${resultDataPath}${nameOfLoci[i]}_result/blastResult/${nameOfLoci[i]}_catQuery.fas
+# 這步驟改成直接cat nonmerge資料夾裡所有的檔案
+cat ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/nCatR1R2/*.fas > ${resultDataPath}${nameOfLoci[i]}_result/blastResult/${nameOfLoci[i]}_catQuery.fas
 
 
-# ${localBlastToolDir}blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
 # /home/lykuo/ncbi-blast-2.10.0+/bin/blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
 ${localBlastToolDir}blastn -db ${resultDataPath}${nameOfLoci[i]}_result/blastResult/${nameOfLoci[i]}_refDB -query ${resultDataPath}${nameOfLoci[i]}_result/blastResult/${nameOfLoci[i]}_catQuery.fas -num_threads 20 -out ${resultDataPath}${nameOfLoci[i]}_result/blastResult/${nameOfLoci[i]}_refResult.txt -outfmt 6
 

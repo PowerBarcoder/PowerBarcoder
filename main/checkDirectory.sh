@@ -19,31 +19,20 @@ mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/untrimmed
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/trimmed
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/filtered
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/r2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/dada2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder
 # create Layer 4th folders
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise/r1
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise/r2
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/r1
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/r2
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise/nonmerged
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise/mergeResult
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/dada2/merged
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/nCatR1R2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/r2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/r1Ref
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/r2Ref
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/aligned
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/merged
 # create Layer 5th folders
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise/nonmerged/r1
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise/nonmerged/r2
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise/nonmerged/r1Ref
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise/nonmerged/r2Ref
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise/nonmerged/mergeSeq
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise/nonmerged/aligned
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/r1
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/r2
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/r1Ref
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/r2Ref
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/aligned
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/mergeSeq
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/deGapMergeSeq
-# create Layer 6th folders
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/denoise_best/nonmerged/aligned/mafft
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/aligned/mafft
 
 done

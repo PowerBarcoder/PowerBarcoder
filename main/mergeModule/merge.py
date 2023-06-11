@@ -25,14 +25,15 @@ print("[INFO] merge.py is running on loci: "+sys.argv[3])
 # loadpath="C:/Users/kwz50/aligned/"
 # loadpath="/home/sktang/powerBC/aligned/"
 
-loadpath=sys.argv[2]+sys.argv[3]+"_result/denoiseResult/denoise_best/nonmerged/aligned/"
+loadpath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/powerbarcoder/aligned/"
 # loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
 
-# mergepath="/home/sktang/powerBC/mergeSeq/"
-mergepath=sys.argv[2]+sys.argv[3]+"_result/denoiseResult/denoise_best/nonmerged/mergeSeq/"
-# mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
+# (deprecated 20230611)
+# # mergepath="/home/sktang/powerBC/mergeSeq/"
+# mergepath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/powerbarcoder/merged/"
+# # mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
 
-degapMergepath=sys.argv[2]+sys.argv[3]+"_result/denoiseResult/denoise_best/nonmerged/deGapMergeSeq/"
+degapMergepath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/powerbarcoder/merged/"
 
 # 取得所有檔案與子目錄名稱
 files = listdir(loadpath)
@@ -315,9 +316,10 @@ for filename in candidate_list:
         output_filename=filename.replace("_.fas","")
         output_filename=output_filename+"_"+r1_header_name+"_"+r2_header_name
 
-        merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n" #處理mergeseq
-        with open(mergepath+filename,"w",encoding="UTF-8") as file:
-            file.write(merge_seq_text)
+        # (deprecated 20230611)
+        # merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n" #處理mergeseq
+        # with open(mergepath+filename,"w",encoding="UTF-8") as file:
+        #     file.write(merge_seq_text)
 
         de_gap_merge_seq=merge_seq.replace("N","").replace("-","")#處理degapmergeseq
         de_gap_merge_seq_text=">"+output_filename+"\n"+de_gap_merge_seq+"\n"
