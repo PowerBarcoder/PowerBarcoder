@@ -11,7 +11,7 @@ DO
       output r1 & r2，要給後面的BeforeAlignment用
 
 # 目的地：
-# /home2/barcoder_test/RUN_sk_20230103/PowerBarcoder/result/rbcLC_result/denoiseResult/denoise_best/nonmerged/r2
+# /home2/barcoder_test/RUN_sk_20230103/PowerBarcoder/result/rbcLC_result/mergeResult/powerbarcoder/nCatR1R2/r2
 # 目標生出單個r像下面的內容：
 # >Diplopterygium_brevipinnulum_Wade4608_KTHU2019_01_r2_0.240_abundance_25
 # AGTCCCAGCGTGAACATGATCTCCACCGGACATACGTAATGCTTTTGCTAATACACGGAAATGCATACCGTGATTTTTCTGTCTATCGATGACAGCATGCATTGCACGGTGAATGTGAAGAAGCAGCCCATTATCTCGACAATAGAAGGCCAAGGTAGTATTTGCGGTAAACCCTCCGGTCAGATAGTCATGCATTACAATTGGTGCCCCCAATTCTCTAGCAAAACGGGCCCTTTTCAACATTTCTTCACACGTACCTGCAGTAG
@@ -25,15 +25,15 @@ import linecache
 
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
 
-loadpath = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_best/nonmerged/"
-r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_best/nonmerged/r1/"
-r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_best/nonmerged/r2/"
+loadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/powerbarcoder/nCatR1R2/"
+r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/powerbarcoder/r1/"
+r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/powerbarcoder/r2/"
 
 
 def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     pattern_for_split = r'NNNNNNNNNN'
 
-    # TODO 這邊之後可能要改，不能只拿前兩行，要去檢查abundance
+    # TODO 這邊之後可能要改，不能只拿前兩行，要去檢查abundance (20230611確認一下是不是在balstResult的篩選條件就已經先按identity選出最像的了)
     seqHeader = linecache.getline(loadpath + filename, 1).replace("\n", "")
     seqText = linecache.getline(loadpath + filename, 2)
 

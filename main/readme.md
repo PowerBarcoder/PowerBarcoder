@@ -80,7 +80,7 @@
 
 取出denoise best的nonmerge資料夾內的r1跟r2
 從r1及r2資料夾中取出來blast(所以第一步的路徑要抽換成今天的)
-//home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_demultiplex/denoice_best/nonmerged/r1
+//home/lykuo/lab_data/NGS_data/miseq/test_LIB720/rbcLN_result/denoise_best/nonmerged/r1
 
 執行順序
 
