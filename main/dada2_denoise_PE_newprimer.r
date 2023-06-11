@@ -61,13 +61,14 @@ for (a in 1:ncol(AP)) {
   multiplex[!multiplex[, AP[, a][2]] %in% "",] -> amplicon
 
 
-  miss = c()
+  missing_sample_list = c()
   seqtable = c()
   dadamergfail = c()
   merg = c() #Kuo_modified
   nonmerg = c() #Kuo_modified
   path_demultiplex = paste0(path_of_result, region, "_result/demultiplexResult")
   path_denoise = paste0(path_of_result, region, "_result/denoiseResult")
+  path_merge = paste0(path_of_result, region, "_result/mergeResult")
 
   path_trim <- paste0(path_demultiplex, "/trimmed")
   sort(list.files(path_trim, pattern = ".r1.fq", full.names = FALSE)) -> R1.names
@@ -107,10 +108,15 @@ for (a in 1:ncol(AP)) {
     r0 = paste0(amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp])
     filename = paste(amplicon[sample_number, 1], amplicon[sample_number, 2], amplicon[sample_number, 3], amplicon[sample_number, 4], ".fas", sep = "_")  #看起來應該就是檔名了
     seqname = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")           #這個式header的文字
-    header = paste0(">", seqname)
-    #加上了header的符號
-    if (purrr::has_element(list.files(path = path_filter), sample_filename) == TRUE) { #這邊只檢查了r1的名字有沒有對，有對boolean就是TRUE
-      # 核心運行，運行後看要不要merge，不能merge的就交由我寫的來處理
+    header = paste0(">", seqname)#加上了header的符號
+
+    #這邊只檢查了r1的名字有沒有對，有對boolean就是TRUE
+    if (purrr::has_element(list.files(path = path_filter), sample_filename) == FALSE) {
+      cbind(r1, header) -> mis
+      rbind(missing_sample_list, mis) -> missing_sample_list
+    }else {
+
+      # 核心運行:denoise
       dadaFs <- dada(r1, err = errF, multithread = TRUE)
       dadaRs <- dada(r2, err = errR, multithread = TRUE)
 
@@ -123,16 +129,23 @@ for (a in 1:ncol(AP)) {
       cbind(r2list, dadaRs[["clustering"]][["sequence"]], dadaRs[["clustering"]][["abundance"]]) -> r2fas
       r2fas[order(as.numeric(r2fas[, 3]), decreasing = TRUE),] -> r2fas
       matrix(r2fas, ncol = 3) -> r2fas
-      write.table(r1fas[, 1:2], file = paste0(path_denoise, "/denoise/r1/", filename), append = FALSE, sep = "\n", quote = FALSE,
-                  row.names = FALSE, col.names = FALSE)
-      write.table(r1fas[, 1:2], file = paste0(path_denoise, "/denoise/r1/", r0), append = FALSE, sep = "\n", quote = FALSE,
-                  row.names = FALSE, col.names = FALSE)
-      write.table(r2fas[, 1:2], file = paste0(path_denoise, "/denoise/r2/", filename), append = FALSE, sep = "\n", quote = FALSE,
-                  row.names = FALSE, col.names = FALSE)
-      write.table(r2fas[, 1:2], file = paste0(path_denoise, "/denoise/r2/", r0), append = FALSE, sep = "\n", quote = FALSE,
-                  row.names = FALSE, col.names = FALSE)
 
-      # r1 r2要merge了
+
+      # # save r1 and r2 seq from dada() results (unnecessary for dada(), but necessary for mergeModule)
+      # 匯出denoise後的r1序列，一條序列兩種檔名把檔名，如: "KTHU2084_Wade5880_Calymmodon_societatis_.fas", "fVGF_br01_rECL_br02"
+      write.table(r1fas[, 1:2], file = paste0(path_denoise, "/r1/", filename), append = FALSE, sep = "\n", quote = FALSE,
+                  row.names = FALSE, col.names = FALSE)
+      # write.table(r1fas[, 1:2], file = paste0(path_merge, "/r1/", r0), append = FALSE, sep = "\n", quote = FALSE,
+      #             row.names = FALSE, col.names = FALSE)
+      # 匯出denoise後的r2序列，一條序列兩種檔名把檔名，如: "KTHU2084_Wade5880_Calymmodon_societatis_.fas", "fVGF_br01_rECL_br02"
+      write.table(r2fas[, 1:2], file = paste0(path_denoise, "/r2/", filename), append = FALSE, sep = "\n", quote = FALSE,
+                  row.names = FALSE, col.names = FALSE)
+      # write.table(r2fas[, 1:2], file = paste0(path_merge, "/r2/", r0), append = FALSE, sep = "\n", quote = FALSE,
+      #             row.names = FALSE, col.names = FALSE)
+
+
+
+      # 請DADA2對r1 r2 merge (necessary)
       tryCatch({
         mergers <- mergePairs(dadaFs, r1, dadaRs, r2, minOverlap = minoverlap, verbose = TRUE)
       }, error = function(e) {
@@ -141,10 +154,12 @@ for (a in 1:ncol(AP)) {
 
       ####TODO 加上chimera killing (做核的會需要)
 
-
-      if (nrow(mergers) > 0 &
-        max(nchar(mergers$sequence)) > AP_minlength &
-        max(mergers$abundance) > 20) {
+      # # parsing merge 結果並存檔
+      # 確認merge內資訊，
+      # 1. 抓出成功merge的，不是的就記錄在dadamergfail內
+      # 2. 抓出abundance最高的ASV存到denoise_best (deprecated)
+      if (nrow(mergers) > 0 & max(nchar(mergers$sequence)) > AP_minlength & max(mergers$abundance) > 20) {
+        # parsing
         sum(mergers$abundance) -> clustersum
         paste0(rep(header, length(mergers$abundance)), "_", numbers[1:length(mergers$abundance)], rep("_", length(mergers$abundance)), sprintf(mergers$abundance / clustersum, fmt = '%#.3f'), rep("_abundance_", length(mergers$abundance)), mergers$abundance) -> merglist
         as.matrix(mergers) -> mergers.table
@@ -160,22 +175,32 @@ for (a in 1:ncol(AP)) {
           cbind(r1, r2, header) -> fail
           rbind(dadamergfail, fail) -> dadamergfail
         }
-        write.table(fas[, 1:2], file = paste0(path_denoise, "/denoise/", filename), append = FALSE, sep = "\n", quote = FALSE,
+        # 存檔rbcLN_result\mergeResult\dada2
+        write.table(fas[, 1:2], file = paste0(path_merge, "/dada2/merged/", filename), append = FALSE, sep = "\n", quote = FALSE,
                     row.names = FALSE, col.names = FALSE)
-        write.table(fas[1, 1:2], file = paste0(path_denoise, "/denoise_best/", filename), append = FALSE, sep = "\n", quote = FALSE,
-                    row.names = FALSE, col.names = FALSE)
+        # (deprecated)
+        # write.table(fas[1, 1:2], file = paste0(path_denoise, "/denoise_best/", filename), append = FALSE, sep = "\n", quote = FALSE,
+        #             row.names = FALSE, col.names = FALSE)
       }else {
         cbind(r1, r2, header) -> fail
         rbind(dadamergfail, fail) -> dadamergfail
       }
 
+
+
+      # 請DADA2對r1 r2 做10N拼接 (unnecessary, because pyhton can do too)
       tryCatch({
         nonmergers <- mergePairs(dadaFs, r1, dadaRs, r2, verbose = TRUE, justConcatenate = TRUE) #Kuo_modified in following lines else
       }, error = function(e) {
         message("Error occurred during mergePairs(): ", conditionMessage(e))
       })
 
+      # # parsing 10Ncat 結果並存檔
+      # 確認10Ncat內資訊，
+      # 1. 抓出成功cat的，存檔
+      # 2. 抓出abundance最高的ASV存到denoise_best (deprecated)
       if (nrow(nonmergers) > 0) {
+        # parsing
         sum(nonmergers$abundance) -> clustersum
         paste0(rep(header, length(nonmergers$abundance)), "_", numbers[1:length(nonmergers$abundance)], rep("_", length(nonmergers$abundance)), sprintf(nonmergers$abundance / clustersum, fmt = '%#.3f'), rep("_abundance_", length(nonmergers$abundance)), nonmergers$abundance, rep("_10Ncat", length(nonmergers$abundance))) -> nonmerglist
         as.matrix(nonmergers) -> nonmergers.table
@@ -184,26 +209,28 @@ for (a in 1:ncol(AP)) {
         fascat[order(as.numeric(fascat[, 3]), decreasing = TRUE),] -> fascat #Kuo_modified may write out this matrix
         matrix(fascat, ncol = 10) -> fascat
         rbind(nonmerg, fascat) -> nonmerg #Kuo_modified could be a table for dada2nonmerge
-        write.table(fascat[, 1:2], file = paste0(path_denoise, "/denoise/nonmerged/", filename), append = FALSE, sep = "\n", quote = FALSE,
+        # 存檔
+        write.table(fascat[, 1:2], file = paste0(path_merge, "/powerbarcoder/nCatR1R2/", filename), append = FALSE, sep = "\n", quote = FALSE,
                     row.names = FALSE, col.names = FALSE)
-        write.table(fascat[1, 1:2], file = paste0(path_denoise, "/denoise_best/nonmerged/", filename), append = FALSE, sep = "\n", quote = FALSE,
-                    row.names = FALSE, col.names = FALSE)
+        # (deprecated)
+        # write.table(fascat[1, 1:2], file = paste0(path_denoise, "/denoise_best/nonmerged/", filename), append = FALSE, sep = "\n", quote = FALSE,
+        #             row.names = FALSE, col.names = FALSE)
       }
 
+      # 20230611 QC可取代，考慮刪掉
       cbind(rep(r1, length(dadaFs[["clustering"]][["abundance"]])), r1list) -> seqtable01
       cbind(rep(r2, length(dadaRs[["clustering"]][["abundance"]])), r2list) -> seqtable02
       rbind(seqtable, seqtable01, seqtable02) -> seqtable
     }
-    if (purrr::has_element(list.files(path = path_filter), sample_filename) == FALSE) {
-      cbind(r1, header) -> mis
-      rbind(miss, mis) -> miss }
+
   }
   stopImplicitCluster()
 
-  write.table(miss, file = paste0(path_denoise, "/denoise/missing_samples.txt"), append = FALSE, sep = "\t", quote = FALSE,
+  # 20230611 QC可取代，考慮刪掉
+  write.table(missing_sample_list, file = paste0(path_merge, "/dada2/missing_samples.txt"), append = FALSE, sep = "\t", quote = FALSE,
               row.names = FALSE, col.names = FALSE)
-  write.table(seqtable, file = paste0(path_denoise, "/denoise/sequence_table.txt"), append = FALSE, sep = "\t", quote = FALSE,
+  write.table(seqtable, file = paste0(path_merge, "/dada2/sequence_table.txt"), append = FALSE, sep = "\t", quote = FALSE,
               row.names = FALSE, col.names = FALSE)
-  write.table(dadamergfail, file = paste0(path_denoise, "/denoise/dadamerge_fail.txt"), append = FALSE, sep = "\t", quote = FALSE,
+  write.table(dadamergfail, file = paste0(path_merge, "/dada2/dadamerge_fail.txt"), append = FALSE, sep = "\t", quote = FALSE,
               row.names = FALSE, col.names = FALSE)
 }
