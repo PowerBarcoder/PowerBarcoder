@@ -5,11 +5,11 @@ We read the file {{locus}}_blastResult.txt to get the list of readsID,
 for each reads, we aligned them with MAFFT.
 
 The input files are in
-{{locus}}_demultiplex/denoice_best/nonmerged/r1Ref/ and
-{{locus}}_demultiplex/denoice_best/nonmerged/r2Ref/,
+{{locus}}_result/denoiseResult/denoise_best/nonmerged/r1Ref/ and
+{{locus}}_result/denoiseResult/denoise_best/nonmerged/r2Ref/,
 and the file name is {{readsID}}.
 
-The output files are in {{locus}}_demultiplex/denoice_best/nonmerged/aligned/,
+The output files are in {{locus}}_result/denoiseResult/denoise_best/nonmerged/aligned/,
 and the file name is {{readsID}}_r1.al and {{readsID}}_r2.al.
 """
 
@@ -20,11 +20,11 @@ import sys
 
 print("[INFO] alignmenter.py is running on loci: " + sys.argv[3])
 
-outputLoadpath = sys.argv[2] + sys.argv[3] + "_demultiplex/denoice_best/nonmerged/"
+outputLoadpath = sys.argv[2] + sys.argv[3] + "_result/denoiseResult/denoise_best/nonmerged/"
 localBlastLoadpath = sys.argv[2]
 
 # localblast完的序列
-fastaFileDir = localBlastLoadpath + "blastResult/"
+fastaFileDir = localBlastLoadpath + sys.argv[3] + "_result/blastResult/"
 fastaFileName = sys.argv[3] + "_blastResult.txt"
 fastaFile = fastaFileDir + fastaFileName
 
