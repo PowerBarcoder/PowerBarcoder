@@ -40,12 +40,12 @@ def run_procedure(data):
     for line in iter(p.stdout.readline, b''):
         # Process each line of output
         if int(time.time()) - throttle_seconds > 2:
-            temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8')
+            temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8', 'ignore')
             socketio.emit('procedure-result', temp_line)
             temp_line = ""
             throttle_seconds = int(time.time())
         else:
-            temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8')
+            temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8', 'ignore')
 
     # [For Debug]
     # for line in iter(p.stdout.readline, b''):
@@ -81,8 +81,8 @@ def home():
     default_minimumLengthCutadaptor = 70
     default_primerF = "GAGACTAAAGCAGGTGTTGGATTCA"
     default_primerR = "TCAAGTCCACCRCGAAGRCATTC"
-    default_amplicon_r1 = "rbcLN_amplicon_r1.fq"
-    default_amplicon_r2 = "rbcLN_amplicon_r2.fq"
+    # default_amplicon_r1 = "rbcLN_amplicon_r1.fq"
+    # default_amplicon_r2 = "rbcLN_amplicon_r2.fq"
     default_barcodesFile1 = "barcodes_rbcL_start_0.fasta"
     default_barcodesFile2 = "barcodes_rbcLN_start2_0.fasta"
     default_sseqidFileName = "fermalies_rbcL.fasta"
@@ -107,8 +107,8 @@ def home():
                            default_minimumLengthCutadaptor=default_minimumLengthCutadaptor,
                            default_primerF=default_primerF,
                            default_primerR=default_primerR,
-                           default_amplicon_r1=default_amplicon_r1,
-                           default_amplicon_r2=default_amplicon_r2,
+                           # default_amplicon_r1=default_amplicon_r1,
+                           # default_amplicon_r2=default_amplicon_r2,
                            default_barcodesFile1=default_barcodesFile1,
                            default_barcodesFile2=default_barcodesFile2,
                            default_sseqidFileName=default_sseqidFileName,
