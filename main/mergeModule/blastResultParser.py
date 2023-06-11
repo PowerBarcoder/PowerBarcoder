@@ -20,7 +20,7 @@ localBlast = BlastRef()
 # "/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_rbcL/"
 loadpath = sys.argv[2]
 
-localBlast.blastRef(loadpath + "blastResult/", sys.argv[3])
+localBlast.blastRef(loadpath + sys.argv[3] + "_result/blastResult/", sys.argv[3])
 
 # 測試用
 # localBlast.blastRef("C:/Users/123/")
@@ -112,7 +112,7 @@ def determineDirection(i):
 
 #20230206 似乎不需要用append了，因為先前已經按loci區分了
 #20230206 之前應該是因為迴圈位置的關係，所以才用append的
-with open(loadpath + "blastResult/" + sys.argv[3] + "_blastResult.txt", "w") as file:
+with open(loadpath + sys.argv[3] + "_result/blastResult/" + sys.argv[3] + "_blastResult.txt", "w") as file:
     for i in range(0, len(qseqidList)):
         # print(determineDirection(i))
             file.write(determineDirection(i) + "\n")

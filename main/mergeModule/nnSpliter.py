@@ -11,7 +11,7 @@ DO
       output r1 & r2，要給後面的BeforeAlignment用
 
 # 目的地：
-# /home2/barcoder_test/RUN_sk_20230103/PowerBarcoder/result/rbcLC_demultiplex/denoice_best/nonmerged/r2
+# /home2/barcoder_test/RUN_sk_20230103/PowerBarcoder/result/rbcLC_result/denoiseResult/denoise_best/nonmerged/r2
 # 目標生出單個r像下面的內容：
 # >Diplopterygium_brevipinnulum_Wade4608_KTHU2019_01_r2_0.240_abundance_25
 # AGTCCCAGCGTGAACATGATCTCCACCGGACATACGTAATGCTTTTGCTAATACACGGAAATGCATACCGTGATTTTTCTGTCTATCGATGACAGCATGCATTGCACGGTGAATGTGAAGAAGCAGCCCATTATCTCGACAATAGAAGGCCAAGGTAGTATTTGCGGTAAACCCTCCGGTCAGATAGTCATGCATTACAATTGGTGCCCCCAATTCTCTAGCAAAACGGGCCCTTTTCAACATTTCTTCACACGTACCTGCAGTAG
@@ -25,9 +25,9 @@ import linecache
 
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
 
-loadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/"
-r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/r1/"
-r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_demultiplex/denoice_best/nonmerged/r2/"
+loadpath = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_best/nonmerged/"
+r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_best/nonmerged/r1/"
+r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_best/nonmerged/r2/"
 
 
 def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
@@ -46,7 +46,7 @@ def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     seqTextr2 = seqTextSplitted[1]
     with open(r1_outputLoadpath + filename, "w", encoding="UTF-8") as r1_file:
         r1_file.write(seqHeader + "_r1" + "\n")
-        r1_file.write(seqTextr1+ "\n") # r1結尾需要多補一個換行
+        r1_file.write(seqTextr1 + "\n")  # r1結尾需要多補一個換行
 
     with open(r2_outputLoadpath + filename, "w", encoding="UTF-8") as r2_file:
         r2_file.write(seqHeader + "_r2" + "\n")
@@ -58,6 +58,7 @@ files = listdir(loadpath)
 # 創建要處理的清單
 candidate_list = set()
 # 以迴圈處理
+processFileNumber = 0
 for filename in files:
     # 產生檔案的絕對路徑
     fullpath = join(loadpath, filename)
@@ -65,8 +66,10 @@ for filename in files:
     if isfile(fullpath) and ('.fas' in filename[-4:]):
         # print("檔案：", filename)
         nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath)  # 切檔
-    else: #20230415 可以考慮把r1,r2,r1ref,r2ref,mergeSeq,deGapMergeSeq,align都先排除
+        processFileNumber += 1
+    else:  # 20230415 可以考慮把r1,r2,r1ref,r2ref,mergeSeq,deGapMergeSeq,align都先排除
         print("[WARNING]" + filename, "is not a file or the filename is not end with .fas")
+print("[INFO]" + str(processFileNumber), " files are split.")
 
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
 

@@ -25,14 +25,14 @@ print("[INFO] merge.py is running on loci: "+sys.argv[3])
 # loadpath="C:/Users/kwz50/aligned/"
 # loadpath="/home/sktang/powerBC/aligned/"
 
-loadpath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/aligned/"
+loadpath=sys.argv[2]+sys.argv[3]+"_result/denoiseResult/denoise_best/nonmerged/aligned/"
 # loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
 
 # mergepath="/home/sktang/powerBC/mergeSeq/"
-mergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/mergeSeq/"
+mergepath=sys.argv[2]+sys.argv[3]+"_result/denoiseResult/denoise_best/nonmerged/mergeSeq/"
 # mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
 
-degapMergepath=sys.argv[2]+sys.argv[3]+"_demultiplex/denoice_best/nonmerged/deGapMergeSeq/"
+degapMergepath=sys.argv[2]+sys.argv[3]+"_result/denoiseResult/denoise_best/nonmerged/deGapMergeSeq/"
 
 # 取得所有檔案與子目錄名稱
 files = listdir(loadpath)
@@ -330,7 +330,7 @@ for filename in candidate_list:
 
 # 20220918
 # 最終檔案要長這樣(注意最後的header名要修改：r1_0.548_abundance_23_r2_0.548_abundance_23)
-# /home/lykuo/lab_data/NGS_data/miseq/LIB720/rbcLN_demultiplex/denoice_best/r1
+# /home/lykuo/lab_data/NGS_data/miseq/LIB720/rbcLN_result/denoiseResult/denoise_best/r1
 # >Diplazium_sylvaticum_Wade4851_KTHU1447_01_r1_0.548_abundance_23_r2_0.548_abundance_23
 # GGCTGGTGTCAAAGATTACCGACTGAACTATTACACCCCCGAATACAAGACCAAAGATACTGACATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCAGCTGAGGAAGCCGGAGCTGCGGTAGCTGCGGAATCCTCCACGGGTACGTGGACCACTGTATGGACAGACGGGTTGACCAGTCTTGACCGTTACAAGGGCCGATGCTACGACATCGAACCTGTCGCTGGGGAGGAAAACCAGTATATCGCGTATGTAGCTT
 
