@@ -46,6 +46,7 @@ def run_procedure(data):
             throttle_seconds = int(time.time())
         else:
             temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8', 'ignore')
+    socketio.emit('procedure-result', temp_line)
 
     # [For Debug]
     # for line in iter(p.stdout.readline, b''):
