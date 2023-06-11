@@ -1,6 +1,6 @@
 # GUI請先生出yml，再來用這支程式轉成shell script
 import yaml
-
+from datetime import datetime
 
 # convert the formData to YAML
 def parsingFormDataToYml(data):
@@ -12,6 +12,10 @@ def parsingFormDataToYml(data):
 
 # convert the YAML to shell script, with some fixed field
 def parsingYmlToShell():
+    # Get current datetime
+    current_datetime = datetime.now()
+    formatted_datetime = current_datetime.strftime("%Y%m%d%H%M")
+
     # Load YAML file
     with open('main/config.yml', 'r') as file:
         config = yaml.safe_load(file)
@@ -19,11 +23,12 @@ def parsingYmlToShell():
     # Generate shell script (有#的代表使用者可以改)
     # path
     script = '#!/bin/bash\n'
+    script += "datetime="+formatted_datetime+"'/'\n"
     script += f"myCutadaptPath=/venv/cutadapt-venv/bin/\n"
     script += f"myFastpPath=/usr/local/bin/\n"
     script += f"localBlastToolDir=/usr/local/bin/\n"
     script += f"ampliconInfo=/PowerBarcoder/data/amplicon_data/\n"
-    script += f"resultDataPath=/PowerBarcoder/data/result/\n"
+    script += f"resultDataPath=/PowerBarcoder/data/result/$datetime\n"
     script += f"missList=/PowerBarcoder/data/missingList.txt\n"
     script += f"R1FastqGz={config['R1FastqGz']}\n"  # R1FastqGz
     script += f"R2FastqGz={config['R2FastqGz']}\n"  # R2FastqGz
@@ -48,11 +53,11 @@ def parsingYmlToShell():
     for i in range(len(config['primerR'])):
         script += f"primerR+=({config['primerR'][i]})\n"  # primerR
 
-    for i in range(len(config['amplicon_r1'])):
-        script += f"amplicon_r1+=({config['amplicon_r1'][i]})\n"  # amplicon_r1
-
-    for i in range(len(config['amplicon_r2'])):
-        script += f"amplicon_r2+=({config['amplicon_r2'][i]})\n"  # amplicon_r2
+    # for i in range(len(config['amplicon_r1'])):
+    #     script += f"amplicon_r1+=({config['amplicon_r1'][i]})\n"  # amplicon_r1
+    #
+    # for i in range(len(config['amplicon_r2'])):
+    #     script += f"amplicon_r2+=({config['amplicon_r2'][i]})\n"  # amplicon_r2
 
     for i in range(len(config['barcodesFile1'])):
         script += f"barcodesFile1+=({config['barcodesFile1'][i]})\n"  # barcodesFile1
