@@ -323,40 +323,40 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="amplicon_r1">
-                        <span id="tooltip9">Amplicon R1: <i class="fa fa-question-circle"></i></span>
-                        <span class="text-secondary information">
-                            <i>
-                                Filename for R1 fastq generated after demultiplex the gz file by cutadapt (not an important name actually)
-                            </i>
-                        </span>
-                    </label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control amplicon_r1" id="amplicon_r1"
-                                   name="amplicon_r1"
-                                   placeholder="{{default_amplicon_r1}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="amplicon_r2">
-                        <span id="tooltip10">Amplicon R2: <i class="fa fa-question-circle"></i></span>
-                        <span class="text-secondary information">
-                            <i>
-                                Filename for R2 fastq generated after demultiplex the gz file by cutadapt (not an important name actually)
-                            </i>
-                        </span>
-                    </label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control amplicon_r2" id="amplicon_r2"
-                                   name="amplicon_r2"
-                                   placeholder="{{default_amplicon_r2}}">
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="form-group">-->
+<!--                    <label for="amplicon_r1">-->
+<!--                        <span id="tooltip9">Amplicon R1: <i class="fa fa-question-circle"></i></span>-->
+<!--                        <span class="text-secondary information">-->
+<!--                            <i>-->
+<!--                                Filename for R1 fastq generated after demultiplex the gz file by cutadapt (not an important name actually)-->
+<!--                            </i>-->
+<!--                        </span>-->
+<!--                    </label>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-12">-->
+<!--                            <input type="text" class="form-control amplicon_r1" id="amplicon_r1"-->
+<!--                                   name="amplicon_r1"-->
+<!--                                   placeholder="{{default_amplicon_r1}}">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="amplicon_r2">-->
+<!--                        <span id="tooltip10">Amplicon R2: <i class="fa fa-question-circle"></i></span>-->
+<!--                        <span class="text-secondary information">-->
+<!--                            <i>-->
+<!--                                Filename for R2 fastq generated after demultiplex the gz file by cutadapt (not an important name actually)-->
+<!--                            </i>-->
+<!--                        </span>-->
+<!--                    </label>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-12">-->
+<!--                            <input type="text" class="form-control amplicon_r2" id="amplicon_r2"-->
+<!--                                   name="amplicon_r2"-->
+<!--                                   placeholder="{{default_amplicon_r2}}">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="form-group">
                     <label for="barcodesFile1">
                         <span id="tooltip11">Barcodes File 1: <i class="fa fa-question-circle"></i></span>
@@ -472,8 +472,8 @@
                 document.getElementById('minimumLengthCutadaptor').value = '{{default_minimumLengthCutadaptor}}'
                 document.getElementById('primerF').value = '{{default_primerF}}'
                 document.getElementById('primerR').value = '{{default_primerR}}'
-                document.getElementById('amplicon_r1').value = '{{default_amplicon_r1}}'
-                document.getElementById('amplicon_r2').value = '{{default_amplicon_r2}}'
+                // document.getElementById('amplicon_r1').value = '{{default_amplicon_r1}}'
+                // document.getElementById('amplicon_r2').value = '{{default_amplicon_r2}}'
                 document.getElementById('barcodesFile1').value = '{{default_barcodesFile1}}'
                 document.getElementById('barcodesFile2').value = '{{default_barcodesFile2}}'
                 document.getElementById('sseqidFileName').value = '{{default_sseqidFileName}}'
@@ -589,12 +589,12 @@
                             'primerR': $('.primerR').map(function () {
                                 return $(this).val();
                             }).get(),
-                            'amplicon_r1': $('.amplicon_r1').map(function () {
-                                return $(this).val();
-                            }).get(),
-                            'amplicon_r2': $('.amplicon_r2').map(function () {
-                                return $(this).val();
-                            }).get(),
+                            // 'amplicon_r1': $('.amplicon_r1').map(function () {
+                            //     return $(this).val();
+                            // }).get(),
+                            // 'amplicon_r2': $('.amplicon_r2').map(function () {
+                            //     return $(this).val();
+                            // }).get(),
                             'barcodesFile1': $('.barcodesFile1').map(function () {
                                 return $(this).val();
                             }).get(),
@@ -698,25 +698,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+<!--                <div class="form-group">-->
 
-                    <label for="amplicon_r1">Amplicon R1:</label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control amplicon_r1" id="amplicon_r1"
-                                   name="amplicon_r1">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="amplicon_r2">Amplicon R2:</label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control amplicon_r2" id="amplicon_r2"
-                                   name="amplicon_r2">
-                        </div>
-                    </div>
-                </div>
+<!--                    <label for="amplicon_r1">Amplicon R1:</label>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-12">-->
+<!--                            <input type="text" class="form-control amplicon_r1" id="amplicon_r1"-->
+<!--                                   name="amplicon_r1">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="amplicon_r2">Amplicon R2:</label>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-12">-->
+<!--                            <input type="text" class="form-control amplicon_r2" id="amplicon_r2"-->
+<!--                                   name="amplicon_r2">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <div class="form-group">
                     <label for="barcodesFile1">Barcodes File 1:</label>
                     <div class="row">
