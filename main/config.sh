@@ -1,5 +1,5 @@
 #!/bin/bash
-datetime=202306111555'/'
+datetime=202306111604'/'
 myCutadaptPath=/venv/cutadapt-venv/bin/
 myFastpPath=/usr/local/bin/
 localBlastToolDir=/usr/local/bin/
