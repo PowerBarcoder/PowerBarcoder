@@ -2,6 +2,8 @@ FROM bioconductor/bioconductor_docker:RELEASE_3_16
 
 # install R dependencies
 RUN R -e 'BiocManager::install("dada2", version="3.16", update=TRUE, ask=FALSE)'
+RUN R -e "install.packages('foreach', dependencies = TRUE)"
+RUN R -e "install.packages('doParallel', dependencies = TRUE)"
 
 ENV PATH="/venv/cutadapt-venv/bin:$PATH"
 
