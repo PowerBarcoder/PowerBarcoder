@@ -5,11 +5,11 @@ We read the file {{locus}}_blastResult.txt to get the list of readsID,
 for each read, we aligned them with MAFFT.
 
 The input files are in
-{{locus}}_result/mergeResult/powerbarcoder/r1Ref/ and
-{{locus}}_result/mergeResult/powerbarcoder/r2Ref/,
+{{locus}}_result/mergeResult/merger/r1Ref/ and
+{{locus}}_result/mergeResult/merger/r2Ref/,
 and the file name is {{readsID}}.
 
-The output files are in {{locus}}_result/mergeResult/powerbarcoder/aligned/,
+The output files are in {{locus}}_result/mergeResult/merger/aligned/,
 and the file name is {{readsID}}_r1.al and {{readsID}}_r2.al.
 """
 
@@ -20,7 +20,7 @@ import sys
 
 print("[INFO] alignmenter.py is running on loci: " + sys.argv[3])
 
-outputLoadpath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/powerbarcoder/"
+outputLoadpath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/"
 localBlastLoadpath = sys.argv[2]
 
 # localblast完的序列

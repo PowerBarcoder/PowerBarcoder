@@ -22,17 +22,17 @@ mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/filtered
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/r1
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/r2
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/dada2
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger
 # create Layer 4th folders
 mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/dada2/merged
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/nCatR1R2
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/r1
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/r2
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/r1Ref
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/r2Ref
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/aligned
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/merged
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/nCatR1R2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/r1
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/r2
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/r1Ref
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/r2Ref
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/aligned
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/merged
 # create Layer 5th folders
-mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/aligned/mafft
+mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/aligned/mafft
 
 done

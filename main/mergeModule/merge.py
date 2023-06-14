@@ -25,15 +25,15 @@ print("[INFO] merge.py is running on loci: "+sys.argv[3])
 # loadpath="C:/Users/kwz50/aligned/"
 # loadpath="/home/sktang/powerBC/aligned/"
 
-loadpath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/powerbarcoder/aligned/"
+loadpath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/merger/aligned/"
 # loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
 
 # (deprecated 20230611)
 # # mergepath="/home/sktang/powerBC/mergeSeq/"
-# mergepath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/powerbarcoder/merged/"
+# mergepath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/merger/merged/"
 # # mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
 
-degapMergepath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/powerbarcoder/merged/"
+degapMergepath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/merger/merged/"
 
 # 取得所有檔案與子目錄名稱
 files = listdir(loadpath)

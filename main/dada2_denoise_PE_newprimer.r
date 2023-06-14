@@ -210,7 +210,7 @@ for (a in 1:ncol(AP)) {
         matrix(fascat, ncol = 10) -> fascat
         rbind(nonmerg, fascat) -> nonmerg #Kuo_modified could be a table for dada2nonmerge
         # 存檔
-        write.table(fascat[, 1:2], file = paste0(path_merge, "/powerbarcoder/nCatR1R2/", filename), append = FALSE, sep = "\n", quote = FALSE,
+        write.table(fascat[, 1:2], file = paste0(path_merge, "/merger/nCatR1R2/", filename), append = FALSE, sep = "\n", quote = FALSE,
                     row.names = FALSE, col.names = FALSE)
         # (deprecated)
         # write.table(fascat[1, 1:2], file = paste0(path_denoise, "/denoise_best/nonmerged/", filename), append = FALSE, sep = "\n", quote = FALSE,

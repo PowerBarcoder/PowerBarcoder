@@ -61,7 +61,7 @@ print("[INFO] alignmentPretreater.py is running on loci: " + sys.argv[4])
 
 # loadpath="/home/sktang/powerBC/"
 localBlastLoadpath = sys.argv[3]
-outputLoadpath = sys.argv[3] + sys.argv[4] + "_result/mergeResult/powerbarcoder/"
+outputLoadpath = sys.argv[3] + sys.argv[4] + "_result/mergeResult/merger/"
 
 # localblast完的序列檔案
 fastaFileDir = localBlastLoadpath + sys.argv[4] + "_result/blastResult/"
