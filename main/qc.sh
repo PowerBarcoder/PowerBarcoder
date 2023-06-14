@@ -2,9 +2,9 @@
 
 . ./config.sh
 
-rm -r ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/nCatR1R2
-rm -r ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/r1
-rm -r ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/r2
-rm -r ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/aligned
+rm -r ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/nCatR1R2
+rm -r ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/r1
+rm -r ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/r2
+rm -r ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/aligned
 
 python3 ./qcModule/missingList.py

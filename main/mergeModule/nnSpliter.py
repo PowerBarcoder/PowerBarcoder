@@ -11,7 +11,7 @@ DO
       output r1 & r2，要給後面的BeforeAlignment用
 
 # 目的地：
-# /home2/barcoder_test/RUN_sk_20230103/PowerBarcoder/result/rbcLC_result/mergeResult/powerbarcoder/nCatR1R2/r2
+# /home2/barcoder_test/RUN_sk_20230103/PowerBarcoder/result/rbcLC_result/mergeResult/merger/nCatR1R2/r2
 # 目標生出單個r像下面的內容：
 # >Diplopterygium_brevipinnulum_Wade4608_KTHU2019_01_r2_0.240_abundance_25
 # AGTCCCAGCGTGAACATGATCTCCACCGGACATACGTAATGCTTTTGCTAATACACGGAAATGCATACCGTGATTTTTCTGTCTATCGATGACAGCATGCATTGCACGGTGAATGTGAAGAAGCAGCCCATTATCTCGACAATAGAAGGCCAAGGTAGTATTTGCGGTAAACCCTCCGGTCAGATAGTCATGCATTACAATTGGTGCCCCCAATTCTCTAGCAAAACGGGCCCTTTTCAACATTTCTTCACACGTACCTGCAGTAG
@@ -25,9 +25,9 @@ import linecache
 
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
 
-loadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/powerbarcoder/nCatR1R2/"
-r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/powerbarcoder/r1/"
-r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/powerbarcoder/r2/"
+loadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/"
+r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/r1/"
+r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/r2/"
 
 
 def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):

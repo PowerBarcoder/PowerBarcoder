@@ -21,7 +21,7 @@ ${localBlastToolDir}makeblastdb -in ${ampliconInfo}${sseqidFileName[i]} -dbtype 
 
 #cat 10N
 # 這步驟改成直接cat nonmerge資料夾裡所有的檔案
-cat ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/powerbarcoder/nCatR1R2/*.fas > ${resultDataPath}${nameOfLoci[i]}_result/blastResult/${nameOfLoci[i]}_catQuery.fas
+cat ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/nCatR1R2/*.fas > ${resultDataPath}${nameOfLoci[i]}_result/blastResult/${nameOfLoci[i]}_catQuery.fas
 
 
 # /home/lykuo/ncbi-blast-2.10.0+/bin/blastn -db refDB -query catQuery.fas -num_threads 20 -out refResult.txt -outfmt 6
