@@ -36,6 +36,7 @@
         }
 
         .information{display:none;}
+        #tooltip99:hover + .information{display:block;}
         #tooltip0:hover + .information{display:block;}
         #tooltip1:hover + .information{display:block;}
         #tooltip2:hover + .information{display:block;}
@@ -57,7 +58,6 @@
 
 </head>
 <body>
-{{post}}
 <div class="container">
     <br>
     <div class="container">
@@ -69,7 +69,6 @@
     </div>
     <h1>PowerBarcoder GUI</h1>
     <p class="lead">Please fill out the following form and submit to start the analysis.</p>
-    <!--    <form method="post" action="{{ url_for('start_data_procedure') }}">-->
     <form method="post">
         <div class="border border-gray p-3 bg-light">
             <div class="d-flex align-items-center">
@@ -83,7 +82,7 @@
             <div id="pathFormContainer" class="mt-3 collapse">
                 <!--                                <div class="form-group">-->
                 <!--                                    <label for="myCutadaptPath">Cutadapt path:</label>-->
-                <!--                                    <div class="row ">-->
+                <!--                                    <div class="row">-->
                 <!--                                        <div class="col-12">-->
                 <!--                                            <input type="text" class="form-control" id="myCutadaptPath" name="myCutadaptPath"-->
                 <!--                                                   placeholder='{{default_myCutadaptPath}}' disabled>-->
@@ -92,7 +91,7 @@
                 <!--                                </div>-->
                 <!--                <div class="form-group">-->
                 <!--                    <label for="myFastpPath">Fastp path:</label>-->
-                <!--                    <div class="row ">-->
+                <!--                    <div class="row">-->
                 <!--                        <div class="col-12">-->
                 <!--                            <input type="text" class="form-control" id="myFastpPath" name="myFastpPath"-->
                 <!--                                   placeholder="{{default_myFastpPath}}" disabled>-->
@@ -101,7 +100,7 @@
                 <!--                </div>-->
                 <!--                <div class="form-group">-->
                 <!--                    <label for="localBlastToolDir">Blast path:</label>-->
-                <!--                    <div class="row ">-->
+                <!--                    <div class="row">-->
                 <!--                        <div class="col-12">-->
                 <!--                            <input type="text" class="form-control" id="localBlastToolDir" name="localBlastToolDir"-->
                 <!--                                   placeholder="{{default_localBlastToolDir}}" disabled>-->
@@ -109,17 +108,8 @@
                 <!--                    </div>-->
                 <!--                </div>-->
                 <!--                <div class="form-group">-->
-                <!--                    <label for="ampliconInfo">NGS data path:</label>-->
-                <!--                    <div class="row ">-->
-                <!--                        <div class="col-12">-->
-                <!--                            <input type="text" class="form-control" id="ampliconInfo" name="ampliconInfo"-->
-                <!--                                   placeholder="{{default_ampliconInfo}}" disabled>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="form-group">-->
                 <!--                    <label for="resultDataPath">Result path:</label>-->
-                <!--                    <div class="row ">-->
+                <!--                    <div class="row">-->
                 <!--                        <div class="col-12">-->
                 <!--                            <input type="text" class="form-control" id="resultDataPath" name="resultDataPath"-->
                 <!--                                   placeholder="{{default_resultDataPath}}" disabled>-->
@@ -128,13 +118,33 @@
                 <!--                </div>-->
                 <!--                <div class="form-group">-->
                 <!--                    <label for="missList">Missing list path:</label>-->
-                <!--                    <div class="row ">-->
+                <!--                    <div class="row">-->
                 <!--                        <div class="col-12">-->
                 <!--                            <input type="text" class="form-control" id="missList" name="missList"-->
                 <!--                                   placeholder="{{default_missList}}" disabled>-->
                 <!--                        </div>-->
                 <!--                    </div>-->
                 <!--                </div>-->
+
+                <div class="form-group">
+                    <label for="ampliconInfo">
+                        <span id="tooltip99">Raw Files Folder Path: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The path of the raw data file within,
+                                including "R1 fastq.gz", "R2 fastq.gz",
+                                "Dada2 Barcode file", "Barcodes File 1",
+                                "Barcodes File 2", and "Sseqid File".
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control" id="ampliconInfo" name="ampliconInfo"
+                                   placeholder="{{default_ampliconInfo}}" onkeyup="addRawFolderPath()">
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="R1FastqGz">
                         <span id="tooltip0">R1 fastq.gz file path: <i class="fa fa-question-circle"></i></span>
@@ -144,8 +154,12 @@
                             </i>
                         </span>
                     </label>
-                    <div class="row ">
-                        <div class="col-12">
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath"
+                                   placeholder="{{TODO}}" disabled="disabled">
+                        </div>
+                        <div class="col">
                             <input type="text" class="form-control" id="R1FastqGz" name="R1FastqGz"
                                    placeholder="{{default_R1FastqGz}}">
                         </div>
@@ -160,8 +174,12 @@
                             </i>
                         </span>
                     </label>
-                    <div class="row ">
-                        <div class="col-12">
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath"
+                                   placeholder="{{TODO}}" disabled="disabled">
+                        </div>
+                        <div class="col">
                             <input type="text" class="form-control" id="R2FastqGz" name="R2FastqGz"
                                    placeholder="{{default_R2FastqGz}}">
                         </div>
@@ -169,14 +187,14 @@
                 </div>
                 <div class="form-group">
                      <label for="dada2LearnErrorFile">
-                        <span id="tooltip2">Dada2 Error File: <i class="fa fa-question-circle"></i></span>
+                        <span id="tooltip2">Dada2 Learn Error Files Folder Path: <i class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
                                 File path within the mounted folder for DADA2 learning error, remember to put the fastq files under this path
                             </i>
                         </span>
                     </label>
-                    <div class="row ">
+                    <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control" id="dada2LearnErrorFile" name="dada2LearnErrorFile"
                                    placeholder="{{default_dada2LearnErrorFile}}">
@@ -192,8 +210,12 @@
                             </i>
                         </span>
                     </label>
-                    <div class="row ">
-                        <div class="col-12">
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath"
+                                   placeholder="{{TODO}}" disabled="disabled">
+                        </div>
+                        <div class="col">
                             <input type="text" class="form-control" id="dada2BarcodeFile" name="dada2BarcodeFile"
                                    placeholder="{{default_dada2BarcodeFile}}">
                         </div>
@@ -215,7 +237,7 @@
                 // document.getElementById('myCutadaptPath').value='{{default_myCutadaptPath}}'
                 // document.getElementById('myFastpPath').value='{{default_myFastpPath}}'
                 // document.getElementById('localBlastToolDir').value='{{default_localBlastToolDir}}'
-                // document.getElementById('ampliconInfo').value='{{default_ampliconInfo}}'
+                document.getElementById('ampliconInfo').value='{{default_ampliconInfo}}'
                 // document.getElementById('resultDataPath').value='{{default_resultDataPath}}'
                 // document.getElementById('missList').value='{{default_missList}}'
                 document.getElementById('R1FastqGz').value = '{{default_R1FastqGz}}'
@@ -224,6 +246,7 @@
                 // document.getElementById('summaryHtmlFileName').value='{{default_summaryHtmlFileName}}'
                 document.getElementById('dada2LearnErrorFile').value = '{{default_dada2LearnErrorFile}}'
                 document.getElementById('dada2BarcodeFile').value = '{{default_dada2BarcodeFile}}'
+                addRawFolderPath()
             }
         </script>
 
@@ -250,7 +273,7 @@
                         </span>
                     </label>
 
-                    <div class="row ">
+                    <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control nameOfLoci" id="nameOfLoci" name="nameOfLoci"
                                    placeholder="{{default_nameOfLoci}}">
@@ -368,7 +391,11 @@
                     </label>
 
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath"
+                                   placeholder="{{TODO}}"  disabled="disabled">
+                        </div>
+                        <div class="col">
                             <input type="text" class="form-control barcodesFile1" id="barcodesFile1"
                                    name="barcodesFile1"
                                    placeholder="{{default_barcodesFile1}}">
@@ -384,19 +411,22 @@
                             </i>
                         </span>
                     </label>
-
                     <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control barcodesFile2"
-                                   id="barcodesFile2"
-                                   name="barcodesFile2"
-                                   placeholder="{{default_barcodesFile2}}">
+                        <div class="col">
+                                <input type="text" class="form-control rawFolderPath"
+                                       placeholder="{{TODO}}" disabled="disabled">
+                        </div>
+                        <div class="col">
+                                <input type="text" class="form-control barcodesFile2"
+                                       id="barcodesFile2"
+                                       name="barcodesFile2"
+                                       placeholder="{{default_barcodesFile2}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="sseqidFileName">
-                        <span id="tooltip13">Sseqid File Name: <i class="fa fa-question-circle"></i></span>
+                        <span id="tooltip13">Sseqid File: <i class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
                                 Library file within the mounted folder "../amplicon_data/" for local BLAST,
@@ -407,7 +437,11 @@
                     </label>
 
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath"
+                                   placeholder="{{TODO}}"  disabled="disabled">
+                        </div>
+                        <div class="col">
                             <input type="text" class="form-control sseqidFileName"
                                    id="sseqidFileName"
                                    name="sseqidFileName"
@@ -479,6 +513,7 @@
                 document.getElementById('sseqidFileName').value = '{{default_sseqidFileName}}'
                 document.getElementById('minimumLengthCutadaptorInLoop').value = '{{default_minimumLengthCutadaptorInLoop}}'
                 document.getElementById('customizedCoreNumber').value = '{{default_customizedCoreNumber}}'
+                addRawFolderPath()
             }
         </script>
 
@@ -565,7 +600,7 @@
                             // 'myCutadaptPath': $('#myCutadaptPath').val(),
                             // 'myFastpPath': $('#myFastpPath').val(),
                             // 'localBlastToolDir': $('#localBlastToolDir').val(),
-                            // 'ampliconInfo': $('#ampliconInfo').val(),
+                            'ampliconInfo': $('#ampliconInfo').val(),
                             // 'resultDataPath': $('#resultDataPath').val(),
                             // 'missList': $('#missList').val(),
                             'R1FastqGz': $('#R1FastqGz').val(),
@@ -658,7 +693,7 @@
             <div id="locusFormContainer${locusContainerCount.toString()}" class="mt-3  collapse">
                 <div class="form-group">
                     <label for="nameOfLoci">Name of Loci:</label>
-                    <div class="row ">
+                    <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control nameOfLoci" id="nameOfLoci" name="nameOfLoci">
                         </div>
@@ -720,7 +755,11 @@
                 <div class="form-group">
                     <label for="barcodesFile1">Barcodes File 1:</label>
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath"
+                                   placeholder="{{TODO}}"  disabled="disabled">
+                        </div>
+                        <div class="col">
                             <input type="text" class="form-control barcodesFile1" id="barcodesFile1"
                                    name="barcodesFile1">
                         </div>
@@ -729,7 +768,11 @@
                 <div class="form-group">
                     <label for="barcodesFile2">Barcodes File 2:</label>
                     <div class="row">
-                        <div class="col-12">
+                         <div class="col">
+                            <input type="text" class="form-control rawFolderPath"
+                                   placeholder="{{TODO}}"  disabled="disabled">
+                        </div>
+                        <div class="col">
                             <input type="text" class="form-control barcodesFile2"
                                    id="barcodesFile2"
                                    name="barcodesFile2">
@@ -737,9 +780,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="sseqidFileName">Sseqid File Name:</label>
+                    <label for="sseqidFileName">Sseqid File:</label>
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath"
+                                   placeholder="{{TODO}}"  disabled="disabled">
+                        </div>
+                        <div class="col">
                             <input type="text" class="form-control sseqidFileName"
                                    id="sseqidFileName"
                                    name="sseqidFileName">
@@ -786,5 +833,15 @@
     });
 
 </script>
+<script>
+    function addRawFolderPath() {
+        let rawFolderPathOriginDiv = document.getElementById("ampliconInfo");
+        let rawFolderPathDestinationDivCollection = document.getElementsByClassName("rawFolderPath");
+        for (let rawFolderPathDestinationDiv of rawFolderPathDestinationDivCollection){
+            rawFolderPathDestinationDiv.value = rawFolderPathOriginDiv.value;
+        }
+    }
+</script>
+
 </body>
 </html>

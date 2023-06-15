@@ -3,7 +3,7 @@
 . ./config.sh
 
 # trim the reads by fastp
-${myFastpPath}fastp -i ${R1FastqGz} -I ${R2FastqGz} -o ${resultDataPath}trim_R1FastqGz.gz -O ${resultDataPath}trim_R2FastqGz.gz -j ${resultDataPath}summary.json -h ${resultDataPath}summary.html
+${myFastpPath}fastp -i ${ampliconInfo}${R1FastqGz} -I ${ampliconInfo}${R2FastqGz} -o ${resultDataPath}trim_R1FastqGz.gz -O ${resultDataPath}trim_R2FastqGz.gz -j ${resultDataPath}summary.json -h ${resultDataPath}summary.html
 
 #yixuan modified for multiLoci
 for ((i=0; i<${#nameOfLoci[@]}; i++))

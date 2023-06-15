@@ -79,6 +79,7 @@ for (a in 1:ncol(AP)) {
   paste0(path_filter, "/filtered_", R1.names) -> filtFs
   paste0(path_filter, "/filtered_", R2.names) -> filtRs
 
+  # first step: filter
   # 這一步做pair，先用了r1的seq_along來迭代，可以改成指定數字， (this step is really slow)
   # 64s vs. 24s
   # Set the number of cores to utilize
@@ -95,10 +96,7 @@ for (a in 1:ncol(AP)) {
 
 
   # TODO 20230604 這裡開始不知道怎麼把"_"改成"_splitter_"，先擱置
-  #pair好的檔案開始處理 (用mulit-thread會重複獨到trimmed資料夾裡面的檔案，應該是取號重複的問題)
-  #pair reads
-
-
+  # second step: denoise
   numCores <- detectCores()
   registerDoParallel(cores = numCores)
   foreach(sample_number = 1:nrow(amplicon), .packages = c("dplyr")) %dopar% { #TODO 20230421 we can use multi-thread to speed up
@@ -145,7 +143,7 @@ for (a in 1:ncol(AP)) {
 
 
 
-      # 請DADA2對r1 r2 merge (necessary)
+      # third step: 請DADA2對r1 r2 merge (necessary)
       tryCatch({
         mergers <- mergePairs(dadaFs, r1, dadaRs, r2, minOverlap = minoverlap, verbose = TRUE)
       }, error = function(e) {
@@ -188,7 +186,7 @@ for (a in 1:ncol(AP)) {
 
 
 
-      # 請DADA2對r1 r2 做10N拼接 (unnecessary, because pyhton can do too)
+      # fourth step: 請DADA2對r1 r2 做10N拼接 (unnecessary, because pyhton can do too)
       tryCatch({
         nonmergers <- mergePairs(dadaFs, r1, dadaRs, r2, verbose = TRUE, justConcatenate = TRUE) #Kuo_modified in following lines else
       }, error = function(e) {
