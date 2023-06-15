@@ -27,7 +27,7 @@ def parsingYmlToShell():
     script += f"myCutadaptPath=/venv/cutadapt-venv/bin/\n"
     script += f"myFastpPath=/usr/local/bin/\n"
     script += f"localBlastToolDir=/usr/local/bin/\n"
-    script += f"ampliconInfo=/PowerBarcoder/data/amplicon_data/\n"
+    script += f"ampliconInfo={config['ampliconInfo']}\n" # ampliconInfo
     script += f"resultDataPath=/PowerBarcoder/data/result/$datetime\n"
     script += f"missList=/PowerBarcoder/data/missingList.txt\n"
     script += f"R1FastqGz={config['R1FastqGz']}\n"  # R1FastqGz
