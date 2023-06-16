@@ -19,7 +19,7 @@ echo "[INFO] end illumina_PE_demultiplex"
 # # -----------------------3. denoise-------------------------
 cd ${workingDirectory}
 echo "[INFO] start dada2_denoise"
-Rscript ${workingDirectory}dada2_denoise_PE_newprimer.r $ampliconInfo $workingDirectory $resultDataPath $dada2LearnErrorFile $dada2BarcodeFile ${nameOfLoci[@]}
+Rscript "${workingDirectory}dada2_denoise_PE_newprimer.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$dada2LearnErrorFile" "$dada2BarcodeFile" "${nameOfLoci[@]}"
 echo "[INFO] end dada2_denoise"
 # # ----------------------------------------------------------
 

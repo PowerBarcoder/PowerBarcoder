@@ -1,13 +1,13 @@
 #!/bin/bash
-datetime=202306141553'/'
+datetime=202306161621'/'
 myCutadaptPath=/venv/cutadapt-venv/bin/
 myFastpPath=/usr/local/bin/
 localBlastToolDir=/usr/local/bin/
 ampliconInfo=/PowerBarcoder/data/amplicon_data/
 resultDataPath=/PowerBarcoder/data/result/$datetime
 missList=/PowerBarcoder/data/missingList.txt
-R1FastqGz=/PowerBarcoder/data/amplicon_data/RUN1-5_R1.fastq.gz
-R2FastqGz=/PowerBarcoder/data/amplicon_data/RUN1-5_R2.fastq.gz
+R1FastqGz=RUN1-5_R1.fastq.gz
+R2FastqGz=RUN1-5_R2.fastq.gz
 summaryJsonFileName=quality.json
 summaryHtmlFileName=quality.html
 dada2LearnErrorFile=/PowerBarcoder/data/dada2LearnErrorFile/
