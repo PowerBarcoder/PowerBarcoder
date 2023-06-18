@@ -1,5 +1,5 @@
 #!/bin/bash
-datetime=202306161621'/'
+datetime=202306181609'/'
 myCutadaptPath=/venv/cutadapt-venv/bin/
 myFastpPath=/usr/local/bin/
 localBlastToolDir=/usr/local/bin/
@@ -8,8 +8,8 @@ resultDataPath=/PowerBarcoder/data/result/$datetime
 missList=/PowerBarcoder/data/missingList.txt
 R1FastqGz=RUN1-5_R1.fastq.gz
 R2FastqGz=RUN1-5_R2.fastq.gz
-summaryJsonFileName=quality.json
-summaryHtmlFileName=quality.html
+summaryJsonFileName=summary.json
+summaryHtmlFileName=summary.html
 dada2LearnErrorFile=/PowerBarcoder/data/dada2LearnErrorFile/
 dada2BarcodeFile=multiplex_cpDNAbarcode_clean.txt
 nameOfLoci+=(rbcLN)

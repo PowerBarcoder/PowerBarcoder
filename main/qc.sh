@@ -11,6 +11,7 @@ echo "[INFO] Start generating quality control report !"
 
 bash ./qcModule/fileLister.sh
 bash ./qcModule/csvParser.sh
-python3 ./qcModule/networkVisualizer.py
+python3 ./qcModule/networkVisualizer.py "$resultDataPath" "${nameOfLoci[i]}"
+
 echo "[INFO] End of generating quality control report !"
 
