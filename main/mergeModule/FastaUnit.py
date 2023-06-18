@@ -61,7 +61,7 @@ class FastaUnit:
     get file name from path without extension
     """
 
-    def getFileNameFromPath(path):
+    def getFileNameFromPath(self, path):
         fileName = ""
         if "/" in path:
             fileName = path.split("/")[-1]
@@ -73,7 +73,7 @@ class FastaUnit:
     get file extension from path
     """
 
-    def getFileExtensionFromPath(path):
+    def getFileExtensionFromPath(self, path):
         extension = ""
         if "/" in path:
             extension = path.split(".")[-1]
@@ -88,7 +88,6 @@ class FastaUnit:
         fileName = self.getFileNameFromPath(loadPath)
         extension = self.getFileExtensionFromPath(loadPath)
         count = len(open(loadPath).readlines())
-        print(count)
         bufferedText = ""
         fileSerialNumber = 1
         for i in range(1, count + 1):

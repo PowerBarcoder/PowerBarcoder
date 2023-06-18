@@ -22,10 +22,12 @@ from os import listdir
 from os.path import isfile, join
 import sys
 import linecache
+from FastaUnit import FastaUnit
 
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
 
 loadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/"
+splitPath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/split/"
 r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/r1/"
 r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/r2/"
 
@@ -54,24 +56,38 @@ def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
 
 
 # 取得所有檔案與子目錄名稱
-files = listdir(loadpath)
-# 創建要處理的清單
-candidate_list = set()
+rawFiles = listdir(loadpath)
+# 先把fasta file按abundance切分成個別檔案，檔名用流水號編
+nCatFastaFile = FastaUnit()
+for filename in rawFiles:
+    fullpath = join(loadpath, filename)
+    if isfile(fullpath):
+        nCatFastaFile.splitMulitpleSeqFastaIntoFiles(fullpath,splitPath)
+
+# 檔名用header替換
+splitFiles = listdir(splitPath)
+for filename in splitFiles:
+    fullpath = join(splitPath, filename)
+    if isfile(fullpath):
+        nCatFastaFile.replaceFilenameWithHeader(fullpath,splitPath,True)
+
+# 取得切分後所有檔案與子目錄名稱
+splitFiles = listdir(splitPath)
 # 以迴圈處理
 processFileNumber = 0
-for filename in files:
+for filename in splitFiles:
     # 產生檔案的絕對路徑
-    fullpath = join(loadpath, filename)
+    fullpath = join(splitPath, filename)
     # 判斷 fullpath 是檔案還是目錄
     if isfile(fullpath) and ('.fas' in filename[-4:]):
         # print("檔案：", filename)
-        nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath)  # 切檔
+        nn_spliter(splitPath, filename, r1_outputLoadpath, r2_outputLoadpath)  # 切檔
         processFileNumber += 1
     else:  # 20230415 可以考慮把r1,r2,r1ref,r2ref,mergeSeq,deGapMergeSeq,align都先排除
         print("[WARNING]" + filename, "is not a file or the filename is not end with .fas")
-print("[INFO]" + str(processFileNumber), " files are split.")
+print("[INFO] " + str(processFileNumber), " files are split.")
 
-print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
+print("[INFO] nnSpliter.py is ended on loci: " + sys.argv[2])
 
 # --------------------------------prototype--------------------------------
 # # sample data

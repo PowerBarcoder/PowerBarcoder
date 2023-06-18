@@ -67,3 +67,15 @@ else
     echo "[INFO] mafft installed"
 fi
 
+
+# check seqkit
+wherewIsSeqkit=$(whereis seqkit)
+checkSeqkit=${#wherewIsSeqkit}
+lengthOfSeqkit=10
+# echo $(whereis cutadapt|#)
+if [ $checkSeqkit -le $lengthOfSeqkit ];
+then
+    exit "[WARNING] Pipeline terminated because seqkit is not found"
+else
+    echo "[INFO] seqkit installed"
+fi
