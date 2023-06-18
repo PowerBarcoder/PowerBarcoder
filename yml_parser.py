@@ -32,8 +32,8 @@ def parsingYmlToShell():
     script += f"missList=/PowerBarcoder/data/missingList.txt\n"
     script += f"R1FastqGz={config['R1FastqGz']}\n"  # R1FastqGz
     script += f"R2FastqGz={config['R2FastqGz']}\n"  # R2FastqGz
-    script += f"summaryJsonFileName=quality.json\n"
-    script += f"summaryHtmlFileName=quality.html\n"
+    script += f"summaryJsonFileName=summary.json\n"
+    script += f"summaryHtmlFileName=summary.html\n"
     script += f"dada2LearnErrorFile={config['dada2LearnErrorFile']}\n"  # dada2LearnErrorFile
     script += f"dada2BarcodeFile={config['dada2BarcodeFile']}\n"  # dada2BarcodeFile
 
