@@ -561,6 +561,8 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12 d-md-flex justify-content-md-end">
+                            <button class=" btn btn-primary" id="saveButton">Save Execution Log</button>
+                            <span>&nbsp</span>
                             <input type="beautify" id="beautify" class=" btn btn-success" value="Dark Mode">
                         </div>
                     </div>
@@ -574,6 +576,26 @@
                     </code>
                 </pre>
                 </div>
+
+                <!--    save the execution log   -->
+                <script>
+                    document.getElementById('saveButton').addEventListener('click', function () {
+                        let codeElement = document.getElementById('console');
+                        let innerText = codeElement.innerText.replace("                    [", "[");
+                        // Create a temporary anchor element to trigger the file download
+                        let downloadLink = document.createElement('a');
+                        downloadLink.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(innerText);
+                        downloadLink.download = 'log.txt';
+                        downloadLink.style.display = 'none';
+                        document.body.appendChild(downloadLink);
+                        // Simulate a click on the anchor element to trigger the file download
+                        downloadLink.click();
+                        // Clean up the temporary anchor element
+                        document.body.removeChild(downloadLink);
+                    });
+                </script>
+
+
                 <script>
                     var socket = io.connect('{{ request.host_url }}', {
                         withCredentials: true,
