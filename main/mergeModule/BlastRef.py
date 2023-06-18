@@ -46,7 +46,7 @@ class BlastRef:
 
     def blastRef(self, load_dir, loci_name):
         List = []
-        # 製作所有key的清單
+        # step 1: 製作所有key的清單
         i = 1
         text = lc.getline(load_dir + loci_name + "_refResult.txt", 1)
         while len(text) > 1:
@@ -71,9 +71,12 @@ class BlastRef:
             # # 當前的名      ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
             # # 實際r1的名    ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
 
-            # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
-            queryName = qseqidSplitList[:-5][-1] + "_" + qseqidSplitList[:-5][-2] + "_" + "_".join(
-                qseqidSplitList[:-5][:-2]) + "_.fas"
+
+            # 20230619 因為所有abundance都要做，所以檔名直接用textList[0]，不用再parsing了
+            queryName = textList[0] + ".fas"
+            # # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
+            # queryName = qseqidSplitList[:-5][-1] + "_" + qseqidSplitList[:-5][-2] + "_" + "_".join(
+            #     qseqidSplitList[:-5][:-2]) + "_.fas"
 
             List.append(queryName)
 
@@ -101,7 +104,7 @@ class BlastRef:
         #  15.   rWhoList(r1或r2)
         #  16.   refList(???)
 
-        # 接上，將value一一貼到key的list裡
+        # step 2: 接上，將value一一貼到key的list裡
         i = 1
         text = lc.getline(load_dir + loci_name + "_refResult.txt", 1)
         while len(text) > 1:
@@ -132,10 +135,14 @@ class BlastRef:
             # # 當前的名      ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
             # # 實際r1的名    ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
 
-            #
-            # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
-            queryName = qseqidSplitList[:-5][-1] + "_" + qseqidSplitList[:-5][-2] + "_" + "_".join(
-                qseqidSplitList[:-5][:-2]) + "_.fas"
+
+            # 20230619 因為所有abundance都要做，所以檔名直接用textList[0]，不用再parsing了
+            queryName = textList[0] + ".fas"
+            # # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
+            # queryName = qseqidSplitList[:-5][-1] + "_" + qseqidSplitList[:-5][-2] + "_" + "_".join(
+            #     qseqidSplitList[:-5][:-2]) + "_.fas"
+
+
             # TODO 這邊取出abundance最高的
 
             qseqid = queryName

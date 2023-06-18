@@ -200,7 +200,7 @@ for (a in 1:ncol(AP)) {
       if (nrow(nonmergers) > 0) {
         # parsing
         sum(nonmergers$abundance) -> clustersum
-        paste0(rep(header, length(nonmergers$abundance)), "_", numbers[1:length(nonmergers$abundance)], rep("_", length(nonmergers$abundance)), sprintf(nonmergers$abundance / clustersum, fmt = '%#.3f'), rep("_abundance_", length(nonmergers$abundance)), nonmergers$abundance, rep("_10Ncat", length(nonmergers$abundance))) -> nonmerglist
+        paste0(rep(header, length(nonmergers$abundance)), "_", numbers[1:length(nonmergers$abundance)], rep("_", length(nonmergers$abundance)), sprintf(nonmergers$abundance / clustersum, fmt = '%#.3f'), rep("_abundance_", length(nonmergers$abundance)), nonmergers$abundance ) -> nonmerglist
         as.matrix(nonmergers) -> nonmergers.table
         cbind(nonmerglist, nonmergers.table) -> fascat #Kuo_modified
         matrix(fascat, ncol = 10) -> fascat
