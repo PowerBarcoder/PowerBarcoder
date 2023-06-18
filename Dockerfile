@@ -32,6 +32,10 @@ RUN apt-get update && \
     curl -O https://mafft.cbrc.jp/alignment/software/mafft-7.520-gcc_fc6.x86_64.rpm && \
     rpm -Uvh mafft-7.520-gcc_fc6.x86_64.rpm
 
+# install seqkit \
+RUN apt-get update && \
+    apt-get install -y seqkit
+
 # install Python dependencies
 WORKDIR /PowerBarcoder
 COPY requirements.txt requirements.txt
