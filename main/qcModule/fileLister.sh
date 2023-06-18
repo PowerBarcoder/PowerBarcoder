@@ -2,9 +2,8 @@
 
 . ./config.sh
 
-echo "[INFO] Start generating quality control report !"
-
-echo "------------------------------------Raw data------------------------------------" >> ""${resultDataPath}/qcReport.txt""
+echo "[INFO] Start to collect all files !"
+echo "------------------------------------Raw data------------------------------------" >> "${resultDataPath}/qcReport.txt"
 seqkit stats "${ampliconInfo}${R1FastqGz}" >> "${resultDataPath}/qcReport.txt"
 seqkit stats "${ampliconInfo}${R2FastqGz}" >> "${resultDataPath}/qcReport.txt"
 echo "--------------------------------------------------------------------------------" >> "${resultDataPath}/qcReport.txt"
@@ -50,12 +49,4 @@ echo "--------------------------------------------------------------------------
 echo "----------------------------------Merger merge----------------------------------" >> "${resultDataPath}/qcReport.txt"
 ls "${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/merged" >> "${resultDataPath}/qcReport.txt"
 echo "--------------------------------------------------------------------------------" >> "${resultDataPath}/qcReport.txt"
-
-#rm -r "${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/nCatR1R2"
-#rm -r "${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/r1"
-#rm -r "${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/r2"
-#rm -r "${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/aligned"
-
-python3 ./qcModule/missingList.py
-
-echo "[INFO] End of generating quality control report !"
+echo "[INFO] End of collecting all files !"
