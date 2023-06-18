@@ -71,8 +71,8 @@ def home():
     default_missList = "/PowerBarcoder/data/missingList.txt"
     default_R1FastqGz = "RUN1-5_R1.fastq.gz"
     default_R2FastqGz = "RUN1-5_R2.fastq.gz"
-    default_summaryJsonFileName = "quality.json"
-    default_summaryHtmlFileName = "quality.html"
+    default_summaryJsonFileName = "summary.json"
+    default_summaryHtmlFileName = "summary.html"
     default_dada2LearnErrorFile = "/PowerBarcoder/data/dada2LearnErrorFile/"
     default_dada2BarcodeFile = "multiplex_cpDNAbarcode_clean.txt"
 
