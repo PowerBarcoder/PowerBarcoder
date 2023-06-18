@@ -13,3 +13,5 @@ python-socketio==5.8.0
 PyYAML==6.0
 six==1.16.0
 Werkzeug==2.2.3
+pyvis==0.3.2
+networkx==3.1
