@@ -14,6 +14,7 @@ for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/blastResult
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult
+  mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/qcResult
   # create Layer 3rd folders
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/untrimmed
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/trimmed

@@ -3,7 +3,7 @@ from pyvis.network import Network
 from networkx.algorithms import bipartite
 import sys
 
-loadpath = sys.argv[1]
+loadpath = sys.argv[1]+sys.argv[2]+"_result/qcResult/"
 # loadpath = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202306181609/"
 
 # Create a new graph
