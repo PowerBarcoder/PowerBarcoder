@@ -104,7 +104,8 @@ for (a in 1:ncol(AP)) {
     r1 = paste0(path_filter, "/filtered_trim_", region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp], "_r1.fq")
     r2 = paste0(path_filter, "/filtered_trim_", region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp], "_r2.fq")
     r0 = paste0(amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp])
-    filename = paste(amplicon[sample_number, 1], amplicon[sample_number, 2], amplicon[sample_number, 3], amplicon[sample_number, 4], ".fas", sep = "_")  #看起來應該就是檔名了
+    # filename = paste(amplicon[sample_number, 1], amplicon[sample_number, 2], amplicon[sample_number, 3], amplicon[sample_number, 4], ".fas", sep = "_")  #看起來應該就是檔名了
+    filename = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], ".fas", sep = "_")    #20230623 檔名改跟header一樣
     seqname = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")           #這個式header的文字
     header = paste0(">", seqname)#加上了header的符號
 
@@ -141,6 +142,12 @@ for (a in 1:ncol(AP)) {
       # write.table(r2fas[, 1:2], file = paste0(path_merge, "/r2/", r0), append = FALSE, sep = "\n", quote = FALSE,
       #             row.names = FALSE, col.names = FALSE)
 
+      # 順便存一個(barcodeName,sampleName)的namePair list
+      barcode_name = paste0(region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp])
+      sample_name = paste0(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")
+      name_pair = paste0(barcode_name, ",", sample_name, sep = ",")
+      write.table(name_pair, file = paste0(path_denoise, "/denoise_pairs.txt"), append = TRUE, sep = "\n", quote = FALSE,
+                  row.names = FALSE, col.names = FALSE)
 
 
       # third step: 請DADA2對r1 r2 merge (necessary)
