@@ -28,7 +28,7 @@ def parsingYmlToShell():
     script += f"myFastpPath='/usr/local/bin/'\n"
     script += f"localBlastToolDir='/usr/local/bin/'\n"
     script += f"ampliconInfo='{config['ampliconInfo']}'\n" # ampliconInfo
-    script += f"resultDataPath='/PowerBarcoder/data/result/$datetime'\n"
+    script += f"resultDataPath='/PowerBarcoder/data/result/'$datetime\n"
     script += f"missList='/PowerBarcoder/data/missingList.txt'\n"
     script += f"R1FastqGz='{config['R1FastqGz']}'\n"  # R1FastqGz
     script += f"R2FastqGz='{config['R2FastqGz']}'\n"  # R2FastqGz
