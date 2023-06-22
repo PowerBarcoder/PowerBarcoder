@@ -313,8 +313,9 @@ for filename in candidate_list:
             merge_seq=merge_seq.replace("-","")
             
         # 步驟六：收尾  # print(merge_seq)
-        output_filename=filename.replace("_.fas","")
-        output_filename=output_filename+"_"+r1_header_name+"_"+r2_header_name
+        output_filename=filename.replace(".fas","")
+        # 20230623 不parsing了，因為10Ncat後，兩邊abundance是一樣的
+        # output_filename=output_filename+"_"+r1_header_name+"_"+r2_header_name
 
         # (deprecated 20230611)
         # merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n" #處理mergeseq
