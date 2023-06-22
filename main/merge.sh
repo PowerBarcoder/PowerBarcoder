@@ -29,7 +29,7 @@ for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
     # 20230215 10N，reverse complement已確認是只轉ref的部分
     python3 ./mergeModule/alignmentPretreater.py "$ampliconInfo" "${sseqidFileName[i]}" "$resultDataPath" "${nameOfLoci[i]}"
     python3 ./mergeModule/alignmenter.py "$ampliconInfo" "$resultDataPath" "${nameOfLoci[i]}"
-    python3 ./mergeModule/merge.py "$ampliconInfo" "$resultDataPath" "${nameOfLoci[i]}"
+    python3 ./mergeModule/merger.py "$ampliconInfo" "$resultDataPath" "${nameOfLoci[i]}"
 
   else #沒有的就跳過
     echo "[WARNING] no nonmerged files found in ${nameOfLoci[i]}"

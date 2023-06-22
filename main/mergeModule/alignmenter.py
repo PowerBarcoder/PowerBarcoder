@@ -62,7 +62,7 @@ with open(fastaFile, "r") as file:
 
 # [2023-04-20] mafft的結果要變單行且皆為大寫
 # 1. (X)可用"--keeplowercase" 保留小寫,但其他全都維持大寫
-# 2. (V)在merge.py內全轉大寫即可
-# 3. (V)換行在merge.py內處理，呼叫fastaUnit()處理即可
+# 2. (V)在merger.py內全轉大寫即可
+# 3. (V)換行在merger.py內處理，呼叫fastaUnit()處理即可
 
 print("[INFO] alignmenter.py is ended on loci: " + sys.argv[3])
