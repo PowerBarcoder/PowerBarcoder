@@ -1,81 +1,69 @@
 # ! /bin/bash
 
-
 echo "[INFO] checking reuirement..."
 
- # check fastp
+# check fastp
 wherewIsFastp=$(whereis fastp)
 checkFastp=${#wherewIsFastp}
 lengthOfFastp=10
 # echo $(whereis fastp|#)
-if [ $checkFastp -le $lengthOfFastp ];
-then
-    exit "[WARNING] Pipeline terminated because fastp is not found"
+if [ $checkFastp -le $lengthOfFastp ]; then
+  exit "[WARNING] Pipeline terminated because fastp is not found"
 else
-    echo "[INFO] fastp installed"
+  echo "[INFO] fastp installed"
 fi
-
 
 # check cutadapt
 wherewIsCutadapt=$(whereis cutadapt)
 checkCutadapt=${#wherewIsCutadapt}
 lengthOfCutadapt=10
 # echo $(whereis cutadapt|#)
-if [ $checkCutadapt -le $lengthOfCutadapt ]; 
-then
-    exit "[WARNING] Pipeline terminated because cutadapt is not found"
+if [ $checkCutadapt -le $lengthOfCutadapt ]; then
+  exit "[WARNING] Pipeline terminated because cutadapt is not found"
 else
-    echo "[INFO] cutadapt installed"
+  echo "[INFO] cutadapt installed"
 fi
-
 
 # check makeblastdb
 wherewIsMakeblastdb=$(whereis makeblastdb)
 checkMakeblastdb=${#wherewIsMakeblastdb}
 lengthOfMakeblastdb=12
 # echo $(whereis cutadapt|#)
-if [ $checkMakeblastdb -le $lengthOfMakeblastdb ];
-then
-    exit "[WARNING] Pipeline terminated because makeblastdb is not found"
+if [ $checkMakeblastdb -le $lengthOfMakeblastdb ]; then
+  exit "[WARNING] Pipeline terminated because makeblastdb is not found"
 else
-    echo "[INFO] makeblastdb installed"
+  echo "[INFO] makeblastdb installed"
 fi
-
 
 # check blastn
 wherewIsBlastn=$(whereis blastn)
 checkBlastn=${#wherewIsBlastn}
 lengthOfBlastn=7
 # echo $(whereis cutadapt|#)
-if [ $checkBlastn -le $lengthOfBlastn ];
-then
-    exit "[WARNING] Pipeline terminated because blastn is not found"
+if [ $checkBlastn -le $lengthOfBlastn ]; then
+  exit "[WARNING] Pipeline terminated because blastn is not found"
 else
-    echo "[INFO] blastn installed"
+  echo "[INFO] blastn installed"
 fi
-
 
 # check mafft
 wherewIsMafft=$(whereis mafft)
 checkMafft=${#wherewIsMafft}
 lengthOfMafft=6
 # echo $(whereis cutadapt|#)
-if [ $checkMafft -le $lengthOfMafft ];
-then
-    exit "[WARNING] Pipeline terminated because mafft is not found"
+if [ $checkMafft -le $lengthOfMafft ]; then
+  exit "[WARNING] Pipeline terminated because mafft is not found"
 else
-    echo "[INFO] mafft installed"
+  echo "[INFO] mafft installed"
 fi
-
 
 # check seqkit
 wherewIsSeqkit=$(whereis seqkit)
 checkSeqkit=${#wherewIsSeqkit}
 lengthOfSeqkit=10
 # echo $(whereis cutadapt|#)
-if [ $checkSeqkit -le $lengthOfSeqkit ];
-then
-    exit "[WARNING] Pipeline terminated because seqkit is not found"
+if [ $checkSeqkit -le $lengthOfSeqkit ]; then
+  exit "[WARNING] Pipeline terminated because seqkit is not found"
 else
-    echo "[INFO] seqkit installed"
+  echo "[INFO] seqkit installed"
 fi
