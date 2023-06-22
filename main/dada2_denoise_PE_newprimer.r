@@ -143,9 +143,9 @@ for (a in 1:ncol(AP)) {
       #             row.names = FALSE, col.names = FALSE)
 
       # 順便存一個(barcodeName,sampleName)的namePair list
-      barcode_name = paste0(region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp])
-      sample_name = paste0(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")
-      name_pair = paste0(barcode_name, ",", sample_name, sep = ",")
+      barcode_name = paste(region, amplicon[sample_number, Fp], amplicon[sample_number, Rp], sep = "_")
+      sample_name = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")
+      name_pair = paste(barcode_name, sample_name, sep = ",")
       write.table(name_pair, file = paste0(path_denoise, "/denoise_pairs.txt"), append = TRUE, sep = "\n", quote = FALSE,
                   row.names = FALSE, col.names = FALSE)
 
