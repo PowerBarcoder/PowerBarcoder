@@ -559,137 +559,140 @@
                 <h5 class="modal-title" id="exampleModalLabel">Form submitted successfully!</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm">
-                            <button class="btn btn-primary" id="saveButton">Save Execution Log</button>
-                        </div>
-                        <div class="col-sm d-md-flex justify-content-md-end">
-                            <span>&nbsp</span>
-                            <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" role="switch" id="darkModeToggle">
-                              <label class="form-check-label" for="darkModeToggle">Dark Mode</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-body" id="modalBodyDiv" style="padding-bottom: 0rem">
                 <div class="text-center mb-3">
-                    <!--                    <img src="/static/loading.gif" alt="Loading"/>-->
                 </div>
-                <div>
-                <pre>
-                    <code class="shellsession" id="console">
+                <div id="consoleDiv">
+                <pre style="margin-bottom: 0rem">
+                    <code class="shellsession" id="console" style="padding-bottom: 0em">
                     </code>
                 </pre>
                 </div>
-
-                <!--    save the execution log   -->
-                <script>
-                    document.getElementById('saveButton').addEventListener('click', function () {
-                        let codeElement = document.getElementById('console');
-                        let innerText = codeElement.innerText.replace("                    [", "[").replaceAll("<","&lt;").replaceAll(">","&gt;");
-                        // Create a temporary anchor element to trigger the file download
-                        let downloadLink = document.createElement('a');
-                        downloadLink.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(innerText);
-                        downloadLink.download = 'log.txt';
-                        downloadLink.style.display = 'none';
-                        document.body.appendChild(downloadLink);
-                        // Simulate a click on the anchor element to trigger the file download
-                        downloadLink.click();
-                        // Clean up the temporary anchor element
-                        document.body.removeChild(downloadLink);
-                    });
-                </script>
-
-
-                <script>
-                    var socket = io.connect('{{ request.host_url }}', {
-                        withCredentials: true,
-                    });
-
-                    socket.on('procedure-result', function (data) {
-                        // update console with data
-                        $("#console").append(data);
-                        // console.log(data);
-                        // Scroll to the bottom of the output div
-                        // $("#console").scrollTop = $("#console").scrollHeight;
-                    });
-
-                    $('#darkModeToggle').on("change", function (event) {
-                        if ($(this).is(":checked")) {
-                            hljs.highlightAll();
-                        } else {
-                            $('.hljs').removeClass('hljs');
-                        }
-                    });
-
-                    $(document).on("submit", 'form', function (event) {
-                        // Prevent default form submission
-                        event.preventDefault();
-
-                        // Collect form data
-                        const formData = {
-                            // 'myCutadaptPath': $('#myCutadaptPath').val(),
-                            // 'myFastpPath': $('#myFastpPath').val(),
-                            // 'localBlastToolDir': $('#localBlastToolDir').val(),
-                            'ampliconInfo': $('#ampliconInfo').val(),
-                            // 'resultDataPath': $('#resultDataPath').val(),
-                            // 'missList': $('#missList').val(),
-                            'R1FastqGz': $('#R1FastqGz').val(),
-                            'R2FastqGz': $('#R2FastqGz').val(),
-                            // 'summaryJsonFileName': $('#summaryJsonFileName').val(),
-                            // 'summaryHtmlFileName': $('#summaryHtmlFileName').val(),
-                            'dada2LearnErrorFile': $('#dada2LearnErrorFile').val(),
-                            'dada2BarcodeFile': $('#dada2BarcodeFile').val(),
-                            'nameOfLoci': $('.nameOfLoci').map(function () {
-                                return $(this).val();
-                            }).get(),
-                            'errorRateCutadaptor': $('.errorRateCutadaptor').map(function () {
-                                return $(this).val();
-                            }).get(),
-                            'minimumLengthCutadaptor': $('.minimumLengthCutadaptor').map(function () {
-                                return $(this).val();
-                            }).get(),
-                            'primerF': $('.primerF').map(function () {
-                                return $(this).val();
-                            }).get(),
-                            'primerR': $('.primerR').map(function () {
-                                return $(this).val();
-                            }).get(),
-                            // 'amplicon_r1': $('.amplicon_r1').map(function () {
-                            //     return $(this).val();
-                            // }).get(),
-                            // 'amplicon_r2': $('.amplicon_r2').map(function () {
-                            //     return $(this).val();
-                            // }).get(),
-                            'barcodesFile1': $('.barcodesFile1').map(function () {
-                                return $(this).val();
-                            }).get(),
-                            'barcodesFile2': $('.barcodesFile2').map(function () {
-                                return $(this).val();
-                            }).get(),
-                            'sseqidFileName': $('.sseqidFileName').map(function () {
-                                return $(this).val();
-                            }).get(),
-                            'minimumLengthCutadaptorInLoop': $('.minimumLengthCutadaptorInLoop').map(function () {
-                                return $(this).val();
-                            }).get(),
-                            'customizedCoreNumber': $('.customizedCoreNumber').map(function () {
-                                return $(this).val();
-                            }).get(),
-                        }
-
-                        // Serialize form data
-                        // let formData = $('form').serialize();
-                        console.log(formData)
-                        // Show the modal
-                        $("#myModal").modal("show")
-                        $("#showModalButton").removeClass("d-none")
-                        socket.emit('run-procedure', formData);
-                    });
-                </script>
             </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+                            <span>&nbsp</span>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="darkModeToggle">
+                                <label class="form-check-label" for="darkModeToggle">Dark Mode</label>
+                            </div>
+                        </div>
+                        <div class="col-sm d-md-flex justify-content-md-end">
+                            <button class="btn btn-primary" id="saveButton">Save Execution Log</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--    save the execution log   -->
+            <script>
+                document.getElementById('saveButton').addEventListener('click', function () {
+                    let codeElement = document.getElementById('console');
+                    let innerText = codeElement.innerText.replace("                    [", "[").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+                    // Create a temporary anchor element to trigger the file download
+                    let downloadLink = document.createElement('a');
+                    downloadLink.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(innerText);
+                    downloadLink.download = 'log.txt';
+                    downloadLink.style.display = 'none';
+                    document.body.appendChild(downloadLink);
+                    // Simulate a click on the anchor element to trigger the file download
+                    downloadLink.click();
+                    // Clean up the temporary anchor element
+                    document.body.removeChild(downloadLink);
+                });
+            </script>
+            <script>
+                let socket = io.connect('{{ request.host_url }}', {
+                    withCredentials: true,
+                });
+
+                socket.on('procedure-result', function (data) {
+                    // update console with data
+                    $("#console").append(data);
+                    // Scroll to the bottom of the output div
+                    let consoleDiv = document.getElementById('consoleDiv');
+                    let modalBodyDiv = document.getElementById('modalBodyDiv');
+                    modalBodyDiv.scrollTo({
+                        top: consoleDiv.scrollHeight,
+                        behavior: 'smooth'
+                    })
+                });
+
+                $('#darkModeToggle').on("change", function (event) {
+                    if ($(this).is(":checked")) {
+                        hljs.highlightAll();
+                    } else {
+                        $('.hljs').removeClass('hljs');
+                    }
+                });
+
+                $(document).on("submit", 'form', function (event) {
+                    // Prevent default form submission
+                    event.preventDefault();
+
+                    // Collect form data
+                    const formData = {
+                        // 'myCutadaptPath': $('#myCutadaptPath').val(),
+                        // 'myFastpPath': $('#myFastpPath').val(),
+                        // 'localBlastToolDir': $('#localBlastToolDir').val(),
+                        'ampliconInfo': $('#ampliconInfo').val(),
+                        // 'resultDataPath': $('#resultDataPath').val(),
+                        // 'missList': $('#missList').val(),
+                        'R1FastqGz': $('#R1FastqGz').val(),
+                        'R2FastqGz': $('#R2FastqGz').val(),
+                        // 'summaryJsonFileName': $('#summaryJsonFileName').val(),
+                        // 'summaryHtmlFileName': $('#summaryHtmlFileName').val(),
+                        'dada2LearnErrorFile': $('#dada2LearnErrorFile').val(),
+                        'dada2BarcodeFile': $('#dada2BarcodeFile').val(),
+                        'nameOfLoci': $('.nameOfLoci').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'errorRateCutadaptor': $('.errorRateCutadaptor').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'minimumLengthCutadaptor': $('.minimumLengthCutadaptor').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'primerF': $('.primerF').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'primerR': $('.primerR').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        // 'amplicon_r1': $('.amplicon_r1').map(function () {
+                        //     return $(this).val();
+                        // }).get(),
+                        // 'amplicon_r2': $('.amplicon_r2').map(function () {
+                        //     return $(this).val();
+                        // }).get(),
+                        'barcodesFile1': $('.barcodesFile1').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'barcodesFile2': $('.barcodesFile2').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'sseqidFileName': $('.sseqidFileName').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'minimumLengthCutadaptorInLoop': $('.minimumLengthCutadaptorInLoop').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'customizedCoreNumber': $('.customizedCoreNumber').map(function () {
+                            return $(this).val();
+                        }).get(),
+                    }
+
+                    // Serialize form data
+                    // let formData = $('form').serialize();
+                    console.log(formData)
+
+                    // Show the modal
+                    $("#myModal").modal("show")
+                    $("#showModalButton").removeClass("d-none")
+                    socket.emit('run-procedure', formData);
+                });
+            </script>
         </div>
     </div>
 </div>
