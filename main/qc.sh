@@ -10,7 +10,7 @@ for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
 
   echo "${nameOfLoci[i]}"
 
-  python3 ./qcModule/csvParser.py "$resultDataPath" "${nameOfLoci[@]}"
+  python3 ./qcModule/csvParser.py "$resultDataPath" "${nameOfLoci[i]}"
 #  python3 ./qcModule/networkVisualizer.py "$resultDataPath" "${nameOfLoci[i]}"
 
   #rm -r "${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/nCatR1R2"
