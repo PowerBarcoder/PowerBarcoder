@@ -27,7 +27,7 @@ from FastaUnit import FastaUnit
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
 
 loadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/"
-splitPath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/split/"
+splitPath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/forSplit/"
 r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/r1/"
 r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/r2/"
 
