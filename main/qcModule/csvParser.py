@@ -6,6 +6,7 @@ print(f"[INFO] Start to parse csv in {sys.argv[2]}!")
 denoise_pair_path = sys.argv[1]+sys.argv[2]+"_result/denoiseResult/denoise_pairs.txt"
 load_path = sys.argv[1]+sys.argv[2]+"_result/qcResult/"
 output_path = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.csv"
+merged_path = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/merged/"
 
 def parsingDenoisePairIntoDict():
     # Open the log.txt file for reading
@@ -35,6 +36,31 @@ def parsingFileListIntoSet(pipline_step:str):
             if record_state:
                 file_set.add(line.strip())
     return file_set
+
+
+def parsingMergedFileFastaWithHighestAbundanceIntoList(filename_set:set, sample_name:str):
+    header = ""
+    sequence = ""
+    filtered_elements = [
+        element for element in filename_set if sample_name in element
+    ]
+
+    if filtered_elements:
+        highest_abundance_element = max(filtered_elements, key=lambda x: float(x.split("_")[-3]))
+        # print("Highest abundance element:", highest_abundance_element)
+        with open(merged_path + highest_abundance_element, 'r') as file:
+            content = file.readlines()
+            # Process each line in the content
+            for line in content:
+                if line.startswith(">"):
+                    header = line.strip()
+                else:
+                    sequence = line.strip()
+    else:
+        # print(f"No elements found for {sample_name}")
+        header = "N/A"
+        sequence = "N/A"
+    return [header, sequence]
 
 
 def parsingAllDataIntoCsv():
@@ -78,8 +104,8 @@ def parsingAllDataIntoCsv():
 
     with open(output_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['', ''] + [step[0] for step in steps])
-        writer.writerow(['Sample Name', 'Barcode'] + [step[1] for step in steps])
+        writer.writerow(['', ''] + [step[0] for step in steps] + ['Highest Abundance Merged header', 'Highest Abundance Merged sequence'])
+        writer.writerow(['Sample Name', 'Barcode'] + [step[1] for step in steps] + ['-', '-'])
 
         for barcode_name, sample_name in sequence_info_dict.items():
             temp_row = []
@@ -90,7 +116,8 @@ def parsingAllDataIntoCsv():
                 else:
                     temp_row.append("N/A")
                     print(f"[WARNING] File not found: {sample_name} in {file_set_parameter_list[file_set_list.index(file_set)]}")
-            writer.writerow([sample_name, barcode_name] + temp_row)
+            fasta_seq = parsingMergedFileFastaWithHighestAbundanceIntoList(file_set_list[12],sample_name)
+            writer.writerow([sample_name, barcode_name] + temp_row + [fasta_seq[0], fasta_seq[1]])
 
     return "Csv generated!"
 
