@@ -164,8 +164,9 @@ class BlastRef:
             rWho = "rWho"  # 從後面取過來，因為後綴是dada2加的，固定四個"Nephrolepis_sp._Lu30199_Co262_01_r1_0.976_abundance_280"
 
             # TODO
-            # 1.用3排序，取最高者出來，(改成只做>90的，下限90當參數可設，全部做完再挑最高的當best，其他當others) # 判斷順序：%>abundance>orders
-            # 2.用abs(7-8)取最大，
+            # 判斷順序：
+            # 1.identity: 用3排序，取最高者出來，但不低於90
+            # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半(qseqid去找檔案算長度，不用寫到檔名上)
             if (float(cate[queryName][2]) < float(pident)):
                 cate[queryName][0] = qseqid
                 cate[queryName][1] = sseqid
