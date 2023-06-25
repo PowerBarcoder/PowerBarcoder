@@ -163,7 +163,7 @@ for (a in 1:ncol(AP)) {
       # 確認merge內資訊，
       # 1. 抓出成功merge的，不是的就記錄在dadamergfail內
       # 2. 抓出abundance最高的ASV存到denoise_best (deprecated)
-      if (nrow(mergers) > 0 & max(nchar(mergers$sequence)) > AP_minlength & max(mergers$abundance) > 20) {
+      if (nrow(mergers) > 0 & max(nchar(mergers$sequence)) > AP_minlength) { #20230624 拿掉" & max(mergers$abundance) > 20"，可以考慮拿到其他步驟當篩選標準
         # parsing
         sum(mergers$abundance) -> clustersum
         paste0(rep(header, length(mergers$abundance)), "_", numbers[1:length(mergers$abundance)], rep("_", length(mergers$abundance)), sprintf(mergers$abundance / clustersum, fmt = '%#.3f'), rep("_abundance_", length(mergers$abundance)), mergers$abundance) -> merglist
