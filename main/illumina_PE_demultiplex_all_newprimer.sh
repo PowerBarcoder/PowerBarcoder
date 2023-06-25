@@ -38,7 +38,7 @@ for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
     out_file="${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/trimmed/trim_$(basename ${r1_file})"
 
     # Run cutadapt with parallel processing
-    ${myCutadaptPath}cutadapt -e "${errorRateCutadaptor[i]}" --no-indels --minimum-length "${minimumLengthCutadaptorInLoop[i]}" -g "${primerR[i]}" -o "${out_file}" "${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/untrimmed/$(basename ${r1_file})" -j "${core_numbers}" &
+    ${myCutadaptPath}cutadapt -e "${errorRateCutadaptor[i]}" --no-indels --minimum-length "${minimumLengthCutadaptorInLoop[i]}" -g "${primerF[i]}" -o "${out_file}" "${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/untrimmed/$(basename ${r1_file})" -j "${core_numbers}" &
 
   done
 
