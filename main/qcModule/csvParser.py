@@ -1,10 +1,11 @@
 import csv
+import re
 import sys
 
 print(f"[INFO] Start to parse csv in {sys.argv[2]}!")
 
 denoise_pair_path = sys.argv[1]+sys.argv[2]+"_result/denoiseResult/denoise_pairs.txt"
-load_path = sys.argv[1]+sys.argv[2]+"_result/qcResult/"
+input_path = sys.argv[1]+sys.argv[2]+"_result/qcResult/qcReport.txt"
 output_path = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.csv"
 merged_path = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/merged/"
 
@@ -23,7 +24,7 @@ def parsingDenoisePairIntoDict():
 
 
 def parsingFileListIntoSet(pipline_step:str):
-    with open(load_path+"qcReport.txt", 'r') as file:
+    with open(input_path, 'r') as file:
         content = file.readlines()
         file_set = set()
         record_state = False
@@ -61,6 +62,25 @@ def parsingMergedFileFastaWithHighestAbundanceIntoList(filename_set:set, sample_
         header = "N/A"
         sequence = "N/A"
     return [header, sequence]
+
+
+def parsingOverallInfoIntoList(filename:str):
+    data = {}
+
+    with open(filename, 'r') as file:
+        content = file.readlines()
+
+        for line in content:
+            if "ALL" in line:
+                line_items = line.strip().split('\t')
+                print(line_items)
+                third_line_values = line_items[6]
+                print(third_line_values)
+            if "FASTQ" in line:
+                line_items = line.strip().split('\t')
+                print(line_items)
+                fifth_line_values = line_items[3]
+                print(fifth_line_values)
 
 
 def parsingAllDataIntoCsv():
@@ -104,6 +124,19 @@ def parsingAllDataIntoCsv():
 
     with open(output_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
+        #
+        # writer.writerow(['Overall', '', '', '','', '', '', '','', '', '', '','', '', '', '',''])
+            # DADA2 filter 之前的項目:
+            # fastq reads number, Q value (可用 seqkit),
+            # Merger merge: ambiguous sites number (越少越好)
+            # Merger blast: BLAST identity, qstart - qend
+            # DADA2 denoise 之後的項目:
+            # ASV number （越少越好）, evenness （越不平均越好）
+            # best 的ASV 的 abundance 跟 proportion
+        # writer.writerow(['Raw data', '', 'Fastp quality trim', '','Cutadapt demultiplex by locus primer', '', '', '','', '', '', '','', '', '', '',''])
+        # writer.writerow(['reads number', 'Q value', 'reads number', 'Q value','reads number', 'Q value', '', '','', '', '', '','', '', '', '',''])
+        #
+        #
         writer.writerow(['', ''] + [step[0] for step in steps] + ['Highest Abundance Merged header', 'Highest Abundance Merged sequence'])
         writer.writerow(['Sample Name', 'Barcode'] + [step[1] for step in steps] + ['-', '-'])
 
@@ -122,5 +155,6 @@ def parsingAllDataIntoCsv():
     return "Csv generated!"
 
 print(parsingAllDataIntoCsv())
+# print(parsingOverallInfoIntoList(input_path))
 
 print(f"[INFO] End of parsing csv in {sys.argv[2]}!")

@@ -2,25 +2,61 @@
 
 . ./config.sh
 
+echo "[INFO] Start to report overall qcReport!"
+
+gunzip -c "${ampliconInfo}${R1FastqGz}" > "${resultDataPath}rawR1Fastq.fq"
+gunzip -c "${ampliconInfo}${R2FastqGz}" > "${resultDataPath}rawR2Fastq.fq"
+gunzip -c "${resultDataPath}trim_R1FastqGz.gz" > "${resultDataPath}trim_R1FastqGz.fq"
+gunzip -c "${resultDataPath}trim_R2FastqGz.gz" > "${resultDataPath}trim_R2FastqGz.fq"
+
+echo " " >"${resultDataPath}overallQcReport.txt"
+
+cd "${resultDataPath}"
+echo "------------------------------------Raw data r1------------------------------------" >>"${resultDataPath}overallQcReport.txt"
+seqtk fqchk "rawR1Fastq.fq" | awk 'NR <= 3' >>"${resultDataPath}overallQcReport.txt"
+seqkit stats "rawR1Fastq.fq" >>"${resultDataPath}overallQcReport.txt"
+echo "--------------------------------------------------------------------------------" >>"${resultDataPath}overallQcReport.txt"
+
+echo "------------------------------------Raw data r2------------------------------------" >>"${resultDataPath}overallQcReport.txt"
+seqtk fqchk "rawR2Fastq.fq" | awk 'NR <= 3' >>"${resultDataPath}overallQcReport.txt"
+seqkit stats "rawR2Fastq.fq" >>"${resultDataPath}overallQcReport.txt"
+echo "--------------------------------------------------------------------------------" >>"${resultDataPath}overallQcReport.txt"
+
+echo "-------------------------------Fastp quality trim r1-------------------------------" >>"${resultDataPath}overallQcReport.txt"
+seqtk fqchk "trim_R1FastqGz.fq" | awk 'NR <= 3' >>"${resultDataPath}overallQcReport.txt"
+seqkit stats "trim_R1FastqGz.fq" >>"${resultDataPath}overallQcReport.txt"
+echo "--------------------------------------------------------------------------------" >>"${resultDataPath}overallQcReport.txt"
+
+echo "-------------------------------Fastp quality trim r2-------------------------------" >>"${resultDataPath}overallQcReport.txt"
+seqtk fqchk "trim_R2FastqGz.fq" | awk 'NR <= 3' >>"${resultDataPath}overallQcReport.txt"
+seqkit stats "trim_R2FastqGz.fq" >>"${resultDataPath}overallQcReport.txt"
+echo "--------------------------------------------------------------------------------" >>"${resultDataPath}overallQcReport.txt"
+
+rm "${resultDataPath}rawR1Fastq.fq"
+rm "${resultDataPath}rawR2Fastq.fq"
+rm "${resultDataPath}trim_R1FastqGz.fq"
+rm "${resultDataPath}trim_R2FastqGz.fq"
+
+echo "[INFO] End of reporting overall qcReport!"
+
 for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
 
-  echo "[INFO] Start to collect all files !"
+  echo "[INFO] Start to collect all files in ${nameOfLoci[i]}!"
+
   echo " " >"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
+  cat "${resultDataPath}overallQcReport.txt" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
 
-#  echo "------------------------------------Raw data------------------------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
-#  seqkit stats "${ampliconInfo}${R1FastqGz}" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
-#  seqkit stats "${ampliconInfo}${R2FastqGz}" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
-#  echo "--------------------------------------------------------------------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
+  cd "${resultDataPath}${nameOfLoci[i]}_result/"
 
-#  echo "-------------------------------Fastp quality trim-------------------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
-#  seqkit stats "${resultDataPath}trim_R1FastqGz.gz" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
-#  seqkit stats "${resultDataPath}trim_R2FastqGz.gz" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
-#  echo "--------------------------------------------------------------------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
+  echo "----------------------Cutadapt demultiplex by locus primer r1----------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
+  seqtk fqchk "${nameOfLoci[i]}_amplicon_r1.fq" | awk 'NR <= 3' >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
+  seqkit stats "${nameOfLoci[i]}_amplicon_r1.fq" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
+  echo "--------------------------------------------------------------------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
 
-#  echo "----------------------Cutadapt demultiplex by locus primer----------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
-#  seqkit stats "${resultDataPath}${nameOfLoci[i]}_result/${nameOfLoci[i]}_amplicon_r1.fq" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
-#  seqkit stats "${resultDataPath}${nameOfLoci[i]}_result/${nameOfLoci[i]}_amplicon_r2.fq" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
-#  echo "--------------------------------------------------------------------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
+  echo "----------------------Cutadapt demultiplex by locus primer r2----------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
+  seqtk fqchk "${nameOfLoci[i]}_amplicon_r2.fq" | awk 'NR <= 3' >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
+  seqkit stats "${nameOfLoci[i]}_amplicon_r2.fq" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
+  echo "--------------------------------------------------------------------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
 
   echo "-------------------Cutadapt demultiplex by sample barcode r1--------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
   cd "${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/untrimmed/" && ls *r1.fq >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
@@ -78,6 +114,8 @@ for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
   cd "${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/merged/" && ls *.fas >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
   echo "--------------------------------------------------------------------------------" >>"${resultDataPath}${nameOfLoci[i]}_result/qcResult/qcReport.txt"
 
-  echo "[INFO] End of collecting all files !"
+  echo "[INFO] End of collecting all files in ${nameOfLoci[i]}!"
 
 done
+
+rm "${resultDataPath}overallQcReport.txt"
