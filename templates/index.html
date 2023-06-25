@@ -580,6 +580,8 @@
                             </div>
                         </div>
                         <div class="col-sm d-md-flex justify-content-md-end">
+                            <button class="btn btn-secondary" id="clearButton">Clear Log</button>
+                            &nbsp;
                             <button class="btn btn-primary" id="saveButton">Save Execution Log</button>
                         </div>
                     </div>
@@ -600,6 +602,10 @@
                     downloadLink.click();
                     // Clean up the temporary anchor element
                     document.body.removeChild(downloadLink);
+                });
+
+                document.getElementById('clearButton').addEventListener('click', function () {
+                    $("#console").empty();
                 });
             </script>
             <script>
