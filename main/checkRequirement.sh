@@ -67,3 +67,14 @@ if [ $checkSeqkit -le $lengthOfSeqkit ]; then
 else
   echo "[INFO] seqkit installed"
 fi
+
+# check seqtk
+wherewIsSeqtk=$(whereis seqtk)
+checkSeqtk=${#wherewIsSeqtk}
+lengthOfSeqtk=10
+# echo $(whereis cutadapt|#)
+if [ $checkSeqtk -le $lengthOfSeqtk ]; then
+  exit "[WARNING] Pipeline terminated because seqtk is not found"
+else
+  echo "[INFO] seqtk installed"
+fi
