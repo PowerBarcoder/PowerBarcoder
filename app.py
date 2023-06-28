@@ -21,14 +21,22 @@ def socketio_emit_procedure_result(msg):
 @socketio.on('run-procedure')
 def run_procedure(data):
     # socketio.emit('procedure-result', '<br>')
-    socketio_emit_procedure_result('Generating config file...<br>')
+    socketio.emit('procedure-result', '\r\n')
+    socketio_emit_procedure_result('Generating config file...\r\n')
+
+    # [For Debug]
+    # n=0
+    # while True:
+    #     socketio.emit('procedure-result', str(n)+'\r\n')
+    #     n+=1
+    #     time.sleep(1)
 
     # Access form data
     form_data = data
     yml_parser.parsingFormDataToYml(form_data)
     yml_parser.parsingYmlToShell()
 
-    socketio_emit_procedure_result('Data procedure started<br>')
+    socketio_emit_procedure_result('Data procedure started\r\n')
 
     cmd = 'cd /PowerBarcoder/main && bash powerBarcode.sh 2>&1'
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1)
@@ -39,7 +47,7 @@ def run_procedure(data):
 
     for line in iter(p.stdout.readline, b''):
         # Process each line of output
-        if int(time.time()) - throttle_seconds > 2:
+        if int(time.time()) - throttle_seconds > 1:
             temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8', 'ignore')
             socketio.emit('procedure-result', temp_line)
             temp_line = ""
@@ -54,8 +62,8 @@ def run_procedure(data):
     #     socketio.emit('procedure-result', "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8'))
 
 
-    socketio_emit_procedure_result('done<br>')
-    socketio_emit_procedure_result('Find your results in data/result/ folder<br>')
+    socketio_emit_procedure_result('done\r\n')
+    socketio_emit_procedure_result('Find your results in data/result/ folder\r\n')
 
 
 @app.route('/')
