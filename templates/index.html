@@ -54,6 +54,17 @@
         #tooltip14:hover + .information{display:block;}
         #tooltip15:hover + .information{display:block;}
 
+        /*隱藏scroll bar*/
+        pre code.hljs {
+            overflow-x: hidden;
+        }
+
+        /*自動換行*/
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
     </style>
 
 </head>
@@ -563,9 +574,10 @@
                 <div class="text-center mb-3">
                 </div>
                 <div id="consoleDiv">
-                <pre style="margin-bottom: 0rem">
-                    <code class="shellsession" id="console" style="padding-bottom: 0em">
-                    </code>
+                <pre style="margin-bottom: 0rem" id="console">
+                    <div class="d-flex justify-content-center" id="loadPreviousDiv">
+                        <button class="btn btn-success" id="loadPreviousButton" style="display: none;">Load Previous</button>
+                    </div>
                 </pre>
                 </div>
             </div>
@@ -589,9 +601,22 @@
             </div>
             <!--    save the execution log   -->
             <script>
+                // btn for saving the console
                 document.getElementById('saveButton').addEventListener('click', function () {
+
+                    // Combine the removed data and code element text
+                    let removedLogContent = removedData.join('\n') + '\n';
                     let codeElement = document.getElementById('console');
-                    let innerText = codeElement.innerText.replace("                    [", "[").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+                    let codeElementCopy = codeElement.cloneNode(true);
+                    let divToRemove = codeElementCopy.querySelector("#loadPreviousDiv");
+                    if (divToRemove) {
+                        codeElementCopy.removeChild(divToRemove);
+                    }
+                    let innerText = (removedLogContent + codeElementCopy.innerText)
+                        .replaceAll("                ","")
+                        .replace("                    [", "[")
+                        .replaceAll("<", "&lt;")
+                        .replaceAll(">", "&gt;");
                     // Create a temporary anchor element to trigger the file download
                     let downloadLink = document.createElement('a');
                     downloadLink.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(innerText);
@@ -604,6 +629,7 @@
                     document.body.removeChild(downloadLink);
                 });
 
+                // btn for clearing the console
                 document.getElementById('clearButton').addEventListener('click', function () {
                     $("#console").empty();
                 });
@@ -613,23 +639,66 @@
                     withCredentials: true,
                 });
 
+                let removedData = [];
+                let max_lines = 50; // Maximum number of lines to display
                 socket.on('procedure-result', function (data) {
-                    // update console with data
-                    $("#console").append(data);
-                    // Scroll to the bottom of the output div
-                    let consoleDiv = document.getElementById('consoleDiv');
-                    let modalBodyDiv = document.getElementById('modalBodyDiv');
-                    modalBodyDiv.scrollTo({
-                        top: consoleDiv.scrollHeight,
-                        behavior: 'smooth'
-                    })
+                    // update console with data by appending the new <div> to the console element
+                    let newDiv = $("<code>");
+                    newDiv.text(data);
+                    $("#console").append(newDiv);
+                    newDiv.addClass("shellsession");
+
+                    // don't forget to highlight the div if dark mode is on
+                    if ($('#darkModeToggle').is(":checked")) {
+                        hljs.highlightAll();
+                    }
+
+                    // Remove older content if necessary
+                    let lines = $("#console").find("code").length;
+                    console.log(lines)
+                    if (lines > max_lines) {
+                        let firstLine = $("#console").find("code:first");
+                        let removedLine = firstLine.text().trim(); // Adjust based on your needs
+                        removedData.push(removedLine);
+                        firstLine.remove();
+                        $("#loadPreviousButton").show();
+
+                    }
+
+                    // // Scroll to the bottom of the output div
+                    // let consoleDiv = document.getElementById('consoleDiv');
+                    // let modalBodyDiv = document.getElementById('modalBodyDiv');
+                    // modalBodyDiv.scrollTo({
+                    //     top: consoleDiv.scrollHeight,
+                    //     behavior: 'smooth'
+                    // })
+                });
+
+                // Event listener for the button click event
+                $("#loadPreviousButton").click(function () {
+                    // Function to load and prepend previous data to the console content
+                    if (removedData.length > 0) {
+                        let previousData = removedData.pop();
+                        let newDiv = $("<code>");
+                        newDiv.text(previousData+"\n");
+                        newDiv.insertBefore($("#console code:first"));
+                        newDiv.addClass("shellsession");
+                        max_lines += 1;
+                    }
+                    // Update the button visibility
+                    if (removedData.length === 0) {
+                        $("#loadPreviousButton").hide();
+                    }
                 });
 
                 $('#darkModeToggle').on("change", function (event) {
                     if ($(this).is(":checked")) {
-                        hljs.highlightAll();
+                        $('code').each(function () {
+                            hljs.highlightElement(this);
+                        });
                     } else {
                         $('.hljs').removeClass('hljs');
+                        $('.hljs').removeClass('language-shell');
                     }
                 });
 
