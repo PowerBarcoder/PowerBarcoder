@@ -631,7 +631,8 @@
 
                 // btn for clearing the console
                 document.getElementById('clearButton').addEventListener('click', function () {
-                    $("#console").empty();
+                    // $("#console").empty();
+                    $("#console").children().not("#loadPreviousDiv").remove();
                 });
             </script>
             <script>
