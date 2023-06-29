@@ -28,9 +28,9 @@ print("[INFO] merger.py is running on loci: "+sys.argv[3])
 loadpath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/merger/aligned/"
 # loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
 
-# (deprecated 20230611)
+# (deprecated 20230611)(retained 20230624，為了方便除錯，還是留著看gap在哪)
 # # mergepath="/home/sktang/powerBC/mergeSeq/"
-# mergepath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/merger/merged/"
+mergepath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/merger/rawMerged/"
 # # mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
 
 degapMergepath=sys.argv[2]+sys.argv[3]+"_result/mergeResult/merger/merged/"
@@ -303,24 +303,24 @@ for filename in candidate_list:
                     overlap_seq=overlap_seq+trim_1_overlap_align[i]
                 elif ((trim_0_overlap_align[i]!="-" and trim_1_overlap_align[i]=="-")):
                     # ATCG+gap=atcg
-                    overlap_seq=overlap_seq+trim_0_overlap_align[i]
+                    overlap_seq=overlap_seq+trim_0_overlap_align[i]   #TODO 研究一下小寫的原因
                 # D G/A/T # V G/A/C # B G/T/C # H A/T/C 兩條序列不會出現
                 else:
                     print("[ERROR] 出錯了GG")
             # print("overlap_num_align",overlap_num_align)
             # print("overlap_seq",overlap_seq)
             merge_seq=merge_seq+r1[:r1_p1-1].upper()+overlap_seq+r2[r2_p2+1:].upper() # print(merge_seq)
-            merge_seq=merge_seq.replace("-","")
+            # merge_seq=merge_seq.replace("-","")
             
         # 步驟六：收尾  # print(merge_seq)
         output_filename=filename.replace(".fas","")
         # 20230623 不parsing了，因為10Ncat後，兩邊abundance是一樣的
         # output_filename=output_filename+"_"+r1_header_name+"_"+r2_header_name
 
-        # (deprecated 20230611)
-        # merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n" #處理mergeseq
-        # with open(mergepath+filename,"w",encoding="UTF-8") as file:
-        #     file.write(merge_seq_text)
+        # (deprecated 20230611)(retained 20230624，為了方便除錯，還是留著看gap在哪)
+        merge_seq_text=">"+output_filename+"\n"+merge_seq+"\n" #處理mergeseq
+        with open(mergepath+filename,"w",encoding="UTF-8") as file:
+            file.write(merge_seq_text)
 
         de_gap_merge_seq=merge_seq.replace("N","").replace("-","")#處理degapmergeseq
         de_gap_merge_seq_text=">"+output_filename+"\n"+de_gap_merge_seq+"\n"
