@@ -1,0 +1,13 @@
+# code:
+# fqchk "rawR1Fastq.fq" | awk 'NR == 3 { print $8, $9 }'
+# data:
+# min_len: 70; max_len: 301; avg_len: 267.15; 33 distinct quality values
+# POS     #bases  %A      %C      %G      %T      %N      avgQ    errQ    %low    %high
+# ALL     38138269        28.3    23.0    25.4    23.3    0.0     34.9    22.5    6.0     94.0
+
+
+# code:
+# seqkit stats rbcLN_amplicon_r1.fq | awk 'NR == 2 { print $4 }'
+# data:
+# file                  format  type  num_seqs     sum_len  min_len  avg_len  max_len
+# rbcLN_amplicon_r1.fq  FASTQ   DNA    142,761  38,138,269       70    267.1      301
