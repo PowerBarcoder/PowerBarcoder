@@ -31,6 +31,7 @@ for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/r1Ref
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/r2Ref
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/aligned
+  mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/rawMerged
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/merged
   # create Layer 5th folders
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/nCatR1R2/forSplit
