@@ -64,26 +64,43 @@ def parsingMergedFileFastaWithHighestAbundanceIntoList(filename_set:set, sample_
     return [header, sequence]
 
 
-def parsingOverallInfoIntoList(filename:str):
-    data = {}
-
-    with open(filename, 'r') as file:
+def parsingOverallInfoIntoList(pipline_step:str):
+    with open(input_path, 'r') as file:
         content = file.readlines()
-
+        file_name, num_seqs, sum_len, min_len, max_len, avgQ, errQ = "", "", "", "", "", "", ""
+        record_state = False
+        # Process each line in the content
         for line in content:
-            if "ALL" in line:
-                line_items = line.strip().split('\t')
-                print(line_items)
-                third_line_values = line_items[6]
-                print(third_line_values)
-            if "FASTQ" in line:
-                line_items = line.strip().split('\t')
-                print(line_items)
-                fifth_line_values = line_items[3]
-                print(fifth_line_values)
+            if pipline_step in line:
+                record_state = True
+                file_name = pipline_step
+            elif "--------------------------------------------------------------------------------" in line:
+                record_state = False
+            if record_state:
+                parameter_list = line.split(" ")
+                if len(parameter_list)==2:
+                    avgQ = parameter_list[0].strip()
+                    errQ = parameter_list[1].strip()
+                elif len(parameter_list)==4:
+                    num_seqs = parameter_list[0].strip()
+                    sum_len = parameter_list[1].strip()
+                    min_len = parameter_list[2].strip()
+                    max_len = parameter_list[3].strip()
+        data = [file_name, num_seqs, sum_len, min_len, max_len, avgQ, errQ]
+    return data
 
 
 def parsingAllDataIntoCsv():
+
+    overall_info_step_list = [
+        "Raw data r1",
+        "Raw data r2",
+        "Fastp quality trim r1",
+        "Fastp quality trim r2",
+        "Cutadapt demultiplex by locus primer r1",
+        "Cutadapt demultiplex by locus primer r2"
+    ]
+
     file_set_parameter_list = [
         "Cutadapt demultiplex by sample barcode r1",
         "Cutadapt demultiplex by sample barcode r2",
@@ -124,19 +141,21 @@ def parsingAllDataIntoCsv():
 
     with open(output_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        #
-        # writer.writerow(['Overall', '', '', '','', '', '', '','', '', '', '','', '', '', '',''])
             # DADA2 filter 之前的項目:
-            # fastq reads number, Q value (可用 seqkit),
             # Merger merge: ambiguous sites number (越少越好)
             # Merger blast: BLAST identity, qstart - qend
             # DADA2 denoise 之後的項目:
             # ASV number （越少越好）, evenness （越不平均越好）
             # best 的ASV 的 abundance 跟 proportion
-        # writer.writerow(['Raw data', '', 'Fastp quality trim', '','Cutadapt demultiplex by locus primer', '', '', '','', '', '', '','', '', '', '',''])
-        # writer.writerow(['reads number', 'Q value', 'reads number', 'Q value','reads number', 'Q value', '', '','', '', '', '','', '', '', '',''])
-        #
-        #
+
+        # overall info
+        writer.writerow(['File', 'num_seqs', 'sum_len', 'min_len', 'max_len', 'avgQ', 'errQ'])
+        for i in overall_info_step_list:
+            overallInfoList = parsingOverallInfoIntoList(i)
+            writer.writerow(overallInfoList)
+        writer.writerow(['', '', '', '', '', '', ''])
+
+        # file list info
         writer.writerow(['', ''] + [step[0] for step in steps] + ['Highest Abundance Merged header', 'Highest Abundance Merged sequence'])
         writer.writerow(['Sample Name', 'Barcode'] + [step[1] for step in steps] + ['-', '-'])
 
@@ -155,6 +174,5 @@ def parsingAllDataIntoCsv():
     return "Csv generated!"
 
 print(parsingAllDataIntoCsv())
-# print(parsingOverallInfoIntoList(input_path))
 
 print(f"[INFO] End of parsing csv in {sys.argv[2]}!")
