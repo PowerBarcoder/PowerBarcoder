@@ -117,12 +117,6 @@ def parsingAllDataIntoCsv():
         "Merger merge"
     ]
 
-    file_set_list = []
-    for parameter in file_set_parameter_list:
-        file_set_list.append(parsingFileListIntoSet(parameter))
-
-    sequence_info_dict = parsingDenoisePairIntoDict()
-
     steps = [
         ("Cutadapt demultiplex by sample barcode", "r1"),
         ("", "r2"),
@@ -158,7 +152,10 @@ def parsingAllDataIntoCsv():
         # file list info
         writer.writerow(['', ''] + [step[0] for step in steps] + ['Highest Abundance Merged header', 'Highest Abundance Merged sequence'])
         writer.writerow(['Sample Name', 'Barcode'] + [step[1] for step in steps] + ['-', '-'])
-
+        file_set_list = []
+        for parameter in file_set_parameter_list:
+            file_set_list.append(parsingFileListIntoSet(parameter))
+        sequence_info_dict = parsingDenoisePairIntoDict()
         for barcode_name, sample_name in sequence_info_dict.items():
             temp_row = []
             for file_set in file_set_list:
