@@ -31,11 +31,14 @@ splitPath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/for
 r1_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/r1/"
 r2_outputLoadpath = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/r2/"
 
+"""
+nn_spliter使用時須確認檔案是否為單條序列，因為我們只讀前兩行，不接受多條序列在一個Fasta檔案中
+"""
+
 
 def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     pattern_for_split = r'NNNNNNNNNN'
 
-    # TODO 這邊之後可能要改，不能只拿前兩行，要去檢查abundance (20230611確認一下是不是在balstResult的篩選條件就已經先按identity選出最像的了)
     seqHeader = linecache.getline(loadpath + filename, 1).replace("\n", "")
     seqText = linecache.getline(loadpath + filename, 2)
 
@@ -62,14 +65,14 @@ nCatFastaFile = FastaUnit()
 for filename in rawFiles:
     fullpath = join(loadpath, filename)
     if isfile(fullpath):
-        nCatFastaFile.splitMulitpleSeqFastaIntoFiles(fullpath,splitPath)
+        nCatFastaFile.splitMulitpleSeqFastaIntoFiles(fullpath, splitPath)
 
 # 檔名用header替換
 splitFiles = listdir(splitPath)
 for filename in splitFiles:
     fullpath = join(splitPath, filename)
     if isfile(fullpath):
-        nCatFastaFile.replaceFilenameWithHeader(fullpath,splitPath,True)
+        nCatFastaFile.replaceFilenameWithHeader(fullpath, splitPath, True)
 
 # 取得切分後所有檔案與子目錄名稱
 splitFiles = listdir(splitPath)

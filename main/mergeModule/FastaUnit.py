@@ -115,12 +115,13 @@ class FastaUnit:
     Replace filename with the sequence header at the first line.
     Notice: If you hava multiple sequences, we only parse the file one's header 
     """
-    def replaceFilenameWithHeader(self,loadPath, outputDir, deleteOriginalFile=False):
+
+    def replaceFilenameWithHeader(self, loadPath, outputDir, deleteOriginalFile=False):
         extension = self.getFileExtensionFromPath(loadPath)
         headerText = ""
         with open(loadPath, "r") as inputFile:
-            headerText = linecache.getline(loadPath, 1)[1:].replace("\n","")
-            with open(outputDir + headerText+"."+extension, "w") as outputFile:
+            headerText = linecache.getline(loadPath, 1)[1:].replace("\n", "")
+            with open(outputDir + headerText + "." + extension, "w") as outputFile:
                 for line in inputFile:
                     outputFile.write(line)
         if (deleteOriginalFile):

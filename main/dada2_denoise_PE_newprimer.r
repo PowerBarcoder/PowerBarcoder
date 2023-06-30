@@ -95,11 +95,13 @@ for (a in 1:ncol(AP)) {
   stopImplicitCluster()
 
 
-  # TODO 20230604 這裡開始不知道怎麼把"_"改成"_splitter_"，先擱置
+  #  20230604 這裡開始不知道怎麼把"_"改成"_splitter_"，先擱置
+  #  (20230630 經過檔名重排後，現在檔名統一都從這裡開始牌之後就不再過多的加工了，)
+  #           (若需要parsing，則盡量從尾端往頭端，因為頭端的物種名可能有數量不一的分割符("_"))
   # second step: denoise
   numCores <- detectCores()
   registerDoParallel(cores = numCores)
-  foreach(sample_number = 1:nrow(amplicon), .packages = c("dplyr")) %dopar% { #TODO 20230421 we can use multi-thread to speed up
+  foreach(sample_number = 1:nrow(amplicon), .packages = c("dplyr")) %dopar% { #20230421 we use multi-thread to speed up
     sample_filename = paste0("filtered_trim_", region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp], "_r1.fq")
     r1 = paste0(path_filter, "/filtered_trim_", region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp], "_r1.fq")
     r2 = paste0(path_filter, "/filtered_trim_", region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp], "_r2.fq")
@@ -107,7 +109,7 @@ for (a in 1:ncol(AP)) {
     # filename = paste(amplicon[sample_number, 1], amplicon[sample_number, 2], amplicon[sample_number, 3], amplicon[sample_number, 4], ".fas", sep = "_")  #看起來應該就是檔名了
     filename = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], ".fas", sep = "_")    #20230623 檔名改跟header一樣
     seqname = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")           #這個式header的文字
-    header = paste0(">", seqname)#加上了header的符號
+    header = paste0(">", seqname) #加上了header的符號
 
     #這邊只檢查了r1的名字有沒有對，有對boolean就是TRUE
     if (purrr::has_element(list.files(path = path_filter), sample_filename) == FALSE) {
@@ -192,7 +194,6 @@ for (a in 1:ncol(AP)) {
       }
 
 
-
       # fourth step: 請DADA2對r1 r2 做10N拼接 (unnecessary, because pyhton can do too)
       tryCatch({
         nonmergers <- mergePairs(dadaFs, r1, dadaRs, r2, verbose = TRUE, justConcatenate = TRUE) #Kuo_modified in following lines else
@@ -207,7 +208,7 @@ for (a in 1:ncol(AP)) {
       if (nrow(nonmergers) > 0) {
         # parsing
         sum(nonmergers$abundance) -> clustersum
-        paste0(rep(header, length(nonmergers$abundance)), "_", numbers[1:length(nonmergers$abundance)], rep("_", length(nonmergers$abundance)), sprintf(nonmergers$abundance / clustersum, fmt = '%#.3f'), rep("_abundance_", length(nonmergers$abundance)), nonmergers$abundance ) -> nonmerglist
+        paste0(rep(header, length(nonmergers$abundance)), "_", numbers[1:length(nonmergers$abundance)], rep("_", length(nonmergers$abundance)), sprintf(nonmergers$abundance / clustersum, fmt = '%#.3f'), rep("_abundance_", length(nonmergers$abundance)), nonmergers$abundance) -> nonmerglist
         as.matrix(nonmergers) -> nonmergers.table
         cbind(nonmerglist, nonmergers.table) -> fascat #Kuo_modified
         matrix(fascat, ncol = 10) -> fascat

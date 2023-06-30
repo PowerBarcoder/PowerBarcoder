@@ -2,6 +2,7 @@
 import yaml
 from datetime import datetime
 
+
 # convert the formData to YAML
 def parsingFormDataToYml(data):
     yaml_data = yaml.dump(data)
@@ -23,11 +24,11 @@ def parsingYmlToShell():
     # Generate shell script (有#的代表使用者可以改)
     # path
     script = '#!/bin/bash\n'
-    script += "datetime='"+formatted_datetime+"/'\n"
+    script += "datetime='" + formatted_datetime + "/'\n"
     script += f"myCutadaptPath='/venv/cutadapt-venv/bin/'\n"
     script += f"myFastpPath='/usr/local/bin/'\n"
     script += f"localBlastToolDir='/usr/local/bin/'\n"
-    script += f"ampliconInfo='{config['ampliconInfo']}'\n" # ampliconInfo
+    script += f"ampliconInfo='{config['ampliconInfo']}'\n"  # ampliconInfo
     script += f"resultDataPath='/PowerBarcoder/data/result/'$datetime\n"
     script += f"missList='/PowerBarcoder/data/missingList.txt'\n"
     script += f"R1FastqGz='{config['R1FastqGz']}'\n"  # R1FastqGz

@@ -6,9 +6,9 @@ prepare r1Ref & r2Ref for alignment
 
 import sys
 
-
 POSITIVE_DIRECTION = "positive"
 NEGATIVE_DIRECTION = "negative"
+
 
 # 製造待測序列路徑的方法
 def qseqidFile(outputLoadpath, rWho, fileName):
@@ -123,7 +123,7 @@ try:
                     r2RowList += lines
                     # print(r2RowList)
             except Exception as e:
-                print("[ERROR] An exception happen in "+sys.argv[4]+"： "+qseqid+" before alignment")
+                print("[ERROR] An exception happen in " + sys.argv[4] + "： " + qseqid + " before alignment")
                 print(e)
                 continue
 
@@ -165,7 +165,7 @@ try:
             createRefFile("r2", r2RowList)
 
 except Exception as e:
-    print("[ERROR] An exception happen in "+sys.argv[4]+" before alignment")
+    print("[ERROR] An exception happen in " + sys.argv[4] + " before alignment")
     print(e)
 
 print("[INFO] alignmentPretreater.py is ended on loci: " + sys.argv[4])
@@ -198,4 +198,3 @@ print("[INFO] alignmentPretreater.py is ended on loci: " + sys.argv[4])
 # 判讀方向從4整情況改為2種情況，
 # 因為r1跟r2已經是定向了，
 # 所以只需要在sign=="negative"時，把ref反轉即可
-

@@ -14,7 +14,7 @@ resultDataPath="/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result_rb
 R1FastqGz="/home/lykuo/lab_data/NGS_data/miseq/HGT22070_Amplicon_RUN1.5/trim_RUN1.5_R1.fq.gz" #20230107可以改成R1FastqGz done
 R2FastqGz="/home/lykuo/lab_data/NGS_data/miseq/HGT22070_Amplicon_RUN1.5/trim_RUN1.5_R2.fq.gz" #20230107可以改成R2FastqGz done
 
-# 20230107單次fastp的名稱，可以改成R2FastqGz.json這種感覺，避免做多次fastp有覆蓋問題 TODO
+# 20230107單次fastp的名稱，可以改成R2FastqGz.json這種感覺，避免做多次fastp有覆蓋問題
 summaryJsonFileName="221229RUN1_5.json"
 summaryHtmlFileName="221229RUN1_5.html"
 
