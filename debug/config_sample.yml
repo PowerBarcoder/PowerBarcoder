@@ -3,14 +3,14 @@ R1FastqGz: RUN_pool_R1.fastq.gz
 R2FastqGz: RUN_pool_R2.fastq.gz
 ampliconInfo: /PowerBarcoder/data/amplicon_data/
 barcodesFile1:
+- barcodes_rbcLC_start_0.fasta
 - barcodes_rbcL_start_0.fasta
 - barcodes_trnL_3exonSTART_0.fasta
-- barcodes_rbcLC_start_0.fasta
 - barcodes_trnL_1If1_0.fasta
 barcodesFile2:
+- barcodes_rbcLC_start2_0.fasta
 - barcodes_rbcLN_start2_0.fasta
 - barcodes_trnF_0.fasta
-- barcodes_rbcLC_start2_0.fasta
 - barcodes_trnL_3exonEND_0.fasta
 customizedCoreNumber:
 - '30'
@@ -35,22 +35,32 @@ minimumLengthCutadaptorInLoop:
 - '150'
 - '150'
 nameOfLoci:
+- rbcLC
 - rbcLN
 - trnLF
-- rbcLC
 - trnL
 primerF:
+- TAGGTCTGTCTGCYAARAATTATGG
 - GAGACTAAAGCAGGTGTTGGATTCA
 - TGAGGGTTCGANTCCCTCTA
-- TAGGTCTGTCTGCYAARAATTATGG
 - GGCAATCCTGAGCCAAATC
+primerFName:
+- fNYG
+- fVGF
+- L5675
+- oneIf1
 primerR:
+- GTTCCCCYTCTAGTTTRCCTACTAC
 - TCAAGTCCACCRCGAAGRCATTC
 - GGATTTTCAGTCCYCTGCTCT
-- GTTCCCCYTCTAGTTTRCCTACTAC
 - TAGAGGGANTCGAACCCTCA
+primerRName:
+- rVVG
+- rECL
+- F4121
+- L7556
 sseqidFileName:
 - fermalies_rbcL.fasta
-- ftol_sanger_alignment_trnLLF_full_f.fasta
 - fermalies_rbcL.fasta
+- ftol_sanger_alignment_trnLLF_full_f.fasta
 - ftol_sanger_alignment_trnLLF_full_f.fasta
