@@ -674,6 +674,9 @@
             </div>
             <!--    save the execution log   -->
             <script>
+                let removedData = [];
+                let max_lines = 50; // Maximum number of lines to display
+
                 // btn for saving the console
                 document.getElementById('saveButton').addEventListener('click', function () {
 
@@ -706,15 +709,13 @@
                 document.getElementById('clearButton').addEventListener('click', function () {
                     // $("#console").empty();
                     $("#console").children().not("#loadPreviousDiv").remove();
+                    removedData = []
                 });
-            </script>
-            <script>
+
                 let socket = io.connect('{{ request.host_url }}', {
                     withCredentials: true,
                 });
 
-                let removedData = [];
-                let max_lines = 50; // Maximum number of lines to display
                 socket.on('procedure-result', function (data) {
                     // update console with data by appending the new <div> to the console element
                     let newDiv = $("<code>");
