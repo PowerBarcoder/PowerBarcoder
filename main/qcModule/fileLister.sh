@@ -4,10 +4,10 @@
 
 echo "[INFO] Start to report overall qcReport!"
 
-gunzip -c "${ampliconInfo}${R1FastqGz}" > "${resultDataPath}rawR1Fastq.fq"
-gunzip -c "${ampliconInfo}${R2FastqGz}" > "${resultDataPath}rawR2Fastq.fq"
-gunzip -c "${resultDataPath}trim_R1FastqGz.gz" > "${resultDataPath}trim_R1FastqGz.fq"
-gunzip -c "${resultDataPath}trim_R2FastqGz.gz" > "${resultDataPath}trim_R2FastqGz.fq"
+gunzip -c "${ampliconInfo}${R1FastqGz}" >"${resultDataPath}rawR1Fastq.fq"
+gunzip -c "${ampliconInfo}${R2FastqGz}" >"${resultDataPath}rawR2Fastq.fq"
+gunzip -c "${resultDataPath}trim_R1FastqGz.gz" >"${resultDataPath}trim_R1FastqGz.fq"
+gunzip -c "${resultDataPath}trim_R2FastqGz.gz" >"${resultDataPath}trim_R2FastqGz.fq"
 
 echo " " >"${resultDataPath}overallQcReport.txt"
 

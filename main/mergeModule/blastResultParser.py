@@ -110,12 +110,13 @@ def determineDirection(i):
         sstartMinusSendList[i]) + '\t' + str(rWhoList[i])
     return result
 
-#20230206 似乎不需要用append了，因為先前已經按loci區分了
-#20230206 之前應該是因為迴圈位置的關係，所以才用append的
+
+# 20230206 似乎不需要用append了，因為先前已經按loci區分了
+# 20230206 之前應該是因為迴圈位置的關係，所以才用append的
 with open(loadpath + sys.argv[3] + "_result/blastResult/" + sys.argv[3] + "_blastResult.txt", "w") as file:
     for i in range(0, len(qseqidList)):
         # print(determineDirection(i))
-            file.write(determineDirection(i) + "\n")
+        file.write(determineDirection(i) + "\n")
 
 # column info：
 # str(qseqidList[i]) +'\t'+

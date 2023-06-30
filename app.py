@@ -15,7 +15,7 @@ app.debug = True  # set debug flag to True
 
 
 def socketio_emit_procedure_result(msg):
-    socketio.emit('procedure-result', "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+msg)
+    socketio.emit('procedure-result', "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + msg)
 
 
 @socketio.on('run-procedure')
@@ -48,19 +48,18 @@ def run_procedure(data):
     for line in iter(p.stdout.readline, b''):
         # Process each line of output
         if int(time.time()) - throttle_seconds > 1:
-            temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8', 'ignore')
+            temp_line += "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + line.decode('utf-8', 'ignore')
             socketio.emit('procedure-result', temp_line)
             temp_line = ""
             throttle_seconds = int(time.time())
         else:
-            temp_line += "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8', 'ignore')
+            temp_line += "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + line.decode('utf-8', 'ignore')
     socketio.emit('procedure-result', temp_line)
 
     # [For Debug]
     # for line in iter(p.stdout.readline, b''):
     #     # Process each line of output
     #     socketio.emit('procedure-result', "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8'))
-
 
     socketio_emit_procedure_result('done\r\n')
     socketio_emit_procedure_result('Find your results in data/result/ folder\r\n')

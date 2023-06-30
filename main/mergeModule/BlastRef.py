@@ -71,7 +71,6 @@ class BlastRef:
             # # 當前的名      ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
             # # 實際r1的名    ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
 
-
             # 20230619 因為所有abundance都要做，所以檔名直接用textList[0]，不用再parsing了
             queryName = textList[0] + ".fas"
             # # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
@@ -135,13 +134,11 @@ class BlastRef:
             # # 當前的名      ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
             # # 實際r1的名    ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
 
-
             # 20230619 因為所有abundance都要做，所以檔名直接用textList[0]，不用再parsing了
             queryName = textList[0] + ".fas"
             # # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
             # queryName = qseqidSplitList[:-5][-1] + "_" + qseqidSplitList[:-5][-2] + "_" + "_".join(
             #     qseqidSplitList[:-5][:-2]) + "_.fas"
-
 
             # TODO 這邊取出abundance最高的
 

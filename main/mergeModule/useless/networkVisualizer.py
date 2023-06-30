@@ -3,7 +3,7 @@ from pyvis.network import Network
 from networkx.algorithms import bipartite
 import sys
 
-loadPath = sys.argv[1]+sys.argv[2]+"_result/qcResult/"
+loadPath = sys.argv[1] + sys.argv[2] + "_result/qcResult/"
 # loadPath = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202306181609/"
 
 # Create a new graph
@@ -35,10 +35,7 @@ for edge in G.edges:
 nt.barnes_hut(overlap=0.2)
 
 # Generate an HTML file with the visualization
-nt.save_graph(loadPath+"hidden_layers.html")
-
-
-
+nt.save_graph(loadPath + "hidden_layers.html")
 
 B = nx.Graph()
 B.add_nodes_from(['A', 'B', 'C', 'D', 'E'], bipartite=0)
@@ -50,11 +47,11 @@ nt2 = Network(height="500px", width="100%", notebook=False)
 
 # Add nodes and edges to the network
 for node in B.nodes:
-    nt2.add_node(node,x=100,y=100)
+    nt2.add_node(node, x=100, y=100)
 
 for edge in B.edges:
     src, tgt = edge
     nt2.add_edge(src, tgt)
 
 # Generate an HTML file with the visualization
-nt2.save_graph(loadPath+"bipartite_graph.html")
+nt2.save_graph(loadPath + "bipartite_graph.html")
