@@ -22,30 +22,29 @@ errF <- learnErrors(filename_of_error_learning_Fs, multithread = TRUE)
 errR <- learnErrors(filename_of_error_learning_Rs, multithread = TRUE)
 
 # 準備一些變數
+# (用於標示abundance排序，意味一個sample最多就99個ASV)
 numbers = c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
-
-
-# 這邊寫死了，要修改，
-# 策略一： multiplex...txt的table用loci.1、loci.2這樣的參數取代掉c("fNYG", "rVVG")內的兩個參數
-# 策略二：直接從config檔裡面傳參數近來，會遇到的問題是，你不知道他要傳幾組，所以可能要寫成向第41行的處理方式
-rbcLC = c("fNYG", "rVVG") #"rbcLC" and column names of primers, VARIABLEs; the first and second items corresponding to the order in demultiplex.sh
-rbcLN = c("fVGF", "rECL")
-# 多loci，要從sh傳參近來，搭配multiplex_clean.txt一起使用，後者是使用者自備的，所以格式很重要
-trnLF = c("L5675", "F4121")
-trnL = c("oneIf1", "L7556")
-pgiC = c("fIQQ", "rESN")
-COI = c("COI_CI46", "COI_rLAG")
 AP_minlength = 1  #TODO 這個也變參數(序列長度)
 minoverlap = 4 #TODO 這個也變參數(merge重疊bp數)
 
-#AP<-data.frame(rbcLC, rbcLN, trnLF, trnL)
-#AP<-data.frame(rbcLC)
 
-#yixuan modified (記得參數順序有變的時候要改)
-AP_temp <- args[6:as.numeric(length(args[]))]
+# Get the locus names and their elements as parameters
+# # example: "a" "b" "c" "d" "e" "rbcLN" "trnLF" "rbcLC" "trnL" "fVGF" "rECL" "L5675" "F4121" "fNYG" "rVVG" "oneIf1" "L7556"
+loci_count <- length(args[6:as.numeric(length(args[]))]) / 3
+loci_count # 4
+locus_names <- args[6:(6 + loci_count - 1)]
+locus_names # "rbcLN" "trnLF" "rbcLC" "trnL"
+locus_elements <- args[(6 + loci_count):as.numeric(length(args[]))]
+locus_elements # "fVGF" "rECL" "L5675" "F4121" "fNYG"   "rVVG" "oneIf1" "L7556"
 
-print(AP_temp)
-AP <- data.frame(mget(AP_temp))
+# Create a data frame using the locus names and elements
+AP <- data.frame(matrix(nrow = 2, ncol = length(locus_names)))
+colnames(AP) <- locus_names
+AP[1,] <- locus_elements[1:(length(locus_elements) %/% 2)] # 取primerF
+AP[2,] <- locus_elements[((length(locus_elements) %/% 2)+1):length(locus_elements)] # 取primerR
+
+# Print the resulting data frame
+print(AP)
 
 multiplex_cpDNAbarcode_clean_path = paste0(path_of_reads, args[5]) #20230107 "multiplex_cpDNAbarcode_clean.txt"請改成變數 done
 multiplex <- read.table(

@@ -88,7 +88,9 @@ def home():
     default_errorRateCutadaptor = 0.125
     default_minimumLengthCutadaptor = 70
     default_primerF = "GAGACTAAAGCAGGTGTTGGATTCA"
+    default_primerFName = "fVGF"
     default_primerR = "TCAAGTCCACCRCGAAGRCATTC"
+    default_primerRName = "rECL"
     # default_amplicon_r1 = "rbcLN_amplicon_r1.fq"
     # default_amplicon_r2 = "rbcLN_amplicon_r2.fq"
     default_barcodesFile1 = "barcodes_rbcL_start_0.fasta"
@@ -114,7 +116,9 @@ def home():
                            default_errorRateCutadaptor=default_errorRateCutadaptor,
                            default_minimumLengthCutadaptor=default_minimumLengthCutadaptor,
                            default_primerF=default_primerF,
+                           default_primerFName=default_primerFName,
                            default_primerR=default_primerR,
+                           default_primerRName=default_primerRName,
                            # default_amplicon_r1=default_amplicon_r1,
                            # default_amplicon_r2=default_amplicon_r2,
                            default_barcodesFile1=default_barcodesFile1,
