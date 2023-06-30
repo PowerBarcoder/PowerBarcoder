@@ -9,7 +9,7 @@ PowerBarcoder is a free software, which is open source.
 PowerBarcoder is a cross-platform software, which can be used in Windows, Linux, and Mac OS.
 
 ## Features (we are trying to achieve)
-1. NGS Data Cleaning Solution (Illumina Miseq)
+1. NGS Data Cleaning Solution (Miseq)
 2. High performance with coroutines, multi-threading, and multiprocessing design
 3. GUI for easy use
 4. Docker for easy deployment
