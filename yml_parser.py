@@ -51,8 +51,14 @@ def parsingYmlToShell():
     for i in range(len(config['primerF'])):
         script += f"primerF+=('{config['primerF'][i]}')\n"  # primerF
 
+    for i in range(len(config['primerFName'])):
+        script += f"primerFName+=('{config['primerFName'][i]}')\n"  # primerFName
+
     for i in range(len(config['primerR'])):
         script += f"primerR+=('{config['primerR'][i]}')\n"  # primerR
+
+    for i in range(len(config['primerRName'])):
+        script += f"primerRName+=('{config['primerRName'][i]}')\n"  # primerRName
 
     # for i in range(len(config['amplicon_r1'])):
     #     script += f"amplicon_r1+=('{config['amplicon_r1'][i]}')\n"  # amplicon_r1

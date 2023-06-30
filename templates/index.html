@@ -393,9 +393,13 @@
                         </span>
                     </label>
                     <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control primerF" id="primerF" name="primerF"
-                                   required="required"
+                        <div class="col">
+                            <input type="text" class="form-control primerFName" required="required"
+                                   placeholder="{{default_primerFName}}" id="primerFName" name="primerFName">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control primerF" id="primerF"
+                                   name="primerF" required="required"
                                    placeholder="{{default_primerF}}">
                         </div>
                     </div>
@@ -410,13 +414,18 @@
                         </span>
                     </label>
                     <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control primerR" id="primerR" name="primerR"
-                                   required="required"
+                        <div class="col">
+                            <input type="text" class="form-control primerRName" required="required"
+                                   placeholder="{{default_primerRName}}" id="primerRName" name="primerRName">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control primerR" id="primerR"
+                                   name="primerR" required="required"
                                    placeholder="{{default_primerR}}">
                         </div>
                     </div>
                 </div>
+
                 <!--                <div class="form-group">-->
                 <!--                    <label for="amplicon_r1">-->
                 <!--                        <span id="tooltip9">Amplicon R1: <i class="fa fa-question-circle"></i></span>-->
@@ -578,7 +587,9 @@
                 document.getElementById('nameOfLoci').value = '{{default_nameOfLoci}}'
                 document.getElementById('errorRateCutadaptor').value = '{{default_errorRateCutadaptor}}'
                 document.getElementById('minimumLengthCutadaptor').value = '{{default_minimumLengthCutadaptor}}'
+                document.getElementById('primerFName').value = '{{default_primerFName}}'
                 document.getElementById('primerF').value = '{{default_primerF}}'
+                document.getElementById('primerRName').value = '{{default_primerRName}}'
                 document.getElementById('primerR').value = '{{default_primerR}}'
                 // document.getElementById('amplicon_r1').value = '{{default_amplicon_r1}}'
                 // document.getElementById('amplicon_r2').value = '{{default_amplicon_r2}}'
@@ -792,7 +803,13 @@
                         'minimumLengthCutadaptor': $('.minimumLengthCutadaptor').map(function () {
                             return $(this).val();
                         }).get(),
+                        'primerFName': $('.primerFName').map(function () {
+                            return $(this).val();
+                        }).get(),
                         'primerF': $('.primerF').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'primerRName': $('.primerRName').map(function () {
                             return $(this).val();
                         }).get(),
                         'primerR': $('.primerR').map(function () {
@@ -892,18 +909,44 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="primerF">Primer F:</label>
+                    <label for="primerF">
+                        <span id="tooltip7">Primer F: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Primer F sequence for this locus
+                            </i>
+                        </span>
+                    </label>
                     <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control primerF" id="primerF" required="required" name="primerF">
+                        <div class="col">
+                            <input type="text" class="form-control primerFName" required="required"
+                                   placeholder="{{default_primerFName}}" id="primerFName" name="primerFName">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control primerF" id="primerF"
+                                   name="primerF" required="required"
+                                   placeholder="{{default_primerF}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="primerR">Primer R:</label>
+                    <label for="primerR">
+                        <span id="tooltip8">Primer R: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Primer R sequence for this locus
+                            </i>
+                        </span>
+                    </label>
                     <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control primerR" id="primerR" required="required" name="primerR">
+                        <div class="col">
+                            <input type="text" class="form-control primerRName" required="required"
+                                   placeholder="{{default_primerRName}}" id="primerRName" name="primerRName">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control primerR" id="primerR"
+                                   name="primerR" required="required"
+                                   placeholder="{{default_primerR}}">
                         </div>
                     </div>
                 </div>
