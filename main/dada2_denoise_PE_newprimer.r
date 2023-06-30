@@ -34,7 +34,7 @@ rbcLN = c("fVGF", "rECL")
 trnLF = c("L5675", "F4121")
 trnL = c("oneIf1", "L7556")
 pgiC = c("fIQQ", "rESN")
-CO1 = c("CI46", "rLAG")
+COI = c("COI_CI46", "COI_rLAG")
 AP_minlength = 1  #TODO 這個也變參數(序列長度)
 minoverlap = 4 #TODO 這個也變參數(merge重疊bp數)
 
