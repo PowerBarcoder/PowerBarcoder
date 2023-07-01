@@ -6,6 +6,9 @@ import traceback
 print(f"[INFO] Start to parse csv in {sys.argv[2]}!")
 
 input_path = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.txt"
+demultiplex_untrimmed_result_path = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/untrimmed"
+demultiplex_trimmed_result_path = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/trimmed"
+demultiplex_filtered_result_path = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/filtered"
 denoise_pair_path = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_pairs.txt"
 blast_result_path = sys.argv[1] + sys.argv[2] + "_result/blastResult/" + sys.argv[2] + "_blastResult.txt"
 dada2_denoise_r1_path = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/r1/"
@@ -28,6 +31,20 @@ def parsingDenoisePairIntoDict():
             maps[key] = value
     # example:  'rbcLN_fVGF_br16_rECL_br06': 'Deparia_edentula_Wade3820_KTHU2093'
     return maps
+
+
+
+def parsingFastqReadsNumber(path:str, prefix:str, file_name:str, rwho:str):
+    """
+    demultiplex_untrimmed_result_path: "rbcLN_fVGF_br01_rECL_br01_r1.fq"
+    demultiplex_trimmed_result_path: "trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
+    demultiplex_filtered_result_path: "filtered_trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
+    """
+    with open(path + "/" + prefix + file_name + "_" + rwho +".fq", "r") as f:
+        # calculate the number of lines
+        num_lines = sum(1 for line in f)
+        fastq_reads_number = num_lines / 4
+    return fastq_reads_number
 
 
 def parsingBlastResultIntoDict():
@@ -220,7 +237,28 @@ def parsingAllDataIntoCsv(destination: str):
             for file_set in file_set_list:
                 file_exist = any(barcode_name in filename or sample_name in filename for filename in file_set)
                 if file_exist:
-                    temp_row.append("V")
+                    # # 計算以下清單對應檔案的fastq reads number，其他欄位則"V"即可
+                    # "Cutadapt demultiplex by sample barcode r1",
+                    # "Cutadapt demultiplex by sample barcode r2",
+                    # "Cutadapt trim the primer sites r1",
+                    # "Cutadapt trim the primer sites r2",
+                    # "DADA2 filter r1",
+                    # "DADA2 filter r2",
+                    if file_set_parameter_list[file_set_list.index(file_set)] == "Cutadapt demultiplex by sample barcode r1":
+                        temp_row.append(parsingFastqReadsNumber(demultiplex_untrimmed_result_path, "", barcode_name, "r1"))
+                    elif file_set_parameter_list[file_set_list.index(file_set)] == "Cutadapt demultiplex by sample barcode r2":
+                        temp_row.append(parsingFastqReadsNumber(demultiplex_untrimmed_result_path, "", barcode_name, "r2"))
+                    elif file_set_parameter_list[file_set_list.index(file_set)] == "Cutadapt trim the primer sites r1":
+                        temp_row.append(parsingFastqReadsNumber(demultiplex_trimmed_result_path, "trim_", barcode_name, "r1"))
+                    elif file_set_parameter_list[file_set_list.index(file_set)] == "Cutadapt trim the primer sites r2":
+                        temp_row.append(parsingFastqReadsNumber(demultiplex_trimmed_result_path, "trim_", barcode_name, "r2"))
+                    elif file_set_parameter_list[file_set_list.index(file_set)] == "DADA2 filter r1":
+                        temp_row.append(parsingFastqReadsNumber(demultiplex_filtered_result_path, "filtered_trim_", barcode_name, "r1"))
+                    elif file_set_parameter_list[file_set_list.index(file_set)] == "DADA2 filter r2":
+                        temp_row.append(parsingFastqReadsNumber(demultiplex_filtered_result_path, "filtered_trim_", barcode_name, "r2"))
+                    else:
+                        temp_row.append("V")
+
                     # # 抓取merger merge seq的檔名
                     # if file_set_parameter_list[file_set_list.index(file_set)] == "Merger merge":
                     #     merger_merge_file_name = next((element for element in parsingFileListIntoSet("Merger merge") if element.startswith(sample_name)), None)
@@ -329,9 +367,9 @@ def parsingAllDataIntoCsv(destination: str):
         # Iterate over each column except the first one (headers)
         for column_index in range(2, 15):
             column_values = [row[column_index] for row in rows[11:]]  # From the first data row
-            v_count = column_values.count('V')
+            v_count = column_values.count('N/A')
             # Add the count to the last row
-            v_count_list.append(str(v_count))
+            v_count_list.append(str(len(column_values) - v_count)+"/"+str((len(column_values))))
     # # Write the updated data back to the CSV file
     with open(destination, 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
