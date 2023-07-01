@@ -80,7 +80,8 @@ class BlastRef:
             # # 條件：
             # 1.identity: 用3排序，取最高者出來，但不低於90
             # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半(qseqid去找檔案算長度，不用寫到檔名上)
-            if float(cate[query_name][2]) < float(pident) and float(pident) >= 90:
+            # if float(cate[query_name][2]) < float(pident) and float(pident) >= 90: #20230702 90的效果有點差，先拿掉
+            if float(cate[query_name][2]) < float(pident):
                 cate[query_name] = value_List
             elif float(cate[query_name][2]) == float(pident):
                 if float(cate[query_name][12]) < float(qstartMinusQend):
