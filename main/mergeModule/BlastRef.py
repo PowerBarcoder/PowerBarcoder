@@ -45,166 +45,52 @@ class BlastRef:
     """
 
     def blastRef(self, load_dir, loci_name):
-        List = []
-        # step 1: 製作所有key的清單
-        i = 1
-        text = lc.getline(load_dir + loci_name + "_refResult.txt", 1)
-        while len(text) > 1:
-            text = lc.getline(load_dir + loci_name + "_refResult.txt", i)
-            if (len(text) < 1):
+        # Step 1: Read file
+        with open(load_dir + loci_name + "_refResult.txt", encoding='iso-8859-1') as f:
+            lines = f.readlines()
+
+        # Step 2: Initialize the category dictionary and value list
+        default_value_List = ["", "", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, "", ""]
+        cate = {}
+
+        # Step 3: Process the lines and update the category dictionary
+        for line in lines:
+            if not line.strip():
                 break
 
-            textList = []
-            textList = text.split("	")  # 檔案是用tab分隔的
-            qseqid = textList[0]
-            qseqidSplitList = textList[0].split("_")
-
-            # 名稱案例：
-
-            # queryName=qseqidSplitList[3]+"_"+qseqidSplitList[2]+"_"+qseqidSplitList[0]+"_"+qseqidSplitList[1]+"_.fas"
-            # # LocalBlast內的：Asplenium_affine_Wade4208_KTHU1183_01_r1_1.000_abundance_65
-            # # 當前的名      ：KTHU1183_Wade4208_Asplenium_affine_.fas
-            # # 實際r1的名    ：KTHU1183_Wade4208_Asplenium_affine_.fas
-
-            # queryName=qseqidSplitList[4]+"_"+qseqidSplitList[3]+"_"+qseqidSplitList[0]+"_"+qseqidSplitList[1]+"_"+qseqidSplitList[2]+"_.fas"
-            # # LocalBlast內的：Asplenium_aff._normale_Kuo3457_KTHU1185_01_r1_1.000_abundance_53
-            # # 當前的名      ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
-            # # 實際r1的名    ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
+            textList = (line.split("\t"))
+            # print(textList) # ['Arachniodes_aristata_122_12_2_01_0.632_abundance_127', 'Cu_po_JP_1', '100.000', '269', '0', '0', '286', '554', '135', '403', '6.28e-143', '497\n']
 
             # 20230619 因為所有abundance都要做，所以檔名直接用textList[0]，不用再parsing了
-            queryName = textList[0] + ".fas"
-            # # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
-            # queryName = qseqidSplitList[:-5][-1] + "_" + qseqidSplitList[:-5][-2] + "_" + "_".join(
-            #     qseqidSplitList[:-5][:-2]) + "_.fas"
+            query_name = textList[0] + ".fas"
+            qseqid = query_name
+            sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue, bitscore = textList[1:12]
+            qstartMinusQend = abs(int(qstart) - int(qend)) #20230702 應該是之前用到負數來比了，所以才會取反，這裡補上abs()
+            sstartMinusSend = abs(int(sstart) - int(send))
+            rWho = "rWho"
 
-            List.append(queryName)
+            # # add default value in the category dictionary
+            if query_name not in cate:
+                cate[query_name] = default_value_List
 
-            i = i + 1
+            value_List = [qseqid, sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue,
+                          bitscore, qstartMinusQend, sstartMinusSend, rWho]
 
-        cate = dict([(k, ["", "", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, "", ""]) for k in List])
-        # 第一個是qseqid，第二個是sseqid，第三個是pident...以此類推
-        # print(len(cate))
-        # 有31個檔案沒錯
-
-        #  1.	 qseqid	 query (e.g., gene) sequence id
-        #  2.	 sseqid	 subject (e.g., reference genome) sequence id
-        #  3.	 pident	 percentage of identical matches
-        #  4.	 length	 alignment length
-        #  5.	 mismatch	 number of mismatches
-        #  6.	 gapopen	 number of gap openings
-        #  7.	 qstart	 start of alignment in query
-        #  8.	 qend	 end of alignment in query
-        #  9.	 sstart	 start of alignment in subject
-        #  10.	 send	 end of alignment in subject
-        #  11.	 evalue	 expect value
-        #  12.	 bitscore	 bit score
-        #  13.   qstartMinusQend
-        #  14.   sstartMinusSend
-        #  15.   rWhoList(r1或r2)
-        #  16.   refList(???)
-
-        # step 2: 接上，將value一一貼到key的list裡
-        i = 1
-        text = lc.getline(load_dir + loci_name + "_refResult.txt", 1)
-        while len(text) > 1:
-            text = lc.getline(load_dir + loci_name + "_refResult.txt", i)
-            if (len(text) < 1):
-                break
-
-            # 第一個是sseqid，第二個是pident，第三個是qstartMinusQend
-            # TODO
-            # 1.用3排序，取最高者出來，pident=textList[2]  #現在是取最高，可是實際上產出的序列可能%很低，所以把%家在檔名上
-            #     如果之後要做篩選，可以從檔名判斷，只要abundance或%有一個過低，就列進清單裡
-            # 2.用abs(7-8)取最大，qstartMinusQend=abs(textList[6]-textList[7])
-
-            textList = []
-            textList = text.split("	")
-            qseqid = textList[0]
-            qseqidSplitList = textList[0].split("_")
-
-            # 名稱案例：
-
-            # queryName=qseqidSplitList[3]+"_"+qseqidSplitList[2]+"_"+qseqidSplitList[0]+"_"+qseqidSplitList[1]+"_.fas"
-            # # LocalBlast內的：Asplenium_affine_Wade4208_KTHU1183_01_r1_1.000_abundance_65
-            # # 當前的名      ：KTHU1183_Wade4208_Asplenium_affine_.fas
-            # # 實際r1的名    ：KTHU1183_Wade4208_Asplenium_affine_.fas
-
-            # queryName=qseqidSplitList[4]+"_"+qseqidSplitList[3]+"_"+qseqidSplitList[0]+"_"+qseqidSplitList[1]+"_"+qseqidSplitList[2]+"_.fas"
-            # # LocalBlast內的：Asplenium_aff._normale_Kuo3457_KTHU1185_01_r1_1.000_abundance_53
-            # # 當前的名      ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
-            # # 實際r1的名    ：KTHU1185_Kuo3457_Asplenium_aff._normale_.fas
-
-            # 20230619 因為所有abundance都要做，所以檔名直接用textList[0]，不用再parsing了
-            queryName = textList[0] + ".fas"
-            # # 最終定案規律如下：localblast轉換成r1或r2檔名的邏輯，先trim掉dada2的後綴(5個)，然後按[KTHUXXX]_[採集號]_[種名]_.fas排
-            # queryName = qseqidSplitList[:-5][-1] + "_" + qseqidSplitList[:-5][-2] + "_" + "_".join(
-            #     qseqidSplitList[:-5][:-2]) + "_.fas"
-
-            # TODO 這邊取出abundance最高的
-
-            qseqid = queryName
-            sseqid = textList[1]
-            pident = textList[2]
-            length = textList[3]
-            mismatch = textList[4]
-            gapopen = textList[5]
-            qstart = textList[6]
-            qend = textList[7]
-            sstart = textList[8]
-            send = textList[9]
-            evalue = textList[10]
-            bitscore = textList[11]
-            qstartMinusQend = (int(textList[6]) - int(textList[7]))
-            sstartMinusSend = (int(textList[8]) - int(textList[9]))
-            # 20230206 10N 處理下，棄用rWho直接寫死，在下一步再按順序判斷
-            # rWho=qseqidSplitList[-4] #從後面取過來，因為後綴是dada2加的，固定四個"Nephrolepis_sp._Lu30199_Co262_01_r1_0.976_abundance_280"
-            rWho = "rWho"  # 從後面取過來，因為後綴是dada2加的，固定四個"Nephrolepis_sp._Lu30199_Co262_01_r1_0.976_abundance_280"
-
-            # TODO
-            # 判斷順序：
+            # 一個Sample會blast到多筆，每讀出一行就要檢查是否有更符合條件的值，有的話就更新
+            # # 條件：
             # 1.identity: 用3排序，取最高者出來，但不低於90
             # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半(qseqid去找檔案算長度，不用寫到檔名上)
-            if (float(cate[queryName][2]) < float(pident)):
-                cate[queryName][0] = qseqid
-                cate[queryName][1] = sseqid
-                cate[queryName][2] = pident
-                cate[queryName][3] = length
-                cate[queryName][4] = mismatch
-                cate[queryName][5] = gapopen
-                cate[queryName][6] = qstart
-                cate[queryName][7] = qend
-                cate[queryName][8] = sstart
-                cate[queryName][9] = send
-                cate[queryName][10] = evalue
-                cate[queryName][11] = bitscore
-                cate[queryName][12] = qstartMinusQend
-                cate[queryName][13] = sstartMinusSend
-                cate[queryName][14] = rWho
-
-            elif (float(cate[queryName][2]) == float(pident)):
-                if (float(cate[queryName][12]) < float(qstartMinusQend)):
-                    cate[queryName][0] = qseqid
-                    cate[queryName][1] = sseqid
-                    cate[queryName][2] = pident
-                    cate[queryName][3] = length
-                    cate[queryName][4] = mismatch
-                    cate[queryName][5] = gapopen
-                    cate[queryName][6] = qstart
-                    cate[queryName][7] = qend
-                    cate[queryName][8] = sstart
-                    cate[queryName][9] = send
-                    cate[queryName][10] = evalue
-                    cate[queryName][11] = bitscore
-                    cate[queryName][12] = qstartMinusQend
-                    cate[queryName][13] = sstartMinusSend
-                    cate[queryName][14] = rWho
-
-            i = i + 1
+            if float(cate[query_name][2]) < float(pident) and float(pident) >= 90:
+                cate[query_name] = value_List
+            elif float(cate[query_name][2]) == float(pident):
+                if float(cate[query_name][12]) < float(qstartMinusQend):
+                    cate[query_name] = value_List
 
         # print(cate)
         # print(len(cate.keys())) #這個數應該要跟nonmerge裡面的檔案數量一致，20230206 267沒錯
         # print(len(cate.keys()))
 
+        # Step 4: 物件拼裝
         qseqidList = []
         for key in cate:
             qseqidList.append(cate[key][0])
@@ -262,7 +148,7 @@ class BlastRef:
 
         bitscoreList = []
         for key in cate:
-            bitscoreList.append(cate[key][11].replace("\n", ""))  # 這裡莫名其妙有個換行
+            bitscoreList.append(str(cate[key][11]).replace("\n", ""))  # 這裡莫名其妙有個換行
         self.bitscoreList = bitscoreList
 
         qstartMinusQendList = []
@@ -281,3 +167,21 @@ class BlastRef:
         self.rWhoList = rWhoList
 
         return self
+
+
+        #  1.	 qseqid	 query (e.g., gene) sequence id
+        #  2.	 sseqid	 subject (e.g., reference genome) sequence id
+        #  3.	 pident	 percentage of identical matches
+        #  4.	 length	 alignment length
+        #  5.	 mismatch	 number of mismatches
+        #  6.	 gapopen	 number of gap openings
+        #  7.	 qstart	 start of alignment in query
+        #  8.	 qend	 end of alignment in query
+        #  9.	 sstart	 start of alignment in subject
+        #  10.	 send	 end of alignment in subject
+        #  11.	 evalue	 expect value
+        #  12.	 bitscore	 bit score
+        #  13.   qstartMinusQend
+        #  14.   sstartMinusSend
+        #  15.   rWhoList(r1或r2)
+        #  16.   refList(???)
