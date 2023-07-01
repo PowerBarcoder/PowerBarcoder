@@ -158,7 +158,7 @@ for filename in candidate_list:
 
             # 看起來要寫個檔案先存起來 (20230111這步ok)
             aligntext = ">r1\n" + r1_for_align + "\n" + ">r2\n" + r2_for_align
-            with open(loadpath + "mafft/" + filename + "temp.fasta", "w", encoding="UTF-8") as file:
+            with open(loadpath + "mafft/" + filename + "temp.fasta", "w", encoding="iso-8859-1") as file:
                 file.write(aligntext)
 
             # 步驟四(執行alignment)
@@ -272,7 +272,7 @@ for filename in candidate_list:
         output_filename = output_filename + "_" + r1_header_name + "_" + r2_header_name
 
         merge_seq_text = ">" + output_filename + "\n" + merge_seq + "\n"  # 處理mergeseq
-        with open(mergepath + filename, "w", encoding="UTF-8") as file:
+        with open(mergepath + filename, "w", encoding="iso-8859-1") as file:
             file.write(merge_seq_text)
 
     except Exception as e:

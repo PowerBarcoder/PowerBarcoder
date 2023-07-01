@@ -207,7 +207,7 @@ for filename in candidate_list:
             # 10N： r1_for_align跟r2_for_align要先degap
             # 20230206 我決定在這邊做degap(所以下一行多加了".replace("-","")")
             aligntext = ">r1\n" + r1_for_align.replace("-", "") + "\n" + ">r2\n" + r2_for_align.replace("-", "")
-            with open(loadpath + "mafft/" + filename + "temp.fasta", "w", encoding="UTF-8") as file:
+            with open(loadpath + "mafft/" + filename + "temp.fasta", "w", encoding="iso-8859-1") as file:
                 file.write(aligntext)
 
             # 步驟四(執行alignment)
@@ -322,12 +322,12 @@ for filename in candidate_list:
 
         # (deprecated 20230611)(retained 20230624，為了方便除錯，還是留著看gap在哪)
         merge_seq_text = ">" + output_filename + "\n" + merge_seq + "\n"  # 處理mergeseq
-        with open(mergepath + filename, "w", encoding="UTF-8") as file:
+        with open(mergepath + filename, "w", encoding="iso-8859-1") as file:
             file.write(merge_seq_text)
 
         de_gap_merge_seq = merge_seq.replace("N", "").replace("-", "")  # 處理degapmergeseq
         de_gap_merge_seq_text = ">" + output_filename + "\n" + de_gap_merge_seq + "\n"
-        with open(degapMergepath + filename, "w", encoding="UTF-8") as file:
+        with open(degapMergepath + filename, "w", encoding="iso-8859-1") as file:
             file.write(de_gap_merge_seq_text)
 
     except Exception as e:
