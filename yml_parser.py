@@ -28,37 +28,37 @@ def parsingYmlToShell():
     script += f"myCutadaptPath='/venv/cutadapt-venv/bin/'\n"
     script += f"myFastpPath='/usr/local/bin/'\n"
     script += f"localBlastToolDir='/usr/local/bin/'\n"
-    script += f"ampliconInfo='{config['ampliconInfo']}'\n"  # ampliconInfo
+    script += f"ampliconInfo='{str(config['ampliconInfo']).strip()}'\n"  # ampliconInfo
     script += f"resultDataPath='/PowerBarcoder/data/result/'$datetime\n"
     script += f"missList='/PowerBarcoder/data/missingList.txt'\n"
-    script += f"R1FastqGz='{config['R1FastqGz']}'\n"  # R1FastqGz
-    script += f"R2FastqGz='{config['R2FastqGz']}'\n"  # R2FastqGz
+    script += f"R1FastqGz='{str(config['R1FastqGz']).strip()}'\n"  # R1FastqGz
+    script += f"R2FastqGz='{str(config['R2FastqGz']).strip()}'\n"  # R2FastqGz
     script += f"summaryJsonFileName='summary.json'\n"
     script += f"summaryHtmlFileName='summary.html'\n"
-    script += f"dada2LearnErrorFile='{config['dada2LearnErrorFile']}'\n"  # dada2LearnErrorFile
-    script += f"dada2BarcodeFile='{config['dada2BarcodeFile']}'\n"  # dada2BarcodeFile
+    script += f"dada2LearnErrorFile='{str(config['dada2LearnErrorFile']).strip()}'\n"  # dada2LearnErrorFile
+    script += f"dada2BarcodeFile='{str(config['dada2BarcodeFile']).strip()}'\n"  # dada2BarcodeFile
 
     # loci
     for i in range(len(config['nameOfLoci'])):
-        script += f"nameOfLoci+=('{config['nameOfLoci'][i]}')\n"  # nameOfLoci
+        script += f"nameOfLoci+=('{str(config['nameOfLoci'][i]).strip()}')\n"  # nameOfLoci
 
     for i in range(len(config['errorRateCutadaptor'])):
-        script += f"errorRateCutadaptor+=('{config['errorRateCutadaptor'][i]}')\n"  # errorRateCutadaptor
+        script += f"errorRateCutadaptor+=('{str(config['errorRateCutadaptor'][i]).strip()}')\n"  # errorRateCutadaptor
 
     for i in range(len(config['minimumLengthCutadaptor'])):
-        script += f"minimumLengthCutadaptor+=('{config['minimumLengthCutadaptor'][i]}')\n"  # minimumLengthCutadaptor
+        script += f"minimumLengthCutadaptor+=('{str(config['minimumLengthCutadaptor'][i]).strip()}')\n"  # minimumLengthCutadaptor
 
     for i in range(len(config['primerF'])):
-        script += f"primerF+=('{config['primerF'][i]}')\n"  # primerF
+        script += f"primerF+=('{str(config['primerF'][i]).strip()}')\n"  # primerF
 
     for i in range(len(config['primerFName'])):
-        script += f"primerFName+=('{config['primerFName'][i]}')\n"  # primerFName
+        script += f"primerFName+=('{str(config['primerFName'][i]).strip()}')\n"  # primerFName
 
     for i in range(len(config['primerR'])):
-        script += f"primerR+=('{config['primerR'][i]}')\n"  # primerR
+        script += f"primerR+=('{str(config['primerR'][i]).strip()}')\n"  # primerR
 
     for i in range(len(config['primerRName'])):
-        script += f"primerRName+=('{config['primerRName'][i]}')\n"  # primerRName
+        script += f"primerRName+=('{str(config['primerRName'][i]).strip()}')\n"  # primerRName
 
     # for i in range(len(config['amplicon_r1'])):
     #     script += f"amplicon_r1+=('{config['amplicon_r1'][i]}')\n"  # amplicon_r1
@@ -67,19 +67,19 @@ def parsingYmlToShell():
     #     script += f"amplicon_r2+=('{config['amplicon_r2'][i]}')\n"  # amplicon_r2
 
     for i in range(len(config['barcodesFile1'])):
-        script += f"barcodesFile1+=('{config['barcodesFile1'][i]}')\n"  # barcodesFile1
+        script += f"barcodesFile1+=('{str(config['barcodesFile1'][i]).strip()}')\n"  # barcodesFile1
 
     for i in range(len(config['barcodesFile2'])):
-        script += f"barcodesFile2+=('{config['barcodesFile2'][i]}')\n"  # barcodesFile2
+        script += f"barcodesFile2+=('{str(config['barcodesFile2'][i]).strip()}')\n"  # barcodesFile2
 
     for i in range(len(config['sseqidFileName'])):
-        script += f"sseqidFileName+=('{config['sseqidFileName'][i]}')\n"  # sseqidFileName
+        script += f"sseqidFileName+=('{str(config['sseqidFileName'][i]).strip()}')\n"  # sseqidFileName
 
     for i in range(len(config['minimumLengthCutadaptorInLoop'])):
-        script += f"minimumLengthCutadaptorInLoop+=('{config['minimumLengthCutadaptorInLoop'][i]}')\n"  # minimumLengthCutadaptorInLoop
+        script += f"minimumLengthCutadaptorInLoop+=('{str(config['minimumLengthCutadaptorInLoop'][i]).strip()}')\n"  # minimumLengthCutadaptorInLoop
 
     for i in range(len(config['customizedCoreNumber'])):
-        script += f"customizedCoreNumber+=('{config['customizedCoreNumber'][i]}')\n"  # customizedCoreNumber
+        script += f"customizedCoreNumber+=('{str(config['customizedCoreNumber'][i]).strip()}')\n"  # customizedCoreNumber
 
     # script += f"nameOfLoci=('{','.join(config['nameOfLoci'])}')\n"# nameOfLoci
     # script += f"errorRateCutadaptor=('{','.join(str(x) for x in config['errorRateCutadaptor'])}')\n"# errorRateCutadaptor
@@ -104,45 +104,3 @@ def parsingYmlToShell():
 
     print('Config file has been exported as a shell script.')
 
-# # Access values in YAML file
-# myCutadaptPath = config['myCutadaptPath']
-# myFastpPath = config['myFastpPath']
-# localBlastToolDir = config['localBlastToolDir']
-# ampliconInfo = config['ampliconInfo']
-# resultDataPath = config['resultDataPath']
-# missList = config['missList']
-# R1FastqGz = config['R1FastqGz']
-# R2FastqGz = config['R2FastqGz']
-# summaryJsonFileName = config['summaryJsonFileName']
-# summaryHtmlFileName = config['summaryHtmlFileName']
-# dada2LearnErrorFile = config['dada2LearnErrorFile']
-# dada2BarcodeFile = config['dada2BarcodeFile']
-#
-# # Access nested values in YAML file
-# nameOfLoci = config['nameOfLoci']
-# errorRateCutadaptor = config['errorRateCutadaptor']
-# minimumLengthCutadaptor = config['minimumLengthCutadaptor']
-# primerF = config['primerF']
-# primerR = config['primerR']
-# amplicon_r1 = config['amplicon_r1']
-# amplicon_r2 = config['amplicon_r2']
-# barcodesFile1 = config['barcodesFile1']
-# barcodesFile2 = config['barcodesFile2']
-# sseqidFileName = config['sseqidFileName']
-# minimumLengthCutadaptorInLoop = config['minimumLengthCutadaptorInLoop']
-# customizedCoreNumber = config['customizedCoreNumber']
-# workingDirectory = config['workingDirectory']
-
-
-# # Generate shell script
-# script = '#!/bin/bash\n\n'
-# for key, value in config.items():
-#     if isinstance(value, list):
-#         for i, v in enumerate(value):
-#             script += f'{key}[{i}]="{v}"\n'
-#     else:
-#         script += f'{key}="{value}"\n'
-#
-# # Write shell script to file
-# with open('main/config_generated.sh', 'w') as f:
-#     f.write(script)
