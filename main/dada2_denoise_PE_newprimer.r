@@ -230,12 +230,4 @@ for (a in 1:ncol(AP)) {
 
   }
   stopImplicitCluster()
-
-  # 20230611 QC可取代，考慮刪掉
-  write.table(missing_sample_list, file = paste0(path_merge, "/dada2/missing_samples.txt"), append = FALSE, sep = "\t", quote = FALSE,
-              row.names = FALSE, col.names = FALSE)
-  write.table(seqtable, file = paste0(path_merge, "/dada2/sequence_table.txt"), append = FALSE, sep = "\t", quote = FALSE,
-              row.names = FALSE, col.names = FALSE)
-  write.table(dadamergfail, file = paste0(path_merge, "/dada2/dadamerge_fail.txt"), append = FALSE, sep = "\t", quote = FALSE,
-              row.names = FALSE, col.names = FALSE)
 }
