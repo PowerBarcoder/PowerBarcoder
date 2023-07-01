@@ -85,6 +85,8 @@ try:
     with open(fastaFile, "r") as file:
         lines = file.readlines()
         for line in lines:
+            if not line.strip():
+                break
             # print (line)
             line = line.replace("\n", "")
             lineSplit = line.split("\t")

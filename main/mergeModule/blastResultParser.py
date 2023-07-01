@@ -116,7 +116,8 @@ def determineDirection(i):
 with open(loadpath + sys.argv[3] + "_result/blastResult/" + sys.argv[3] + "_blastResult.txt", "w") as file:
     for i in range(0, len(qseqidList)):
         # print(determineDirection(i))
-        file.write(determineDirection(i) + "\n")
+        if "\t\t0\t0\t0\t0\t0\t0\t0\t0\t\t\t0\t0\t" not in determineDirection(i):
+            file.write(determineDirection(i) + "\n")
 
 # column info：
 # str(qseqidList[i]) +'\t'+
