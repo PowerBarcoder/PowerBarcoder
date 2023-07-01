@@ -30,7 +30,7 @@ def parsingDenoisePairIntoDict():
                 linePair = line.strip().split(',')
                 key, value = linePair[0], linePair[1]
                 maps[key] = value
-    except UnicodeDecodeError as e:
+    except Exception as e:
         print(f"Error decoding file: {e}")
     # example:  'rbcLN_fVGF_br16_rECL_br06': 'Deparia_edentula_Wade3820_KTHU2093'
     return maps
