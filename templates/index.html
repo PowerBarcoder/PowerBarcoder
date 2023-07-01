@@ -624,7 +624,7 @@
                 <div class="col-md-12 d-md-flex justify-content-md-end">
                     <input id="showModalButton" type="button" class=" btn btn-success d-none" value="View logs"
                            onclick="$('#myModal').modal('show')"> &nbsp;
-                    <input type="submit" class="btn btn-primary" value="Submit">
+                    <input id="submitButton" type="submit" class="btn btn-primary" value="Submit">
                 </div>
             </div>
         </div>
@@ -847,6 +847,24 @@
                     $("#myModal").modal("show")
                     $("#showModalButton").removeClass("d-none")
                     socket.emit('run-procedure', formData);
+
+                    // Disable the submit button
+                    $('#submitButton').prop('disabled', true);
+                    // Show the countdown text
+                    $('#submitButton').val('Please wait...');
+
+                    // Start the countdown
+                    let seconds = 70;
+                    let countdownInterval = setInterval(function () {
+                        seconds--;
+                        if (seconds > 0) {
+                            $('#submitButton').val('Please wait... ' + seconds + 's');
+                        } else {
+                            // Enable the submit button and restore its original value
+                            $('#submitButton').prop('disabled', false).val('Submit');
+                            clearInterval(countdownInterval);
+                        }
+                    }, 1000);
                 });
             </script>
         </div>
