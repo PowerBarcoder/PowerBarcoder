@@ -22,6 +22,7 @@ from os import listdir
 from os.path import isfile, join
 import sys
 import linecache
+import traceback
 from FastaUnit import FastaUnit
 
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
@@ -63,16 +64,24 @@ rawFiles = listdir(loadpath)
 # 先把fasta file按abundance切分成個別檔案，檔名用流水號編
 nCatFastaFile = FastaUnit()
 for filename in rawFiles:
-    fullpath = join(loadpath, filename)
-    if isfile(fullpath):
-        nCatFastaFile.splitMulitpleSeqFastaIntoFiles(fullpath, splitPath)
+    try:
+        fullpath = join(loadpath, filename)
+        if isfile(fullpath):
+            nCatFastaFile.splitMulitpleSeqFastaIntoFiles(fullpath, splitPath)
+    except:
+        print("[ERROR] Something wrong in " + filename + " when splitMulitpleSeqFastaIntoFiles().")
+        print(traceback.print_exc())
 
 # 檔名用header替換
 splitFiles = listdir(splitPath)
 for filename in splitFiles:
-    fullpath = join(splitPath, filename)
-    if isfile(fullpath):
-        nCatFastaFile.replaceFilenameWithHeader(fullpath, splitPath, True)
+    try:
+        fullpath = join(splitPath, filename)
+        if isfile(fullpath):
+            nCatFastaFile.replaceFilenameWithHeader(fullpath, splitPath, True)
+    except:
+        print("[ERROR] Something wrong in " + filename + " when replaceFilenameWithHeader().")
+        print(traceback.print_exc())
 
 # 取得切分後所有檔案與子目錄名稱
 splitFiles = listdir(splitPath)
