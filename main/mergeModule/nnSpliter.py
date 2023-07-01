@@ -88,15 +88,20 @@ splitFiles = listdir(splitPath)
 # 以迴圈處理
 processFileNumber = 0
 for filename in splitFiles:
-    # 產生檔案的絕對路徑
-    fullpath = join(splitPath, filename)
-    # 判斷 fullpath 是檔案還是目錄
-    if isfile(fullpath) and ('.fas' in filename[-4:]):
-        # print("檔案：", filename)
-        nn_spliter(splitPath, filename, r1_outputLoadpath, r2_outputLoadpath)  # 切檔
-        processFileNumber += 1
-    else:  # 20230415 可以考慮把r1,r2,r1ref,r2ref,mergeSeq,deGapMergeSeq,align都先排除
-        print("[WARNING]" + filename, "is not a file or the filename is not end with .fas")
+    try:
+        # 產生檔案的絕對路徑
+        fullpath = join(splitPath, filename)
+        # 判斷 fullpath 是檔案還是目錄
+        if isfile(fullpath) and ('.fas' in filename[-4:]):
+            # print("檔案：", filename)
+            nn_spliter(splitPath, filename, r1_outputLoadpath, r2_outputLoadpath)  # 切檔
+            processFileNumber += 1
+        else:  # 20230415 可以考慮把r1,r2,r1ref,r2ref,mergeSeq,deGapMergeSeq,align都先排除
+            print("[WARNING]" + filename, "is not a file or the filename is not end with .fas")
+    except:
+        print("[ERROR] Something wrong in " + filename + " in nnSpliter.py.")
+        print(traceback.print_exc())
+
 print("[INFO] " + str(processFileNumber), " files are split.")
 
 print("[INFO] nnSpliter.py is ended on loci: " + sys.argv[2])
