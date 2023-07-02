@@ -87,6 +87,24 @@ class BlastRef:
                 if float(cate[query_name][12]) < float(qstartMinusQend):
                     cate[query_name] = value_List
 
+        # # TODO 使用篩選模式參數來決定使用以下三種情境之一 (20230702)
+        #
+        #     if float(cate[query_name][2]) < float(pident) and float(pident) >= 85:
+        #         cate[query_name] = value_List
+        #     elif float(cate[query_name][2]) == float(pident):
+        #         if float(cate[query_name][12]) < float(qstartMinusQend):
+        #             cate[query_name] = value_List
+        #
+        #     if float(cate[query_name][12]) < float(qstartMinusQend) and float(pident) >= 85:
+        #         cate[query_name] = value_List
+        #     elif float(cate[query_name][12]) == float(qstartMinusQend):
+        #         if float(cate[query_name][2]) < float(pident):
+        #             cate[query_name] = value_List
+        #
+        #     if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85:
+        #         cate[query_name] = value_List
+
+
         # print(cate)
         # print(len(cate.keys())) #這個數應該要跟nonmerge裡面的檔案數量一致，20230206 267沒錯
         # print(len(cate.keys()))
