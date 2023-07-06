@@ -334,10 +334,5 @@ for filename in candidate_list:
         print(e)
         print("[WARNING] merger.py 319: something wrong.", filename)
 
-# 20220918
-# 最終檔案要長這樣(注意最後的header名要修改：r1_0.548_abundance_23_r2_0.548_abundance_23)
-# /home/lykuo/lab_data/NGS_data/miseq/LIB720/rbcLN_result/denoiseResult/denoise_best/r1
-# >Diplazium_sylvaticum_Wade4851_KTHU1447_01_r1_0.548_abundance_23_r2_0.548_abundance_23
-# GGCTGGTGTCAAAGATTACCGACTGAACTATTACACCCCCGAATACAAGACCAAAGATACTGACATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCAGCTGAGGAAGCCGGAGCTGCGGTAGCTGCGGAATCCTCCACGGGTACGTGGACCACTGTATGGACAGACGGGTTGACCAGTCTTGACCGTTACAAGGGCCGATGCTACGACATCGAACCTGTCGCTGGGGAGGAAAACCAGTATATCGCGTATGTAGCTT
 
 print("[INFO] merger.py is ended on loci: " + sys.argv[3])

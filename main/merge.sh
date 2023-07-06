@@ -20,7 +20,7 @@ for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
     echo "[INFO] ${count} nonmerged files found in ${nameOfLoci[i]}"
 
     #  準備parsing各loci local blast的結果 --- input：10N seq 的 blast refResult; output：10N blastResult
-    python3 ./mergeModule/blastResultParser.py "$ampliconInfo" "$resultDataPath" "${nameOfLoci[i]}"
+    python3 ./mergeModule/blastResultParser.py "$ampliconInfo" "$resultDataPath" "${blastParsingMode[i]}" "${nameOfLoci[i]}"
 
     #  就是這裡拆NN到原先的nonmerged/r1,r2資料夾裡(只負責拆，判斷方向交給下一步驟)
     python3 ./mergeModule/nnSpliter.py "$resultDataPath" "${nameOfLoci[i]}" #blast完，需要拆10N

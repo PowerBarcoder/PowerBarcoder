@@ -24,17 +24,17 @@ errR <- learnErrors(filename_of_error_learning_Rs, multithread = TRUE)
 # 準備一些變數
 # (用於標示abundance排序，意味一個sample最多就99個ASV)
 numbers = c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
-AP_minlength = 1  #TODO 這個也變參數(序列長度)
-minoverlap = 4 #TODO 這個也變參數(merge重疊bp數)
+AP_minlength = as.numeric(args[6])  # 這個也變參數(序列長度)
+minoverlap = as.numeric(args[7]) # 這個也變參數(merge重疊bp數)
 
 
 # Get the locus names and their elements as parameters
 # # example: "a" "b" "c" "d" "e" "rbcLN" "trnLF" "rbcLC" "trnL" "fVGF" "rECL" "L5675" "F4121" "fNYG" "rVVG" "oneIf1" "L7556"
-loci_count <- length(args[6:as.numeric(length(args[]))]) / 3
+loci_count <- length(args[8:as.numeric(length(args[]))]) / 3
 loci_count # 4
-locus_names <- args[6:(6 + loci_count - 1)]
+locus_names <- args[8:(8 + loci_count - 1)]
 locus_names # "rbcLN" "trnLF" "rbcLC" "trnL"
-locus_elements <- args[(6 + loci_count):as.numeric(length(args[]))]
+locus_elements <- args[(8 + loci_count):as.numeric(length(args[]))]
 locus_elements # "fVGF" "rECL" "L5675" "F4121" "fNYG"   "rVVG" "oneIf1" "L7556"
 
 # Create a data frame using the locus names and elements
@@ -135,13 +135,9 @@ for (a in 1:ncol(AP)) {
       # 匯出denoise後的r1序列，一條序列兩種檔名把檔名，如: "KTHU2084_Wade5880_Calymmodon_societatis_.fas", "fVGF_br01_rECL_br02"
       write.table(r1fas[, 1:2], file = paste0(path_denoise, "/r1/", filename), append = FALSE, sep = "\n", quote = FALSE,
                   row.names = FALSE, col.names = FALSE)
-      # write.table(r1fas[, 1:2], file = paste0(path_merge, "/r1/", r0), append = FALSE, sep = "\n", quote = FALSE,
-      #             row.names = FALSE, col.names = FALSE)
       # 匯出denoise後的r2序列，一條序列兩種檔名把檔名，如: "KTHU2084_Wade5880_Calymmodon_societatis_.fas", "fVGF_br01_rECL_br02"
       write.table(r2fas[, 1:2], file = paste0(path_denoise, "/r2/", filename), append = FALSE, sep = "\n", quote = FALSE,
                   row.names = FALSE, col.names = FALSE)
-      # write.table(r2fas[, 1:2], file = paste0(path_merge, "/r2/", r0), append = FALSE, sep = "\n", quote = FALSE,
-      #             row.names = FALSE, col.names = FALSE)
 
       # 順便存一個(barcodeName,sampleName)的namePair list
       barcode_name = paste(region, amplicon[sample_number, Fp], amplicon[sample_number, Rp], sep = "_")
@@ -184,9 +180,6 @@ for (a in 1:ncol(AP)) {
         # 存檔rbcLN_result\mergeResult\dada2
         write.table(fas[, 1:2], file = paste0(path_merge, "/dada2/merged/", filename), append = FALSE, sep = "\n", quote = FALSE,
                     row.names = FALSE, col.names = FALSE)
-        # (deprecated)
-        # write.table(fas[1, 1:2], file = paste0(path_denoise, "/denoise_best/", filename), append = FALSE, sep = "\n", quote = FALSE,
-        #             row.names = FALSE, col.names = FALSE)
       }else {
         cbind(r1, r2, header) -> fail
         rbind(dadamergfail, fail) -> dadamergfail
@@ -217,9 +210,6 @@ for (a in 1:ncol(AP)) {
         # 存檔
         write.table(fascat[, 1:2], file = paste0(path_merge, "/merger/nCatR1R2/", filename), append = FALSE, sep = "\n", quote = FALSE,
                     row.names = FALSE, col.names = FALSE)
-        # (deprecated)
-        # write.table(fascat[1, 1:2], file = paste0(path_denoise, "/denoise_best/nonmerged/", filename), append = FALSE, sep = "\n", quote = FALSE,
-        #             row.names = FALSE, col.names = FALSE)
       }
 
       # 20230611 QC可取代，考慮刪掉
