@@ -7,20 +7,23 @@
 完成後再底下的"方法們"
 """
 
-# sktang@Kuo-fern-lab:~/powerBC$ python3 alignmenter.py
-
 import sys
 from BlastRef import BlastRef
 
-print("[INFO] blastResultParser.py is running on loci: " + sys.argv[3])
+ampliconInfo = sys.argv[1]
+resultDataPath = sys.argv[2]
+blast_parsing_mode = sys.argv[3]
+nameOfLoci = sys.argv[4]
+
+print("[INFO] blastResultParser.py is running on loci: " + nameOfLoci)
 
 localBlast = BlastRef()
 
 # loadpath="/home/sktang/powerBC/"
 # "/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_rbcL/"
-loadpath = sys.argv[2]
+loadpath = resultDataPath
 
-localBlast.blastRef(loadpath + sys.argv[3] + "_result/blastResult/", sys.argv[3])
+localBlast.blastRef(loadpath + nameOfLoci + "_result/blastResult/", nameOfLoci, blast_parsing_mode)
 
 # 測試用
 # localBlast.blastRef("C:/Users/123/")
@@ -113,7 +116,7 @@ def determineDirection(i):
 
 # 20230206 似乎不需要用append了，因為先前已經按loci區分了
 # 20230206 之前應該是因為迴圈位置的關係，所以才用append的
-with open(loadpath + sys.argv[3] + "_result/blastResult/" + sys.argv[3] + "_blastResult.txt", "w") as file:
+with open(loadpath + nameOfLoci + "_result/blastResult/" + nameOfLoci + "_blastResult.txt", "w") as file:
     for i in range(0, len(qseqidList)):
         # print(determineDirection(i))
         if "\t\t0\t0\t0\t0\t0\t0\t0\t0\t\t\t0\t0\t" not in determineDirection(i):
@@ -137,4 +140,4 @@ with open(loadpath + sys.argv[3] + "_result/blastResult/" + sys.argv[3] + "_blas
 # str(rWhoList[i])
 
 
-print("[INFO] blastResultParser.py is ended on loci: " + sys.argv[3])
+print("[INFO] blastResultParser.py is ended on loci: " + nameOfLoci)

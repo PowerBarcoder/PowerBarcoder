@@ -44,7 +44,7 @@ class BlastRef:
     Step 3 迴圈跑dict裡的所有key，取出值放進個別欄位的list裡(所以回傳出來16個list，每個list都是Object的一個properties)
     """
 
-    def blastRef(self, load_dir, loci_name):
+    def blastRef(self, load_dir, loci_name, blast_parsing_mode):
         # Step 1: Read file
         with open(load_dir + loci_name + "_refResult.txt", encoding='iso-8859-1') as f:
             lines = f.readlines()
@@ -54,6 +54,7 @@ class BlastRef:
         cate = {}
 
         # Step 3: Process the lines and update the category dictionary
+        print("[INFO] blast_parsing_mode = ", blast_parsing_mode)
         for line in lines:
             if not line.strip():
                 break
@@ -76,33 +77,33 @@ class BlastRef:
             value_List = [qseqid, sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue,
                           bitscore, qstartMinusQend, sstartMinusSend, rWho]
 
-            # 一個Sample會blast到多筆，每讀出一行就要檢查是否有更符合條件的值，有的話就更新
-            # # 條件：
-            # 1.identity: 用3排序，取最高者出來，但不低於90
-            # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半(qseqid去找檔案算長度，不用寫到檔名上)
-            # if float(cate[query_name][2]) < float(pident) and float(pident) >= 90: #20230702 90的效果有點差，先拿掉
-            if float(cate[query_name][2]) < float(pident):
-                cate[query_name] = value_List
-            elif float(cate[query_name][2]) == float(pident):
-                if float(cate[query_name][12]) < float(qstartMinusQend):
+        # 一個Sample會blast到多筆，每讀出一行就要檢查是否有更符合條件的值，有的話就更新
+        # 使用blastParsingMode參數來決定使用以下三種情境之一 (20230702)
+            if blast_parsing_mode == "0":
+                # # 模式一:
+                # 1.identity: 用3排序，取最高者出來，但不低於85
+                # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半
+                if float(cate[query_name][2]) < float(pident) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(cate[query_name][3]):
                     cate[query_name] = value_List
-
-        # # TODO 使用篩選模式參數來決定使用以下三種情境之一 (20230702)
-        #
-        #     if float(cate[query_name][2]) < float(pident) and float(pident) >= 85:
-        #         cate[query_name] = value_List
-        #     elif float(cate[query_name][2]) == float(pident):
-        #         if float(cate[query_name][12]) < float(qstartMinusQend):
-        #             cate[query_name] = value_List
-        #
-        #     if float(cate[query_name][12]) < float(qstartMinusQend) and float(pident) >= 85:
-        #         cate[query_name] = value_List
-        #     elif float(cate[query_name][12]) == float(qstartMinusQend):
-        #         if float(cate[query_name][2]) < float(pident):
-        #             cate[query_name] = value_List
-        #
-        #     if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85:
-        #         cate[query_name] = value_List
+                elif float(cate[query_name][2]) == float(pident):
+                    if float(cate[query_name][12]) < float(qstartMinusQend):
+                        cate[query_name] = value_List
+            elif blast_parsing_mode == "1":
+                # # 模式二:
+                # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半
+                # 2.identity: 用3排序，取最高者出來，但不低於85
+                if float(cate[query_name][12]) < float(qstartMinusQend) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(cate[query_name][3]):
+                    cate[query_name] = value_List
+                elif float(cate[query_name][12]) == float(qstartMinusQend):
+                    if float(cate[query_name][2]) < float(pident):
+                        cate[query_name] = value_List
+            elif blast_parsing_mode == "2":
+                # # 模式三:
+                # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85
+                if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(cate[query_name][3]):
+                    cate[query_name] = value_List
+            else:
+                print("blastParsingMode error")
 
 
         # print(cate)

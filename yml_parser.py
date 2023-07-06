@@ -37,6 +37,8 @@ def parsingYmlToShell():
     script += f"summaryHtmlFileName='summary.html'\n"
     script += f"dada2LearnErrorFile='{str(config['dada2LearnErrorFile']).strip()}'\n"  # dada2LearnErrorFile
     script += f"dada2BarcodeFile='{str(config['dada2BarcodeFile']).strip()}'\n"  # dada2BarcodeFile
+    script += f"ampliconMinimumLength='1'\n"
+    script += f"minimunOverlapBasePair='4'\n"
 
     # loci
     for i in range(len(config['nameOfLoci'])):
@@ -81,18 +83,8 @@ def parsingYmlToShell():
     for i in range(len(config['customizedCoreNumber'])):
         script += f"customizedCoreNumber+=('{str(config['customizedCoreNumber'][i]).strip()}')\n"  # customizedCoreNumber
 
-    # script += f"nameOfLoci=('{','.join(config['nameOfLoci'])}')\n"# nameOfLoci
-    # script += f"errorRateCutadaptor=('{','.join(str(x) for x in config['errorRateCutadaptor'])}')\n"# errorRateCutadaptor
-    # script += f"minimumLengthCutadaptor=('{','.join(str(x) for x in config['minimumLengthCutadaptor'])}')\n"# minimumLengthCutadaptor
-    # script += f"primerF=('{','.join(f'{x}' for x in config['primerF'])}')\n"# primerF
-    # script += f"primerR=('{','.join(f'{x}' for x in config['primerR'])}')\n"# primerR
-    # script += f"amplicon_r1=('{','.join(f'{x}' for x in config['amplicon_r1'])}')\n"# amplicon_r1
-    # script += f"amplicon_r2=('{','.join(f'{x}' for x in config['amplicon_r2'])}')\n"# amplicon_r2
-    # script += f"barcodesFile1=('{','.join(f'{x}' for x in config['barcodesFile1'])}')\n"# barcodesFile1
-    # script += f"barcodesFile2=('{','.join(f'{x}' for x in config['barcodesFile2'])}')\n"# barcodesFile2
-    # script += f"sseqidFileName=('{','.join(f'{x}' for x in config['sseqidFileName'])}')\n"# sseqidFileName
-    # script += f"minimumLengthCutadaptorInLoop=('{','.join(str(x) for x in config['minimumLengthCutadaptorInLoop'])}')\n"# minimumLengthCutadaptorInLoop
-    # script += f"customizedCoreNumber=('{','.join(str(x) for x in config['customizedCoreNumber'])}')\n"# customizedCoreNumber
+    for i in range(len(config['nameOfLoci'])):
+        script += f"blastParsingMode+=('0')\n"
 
     script += f"workingDirectory='/PowerBarcoder/main/'\n"
 
