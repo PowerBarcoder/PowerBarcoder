@@ -6,14 +6,14 @@ from flask import Flask, render_template
 from flask_cors import CORS
 from flask_socketio import SocketIO
 import flask_socketio as ws
-
+import uuid
 import yml_parser
 
 app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins='*')
 app.debug = True  # set debug flag to True
-
+batch_name_set = set()
 
 def ws_emit_procedure_result(msg, room_name):
     ws.emit('procedure-result', "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + msg, room=room_name)
@@ -25,7 +25,16 @@ def run_procedure(data):
     # Get current datetime
     formatted_datetime = datetime.now().strftime("%Y%m%d%H%M")
 
-    ws.join_room(formatted_datetime)
+    # Join room, so that we can emit to specific room
+    if formatted_datetime not in batch_name_set:
+        batch_name_set.add(formatted_datetime)
+        ws.join_room(formatted_datetime)
+    else:
+        temp_uuid = uuid.uuid4()
+        ws.join_room(formatted_datetime+str(temp_uuid))
+        ws_emit_procedure_result('Server is busy, please try again later\r\n', formatted_datetime+str(temp_uuid))
+        ws.close_room(formatted_datetime+str(temp_uuid))
+        return
 
     # socketio.emit('procedure-result', '<br>')
     ws.emit('procedure-result', '\r\n', room=formatted_datetime)
@@ -71,6 +80,9 @@ def run_procedure(data):
     ws_emit_procedure_result('done\r\n',formatted_datetime)
     ws_emit_procedure_result('Find your results in data/result/ folder\r\n',formatted_datetime)
 
+    # Remove batch name from set
+    batch_name_set.remove(formatted_datetime)
+    ws.leave_room(formatted_datetime)
 
 @app.route('/')
 def home():
