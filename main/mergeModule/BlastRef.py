@@ -78,7 +78,7 @@ class BlastRef:
                           bitscore, qstartMinusQend, sstartMinusSend, rWho]
 
         # 一個Sample會blast到多筆，每讀出一行就要檢查是否有更符合條件的值，有的話就更新
-        # 使用blastParsingMode參數來決定使用以下三種情境之一 (20230702)
+        # 使用blastParsingMode參數來決定使用以下四種情境之一 (20230702)
             if blast_parsing_mode == "0":
                 # # 模式一:
                 # 1.identity: 用3排序，取最高者出來，但不低於85
@@ -101,6 +101,11 @@ class BlastRef:
                 # # 模式三:
                 # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85
                 if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(cate[query_name][3]):
+                    cate[query_name] = value_List
+            elif blast_parsing_mode == "3":
+                # # 模式四:
+                # 1. e-value, 越小越好，但不高於0.01，1/10000代表每10000次align才可能出現一次更好的結果
+                if float(cate[query_name][10]) < float(evalue) and evalue < 0.01 and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(cate[query_name][3]):
                     cate[query_name] = value_List
             else:
                 print("blastParsingMode error")

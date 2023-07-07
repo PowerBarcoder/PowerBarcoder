@@ -376,12 +376,13 @@ def parsingAllDataIntoCsv(destination: str):
             v_count = column_values.count('N/A')
             # Add the count to the last row
             v_count_list.append(str(len(column_values) - v_count)+"/"+str((len(column_values))))
+        identical_to_DADA2_merge_count = [row[23] for row in rows[11:]].count('1')
     # # Write the updated data back to the CSV file
     with open(destination, 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['Total success', '-']
                         + v_count_list
-                        + ['-', '-', '-', '-', '-', '-', '-', '-', '-']
+                        + ['-', '-', '-', '-', '-', '-', '-', '-'] + [identical_to_DADA2_merge_count]
                         + ['-', '-', '-']
                         + ['-', '-', '-']
                         + ['-', '-', '-']
