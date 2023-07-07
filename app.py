@@ -5,6 +5,7 @@ from datetime import datetime
 from flask import Flask, render_template
 from flask_cors import CORS
 from flask_socketio import SocketIO
+import flask_socketio as ws
 
 import yml_parser
 
@@ -14,15 +15,21 @@ socketio = SocketIO(app, cors_allowed_origins='*')
 app.debug = True  # set debug flag to True
 
 
-def socketio_emit_procedure_result(msg):
-    socketio.emit('procedure-result', "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + msg)
+def ws_emit_procedure_result(msg, room_name):
+    ws.emit('procedure-result', "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + msg, room=room_name)
 
 
 @socketio.on('run-procedure')
 def run_procedure(data):
+
+    # Get current datetime
+    formatted_datetime = datetime.now().strftime("%Y%m%d%H%M")
+
+    ws.join_room(formatted_datetime)
+
     # socketio.emit('procedure-result', '<br>')
-    socketio.emit('procedure-result', '\r\n')
-    socketio_emit_procedure_result('Generating config file...\r\n')
+    ws.emit('procedure-result', '\r\n', room=formatted_datetime)
+    ws_emit_procedure_result('Generating config file...\r\n',formatted_datetime)
 
     # [For Debug]
     # n=0
@@ -36,7 +43,7 @@ def run_procedure(data):
     yml_parser.parsingFormDataToYml(form_data)
     yml_parser.parsingYmlToShell()
 
-    socketio_emit_procedure_result('Data procedure started\r\n')
+    ws_emit_procedure_result('Data procedure started\r\n',formatted_datetime)
 
     cmd = 'cd /PowerBarcoder/main && bash powerBarcode.sh 2>&1'
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1)
@@ -49,20 +56,20 @@ def run_procedure(data):
         # Process each line of output
         if int(time.time()) - throttle_seconds > 1:
             temp_line += "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + line.decode('utf-8', 'ignore')
-            socketio.emit('procedure-result', temp_line)
+            socketio.emit('procedure-result', temp_line, room=formatted_datetime)
             temp_line = ""
             throttle_seconds = int(time.time())
         else:
             temp_line += "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + line.decode('utf-8', 'ignore')
-    socketio.emit('procedure-result', temp_line)
+    socketio.emit('procedure-result', temp_line, room=formatted_datetime)
 
     # [For Debug]
     # for line in iter(p.stdout.readline, b''):
     #     # Process each line of output
     #     socketio.emit('procedure-result', "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8'))
 
-    socketio_emit_procedure_result('done\r\n')
-    socketio_emit_procedure_result('Find your results in data/result/ folder\r\n')
+    ws_emit_procedure_result('done\r\n',formatted_datetime)
+    ws_emit_procedure_result('Find your results in data/result/ folder\r\n',formatted_datetime)
 
 
 @app.route('/')
