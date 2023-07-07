@@ -1,5 +1,7 @@
 # ! /bin/bash
-. ./config.sh
+
+. /PowerBarcoder/data/result/"$1"/config.sh
+
 # refResult.txt是localBlast的結果，blastResult.txt是我們parsing後的結果，在blastResultParser.py產生的
 
 echo "[INFO] 00_blastForRef is running"

@@ -88,28 +88,27 @@ class FastaUnit:
         fileName = self.getFileNameFromPath(loadPath)
         extension = self.getFileExtensionFromPath(loadPath)
         count = len(open(loadPath).readlines())
-        bufferedText = ""
         fileSerialNumber = 1
-        for i in range(1, count + 1):
-            text = linecache.getline(loadPath, i)
-            x = text.replace("\n", "")
-            # print(x)
-            if ">" in x and i != 1:  # not first line header
-                with open(saveDir + fileName + "_" + str(fileSerialNumber) + "." + extension, "w") as file_edit:
-                    file_edit.write(bufferedText)
-                    fileSerialNumber += 1
-                bufferedText = ""
-                bufferedText += (x + "\n")
-            elif ">" in x and i == 1:  # first line header
-                bufferedText = ""
-                bufferedText += (x + "\n")
-            elif ">" not in x and i != count:  # not last line seq
-                bufferedText += (x)
-            else:  # last line seq
-                bufferedText += (x)
-                with open(saveDir + fileName + "_" + str(fileSerialNumber) + "." + extension, "w") as file_edit:
-                    file_edit.write(bufferedText)
-                    fileSerialNumber += 1
+        with open(loadPath, "r") as file:
+            bufferedText = ""
+            for i, line in enumerate(file, start=1):
+                text = line.rstrip("\n")
+                if ">" in text and i != 1:  # not first line header
+                    with open(saveDir + fileName + "_" + str(fileSerialNumber) + "." + extension, "w") as file_edit:
+                        file_edit.write(bufferedText)
+                        fileSerialNumber += 1
+                    bufferedText = ""
+                    bufferedText += (text + "\n")
+                elif ">" in text and i == 1:  # first line header
+                    bufferedText = ""
+                    bufferedText += (text + "\n")
+                elif ">" not in text and i != count:  # not last line seq
+                    bufferedText += text
+                else:  # last line seq
+                    bufferedText += text
+                    with open(saveDir + fileName + "_" + str(fileSerialNumber) + "." + extension, "w") as file_edit:
+                        file_edit.write(bufferedText)
+                        fileSerialNumber += 1
 
     """
     Replace filename with the sequence header at the first line.

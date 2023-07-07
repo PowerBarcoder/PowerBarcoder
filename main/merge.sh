@@ -1,13 +1,13 @@
 #! /bin/bash
 
-. ./config.sh
+. /PowerBarcoder/data/result/"$1"/config.sh
 
 #  新的DADA2已經將r1跟r2合併了，所以是放在nonmerged下，檔名結尾是_.fas
 #  /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_rbcL/rbcLC_result/denoiseResult/denoise_best/nonmerged
 #  所以blast裡面會處理變更的路徑，處理完之後，
 #  檢查blast的結果方向是否與原本的相反，相反的話，反轉ref，之後再去alignment
 
-bash ./mergeModule/00_blastForRef.sh #先blast，內部自帶迴圈處理
+bash ./mergeModule/00_blastForRef.sh "$1" #先blast，內部自帶迴圈處理
 
 for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
   count=0
