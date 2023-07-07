@@ -1,5 +1,6 @@
 # ! /bin/bash
-. ./config.sh
+
+. /PowerBarcoder/data/result/"$1"/config.sh
 
 echo "[INFO] checking file directories..."
 

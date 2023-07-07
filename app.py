@@ -41,11 +41,11 @@ def run_procedure(data):
     # Access form data
     form_data = data
     yml_parser.parsingFormDataToYml(form_data)
-    yml_parser.parsingYmlToShell()
+    yml_parser.parsingYmlToShell(formatted_datetime)
 
     ws_emit_procedure_result('Data procedure started\r\n',formatted_datetime)
 
-    cmd = 'cd /PowerBarcoder/main && bash powerBarcode.sh 2>&1'
+    cmd = 'cd /PowerBarcoder/main && bash powerBarcode.sh ' +formatted_datetime+ ' 2>&1'
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1)
 
     # throttle detection, we don't need virtual scrolling anymore

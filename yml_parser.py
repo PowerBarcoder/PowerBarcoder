@@ -1,4 +1,5 @@
 # GUI請先生出yml，再來用這支程式轉成shell script
+import os
 import yaml
 from datetime import datetime
 
@@ -12,10 +13,7 @@ def parsingFormDataToYml(data):
 
 
 # convert the YAML to shell script, with some fixed field
-def parsingYmlToShell():
-    # Get current datetime
-    current_datetime = datetime.now()
-    formatted_datetime = current_datetime.strftime("%Y%m%d%H%M")
+def parsingYmlToShell(batch_name:str):
 
     # Load YAML file
     with open('main/config.yml', 'r') as file:
@@ -24,7 +22,7 @@ def parsingYmlToShell():
     # Generate shell script (有#的代表使用者可以改)
     # path
     script = '#!/bin/bash\n'
-    script += "datetime='" + formatted_datetime + "/'\n"
+    script += "datetime='" + batch_name + "/'\n"
     script += f"myCutadaptPath='/venv/cutadapt-venv/bin/'\n"
     script += f"myFastpPath='/usr/local/bin/'\n"
     script += f"localBlastToolDir='/usr/local/bin/'\n"
@@ -84,14 +82,16 @@ def parsingYmlToShell():
         script += f"customizedCoreNumber+=('{str(config['customizedCoreNumber'][i]).strip()}')\n"  # customizedCoreNumber
 
     for i in range(len(config['nameOfLoci'])):
-        script += f"blastParsingMode+=('0')\n"
+        script += f"blastParsingMode+=('2')\n" # blastParsingMode (default: 2)
 
     script += f"workingDirectory='/PowerBarcoder/main/'\n"
 
     script += 'echo \'[INFO] config imported!\'\n'
 
+
     # Write script to file
-    with open('main/config.sh', 'w') as f:
+    os.makedirs('/PowerBarcoder/data/result/'+str(batch_name))
+    with open("/PowerBarcoder/data/result/"+batch_name+"/config.sh", 'w') as f:
         f.write(script)
 
     print('Config file has been exported as a shell script.')
