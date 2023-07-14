@@ -16,7 +16,7 @@ RUN apt-get update && \
 
 WORKDIR /usr/local/bin
 # install blast
-RUN curl -O ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.13.0/ncbi-blast-2.13.0+-x64-linux.tar.gz
+RUN curl -O https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.13.0/ncbi-blast-2.13.0+-x64-linux.tar.gz
 RUN tar -zxvf ncbi-blast-2.13.0+-x64-linux.tar.gz && \
     rm ncbi-blast-2.13.0+-x64-linux.tar.gz && \
     ln -s /usr/local/bin/ncbi-blast-2.13.0+/bin/* /usr/local/bin/
