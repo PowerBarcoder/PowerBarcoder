@@ -11,3 +11,7 @@
 # data:
 # file                  format  type  num_seqs     sum_len  min_len  avg_len  max_len
 # rbcLN_amplicon_r1.fq  FASTQ   DNA    142,761  38,138,269       70    267.1      301
+
+
+# docker build -t powerbarcoder .
+# docker run -d -p 5000:5000 -v C:/Users/kwz50/IdeaProjects/PowerBarcoder:/PowerBarcoder --name powerbarcoder powerbarcoder
