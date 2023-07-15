@@ -23,7 +23,7 @@ localBlast = BlastRef()
 # "/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_rbcL/"
 loadpath = resultDataPath
 
-localBlast.blastRef(loadpath + nameOfLoci + "_result/blastResult/", nameOfLoci, blast_parsing_mode)
+localBlast.blastRef(loadpath + nameOfLoci, nameOfLoci, blast_parsing_mode)
 
 # 測試用
 # localBlast.blastRef("C:/Users/123/")

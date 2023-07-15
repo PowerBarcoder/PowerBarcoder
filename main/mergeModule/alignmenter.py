@@ -29,13 +29,17 @@ fastaFileName = sys.argv[3] + "_blastResult.txt"
 fastaFile = fastaFileDir + fastaFileName
 
 
-def align_sequence(qseqid):
+def align_sequence(qseqid, forward):
     # we need to avoid the situation that the filename with special characters, so we add "'" around the path string
-    AligmentR1 = "mafft --thread 10 --maxiterate 16 --globalpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "_r1" + ".al" + "'"
-    AligmentR2 = "mafft --thread 10 --maxiterate 16 --globalpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "_r2" + ".al" + "'"
+    AligmentR1 = "mafft --thread 10 --maxiterate 16 --globalpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
+    AligmentR2 = "mafft --thread 10 --maxiterate 16 --globalpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
     try:
-        subprocess.run(AligmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
-        subprocess.run(AligmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+        if forward == "r1":
+            subprocess.run(AligmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+        elif forward == "r2":
+            subprocess.run(AligmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+        else:
+            print("[ERROR] forward is not r1 or r2")
         print("[INFO] aligned: " + qseqid)
     except Exception as e:
         print("[ERROR] failed to aligned with error message", e)
@@ -47,8 +51,9 @@ with open(fastaFile, "r") as file:
         futures = []
         for line in lines:
             line = line.strip()
-            qseqid = line.split("\t")[0]
-            futures.append(executor.submit(align_sequence, qseqid))
+            qseqid = line.split("\t")[0] # 第一個放qseqid
+            forward = line.split("\t")[-1] # 最後一個放forward
+            futures.append(executor.submit(align_sequence, qseqid, forward))
         concurrent.futures.wait(futures)
 
 # [2023-04-20][test] 635 reads in AMD Ryzen 5 5600U with Radeon Graphics, 32GB RAM

@@ -9,6 +9,7 @@ from os.path import isfile, isdir, join
 import sys
 from os import path
 import time
+import traceback
 
 print("[INFO] merger.py is running on loci: " + sys.argv[3])
 
@@ -52,8 +53,8 @@ for filename in files:
     if isfile(fullpath) and (filename != "temp.fasta"):
         # print("檔案：", filename)
         filename_trim = str(filename)
-        filename_trim = filename_trim.replace("_r1.al", "")
-        filename_trim = filename_trim.replace("_r2.al", "")
+        filename_trim = filename_trim.replace("_r1.fas", "")
+        filename_trim = filename_trim.replace("_r2.fas", "")
         candidate_list.add(filename_trim)
 #   elif isdir(fullpath):
 #     print("目錄：", filename)
@@ -63,18 +64,26 @@ for filename in files:
 for filename in candidate_list:
     try:
         #  把alignment好的r1跟r2讀進來變單行
-        r1_fastaUnit = FastaUnit()
-        # r1_loadpath = loadpath+0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r1.al
-        r1_loadpath = loadpath + filename + "_r1.al"
-        # /home/sktang/powerBC/aligned/0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r1.al
-        r1_fastaUnit.fastaUnit(r1_loadpath)
-        r1_seqMap = r1_fastaUnit.seqMap
+        r1_loadpath = loadpath + filename + "_r1.fas" # r1_loadpath = loadpath+0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r1.al
+        r2_loadpath = loadpath + filename + "_r2.fas" # r2_loadpath = "C:/Users/kwz50/aligned/0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r2.al"
 
+        # 若因為沒有blast到東西，那這對就不要往下做了，直接換下一對ASV
+        if not path.exists(r1_loadpath):
+            print("[INFO] " + r1_loadpath + " not found, skip this pair")
+            continue
+        if not path.exists(r2_loadpath):
+            print("[INFO] " + r2_loadpath + " not found, skip this pair")
+            continue
+
+        r1_fastaUnit = FastaUnit()
         r2_fastaUnit = FastaUnit()
-        # r2_loadpath = "C:/Users/kwz50/aligned/0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r2.al"
-        r2_loadpath = loadpath + filename + "_r2.al"
+
+        r1_fastaUnit.fastaUnit(r1_loadpath)
         r2_fastaUnit.fastaUnit(r2_loadpath)
+
+        r1_seqMap = r1_fastaUnit.seqMap
         r2_seqMap = r2_fastaUnit.seqMap
+
 
         # 讀兩個.fs進來當r1、ref_r1、r2、ref_r2(20220423)
         r1 = ""
@@ -322,16 +331,16 @@ for filename in candidate_list:
 
         # (deprecated 20230611)(retained 20230624，為了方便除錯，還是留著看gap在哪)
         merge_seq_text = ">" + output_filename + "\n" + merge_seq + "\n"  # 處理mergeseq
-        with open(mergepath + filename, "w", encoding="iso-8859-1") as file:
+        with open(mergepath + filename + ".fas", "w", encoding="iso-8859-1") as file:
             file.write(merge_seq_text)
 
         de_gap_merge_seq = merge_seq.replace("N", "").replace("-", "")  # 處理degapmergeseq
         de_gap_merge_seq_text = ">" + output_filename + "\n" + de_gap_merge_seq + "\n"
-        with open(degapMergepath + filename, "w", encoding="iso-8859-1") as file:
+        with open(degapMergepath + filename + ".fas", "w", encoding="iso-8859-1") as file:
             file.write(de_gap_merge_seq_text)
 
     except Exception as e:
-        print(e)
+        print(traceback.print_exc())
         print("[WARNING] merger.py 319: something wrong.", filename)
 
 

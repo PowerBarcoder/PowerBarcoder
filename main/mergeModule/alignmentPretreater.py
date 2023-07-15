@@ -5,6 +5,7 @@ prepare r1Ref & r2Ref for alignment
 """
 
 import sys
+import traceback
 
 POSITIVE_DIRECTION = "positive"
 NEGATIVE_DIRECTION = "negative"
@@ -94,8 +95,8 @@ try:
             qseqid = lineSplit[0]
             sseqid = lineSplit[1]
             sign = negativeTest(lineSplit[12], lineSplit[13])
-            forword = lineSplit[14]
-            # print(qseqid+" "+sseqid+" "+sign+" "+forword)
+            forward = lineSplit[14]
+            # print(qseqid+" "+sseqid+" "+sign+" "+forward)
 
             # 已獲得所有資訊，開始分四狀況來寫alignment了
             # 0514-016_CYH20090514-016_Microlepia_substrigosa_.fas
@@ -103,30 +104,43 @@ try:
             # positive
             # r1
             try:
-                # 待測序列r1製作
-                qseqidFileStr = qseqidFile(outputLoadpath, "r1", qseqid)
-                # print(qseqidFile(loadpath,forword,qseqid))
-                r1RowList = []
-                with open(qseqidFileStr, "r") as qR1File:
-                    # print(qseqidFileStr)
-                    lines = qR1File.readlines()
-                    # print(lines)
-                    r1RowList += lines
-                    # print(r1RowList)
-
-                # 待測序列r2製作
-                qseqidFileStr = qseqidFile(outputLoadpath, "r2", qseqid)
-                # print(qseqidFile(loadpath,forword,qseqid))
-                r2RowList = []
-                with open(qseqidFileStr, "r") as qR2File:
-                    # print(qseqidFileStr)
-                    lines = qR2File.readlines()
-                    # print(lines)
-                    r2RowList += lines
-                    # print(r2RowList)
+                qseqidFileStr = qseqidFile(outputLoadpath, forward, qseqid)
+                if forward=="r1":
+                    r1RowList = []
+                    with open(qseqidFileStr, "r") as qR1File:
+                        lines = qR1File.readlines()
+                        r1RowList += lines
+                elif forward=="r2":
+                    r2RowList = []
+                    with open(qseqidFileStr, "r") as qR2File:
+                        lines = qR2File.readlines()
+                        r2RowList += lines
+                else:
+                    print("forward error in alignmentPretreater.py 118: "+qseqidFileStr)
+                # # 待測序列r1製作
+                # qseqidFileStr = qseqidFile(outputLoadpath, "r1", qseqid)
+                # # print(qseqidFile(loadpath,forward,qseqid))
+                # r1RowList = []
+                # with open(qseqidFileStr, "r") as qR1File:
+                #     # print(qseqidFileStr)
+                #     lines = qR1File.readlines()
+                #     # print(lines)
+                #     r1RowList += lines
+                #     # print(r1RowList)
+                #
+                # # 待測序列r2製作
+                # qseqidFileStr = qseqidFile(outputLoadpath, "r2", qseqid)
+                # # print(qseqidFile(loadpath,forward,qseqid))
+                # r2RowList = []
+                # with open(qseqidFileStr, "r") as qR2File:
+                #     # print(qseqidFileStr)
+                #     lines = qR2File.readlines()
+                #     # print(lines)
+                #     r2RowList += lines
+                #     # print(r2RowList)
             except Exception as e:
                 print("[ERROR] An exception happen in " + sys.argv[4] + "： " + qseqid + " before alignment")
-                print(e)
+                print(traceback.print_exc())
                 continue
 
             # ref seq製作
@@ -144,14 +158,14 @@ try:
             # if else判斷方向(多行的fasta之後再處理成一行的)
 
             # 2022年舊版
-            # if ((sign=="negative")and(forword=="r1")):
+            # if ((sign=="negative")and(forward=="r1")):
             #     targetRowList[1]=ReverseComplement(targetRowList[1])
             #     r2RowList[1]=ReverseComplement(r2RowList[1])
-            # elif ((sign=="positive")and(forword=="r1")):
+            # elif ((sign=="positive")and(forward=="r1")):
             #     r2RowList[1]=ReverseComplement(r2RowList[1])
-            # elif ((sign=="negative")and(forword=="r2")):
+            # elif ((sign=="negative")and(forward=="r2")):
             #     r2RowList[1]=ReverseComplement(r2RowList[1])
-            # elif ((sign=="positive")and(forword=="r2")):
+            # elif ((sign=="positive")and(forward=="r2")):
             #     targetRowList[1]=ReverseComplement(targetRowList[1])
             #     r2RowList[1]=ReverseComplement(r2RowList[1])
 
@@ -163,12 +177,16 @@ try:
                 # print("positive: "+fastaFile)
                 pass
 
-            createRefFile("r1", r1RowList)
-            createRefFile("r2", r2RowList)
+            if forward == "r1":
+                createRefFile("r1", r1RowList)
+            elif forward == "r2":
+                createRefFile("r2", r2RowList)
+            else:
+                print("forward error in alignmentPretreater.py 183: " + qseqidFileStr)
 
 except Exception as e:
     print("[ERROR] An exception happen in " + sys.argv[4] + " before alignment")
-    print(e)
+    print(traceback.print_exc())
 
 print("[INFO] alignmentPretreater.py is ended on loci: " + sys.argv[4])
 
