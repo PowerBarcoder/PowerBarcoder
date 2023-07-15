@@ -277,7 +277,7 @@ def parsingAllDataIntoCsv(destination: str):
                 fasta_seq = fasta_seq[1]
                 fasta_length = len(fasta_seq) if fasta_seq != "N/A" else "N/A"
                 ambiguous_sites_number = sum(1 for i in fasta_seq if
-                                             i in ["R", "Y", "M", "K", "S", "Q", "N", "r", "y", "m", "k", "s", "q",
+                                             i in ["R", "Y", "M", "K", "S", "W", "N", "r", "y", "m", "k", "s", "w",
                                                    "n"]) if fasta_seq != "N/A" else "N/A"
                 lowercase_sites_number = sum(1 for i in fasta_seq if i.islower()) if fasta_seq != "N/A" else "N/A"
 
@@ -311,7 +311,7 @@ def parsingAllDataIntoCsv(destination: str):
                             else:
                                 merger_merged_seq = line.strip()
                                 break
-                    if dada2_merge_seq == merger_merged_seq:
+                    if dada2_merge_seq.upper() == merger_merged_seq.upper():
                         identical_to_DADA2_merge = "1"
                     else:
                         identical_to_DADA2_merge = "0"
