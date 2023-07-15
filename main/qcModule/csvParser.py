@@ -54,7 +54,7 @@ def parsingBlastResultIntoDict():
     with open(blast_result_path, 'r', encoding='iso-8859-1') as file:
         for line in file:
             columns = line.strip().split('\t')
-            key = columns[0]
+            key = columns[0].replace("_r1.fas","").replace("_r2.fas","") + ".fas"
             value = [columns[1], columns[2], columns[12]]
             data_dict[key] = value
     return data_dict
@@ -86,6 +86,8 @@ def parsingMergedFileFastaWithHighestAbundanceIntoList(filename_set: set, sample
     if filtered_elements:
         highest_abundance_element = max(filtered_elements, key=lambda x: float(x.split("_")[-3]))
         # print("Highest abundance element:", highest_abundance_element)
+        if not os.path.exists(merger_merged_path + highest_abundance_element):
+            return ["N/A", "N/A"]
         with open(merger_merged_path + highest_abundance_element, 'r', encoding='iso-8859-1') as file:
             content = file.readlines()
             # Process each line in the content
@@ -96,8 +98,7 @@ def parsingMergedFileFastaWithHighestAbundanceIntoList(filename_set: set, sample
                     sequence = line.strip()
     else:
         # print(f"No elements found for {sample_name}")
-        header = "N/A"
-        sequence = "N/A"
+        return ["N/A", "N/A"]
     return [header, sequence]
 
 
@@ -285,9 +286,9 @@ def parsingAllDataIntoCsv(destination: str):
                 # # (we only use the highest abundance seq, fasta_header, which has already been parsed by parsingMergedFileFastaWithHighestAbundanceIntoList())
                 merger_merge_file_name = fasta_header.replace(">", "") + ".fas"
                 blast_result_dict = parsingBlastResultIntoDict()
-                blast_subject_id = blast_result_dict[merger_merge_file_name][0] if fasta_seq != "N/A" else "N/A"
-                blast_identity = blast_result_dict[merger_merge_file_name][1] if fasta_seq != "N/A" else "N/A"
-                blast_qstart_qend = abs(int(blast_result_dict[merger_merge_file_name][2])) if fasta_seq != "N/A" else "N/A"
+                blast_subject_id = blast_result_dict.get(merger_merge_file_name)[0] if fasta_seq != "N/A" else "N/A"
+                blast_identity = blast_result_dict.get(merger_merge_file_name)[1] if fasta_seq != "N/A" else "N/A"
+                blast_qstart_qend = abs(int(blast_result_dict.get(merger_merge_file_name)[2])) if fasta_seq != "N/A" else "N/A"
 
                 # Write file list info data (part from dada2 merge)
                 # # need to check the file exist first

@@ -24,16 +24,16 @@ class BlastRef:
         self.qseqidList = []
         self.sseqidList = []
         self.pidentList = []
-        self.lengthList = []
+        self.lengthList = []#3
         self.mismatchList = []
         self.gapopenList = []
-        self.qstartList = []
-        self.qendList = []
+        self.qstartList = []#6
+        self.qendList = []#7
         self.sstartList = []
         self.sendList = []
         self.evalueList = []
         self.bitscoreList = []
-        self.qstartMinusQendList = []
+        self.qstartMinusQendList = []#12
         self.sstartMinusSendList = []
         self.rWhoList = []
         self.refList = []
@@ -45,8 +45,10 @@ class BlastRef:
     """
 
     def blastRef(self, load_dir, loci_name, blast_parsing_mode):
+        qseqid_file_dir_r1 = load_dir + "_result/mergeResult/merger/r1/"
+        qseqid_file_dir_r2 = load_dir + "_result/mergeResult/merger/r2/"
         # Step 1: Read file
-        with open(load_dir + loci_name + "_refResult.txt", encoding='iso-8859-1') as f:
+        with open(load_dir + "_result/blastResult/" + loci_name + "_refResult.txt", encoding='iso-8859-1') as f:
             lines = f.readlines()
 
         # Step 2: Initialize the category dictionary and value list
@@ -55,6 +57,7 @@ class BlastRef:
 
         # Step 3: Process the lines and update the category dictionary
         print("[INFO] blast_parsing_mode = ", blast_parsing_mode)
+        temp_query_name = "" #給第一個query_name用的，如果下一個query_name跟這個一樣，就不用再讀檔算qseqid序列長度了
         for line in lines:
             if not line.strip():
                 break
@@ -68,7 +71,7 @@ class BlastRef:
             sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue, bitscore = textList[1:12]
             qstartMinusQend = abs(int(qstart) - int(qend)) #20230702 應該是之前用到負數來比了，所以才會取反，這裡補上abs()
             sstartMinusSend = abs(int(sstart) - int(send))
-            rWho = "rWho"
+            rWho = query_name.find("_r1") != -1 and "r1" or "r2"
 
             # # add default value in the category dictionary
             if query_name not in cate:
@@ -76,23 +79,40 @@ class BlastRef:
 
             value_List = [qseqid, sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue,
                           bitscore, qstartMinusQend, sstartMinusSend, rWho]
+            # print(value_List)
+            # 20230715 修改float(cate[query_name][3])，改成去讀檔算長度，不然這裡的length其實是有align到的範圍的length
+            if query_name != temp_query_name: #不篩的話讀檔次數要從幾千變幾十萬
+                temp_query_name = query_name
+                if (query_name.find("_r1") != -1):
+                    qseqid_file_path = qseqid_file_dir_r1 + query_name
+                elif (query_name.find("_r2") != -1):
+                    qseqid_file_path = qseqid_file_dir_r2 + query_name
+                # get fasta sequence length
+                with open(qseqid_file_path, encoding='iso-8859-1') as f:
+                    lines = f.readlines()
+                    qseqid_length = len(lines[1].strip())
+                    # print(qseqid_file_path,str(qseqid_length))
+                    #/PowerBarcoder/data/result/202307150850/trnLF_result/mergeResult/merger/r1/Diplazium_sp._Wade5374_KTHU1451_02_0.387_abundance_251_r1.fas 271
 
         # 一個Sample會blast到多筆，每讀出一行就要檢查是否有更符合條件的值，有的話就更新
         # 使用blastParsingMode參數來決定使用以下四種情境之一 (20230702)
+            # cate[query_name][12]代表當前最高的qstartMinusQend
+            # 用float(cate[query_name][12]) < float(qstartMinusQend)可判斷新值是否比舊值大
+            # 同理，用float(cate[query_name][2]) == float(pident)可判斷新值是否跟舊值一樣
             if blast_parsing_mode == "0":
                 # # 模式一:
                 # 1.identity: 用3排序，取最高者出來，但不低於85
                 # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半
-                if float(cate[query_name][2]) < float(pident) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(cate[query_name][3]):
+                if float(cate[query_name][2]) < float(pident) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(qseqid_length):
                     cate[query_name] = value_List
                 elif float(cate[query_name][2]) == float(pident):
                     if float(cate[query_name][12]) < float(qstartMinusQend):
                         cate[query_name] = value_List
             elif blast_parsing_mode == "1":
                 # # 模式二:
-                # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半
+                # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度(qseqid_length)的一半
                 # 2.identity: 用3排序，取最高者出來，但不低於85
-                if float(cate[query_name][12]) < float(qstartMinusQend) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(cate[query_name][3]):
+                if float(cate[query_name][12]) < float(qstartMinusQend) and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
                     cate[query_name] = value_List
                 elif float(cate[query_name][12]) == float(qstartMinusQend):
                     if float(cate[query_name][2]) < float(pident):
@@ -100,15 +120,15 @@ class BlastRef:
             elif blast_parsing_mode == "2":
                 # # 模式三:
                 # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85
-                if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(cate[query_name][3]):
+                if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
                     cate[query_name] = value_List
             elif blast_parsing_mode == "3":
                 # # 模式四:
                 # 1. e-value, 越小越好，但不高於0.01，1/10000代表每10000次align才可能出現一次更好的結果
-                if float(cate[query_name][10]) < float(evalue) and evalue < 0.01 and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(cate[query_name][3]):
+                if float(cate[query_name][10]) < float(evalue) and evalue < 0.01 and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
                     cate[query_name] = value_List
             else:
-                print("blastParsingMode error")
+                print("can't choose the right blastParsingMode: " + query_name)
 
 
         # print(cate)
