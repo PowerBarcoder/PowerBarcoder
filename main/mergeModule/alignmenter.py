@@ -31,15 +31,22 @@ fastaFile = fastaFileDir + fastaFileName
 
 def align_sequence(qseqid, forward):
     # we need to avoid the situation that the filename with special characters, so we add "'" around the path string
-    AligmentR1 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
-    AligmentR2 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
     try:
+        # r1r2分開blast
         if forward == "r1":
-            subprocess.run(AligmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+            AlignmentR1 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
+            subprocess.run(AlignmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
         elif forward == "r2":
-            subprocess.run(AligmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+            AlignmentR2 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
+            subprocess.run(AlignmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+        # r1r2 cat起來blast
+        elif forward == "rWho":
+            AlignmentR1 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid.replace(".fas","_r1.fas") + "'"
+            AlignmentR2 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid.replace(".fas","_r2.fas") + "'"
+            subprocess.run(AlignmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+            subprocess.run(AlignmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
         else:
-            print("[ERROR] forward is not r1 or r2")
+            print("[ERROR] forward is not r1,r2 or rWho")
         print("[INFO] aligned: " + qseqid)
     except Exception as e:
         print("[ERROR] failed to aligned with error message", e)

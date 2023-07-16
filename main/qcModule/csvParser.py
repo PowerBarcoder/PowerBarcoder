@@ -54,7 +54,7 @@ def parsingBlastResultIntoDict():
     with open(blast_result_path, 'r', encoding='iso-8859-1') as file:
         for line in file:
             columns = line.strip().split('\t')
-            key = columns[0].replace("_r1.fas","").replace("_r2.fas","") + ".fas"
+            key = columns[0].replace("_r1.fas","").replace("_r2.fas","").replace(".fas","") + ".fas"
             value = [columns[1], columns[2], columns[12]]
             data_dict[key] = value
     return data_dict
@@ -239,7 +239,9 @@ def parsingAllDataIntoCsv(destination: str):
             try:
                 temp_row = []
                 for file_set in file_set_list:
-                    file_exist = any(barcode_name in filename or sample_name in filename for filename in file_set)
+                    file_exist = any(barcode_name in filename
+                                     or sample_name in filename
+                                     for filename in file_set)
                     if file_exist:
                         # # 計算以下清單對應檔案的fastq reads number，其他欄位則"V"即可
                         # "Cutadapt demultiplex by sample barcode r1",
