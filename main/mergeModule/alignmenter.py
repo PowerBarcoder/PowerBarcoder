@@ -31,8 +31,8 @@ fastaFile = fastaFileDir + fastaFileName
 
 def align_sequence(qseqid, forward):
     # we need to avoid the situation that the filename with special characters, so we add "'" around the path string
-    AligmentR1 = "mafft --thread 10 --maxiterate 16 --globalpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
-    AligmentR2 = "mafft --thread 10 --maxiterate 16 --globalpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
+    AligmentR1 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
+    AligmentR2 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
     try:
         if forward == "r1":
             subprocess.run(AligmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
