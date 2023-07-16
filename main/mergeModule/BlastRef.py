@@ -47,6 +47,7 @@ class BlastRef:
     def blastRef(self, load_dir, loci_name, blast_parsing_mode):
         qseqid_file_dir_r1 = load_dir + "_result/mergeResult/merger/r1/"
         qseqid_file_dir_r2 = load_dir + "_result/mergeResult/merger/r2/"
+        qseqid_file_dir_cat = load_dir + "_result/mergeResult/merger/nCatR1R2/forSplit/"
         # Step 1: Read file
         with open(load_dir + "_result/blastResult/" + loci_name + "_refResult.txt", encoding='iso-8859-1') as f:
             lines = f.readlines()
@@ -71,7 +72,14 @@ class BlastRef:
             sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue, bitscore = textList[1:12]
             qstartMinusQend = abs(int(qstart) - int(qend)) #20230702 應該是之前用到負數來比了，所以才會取反，這裡補上abs()
             sstartMinusSend = abs(int(sstart) - int(send))
-            rWho = query_name.find("_r1") != -1 and "r1" or "r2"
+
+            # r1r2 cat起來blast
+            rWho = "rWho"
+            # r1r2分開blast
+            if query_name.find("_r1") != -1:
+                rWho = "r1"
+            elif query_name.find("_r2") != -1:
+                rWho = "r2"
 
             # # add default value in the category dictionary
             if query_name not in cate:
@@ -83,10 +91,15 @@ class BlastRef:
             # 20230715 修改float(cate[query_name][3])，改成去讀檔算長度，不然這裡的length其實是有align到的範圍的length
             if query_name != temp_query_name: #不篩的話讀檔次數要從幾千變幾十萬
                 temp_query_name = query_name
+                # r1r2分開blast
                 if (query_name.find("_r1") != -1):
                     qseqid_file_path = qseqid_file_dir_r1 + query_name
                 elif (query_name.find("_r2") != -1):
                     qseqid_file_path = qseqid_file_dir_r2 + query_name
+                # r1r2 cat起來blast
+                else:
+                    qseqid_file_path = qseqid_file_dir_cat + query_name
+
                 # get fasta sequence length
                 with open(qseqid_file_path, encoding='iso-8859-1') as f:
                     lines = f.readlines()

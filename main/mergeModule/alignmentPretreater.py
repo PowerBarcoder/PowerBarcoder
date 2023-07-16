@@ -104,6 +104,7 @@ try:
             # positive
             # r1
             try:
+                # r1r2分開blast
                 qseqidFileStr = qseqidFile(outputLoadpath, forward, qseqid)
                 if forward=="r1":
                     r1RowList = []
@@ -115,29 +116,33 @@ try:
                     with open(qseqidFileStr, "r") as qR2File:
                         lines = qR2File.readlines()
                         r2RowList += lines
+                # r1r2 cat起來blast
+                elif forward=="rWho":
+                    # 待測序列r1製作
+                    qseqidFileStr = qseqidFile(outputLoadpath, "r1", qseqid.replace(".fas","_r1.fas"))
+                    # print(qseqidFile(loadpath,forward,qseqid))
+                    r1RowList = []
+                    with open(qseqidFileStr, "r") as qR1File:
+                        # print(qseqidFileStr)
+                        lines = qR1File.readlines()
+                        # print(lines)
+                        r1RowList += lines
+                        # print(r1RowList)
+
+                    # 待測序列r2製作
+                    qseqidFileStr = qseqidFile(outputLoadpath, "r2", qseqid.replace(".fas","_r2.fas"))
+                    # print(qseqidFile(loadpath,forward,qseqid))
+                    r2RowList = []
+                    with open(qseqidFileStr, "r") as qR2File:
+                        # print(qseqidFileStr)
+                        lines = qR2File.readlines()
+                        # print(lines)
+                        r2RowList += lines
+                        # print(r2RowList)
                 else:
                     print("forward error in alignmentPretreater.py 118: "+qseqidFileStr)
-                # # 待測序列r1製作
-                # qseqidFileStr = qseqidFile(outputLoadpath, "r1", qseqid)
-                # # print(qseqidFile(loadpath,forward,qseqid))
-                # r1RowList = []
-                # with open(qseqidFileStr, "r") as qR1File:
-                #     # print(qseqidFileStr)
-                #     lines = qR1File.readlines()
-                #     # print(lines)
-                #     r1RowList += lines
-                #     # print(r1RowList)
-                #
-                # # 待測序列r2製作
-                # qseqidFileStr = qseqidFile(outputLoadpath, "r2", qseqid)
-                # # print(qseqidFile(loadpath,forward,qseqid))
-                # r2RowList = []
-                # with open(qseqidFileStr, "r") as qR2File:
-                #     # print(qseqidFileStr)
-                #     lines = qR2File.readlines()
-                #     # print(lines)
-                #     r2RowList += lines
-                #     # print(r2RowList)
+
+
             except Exception as e:
                 print("[ERROR] An exception happen in " + sys.argv[4] + "： " + qseqid + " before alignment")
                 print(traceback.print_exc())
@@ -177,9 +182,14 @@ try:
                 # print("positive: "+fastaFile)
                 pass
 
+            # # r1r2分開blast
             if forward == "r1":
                 createRefFile("r1", r1RowList)
             elif forward == "r2":
+                createRefFile("r2", r2RowList)
+            # # r1r2 cat起來blast
+            elif forward == "rWho":
+                createRefFile("r1", r1RowList)
                 createRefFile("r2", r2RowList)
             else:
                 print("forward error in alignmentPretreater.py 183: " + qseqidFileStr)
