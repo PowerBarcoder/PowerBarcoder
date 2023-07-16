@@ -14,7 +14,7 @@
 #  python3 ./mergeModule/nnSpliter.py "$resultDataPath" "${nameOfLoci[i]}" #blast完，需要拆10N
 #done
 
-#bash ./mergeModule/00_blastForRef.sh "$1" #先blast，內部自帶迴圈處理
+bash ./mergeModule/00_blastForRef.sh "$1" #先blast，內部自帶迴圈處理
 
 for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
   count=0
