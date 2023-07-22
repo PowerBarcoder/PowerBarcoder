@@ -296,6 +296,7 @@ def parsingAllDataIntoCsv(destination: str):
                 # # need to check the file exist first
                 # # for dada2 seq. we only retrieve the first seq. (highest abundance)
                 identical_to_DADA2_merge = "N/A"
+                merger_merged_file_list = os.listdir(merger_merged_path)
                 if os.path.exists(dada2_merged_path + sample_name + "_.fas") and os.path.exists(
                         merger_merged_path + fasta_header.replace(">", "") + ".fas"):
                     dada2_merge_seq = "1"
@@ -307,20 +308,29 @@ def parsingAllDataIntoCsv(destination: str):
                             else:
                                 dada2_merge_seq = line.strip()
                                 break
-                    with open(merger_merged_path + fasta_header.replace(">", "") + ".fas", "r") as merger_merge_file:
-                        for line in merger_merge_file:
-                            if line.startswith(">"):
-                                continue
-                            else:
-                                merger_merged_seq = line.strip()
-                                break
-                    if dada2_merge_seq.upper() == merger_merged_seq.upper():
-                        identical_to_DADA2_merge = "1"
-                    else:
-                        identical_to_DADA2_merge = "0"
+                    # check all merger merged files
+                    identical_to_DADA2_merge = "N/A"
+                    for file in merger_merged_file_list:
+                        if sample_name in file:
+                            # sample : Adiantum_hispidulum_CYH20090701.011_KTHU2052
+                            # file : Adiantum_hispidulum_CYH20090701.011_KTHU2052_01_0.973_abundance_110.fas
+                            with open(merger_merged_path + fasta_header.replace(">", "") + ".fas", "r") as merger_merge_file:
+                                for line in merger_merge_file:
+                                    if line.startswith(">"):
+                                        continue
+                                    else:
+                                        merger_merged_seq = line.strip()
+                                        break
+                            if dada2_merge_seq.upper() == merger_merged_seq.upper():
+                                abundant = file.split(sample_name)[1].split("_")[1].replace("01","1").replace("02","2").replace("03","3").replace("04","4").replace("05","5").replace("06","6").replace("07","7").replace("08","8").replace("09","9")
+                                if identical_to_DADA2_merge == "N/A":
+                                    identical_to_DADA2_merge = ""
+                                    identical_to_DADA2_merge += abundant
+                                else:
+                                    identical_to_DADA2_merge += "," + abundant
 
+                # start writing abundance info
                 abundance_info_list = list()
-
                 # Process DADA2 denoise r1's abundance data
                 # # ['Christella', 'arida', 'Lu31801', 'KTHU2029', '01', 'r1', '1.000', 'abundance', '25']
                 dada2_denoise_r1_file = dada2_denoise_r1_path + sample_name + "_.fas"
@@ -379,7 +389,7 @@ def parsingAllDataIntoCsv(destination: str):
             v_count = column_values.count('N/A')
             # Add the count to the last row
             v_count_list.append(str(len(column_values) - v_count)+"/"+str((len(column_values))))
-        identical_to_DADA2_merge_count = [row[23] for row in rows[11:]].count('1')
+        identical_to_DADA2_merge_count = len([row[23] for row in rows[11:] if (row[23] != 'N/A') and (row[23] != '')])
     # # Write the updated data back to the CSV file
     with open(destination, 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
