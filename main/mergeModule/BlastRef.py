@@ -53,7 +53,7 @@ class BlastRef:
             lines = f.readlines()
 
         # Step 2: Initialize the category dictionary and value list
-        default_value_List = ["", "", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, "", ""]
+        default_value_List = ["", "", 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, "", ""]
         cate = {}
 
         # Step 3: Process the lines and update the category dictionary
@@ -116,7 +116,8 @@ class BlastRef:
                 # # 模式一:
                 # 1.identity: 用3排序，取最高者出來，但不低於85
                 # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半
-                if float(cate[query_name][2]) < float(pident) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(qseqid_length):
+                if float(cate[query_name][2]) < float(pident):
+                # if float(cate[query_name][2]) < float(pident) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(qseqid_length):
                     cate[query_name] = value_List
                 elif float(cate[query_name][2]) == float(pident):
                     if float(cate[query_name][12]) < float(qstartMinusQend):
@@ -125,7 +126,8 @@ class BlastRef:
                 # # 模式二:
                 # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度(qseqid_length)的一半
                 # 2.identity: 用3排序，取最高者出來，但不低於85
-                if float(cate[query_name][12]) < float(qstartMinusQend) and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
+                if float(cate[query_name][12]) < float(qstartMinusQend):
+                # if float(cate[query_name][12]) < float(qstartMinusQend) and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
                     cate[query_name] = value_List
                 elif float(cate[query_name][12]) == float(qstartMinusQend):
                     if float(cate[query_name][2]) < float(pident):
@@ -134,12 +136,14 @@ class BlastRef:
                 # # 模式三:
                 # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85
                 # if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
-                if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85:
+                if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident):
+                # if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85:
                     cate[query_name] = value_List
             elif blast_parsing_mode == "3":
                 # # 模式四:
                 # 1. e-value, 越小越好，但不高於0.01，1/10000代表每10000次align才可能出現一次更好的結果
-                if float(cate[query_name][10]) < float(evalue) and evalue < 0.01 and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
+                if float(cate[query_name][10]) > float(evalue) and float(evalue) < 0.01:
+                # if float(cate[query_name][10]) > float(evalue) and float(evalue) < 0.01 and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
                     cate[query_name] = value_List
             else:
                 print("can't choose the right blastParsingMode: " + query_name)

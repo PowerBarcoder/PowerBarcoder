@@ -2,17 +2,14 @@
 
 . /PowerBarcoder/data/result/"$1"/config.sh
 
-#  新的DADA2已經將r1跟r2合併了，所以是放在nonmerged下，檔名結尾是_.fas
-#  /home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_rbcL/rbcLC_result/denoiseResult/denoise_best/nonmerged
-#  所以blast裡面會處理變更的路徑，處理完之後，
-#  檢查blast的結果方向是否與原本的相反，相反的話，反轉ref，之後再去alignment
-
-##  20230716 先把10Ncat的拆開，再拿去blast，不然blast的長度會很淒慘，超過50%長度的屈指可數
-##  就是這裡拆NN到原先的nonmerged/r1,r2資料夾裡(只負責拆，判斷方向交給下一步驟)
-## r1r2分開blast
-#for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
-#  python3 ./mergeModule/nnSpliter.py "$resultDataPath" "${nameOfLoci[i]}" #blast完，需要拆10N
-#done
+if [ "${blastReadChoosingMode}" -eq 1 ]; then
+  echo "[INFO] blastReadChoosingMode is 1, run nnSpliter.py before blast "
+  for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
+    python3 ./mergeModule/nnSpliter.py "$resultDataPath" "${nameOfLoci[i]}" #blast完，需要拆10N
+  done
+else #沒有的就跳過
+  echo "[INFO] blastReadChoosingMode is 0, run nnSpliter.py after blast "
+fi
 
 bash ./mergeModule/00_blastForRef.sh "$1" #先blast，內部自帶迴圈處理
 
@@ -26,9 +23,11 @@ for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
     #    ((count = $count/2))
     echo "[INFO] ${count} nonmerged files found in ${nameOfLoci[i]}"
 
-    # r1r2 cat起來blast
-    #  就是這裡拆NN到原先的nonmerged/r1,r2資料夾裡(只負責拆，判斷方向交給下一步驟)
-    python3 ./mergeModule/nnSpliter.py "$resultDataPath" "${nameOfLoci[i]}" #blast完，需要拆10N
+    if [ "${blastReadChoosingMode}" -eq 0 ]; then
+        # r1r2 cat起來blast
+        #  就是這裡拆NN到原先的nonmerged/r1,r2資料夾裡(只負責拆，判斷方向交給下一步驟)
+        python3 ./mergeModule/nnSpliter.py "$resultDataPath" "${nameOfLoci[i]}" #blast完，需要拆10N
+    fi
 
     #  準備parsing各loci local blast的結果 --- input：10N seq 的 blast refResult; output：10N blastResult
     python3 ./mergeModule/blastResultParser.py "$ampliconInfo" "$resultDataPath" "${blastParsingMode[i]}" "${nameOfLoci[i]}"
