@@ -324,10 +324,13 @@ def parsingAllDataIntoCsv(destination: str):
                             if dada2_merge_seq.upper() == merger_merged_seq.upper():
                                 abundant = file.split(sample_name)[1].split("_")[1].replace("01","1").replace("02","2").replace("03","3").replace("04","4").replace("05","5").replace("06","6").replace("07","7").replace("08","8").replace("09","9")
                                 if identical_to_DADA2_merge == "N/A":
-                                    identical_to_DADA2_merge = ""
-                                    identical_to_DADA2_merge += abundant
+                                    identical_to_DADA2_merge = list()
+                                    identical_to_DADA2_merge.append(int(abundant))
                                 else:
-                                    identical_to_DADA2_merge += "," + abundant
+                                    identical_to_DADA2_merge.append(int(abundant))
+                    if identical_to_DADA2_merge != "N/A": #sort the list and convert to string
+                        identical_to_DADA2_merge_str = list(str(e) for e in sorted(identical_to_DADA2_merge))
+                        identical_to_DADA2_merge = ','.join(identical_to_DADA2_merge_str)
 
                 # start writing abundance info
                 abundance_info_list = list()
