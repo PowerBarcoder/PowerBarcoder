@@ -5,3 +5,5 @@ main/mergeModule/__pycache__/
 result/
 result2/
 ssl/
+main/config.yml
+main/config.sh
