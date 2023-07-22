@@ -159,3 +159,10 @@ if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0')
     app.config['CORS_HEADERS'] = 'Content-Type'
     socketio.run(app, debug=True, host='0.0.0.0', allow_unsafe_werkzeug=True)
+
+    # # Specify the path to the ssl folder
+    # ssl_folder = 'ssl'
+    # # Use the SSL certificate and key files from the ssl folder
+    # ssl_context = (f'{ssl_folder}/smallfarmer_shop.crt', f'{ssl_folder}/smallfarmer.key')
+    # # Run the app with socketio and HTTPS enabled
+    # socketio.run(app, debug=True, host='0.0.0.0', port=5000, ssl_context=ssl_context, allow_unsafe_werkzeug=True)

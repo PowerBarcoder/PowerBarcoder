@@ -81,6 +81,11 @@ def parsingYmlToShell(batch_name:str):
     for i in range(len(config['customizedCoreNumber'])):
         script += f"customizedCoreNumber+=('{str(config['customizedCoreNumber'][i]).strip()}')\n"  # customizedCoreNumber
 
+    # Dev Only
+    for i in range(len(config['nameOfLoci'])):
+        script += f"blastReadChoosingMode+=('1')\n" # blastReadChoosingMode (default: 1): 0: 10Ncat Blast, 1: split R1 R2 Blast
+
+    # Dev Only
     for i in range(len(config['nameOfLoci'])):
         script += f"blastParsingMode+=('2')\n" # blastParsingMode (default: 2)
 
