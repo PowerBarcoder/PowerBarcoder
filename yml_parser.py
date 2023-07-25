@@ -37,6 +37,7 @@ def parsingYmlToShell(batch_name:str):
     script += f"dada2BarcodeFile='{str(config['dada2BarcodeFile']).strip()}'\n"  # dada2BarcodeFile
     script += f"ampliconMinimumLength='1'\n"
     script += f"minimunOverlapBasePair='4'\n"
+    script += f"devMode='0'\n"  # devMode (default: 0) 0: off, 1: on
 
     # loci
     for i in range(len(config['nameOfLoci'])):
