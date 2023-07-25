@@ -38,4 +38,11 @@ bash ${workingDirectory}qc.sh "$1"
 echo "[INFO] end qc.sh"
 # # ----------------------------------------------------------
 
+# # -----------------------6. dev mode------------------------
+cd ${workingDirectory}
+echo "[INFO] start dev.sh"
+bash ${workingDirectory}dev.sh "$1"
+echo "[INFO] end dev.sh"
+# # ----------------------------------------------------------
+
 echo "[INFO] end of flow"

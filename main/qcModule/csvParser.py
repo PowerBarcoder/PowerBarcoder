@@ -219,7 +219,7 @@ def parsingAllDataIntoCsv(destination: str):
                         + ['DADA2 merge', '-', '-']
                         + ['DADA2 10N concat', '-', '-']
                         )
-        writer.writerow(['Sample Name', 'Barcode']
+        writer.writerow(['Barcode', 'Sample Name']
                         + [step[1] for step in steps]
                         + ['header', 'sequence', 'length', 'ambiguous sites number', 'lowercase sites number',
                            'BLAST subjectID', 'BLAST identity', 'BLAST qstart-qend', 'Identical to DADA2 merge']
@@ -235,7 +235,7 @@ def parsingAllDataIntoCsv(destination: str):
 
         # Add each row by iterating the sample we have
         # Write file list info data (part from qc_report.txt)
-        for barcode_name, sample_name in sequence_info_dict.items():
+        for barcode_name, sample_name in sorted(sequence_info_dict.items()):
             try:
                 temp_row = []
                 for file_set in file_set_list:
@@ -301,15 +301,8 @@ def parsingAllDataIntoCsv(destination: str):
                         merger_merged_path + fasta_header.replace(">", "") + ".fas"):
                     dada2_merge_seq = "1"
                     merger_merged_seq = "2"
-                    with open(dada2_merged_path + sample_name + "_.fas", "r") as dada2_merge_file:
-                        for line in dada2_merge_file:
-                            if line.startswith(">"):
-                                continue
-                            else:
-                                dada2_merge_seq = line.strip()
-                                break
-                    # check all merger merged files
-                    identical_to_DADA2_merge = "N/A"
+                    # check all merger merged files with each ASV seq. from dada2 merged file
+                    identical_to_DADA2_merge = list()
                     for file in merger_merged_file_list:
                         if sample_name in file:
                             # sample : Adiantum_hispidulum_CYH20090701.011_KTHU2052
@@ -321,16 +314,19 @@ def parsingAllDataIntoCsv(destination: str):
                                     else:
                                         merger_merged_seq = line.strip()
                                         break
-                            if dada2_merge_seq.upper() == merger_merged_seq.upper():
-                                abundant = file.split(sample_name)[1].split("_")[1].replace("01","1").replace("02","2").replace("03","3").replace("04","4").replace("05","5").replace("06","6").replace("07","7").replace("08","8").replace("09","9")
-                                if identical_to_DADA2_merge == "N/A":
-                                    identical_to_DADA2_merge = list()
-                                    identical_to_DADA2_merge.append(int(abundant))
-                                else:
-                                    identical_to_DADA2_merge.append(int(abundant))
-                    if identical_to_DADA2_merge != "N/A": #sort the list and convert to string
+                                with open(dada2_merged_path + sample_name + "_.fas", "r") as dada2_merge_file: #dada2 merged file has multiple seq.
+                                    for line in dada2_merge_file:
+                                        dada2_merge_seq = line.strip()
+                                        if dada2_merge_seq.upper() == merger_merged_seq.upper():
+                                            # print(f"[INFO] {dada2_merge_seq} is identical to {merger_merged_seq} in {file}")
+                                            abundant = file.split(sample_name)[1].split("_")[1].replace("01","1").replace("02","2").replace("03","3").replace("04","4").replace("05","5").replace("06","6").replace("07","7").replace("08","8").replace("09","9")
+                                            identical_to_DADA2_merge.append(int(abundant))
+                                            break
+                    if len(identical_to_DADA2_merge) > 0 : #sort the list and convert to string
                         identical_to_DADA2_merge_str = list(str(e) for e in sorted(identical_to_DADA2_merge))
                         identical_to_DADA2_merge = ','.join(identical_to_DADA2_merge_str)
+                    else:
+                        identical_to_DADA2_merge = "N/A"
 
                 # start writing abundance info
                 abundance_info_list = list()
@@ -371,7 +367,7 @@ def parsingAllDataIntoCsv(destination: str):
                     abundance_info_list.extend(["N/A", "N/A", "N/A"])
 
                 # Write file list info data (finally we write the row here)
-                writer.writerow([sample_name, barcode_name]
+                writer.writerow([barcode_name, sample_name]
                                 + temp_row
                                 + [fasta_header, fasta_seq, fasta_length, ambiguous_sites_number, lowercase_sites_number,
                                    blast_subject_id, blast_identity, blast_qstart_qend, identical_to_DADA2_merge]
