@@ -1,4 +1,5 @@
 import csv
+import hashlib
 import os
 import sys
 import traceback
@@ -130,14 +131,13 @@ def parsingOverallInfoIntoList(pipline_step: str):
 
 # prepare the abundance info for "DADA2 denoise r1","DADA2 denoise r2","DADA2 merge","DADA2 10N concat"
 def processAbundanceFile(file_path):
-    sequence_info = [0, 0.0, 0]
+    sequence_info = [0, 0.0, 0, 0]
     abundance_count = []
     best_asv_abundance_proportion = []
     best_asv_abundance_number = []
 
     with open(file_path, "r") as file:
         lines = file.readlines()
-
         for i in range(0, len(lines), 2):
             header = lines[i].strip()[1:]
             header_words = header.split("_abundance_")  # 用這個切最保險
@@ -149,6 +149,10 @@ def processAbundanceFile(file_path):
     sequence_info[0] = len(abundance_count)
     sequence_info[1] = max(best_asv_abundance_proportion)
     sequence_info[2] = max(best_asv_abundance_number)
+    with open(file_path, "r") as file: # 計算hash，不知為何在同一個with內下值會為空
+        file_content_hash = hashlib.md5(file.read().encode()).hexdigest()
+        sequence_info[3] = file_content_hash
+    # print(sequence_info[3])
 
     return sequence_info
 
@@ -214,19 +218,19 @@ def parsingAllDataIntoCsv(destination: str):
         writer.writerow(['', '']
                         + [step[0] for step in steps]
                         + ['Highest Abundance ASV', '-', '-', '-', '-', '-', '-', '-', '-']
-                        + ['DADA2 denoise r1', '-', '-']
-                        + ['DADA2 denoise r2', '-', '-']
-                        + ['DADA2 merge', '-', '-']
-                        + ['DADA2 10N concat', '-', '-']
+                        + ['DADA2 denoise r1', '-', '-', '-']
+                        + ['DADA2 denoise r2', '-', '-', '-']
+                        + ['DADA2 merge', '-', '-', '-']
+                        + ['DADA2 10N concat', '-', '-', '-']
                         )
         writer.writerow(['Barcode', 'Sample Name']
                         + [step[1] for step in steps]
                         + ['header', 'sequence', 'length', 'ambiguous sites number', 'lowercase sites number',
                            'BLAST subjectID', 'BLAST identity', 'BLAST qstart-qend', 'Identical to DADA2 merge']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number']
+                        + ['ASV count', 'best ASV proportion', 'best ASV number','hash value']
+                        + ['ASV count', 'best ASV proportion', 'best ASV number','hash value']
+                        + ['ASV count', 'best ASV proportion', 'best ASV number','hash value']
+                        + ['ASV count', 'best ASV proportion', 'best ASV number','hash value']
                         )
 
         # Write file list info data
@@ -235,6 +239,7 @@ def parsingAllDataIntoCsv(destination: str):
 
         # Add each row by iterating the sample we have
         # Write file list info data (part from qc_report.txt)
+        # Step 1: Write barcode and sample name column
         for barcode_name, sample_name in sorted(sequence_info_dict.items()):
             try:
                 temp_row = []
@@ -242,6 +247,7 @@ def parsingAllDataIntoCsv(destination: str):
                     file_exist = any(barcode_name in filename
                                      or sample_name in filename
                                      for filename in file_set)
+                    # Step 2: Write temp_row column: from "Cutadapt demultiplex by sample barcode r1" to "Merger merge"
                     if file_exist:
                         # # 計算以下清單對應檔案的fastq reads number，其他欄位則"V"即可
                         # "Cutadapt demultiplex by sample barcode r1",
@@ -274,6 +280,7 @@ def parsingAllDataIntoCsv(destination: str):
                         print(
                             f"[WARNING] File not found: {sample_name} in {file_set_parameter_list[file_set_list.index(file_set)]}")
 
+                # Step 3: Write "Highest Abundance ASV" column: from "header" to "Identical to DADA2 merge"
                 # Write file list info data (part from merged file)
                 fasta_seq = parsingMergedFileFastaWithHighestAbundanceIntoList(file_set_list[12], sample_name)
                 fasta_header = fasta_seq[0]
@@ -328,6 +335,7 @@ def parsingAllDataIntoCsv(destination: str):
                     else:
                         identical_to_DADA2_merge = "N/A"
 
+                # Step 4 : Write "Abundance info" column: from "DADA2 denoise r1" to "DADA2 10N concat"
                 # start writing abundance info
                 abundance_info_list = list()
                 # Process DADA2 denoise r1's abundance data
@@ -337,7 +345,7 @@ def parsingAllDataIntoCsv(destination: str):
                     sequence_info = processAbundanceFile(dada2_denoise_r1_file)
                     abundance_info_list.extend(sequence_info)
                 else:
-                    abundance_info_list.extend(["N/A", "N/A", "N/A"])
+                    abundance_info_list.extend(["N/A", "N/A", "N/A","N/A"])
 
                 # Process DADA2 denoise r2's abundance data
                 # # ['Christella', 'arida', 'Lu31801', 'KTHU2029', '01', 'r1', '1.000', 'abundance', '25']
@@ -346,7 +354,7 @@ def parsingAllDataIntoCsv(destination: str):
                     sequence_info = processAbundanceFile(dada2_denoise_r2_file)
                     abundance_info_list.extend(sequence_info)
                 else:
-                    abundance_info_list.extend(["N/A", "N/A", "N/A"])
+                    abundance_info_list.extend(["N/A", "N/A", "N/A","N/A"])
 
                 # Process DADA2 merge's abundance data
                 # # ['Christella', 'arida', 'Lu31801', 'KTHU2029', '01', 'r1', '1.000', 'abundance', '25']
@@ -355,7 +363,7 @@ def parsingAllDataIntoCsv(destination: str):
                     sequence_info = processAbundanceFile(dada2_merged_file)
                     abundance_info_list.extend(sequence_info)
                 else:
-                    abundance_info_list.extend(["N/A", "N/A", "N/A"])
+                    abundance_info_list.extend(["N/A", "N/A", "N/A","N/A"])
 
                 # Process DADA2 10N cat's abundance data
                 # # ['Christella', 'arida', 'Lu31801', 'KTHU2029', '01', '1.000', 'abundance', '24']
@@ -364,8 +372,9 @@ def parsingAllDataIntoCsv(destination: str):
                     sequence_info = processAbundanceFile(dada2_10N_cat_file)
                     abundance_info_list.extend(sequence_info)
                 else:
-                    abundance_info_list.extend(["N/A", "N/A", "N/A"])
+                    abundance_info_list.extend(["N/A", "N/A", "N/A","N/A"])
 
+                # Step 5 : Write all columns to the csv file
                 # Write file list info data (finally we write the row here)
                 writer.writerow([barcode_name, sample_name]
                                 + temp_row
@@ -375,8 +384,9 @@ def parsingAllDataIntoCsv(destination: str):
                                 )
             except Exception as e:
                 print("Error occurred when processing sample: " + sample_name +" in qcReport")
-                print(e)
+                print(traceback.print_exc())
 
+    # Step 6 : Write successful rate info in the last row
     # Write successful rate info in the last row
     with open(destination, 'r', encoding='iso-8859-1') as csvfile:
         reader = csv.reader(csvfile)
@@ -395,10 +405,10 @@ def parsingAllDataIntoCsv(destination: str):
         writer.writerow(['Total success', '-']
                         + v_count_list
                         + ['-', '-', '-', '-', '-', '-', '-', '-'] + [identical_to_DADA2_merge_count]
-                        + ['-', '-', '-']
-                        + ['-', '-', '-']
-                        + ['-', '-', '-']
-                        + ['-', '-', '-']
+                        + ['-', '-', '-', '-']
+                        + ['-', '-', '-', '-']
+                        + ['-', '-', '-', '-']
+                        + ['-', '-', '-', '-']
                         )
 
     return "Csv generated!"
