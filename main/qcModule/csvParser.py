@@ -149,7 +149,7 @@ def processAbundanceFile(file_path):
     sequence_info[0] = len(abundance_count)
     sequence_info[1] = max(best_asv_abundance_proportion)
     sequence_info[2] = max(best_asv_abundance_number)
-    with open(file_path, "r") as file: # 計算hash，不知為何在同一個with內下值會為空
+    with open(file_path, "r") as file: # 計算hash，須獨立拿出讀，不然readlines讀完指針就已經讀到底了，後面hash等於拿空的東西去算
         file_content_hash = hashlib.md5(file.read().encode()).hexdigest()
         sequence_info[3] = file_content_hash
     # print(sequence_info[3])
