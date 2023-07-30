@@ -345,7 +345,7 @@
                         <div class="col-12">
                             <input type="text" class="form-control nameOfLoci" id="nameOfLoci" name="nameOfLoci"
                                    required="required"
-                                   placeholder="{{default_nameOfLoci}}">
+                                   placeholder="{{rbcL_nameOfLoci}}">
                         </div>
                     </div>
                 </div>
@@ -361,12 +361,12 @@
                     <div class="row">
                         <div class="col">
                             <input type="text" class="form-control primerFName" required="required"
-                                   placeholder="{{default_primerFName}}" id="primerFName" name="primerFName">
+                                   placeholder="{{rbcL_primerFName}}" id="primerFName" name="primerFName">
                         </div>
                         <div class="col">
                             <input type="text" class="form-control primerF" id="primerF"
                                    name="primerF" required="required"
-                                   placeholder="{{default_primerF}}">
+                                   placeholder="{{rbcL_primerF}}">
                         </div>
                     </div>
                 </div>
@@ -382,50 +382,15 @@
                     <div class="row">
                         <div class="col">
                             <input type="text" class="form-control primerRName" required="required"
-                                   placeholder="{{default_primerRName}}" id="primerRName" name="primerRName">
+                                   placeholder="{{rbcL_primerRName}}" id="primerRName" name="primerRName">
                         </div>
                         <div class="col">
                             <input type="text" class="form-control primerR" id="primerR"
                                    name="primerR" required="required"
-                                   placeholder="{{default_primerR}}">
+                                   placeholder="{{rbcL_primerR}}">
                         </div>
                     </div>
                 </div>
-
-                <!--                <div class="form-group">-->
-                <!--                    <label for="amplicon_r1">-->
-                <!--                        <span id="tooltip9">Amplicon R1: <i class="fa fa-question-circle"></i></span>-->
-                <!--                        <span class="text-secondary information">-->
-                <!--                            <i>-->
-                <!--                                Filename for R1 fastq generated after demultiplex the gz file by cutadapt (not an important name actually)-->
-                <!--                            </i>-->
-                <!--                        </span>-->
-                <!--                    </label>-->
-                <!--                    <div class="row">-->
-                <!--                        <div class="col-12">-->
-                <!--                            <input type="text" class="form-control amplicon_r1" id="amplicon_r1"-->
-                <!--                                   name="amplicon_r1"-->
-                <!--                                   placeholder="{{default_amplicon_r1}}">-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="form-group">-->
-                <!--                    <label for="amplicon_r2">-->
-                <!--                        <span id="tooltip10">Amplicon R2: <i class="fa fa-question-circle"></i></span>-->
-                <!--                        <span class="text-secondary information">-->
-                <!--                            <i>-->
-                <!--                                Filename for R2 fastq generated after demultiplex the gz file by cutadapt (not an important name actually)-->
-                <!--                            </i>-->
-                <!--                        </span>-->
-                <!--                    </label>-->
-                <!--                    <div class="row">-->
-                <!--                        <div class="col-12">-->
-                <!--                            <input type="text" class="form-control amplicon_r2" id="amplicon_r2"-->
-                <!--                                   name="amplicon_r2"-->
-                <!--                                   placeholder="{{default_amplicon_r2}}">-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
                 <div class="form-group">
                     <label for="barcodesFile1">
                         <span id="tooltip11">Barcodes File 1: <i class="fa fa-question-circle"></i></span>
@@ -444,7 +409,7 @@
                         <div class="col">
                             <input type="text" class="form-control barcodesFile1" id="barcodesFile1"
                                    name="barcodesFile1" required="required"
-                                   placeholder="{{default_barcodesFile1}}">
+                                   placeholder="{{rbcL_barcodesFile1}}">
                         </div>
                     </div>
                 </div>
@@ -466,7 +431,7 @@
                             <input type="text" class="form-control barcodesFile2"
                                    id="barcodesFile2"
                                    name="barcodesFile2" required="required"
-                                   placeholder="{{default_barcodesFile2}}">
+                                   placeholder="{{rbcL_barcodesFile2}}">
                         </div>
                     </div>
                 </div>
@@ -492,11 +457,11 @@
                                    id="sseqidFileName"
                                    name="sseqidFileName"
                                    required="required"
-                                   placeholder="{{default_sseqidFileName}}">
+                                   placeholder="{{rbcL_sseqidFileName}}">
                         </div>
                     </div>
                 </div>
-                                <div class="form-group">
+                <div class="form-group">
                     <label for="errorRateCutadaptor">
                         <span id="tooltip5">Error Rate Cutadaptor: <i class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
@@ -509,7 +474,7 @@
                         <div class="col-12">
                             <input type="text" class="form-control errorRateCutadaptor" id="errorRateCutadaptor"
                                    name="errorRateCutadaptor" required="required"
-                                   placeholder="{{default_errorRateCutadaptor}}">
+                                   placeholder="{{rbcL_errorRateCutadaptor}}">
                         </div>
                     </div>
                 </div>
@@ -526,7 +491,7 @@
                         <div class="col-12">
                             <input type="text" class="form-control minimumLengthCutadaptor" id="minimumLengthCutadaptor"
                                    name="minimumLengthCutadaptor" required="required"
-                                   placeholder="{{default_minimumLengthCutadaptor}}">
+                                   placeholder="{{rbcL_minimumLengthCutadaptor}}">
                         </div>
                     </div>
                 </div>
@@ -547,7 +512,7 @@
                                    id="minimumLengthCutadaptorInLoop"
                                    name="minimumLengthCutadaptorInLoop"
                                    required="required"
-                                   placeholder="{{default_minimumLengthCutadaptorInLoop}}">
+                                   placeholder="{{rbcL_minimumLengthCutadaptorInLoop}}">
                         </div>
                     </div>
                 </div>
@@ -566,16 +531,21 @@
                             <input type="text" class="form-control customizedCoreNumber"
                                    id="customizedCoreNumber"
                                    name="customizedCoreNumber" required="required"
-                                   placeholder="{{default_customizedCoreNumber}}">
+                                   placeholder="{{rbcL_customizedCoreNumber}}">
                         </div>
                     </div>
                 </div>
 
                 <br>
                 <div class="d-flex align-items-center">
-                    <button id="autoCompleteWithLoci" class="btn btn-warning" type="button"
-                            onclick="autoCompleteWithDefaultLoci()">
-                        Use Demo Loci
+                    <button id="autoCompleteWithRBCL" class="btn btn-warning" type="button"
+                            onclick="autoCompleteWithRBCLLoci()">
+                        Demo rbcL
+                    </button>
+                    &nbsp;
+                    <button id="autoCompleteWithTRNLF" class="btn btn-warning" type="button"
+                            onclick="autoCompleteWithTRNLFLoci()">
+                        Demo trnLF
                     </button>
                 </div>
             </div>
@@ -583,21 +553,40 @@
 
 
         <script>
-            function autoCompleteWithDefaultLoci() {
-                document.getElementById('nameOfLoci').value = '{{default_nameOfLoci}}'
-                document.getElementById('errorRateCutadaptor').value = '{{default_errorRateCutadaptor}}'
-                document.getElementById('minimumLengthCutadaptor').value = '{{default_minimumLengthCutadaptor}}'
-                document.getElementById('primerFName').value = '{{default_primerFName}}'
-                document.getElementById('primerF').value = '{{default_primerF}}'
-                document.getElementById('primerRName').value = '{{default_primerRName}}'
-                document.getElementById('primerR').value = '{{default_primerR}}'
-                // document.getElementById('amplicon_r1').value = '{{default_amplicon_r1}}'
-                // document.getElementById('amplicon_r2').value = '{{default_amplicon_r2}}'
-                document.getElementById('barcodesFile1').value = '{{default_barcodesFile1}}'
-                document.getElementById('barcodesFile2').value = '{{default_barcodesFile2}}'
-                document.getElementById('sseqidFileName').value = '{{default_sseqidFileName}}'
-                document.getElementById('minimumLengthCutadaptorInLoop').value = '{{default_minimumLengthCutadaptorInLoop}}'
-                document.getElementById('customizedCoreNumber').value = '{{default_customizedCoreNumber}}'
+            function autoCompleteWithRBCLLoci() {
+                document.getElementById('nameOfLoci').value = '{{rbcL_nameOfLoci}}'
+                document.getElementById('errorRateCutadaptor').value = '{{rbcL_errorRateCutadaptor}}'
+                document.getElementById('minimumLengthCutadaptor').value = '{{rbcL_minimumLengthCutadaptor}}'
+                document.getElementById('primerFName').value = '{{rbcL_primerFName}}'
+                document.getElementById('primerF').value = '{{rbcL_primerF}}'
+                document.getElementById('primerRName').value = '{{rbcL_primerRName}}'
+                document.getElementById('primerR').value = '{{rbcL_primerR}}'
+                // document.getElementById('amplicon_r1').value = '{{rbcL_amplicon_r1}}'
+                // document.getElementById('amplicon_r2').value = '{{rbcL_amplicon_r2}}'
+                document.getElementById('barcodesFile1').value = '{{rbcL_barcodesFile1}}'
+                document.getElementById('barcodesFile2').value = '{{rbcL_barcodesFile2}}'
+                document.getElementById('sseqidFileName').value = '{{rbcL_sseqidFileName}}'
+                document.getElementById('minimumLengthCutadaptorInLoop').value = '{{rbcL_minimumLengthCutadaptorInLoop}}'
+                document.getElementById('customizedCoreNumber').value = '{{rbcL_customizedCoreNumber}}'
+                addRawFolderPath()
+            }
+
+            function autoCompleteWithTRNLFLoci() {
+                document.getElementById('nameOfLoci').value = '{{trnLF_nameOfLoci}}'
+                document.getElementById('errorRateCutadaptor').value = '{{trnLF_errorRateCutadaptor}}'
+                document.getElementById('minimumLengthCutadaptor').value = '{{trnLF_minimumLengthCutadaptor}}'
+                document.getElementById('primerFName').value = '{{trnLF_primerFName}}'
+                document.getElementById('primerF').value = '{{trnLF_primerF}}'
+                document.getElementById('primerRName').value = '{{trnLF_primerRName}}'
+                document.getElementById('primerR').value = '{{trnLF_primerR}}'
+                // document.getElementById('amplicon_r1').value = '{{trnLF_amplicon_r1}}'
+                // document.getElementById('amplicon_r2').value = '{{trnLF_amplicon_r2}}'
+                document.getElementById('barcodesFile1').value = '{{trnLF_barcodesFile1}}'
+                document.getElementById('barcodesFile2').value = '{{trnLF_barcodesFile2}}'
+                document.getElementById('sseqidFileName').value = '{{trnLF_sseqidFileName}}'
+                document.getElementById('minimumLengthCutadaptorInLoop').value = '{{trnLF_minimumLengthCutadaptorInLoop}}'
+                document.getElementById('customizedCoreNumber').value = '{{trnLF_customizedCoreNumber}}'
+                console.log('{{trnLF_nameOfLoci}}')
                 addRawFolderPath()
             }
         </script>
@@ -905,7 +894,7 @@
                     <label for="nameOfLoci">Name of Loci:</label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control nameOfLoci" id="nameOfLoci" required="required" name="nameOfLoci">
+                            <input type="text" class="form-control nameOfLoci" id="nameOfLoci" required="required" name="nameOfLoci" placeholder="{{rbcL_nameOfLoci}}">
                         </div>
                     </div>
                 </div>
@@ -921,12 +910,12 @@
                     <div class="row">
                         <div class="col">
                             <input type="text" class="form-control primerFName" required="required"
-                                   placeholder="{{default_primerFName}}" id="primerFName" name="primerFName">
+                                   placeholder="{{rbcL_primerFName}}" id="primerFName" name="primerFName">
                         </div>
                         <div class="col">
                             <input type="text" class="form-control primerF" id="primerF"
                                    name="primerF" required="required"
-                                   placeholder="{{default_primerF}}">
+                                   placeholder="{{rbcL_primerF}}">
                         </div>
                     </div>
                 </div>
@@ -942,34 +931,15 @@
                     <div class="row">
                         <div class="col">
                             <input type="text" class="form-control primerRName" required="required"
-                                   placeholder="{{default_primerRName}}" id="primerRName" name="primerRName">
+                                   placeholder="{{rbcL_primerRName}}" id="primerRName" name="primerRName">
                         </div>
                         <div class="col">
                             <input type="text" class="form-control primerR" id="primerR"
                                    name="primerR" required="required"
-                                   placeholder="{{default_primerR}}">
+                                   placeholder="{{rbcL_primerR}}">
                         </div>
                     </div>
                 </div>
-<!--                <div class="form-group">-->
-
-<!--                    <label for="amplicon_r1">Amplicon R1:</label>-->
-<!--                    <div class="row">-->
-<!--                        <div class="col-12">-->
-<!--                            <input type="text" class="form-control amplicon_r1" id="amplicon_r1"-->
-<!--                                   name="amplicon_r1">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="form-group">-->
-<!--                    <label for="amplicon_r2">Amplicon R2:</label>-->
-<!--                    <div class="row">-->
-<!--                        <div class="col-12">-->
-<!--                            <input type="text" class="form-control amplicon_r2" id="amplicon_r2"-->
-<!--                                   name="amplicon_r2">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
                 <div class="form-group">
                     <label for="barcodesFile1">Barcodes File 1:</label>
                     <div class="row">
@@ -979,7 +949,7 @@
                         </div>
                         <div class="col">
                             <input type="text" class="form-control barcodesFile1" id="barcodesFile1" required="required"
-                                   name="barcodesFile1">
+                                   name="barcodesFile1" placeholder="{{rbcL_barcodesFile1}}">
                         </div>
                     </div>
                 </div>
@@ -993,7 +963,7 @@
                         <div class="col">
                             <input type="text" class="form-control barcodesFile2"
                                    id="barcodesFile2" required="required"
-                                   name="barcodesFile2">
+                                   name="barcodesFile2" placeholder="{{rbcL_barcodesFile2}}">
                         </div>
                     </div>
                 </div>
@@ -1007,7 +977,7 @@
                         <div class="col">
                             <input type="text" class="form-control sseqidFileName"
                                    id="sseqidFileName" required="required"
-                                   name="sseqidFileName">
+                                   name="sseqidFileName" placeholder="{{rbcL_sseqidFileName}}">
                         </div>
                     </div>
                 </div>
@@ -1016,7 +986,7 @@
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control errorRateCutadaptor" id="errorRateCutadaptor" required="required"
-                                   name="errorRateCutadaptor">
+                                   name="errorRateCutadaptor" placeholder="{{rbcL_errorRateCutadaptor}}">
                         </div>
                     </div>
                 </div>
@@ -1025,7 +995,7 @@
                     <div class="row">
                         <div class="col-12">
                             <input type="text" class="form-control minimumLengthCutadaptor" id="minimumLengthCutadaptor" required="required"
-                                   name="minimumLengthCutadaptor">
+                                   name="minimumLengthCutadaptor" placeholder="{{rbcL_minimumLengthCutadaptor}}">
                         </div>
                     </div>
                 </div>
@@ -1037,7 +1007,7 @@
                         <div class="col-12">
                             <input type="text" class="form-control minimumLengthCutadaptorInLoop"
                                    id="minimumLengthCutadaptorInLoop" required="required"
-                                   name="minimumLengthCutadaptorInLoop">
+                                   name="minimumLengthCutadaptorInLoop" placeholder="{{rbcL_minimumLengthCutadaptorInLoop}}">
                         </div>
                     </div>
                 </div>
@@ -1048,7 +1018,7 @@
                         <div class="col-12">
                             <input type="text" class="form-control customizedCoreNumber"
                                    id="customizedCoreNumber" required="required"
-                                   name="customizedCoreNumber">
+                                   name="customizedCoreNumber" placeholder="{{rbcL_customizedCoreNumber}}">
                         </div>
                     </div>
                 </div>

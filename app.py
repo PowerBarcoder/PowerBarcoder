@@ -102,23 +102,37 @@ def home():
     default_dada2LearnErrorFile = "/PowerBarcoder/data/dada2LearnErrorFile/"
     default_dada2BarcodeFile = "multiplex_cpDNAbarcode_clean.txt"
 
-    # Locus (only the one for demo)
-    default_nameOfLoci = "rbcLN"
-    default_errorRateCutadaptor = 0.125
-    default_minimumLengthCutadaptor = 70
-    default_primerF = "GAGACTAAAGCAGGTGTTGGATTCA"
-    default_primerFName = "fVGF"
-    default_primerR = "TCAAGTCCACCRCGAAGRCATTC"
-    default_primerRName = "rECL"
-    # default_amplicon_r1 = "rbcLN_amplicon_r1.fq"
-    # default_amplicon_r2 = "rbcLN_amplicon_r2.fq"
-    default_barcodesFile1 = "barcodes_rbcL_start_0.fasta"
-    default_barcodesFile2 = "barcodes_rbcLN_start2_0.fasta"
-    default_sseqidFileName = "fermalies_rbcL.fasta"
-    default_minimumLengthCutadaptorInLoop = 150
-    default_customizedCoreNumber = 30
+    # Locus (rbcL demo)
+    rbcL_nameOfLoci = "rbcLN"
+    rbcL_errorRateCutadaptor = 0.125
+    rbcL_minimumLengthCutadaptor = 70
+    rbcL_primerF = "GAGACTAAAGCAGGTGTTGGATTCA"
+    rbcL_primerFName = "fVGF"
+    rbcL_primerR = "TCAAGTCCACCRCGAAGRCATTC"
+    rbcL_primerRName = "rECL"
+    rbcL_barcodesFile1 = "barcodes_rbcL_start_0.fasta"
+    rbcL_barcodesFile2 = "barcodes_rbcLN_start2_0.fasta"
+    rbcL_sseqidFileName = "fermalies_rbcL.fasta"
+    rbcL_minimumLengthCutadaptorInLoop = 150
+    rbcL_customizedCoreNumber = 30
+
+    # Locus (trnLF demo)
+    trnLF_nameOfLoci = "trnLF"
+    trnLF_errorRateCutadaptor = 0.125
+    trnLF_minimumLengthCutadaptor = 70
+    trnLF_primerF = "TGAGGGTTCGANTCCCTCTA"
+    trnLF_primerFName = "L5675"
+    trnLF_primerR = "GGATTTTCAGTCCYCTGCTCT"
+    trnLF_primerRName = "F4121"
+    trnLF_barcodesFile1 = "barcodes_trnL_3exonSTART_0.fasta"
+    trnLF_barcodesFile2 = "barcodes_trnF_0.fasta"
+    trnLF_sseqidFileName = "ftol_sanger_alignment_trnLLF_full_f.fasta"
+    trnLF_minimumLengthCutadaptorInLoop = 150
+    trnLF_customizedCoreNumber = 30
+
 
     return render_template('index.html',
+                           # Path
                            default_myCutadaptPath=default_myCutadaptPath,
                            default_myFastpPath=default_myFastpPath,
                            default_localBlastToolDir=default_localBlastToolDir,
@@ -131,20 +145,32 @@ def home():
                            default_summaryHtmlFileName=default_summaryHtmlFileName,
                            default_dada2LearnErrorFile=default_dada2LearnErrorFile,
                            default_dada2BarcodeFile=default_dada2BarcodeFile,
-                           default_nameOfLoci=default_nameOfLoci,
-                           default_errorRateCutadaptor=default_errorRateCutadaptor,
-                           default_minimumLengthCutadaptor=default_minimumLengthCutadaptor,
-                           default_primerF=default_primerF,
-                           default_primerFName=default_primerFName,
-                           default_primerR=default_primerR,
-                           default_primerRName=default_primerRName,
-                           # default_amplicon_r1=default_amplicon_r1,
-                           # default_amplicon_r2=default_amplicon_r2,
-                           default_barcodesFile1=default_barcodesFile1,
-                           default_barcodesFile2=default_barcodesFile2,
-                           default_sseqidFileName=default_sseqidFileName,
-                           default_minimumLengthCutadaptorInLoop=default_minimumLengthCutadaptorInLoop,
-                           default_customizedCoreNumber=default_customizedCoreNumber
+                           # Locus (rbcL demo)
+                           rbcL_nameOfLoci=rbcL_nameOfLoci,
+                           rbcL_errorRateCutadaptor=rbcL_errorRateCutadaptor,
+                           rbcL_minimumLengthCutadaptor=rbcL_minimumLengthCutadaptor,
+                           rbcL_primerF=rbcL_primerF,
+                           rbcL_primerFName=rbcL_primerFName,
+                           rbcL_primerR=rbcL_primerR,
+                           rbcL_primerRName=rbcL_primerRName,
+                           rbcL_barcodesFile1=rbcL_barcodesFile1,
+                           rbcL_barcodesFile2=rbcL_barcodesFile2,
+                           rbcL_sseqidFileName=rbcL_sseqidFileName,
+                           rbcL_minimumLengthCutadaptorInLoop=rbcL_minimumLengthCutadaptorInLoop,
+                           rbcL_customizedCoreNumber=rbcL_customizedCoreNumber,
+                           # Locus (trnLF demo)
+                           trnLF_nameOfLoci=trnLF_nameOfLoci,
+                           trnLF_errorRateCutadaptor=trnLF_errorRateCutadaptor,
+                           trnLF_minimumLengthCutadaptor=trnLF_minimumLengthCutadaptor,
+                           trnLF_primerF=trnLF_primerF,
+                           trnLF_primerFName=trnLF_primerFName,
+                           trnLF_primerR=trnLF_primerR,
+                           trnLF_primerRName=trnLF_primerRName,
+                           trnLF_barcodesFile1=trnLF_barcodesFile1,
+                           trnLF_barcodesFile2=trnLF_barcodesFile2,
+                           trnLF_sseqidFileName=trnLF_sseqidFileName,
+                           trnLF_minimumLengthCutadaptorInLoop=trnLF_minimumLengthCutadaptorInLoop,
+                           trnLF_customizedCoreNumber=trnLF_customizedCoreNumber
                            )
 
 

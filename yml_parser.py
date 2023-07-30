@@ -39,7 +39,7 @@ def parsingYmlToShell(batch_name:str):
     script += f"ampliconMinimumLength='1'\n"
     script += f"minimunOverlapBasePair='4'\n"
     # Dev Only
-    script += f"devMode='1'\n"  # devMode (default: 0) 0: off, 1: on
+    script += f"devMode='1'\n"  # devMode (default: 0) 0: off, 1: on #TODO 上線前關掉
 
     # loci
     for i in range(len(config['nameOfLoci'])):
