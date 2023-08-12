@@ -64,3 +64,4 @@ for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
 
   # -----------------finish of demultiplex------------------------
 done
+
