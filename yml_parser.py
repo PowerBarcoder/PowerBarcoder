@@ -36,10 +36,10 @@ def parsingYmlToShell(batch_name:str):
     script += f"summaryHtmlFileName='summary.html'\n"
     script += f"dada2LearnErrorFile='{str(config['dada2LearnErrorFile']).strip()}'\n"  # dada2LearnErrorFile
     script += f"dada2BarcodeFile='{str(config['dada2BarcodeFile']).strip()}'\n"  # dada2BarcodeFile
-    script += f"ampliconMinimumLength='1'\n"
-    script += f"minimunOverlapBasePair='4'\n"
+    script += f"ampliconMinimumLength='{str(config['ampliconMinimumLength']).strip()}'\n" # ampliconMinimumLength (default: 1)
+    script += f"minimumOverlapBasePair='{str(config['minimumOverlapBasePair']).strip()}'\n" # minimumOverlapBasePair (default: 4)
     # Dev Only
-    script += f"devMode='1'\n"  # devMode (default: 0) 0: off, 1: on #TODO 上線前關掉
+    script += f"devMode='{str(config['devMode']).strip()}'\n"  # devMode (default: 0) 0: off, 1: on #TODO 上線前關掉
 
     # loci
     for i in range(len(config['nameOfLoci'])):
@@ -59,8 +59,8 @@ def parsingYmlToShell(batch_name:str):
         script += f"minimumLengthCutadaptorInLoop+=('{str(config['minimumLengthCutadaptorInLoop'][i]).strip()}')\n"  # minimumLengthCutadaptorInLoop
         script += f"customizedCoreNumber+=('{str(config['customizedCoreNumber'][i]).strip()}')\n"  # customizedCoreNumber
         # Dev Only
-        script += f"blastReadChoosingMode+=('1')\n" # blastReadChoosingMode (default: 1): 0: 10Ncat Blast, 1: split R1 R2 Blast
-        script += f"blastParsingMode+=('2')\n" # blastParsingMode (default: 2)
+        script += f"blastReadChoosingMode+=('{str(config['blastReadChoosingMode'][i]).strip()}')\n" # blastReadChoosingMode (default: 1): 0: 10Ncat Blast, 1: split R1 R2 Blast
+        script += f"blastParsingMode+=('{str(config['blastParsingMode'][i]).strip()}')\n" # blastParsingMode (default: 2)
 
     script += 'echo \'[INFO] config imported!\'\n'
 

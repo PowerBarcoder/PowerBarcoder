@@ -36,75 +36,98 @@
         }
 
         .information {
-            display: none;
+            display: block;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 1s ease-in-out;
         }
 
         #tooltip99:hover + .information {
-            display: block;
+            max-height: 1000px;
+        }
+
+        #tooltip98:hover + .information {
+            max-height: 1000px;
+        }
+
+        #tooltip97:hover + .information {
+            max-height: 1000px;
+        }
+
+        #tooltip96:hover + .information {
+            max-height: 1000px;
+        }
+
+        #tooltip95:hover + .information {
+            max-height: 1000px;
+        }
+
+        #tooltip94:hover + .information {
+            max-height: 1000px;
         }
 
         #tooltip0:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip1:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip2:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip3:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip4:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip5:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip6:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip7:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip8:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip9:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip10:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip11:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip12:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip13:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip14:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         #tooltip15:hover + .information {
-            display: block;
+            max-height: 1000px;
         }
 
         /*隱藏scroll bar*/
@@ -118,6 +141,20 @@
             word-wrap: break-word;
         }
 
+        .advanceMode {
+            color: red;
+        }
+
+        .showAdvanceMode {
+            display: block;
+
+        }
+
+        .hideAdvanceMode {
+            display: none;
+        }
+
+
     </style>
 
 </head>
@@ -127,7 +164,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 d-md-flex justify-content-md-end">
-                <button type="button" class=" btn btn-secondary"> v.<i>Beta</i></button>
+                <button type="button" class=" btn btn-secondary" onclick="openAdvanceMode()"> v.<i>Beta</i></button>
             </div>
         </div>
     </div>
@@ -278,17 +315,75 @@
                         </span>
                     </label>
                     <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control rawFolderPath" required="required"
-                                   placeholder="{{TODO}}" disabled="disabled">
-                        </div>
-                        <div class="col">
+                        <div class="col-12">
                             <input type="text" class="form-control" id="dada2BarcodeFile" name="dada2BarcodeFile"
                                    required="required"
                                    placeholder="{{default_dada2BarcodeFile}}">
                         </div>
                     </div>
                 </div>
+
+
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="devMode">
+                        <span id="tooltip98">Develop Mode: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                If you want to use the develop mode, please set it to "1", otherwise, set it to "0
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control devMode" id="devMode" name="devMode"
+                                   required="required" value="{{devMode}}"
+                                   placeholder="{{devMode}}">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="ampliconMinimumLength">
+                        <span id="tooltip97">Amplicon Minimum Length: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The minimum length of amplicon, default is 1
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control ampliconMinimumLength" id="ampliconMinimumLength"
+                                   name="ampliconMinimumLength"
+                                   required="required" value="{{ampliconMinimumLength}}"
+                                   placeholder="{{ampliconMinimumLength}}">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="minimumOverlapBasePair">
+                        <span id="tooltip96">Minimum Overlap Base Pair: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The minimum overlap base pair, default is 4
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control minimumOverlapBasePair" id="minimumOverlapBasePair"
+                                   name="minimumOverlapBasePair"
+                                   required="required" value="{{minimumOverlapBasePair}}"
+                                   placeholder="{{minimumOverlapBasePair}}">
+                        </div>
+                    </div>
+                </div>
+
 
                 <br>
                 <div class="d-flex align-items-center">
@@ -316,6 +411,20 @@
                 document.getElementById('dada2BarcodeFile').value = '{{default_dada2BarcodeFile}}'
                 addRawFolderPath()
             }
+
+            function openAdvanceMode() {
+                let advanceMode = document.getElementsByClassName("advanceMode");
+                for (let i = 0; i < advanceMode.length; i++) {
+                    if (advanceMode[i].classList.contains("showAdvanceMode")) {
+                        advanceMode[i].classList.remove("showAdvanceMode");
+                        advanceMode[i].classList.add("hideAdvanceMode");
+                    } else {
+                        advanceMode[i].classList.add("showAdvanceMode");
+                        advanceMode[i].classList.remove("hideAdvanceMode");
+                    }
+                }
+            };
+
         </script>
 
 
@@ -536,6 +645,46 @@
                     </div>
                 </div>
 
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="blastReadChoosingMode">
+                        <span id="tooltip95">Blast Read Choosing Mode: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Blast Read Choosing Mode, details can be found in PowerBarcoder manual.
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control blastReadChoosingMode" id="blastReadChoosingMode"
+                                   name="blastReadChoosingMode"
+                                   required="required" value="{{blastReadChoosingMode}}"
+                                   placeholder="{{blastReadChoosingMode}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="blastParsingMode">
+                        <span id="tooltip94">Blast Parsing Mode: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Blast Parsing Mode, details can be found in PowerBarcoder manual.
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control blastParsingMode" id="blastParsingMode"
+                                   name="blastParsingMode"
+                                   required="required" value="{{blastParsingMode}}"
+                                   placeholder="{{blastParsingMode}}">
+                        </div>
+                    </div>
+                </div>
+
                 <br>
                 <div class="d-flex align-items-center">
                     <button id="autoCompleteWithRBCL" class="btn btn-warning" type="button"
@@ -568,6 +717,8 @@
                 document.getElementById('sseqidFileName').value = '{{rbcL_sseqidFileName}}'
                 document.getElementById('minimumLengthCutadaptorInLoop').value = '{{rbcL_minimumLengthCutadaptorInLoop}}'
                 document.getElementById('customizedCoreNumber').value = '{{rbcL_customizedCoreNumber}}'
+                document.getElementById('blastReadChoosingMode').value = '{{rbcL_blastReadChoosingMode}}'
+                document.getElementById('blastParsingMode').value = '{{rbcL_blastParsingMode}}'
                 addRawFolderPath()
             }
 
@@ -586,7 +737,8 @@
                 document.getElementById('sseqidFileName').value = '{{trnLF_sseqidFileName}}'
                 document.getElementById('minimumLengthCutadaptorInLoop').value = '{{trnLF_minimumLengthCutadaptorInLoop}}'
                 document.getElementById('customizedCoreNumber').value = '{{trnLF_customizedCoreNumber}}'
-                console.log('{{trnLF_nameOfLoci}}')
+                document.getElementById('blastReadChoosingMode').value = '{{trnLF_blastReadChoosingMode}}'
+                document.getElementById('blastParsingMode').value = '{{trnLF_blastParsingMode}}'
                 addRawFolderPath()
             }
         </script>
@@ -784,6 +936,10 @@
                         // 'summaryHtmlFileName': $('#summaryHtmlFileName').val(),
                         'dada2LearnErrorFile': $('#dada2LearnErrorFile').val(),
                         'dada2BarcodeFile': $('#dada2BarcodeFile').val(),
+                        'devMode': $('#devMode').val(),
+                        'ampliconMinimumLength': $('#ampliconMinimumLength').val(),
+                        'minimumOverlapBasePair': $('#minimumOverlapBasePair').val(),
+
                         'nameOfLoci': $('.nameOfLoci').map(function () {
                             return $(this).val();
                         }).get(),
@@ -824,6 +980,12 @@
                             return $(this).val();
                         }).get(),
                         'customizedCoreNumber': $('.customizedCoreNumber').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'blastReadChoosingMode': $('.blastReadChoosingMode').map(function () {
+                            return $(this).val();
+                        }).get(),
+                        'blastParsingMode': $('.blastParsingMode').map(function () {
                             return $(this).val();
                         }).get(),
                     }
@@ -1019,6 +1181,42 @@
                             <input type="text" class="form-control customizedCoreNumber"
                                    id="customizedCoreNumber" required="required"
                                    name="customizedCoreNumber" placeholder="{{rbcL_customizedCoreNumber}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="blastReadChoosingMode">
+                        <span id="tooltip95">Blast Read Choosing Mode: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Blast Read Choosing Mode, details can be found in PowerBarcoder manual.
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control advanceMode" id="blastReadChoosingMode"
+                                   name="blastReadChoosingMode"
+                                   required="required" value="{{blastReadChoosingMode}}"
+                                   placeholder="{{blastReadChoosingMode}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="blastParsingMode">
+                        <span id="tooltip94">Blast Parsing Mode: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Blast Parsing Mode, details can be found in PowerBarcoder manual.
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control advanceMode" id="blastParsingMode"
+                                   name="blastParsingMode"
+                                   required="required" value="{{blastParsingMode}}"
+                                   placeholder="{{blastParsingMode}}">
                         </div>
                     </div>
                 </div>
