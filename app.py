@@ -15,13 +15,13 @@ socketio = SocketIO(app, cors_allowed_origins='*')
 app.debug = True  # set debug flag to True
 batch_name_set = set()
 
+
 def ws_emit_procedure_result(msg, room_name):
     ws.emit('procedure-result', "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + msg, room=room_name)
 
 
 @socketio.on('run-procedure')
 def run_procedure(data):
-
     # Get current datetime
     formatted_datetime = datetime.now().strftime("%Y%m%d%H%M")
 
@@ -31,14 +31,14 @@ def run_procedure(data):
         ws.join_room(formatted_datetime)
     else:
         temp_uuid = uuid.uuid4()
-        ws.join_room(formatted_datetime+str(temp_uuid))
-        ws_emit_procedure_result('Server is busy, please try again later\r\n', formatted_datetime+str(temp_uuid))
-        ws.close_room(formatted_datetime+str(temp_uuid))
+        ws.join_room(formatted_datetime + str(temp_uuid))
+        ws_emit_procedure_result('Server is busy, please try again later\r\n', formatted_datetime + str(temp_uuid))
+        ws.close_room(formatted_datetime + str(temp_uuid))
         return
 
     # socketio.emit('procedure-result', '<br>')
     ws.emit('procedure-result', '\r\n', room=formatted_datetime)
-    ws_emit_procedure_result('Generating config file...\r\n',formatted_datetime)
+    ws_emit_procedure_result('Generating config file...\r\n', formatted_datetime)
 
     # [For Debug]
     # n=0
@@ -52,9 +52,9 @@ def run_procedure(data):
     yml_parser.parsingFormDataToYml(form_data)
     yml_parser.parsingYmlToShell(formatted_datetime)
 
-    ws_emit_procedure_result('Data procedure started\r\n',formatted_datetime)
+    ws_emit_procedure_result('Data procedure started\r\n', formatted_datetime)
 
-    cmd = 'cd /PowerBarcoder/main && bash powerBarcode.sh ' +formatted_datetime+ ' 2>&1'
+    cmd = 'cd /PowerBarcoder/main && bash powerBarcode.sh ' + formatted_datetime + ' 2>&1'
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1)
 
     # throttle detection, we don't need virtual scrolling anymore
@@ -77,12 +77,13 @@ def run_procedure(data):
     #     # Process each line of output
     #     socketio.emit('procedure-result', "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8'))
 
-    ws_emit_procedure_result('done\r\n',formatted_datetime)
-    ws_emit_procedure_result('Find your results in data/result/ folder\r\n',formatted_datetime)
+    ws_emit_procedure_result('done\r\n', formatted_datetime)
+    ws_emit_procedure_result('Find your results in data/result/ folder\r\n', formatted_datetime)
 
     # Remove batch name from set
     batch_name_set.remove(formatted_datetime)
     ws.leave_room(formatted_datetime)
+
 
 @app.route('/')
 def home():
@@ -101,6 +102,9 @@ def home():
     default_summaryHtmlFileName = "summary.html"
     default_dada2LearnErrorFile = "/PowerBarcoder/data/dada2LearnErrorFile/"
     default_dada2BarcodeFile = "multiplex_cpDNAbarcode_clean.txt"
+    devMode = 1
+    ampliconMinimumLength = 1
+    minimumOverlapBasePair = 4
 
     # Locus (rbcL demo)
     rbcL_nameOfLoci = "rbcLN"
@@ -115,6 +119,8 @@ def home():
     rbcL_sseqidFileName = "fermalies_rbcL.fasta"
     rbcL_minimumLengthCutadaptorInLoop = 150
     rbcL_customizedCoreNumber = 30
+    rbcL_blastReadChoosingMode = 1
+    rbcL_blastParsingMode = 2
 
     # Locus (trnLF demo)
     trnLF_nameOfLoci = "trnLF"
@@ -129,7 +135,8 @@ def home():
     trnLF_sseqidFileName = "ftol_sanger_alignment_trnLLF_full_f.fasta"
     trnLF_minimumLengthCutadaptorInLoop = 150
     trnLF_customizedCoreNumber = 30
-
+    trnLF_blastReadChoosingMode = 1
+    trnLF_blastParsingMode = 2
 
     return render_template('index.html',
                            # Path
@@ -145,6 +152,9 @@ def home():
                            default_summaryHtmlFileName=default_summaryHtmlFileName,
                            default_dada2LearnErrorFile=default_dada2LearnErrorFile,
                            default_dada2BarcodeFile=default_dada2BarcodeFile,
+                           devMode=devMode,
+                           ampliconMinimumLength=ampliconMinimumLength,
+                           minimumOverlapBasePair=minimumOverlapBasePair,
                            # Locus (rbcL demo)
                            rbcL_nameOfLoci=rbcL_nameOfLoci,
                            rbcL_errorRateCutadaptor=rbcL_errorRateCutadaptor,
@@ -158,6 +168,8 @@ def home():
                            rbcL_sseqidFileName=rbcL_sseqidFileName,
                            rbcL_minimumLengthCutadaptorInLoop=rbcL_minimumLengthCutadaptorInLoop,
                            rbcL_customizedCoreNumber=rbcL_customizedCoreNumber,
+                           rbcL_blastReadChoosingMode=rbcL_blastReadChoosingMode,
+                           rbcL_blastParsingMode=rbcL_blastParsingMode,
                            # Locus (trnLF demo)
                            trnLF_nameOfLoci=trnLF_nameOfLoci,
                            trnLF_errorRateCutadaptor=trnLF_errorRateCutadaptor,
@@ -170,7 +182,9 @@ def home():
                            trnLF_barcodesFile2=trnLF_barcodesFile2,
                            trnLF_sseqidFileName=trnLF_sseqidFileName,
                            trnLF_minimumLengthCutadaptorInLoop=trnLF_minimumLengthCutadaptorInLoop,
-                           trnLF_customizedCoreNumber=trnLF_customizedCoreNumber
+                           trnLF_customizedCoreNumber=trnLF_customizedCoreNumber,
+                           trnLF_blastReadChoosingMode=trnLF_blastReadChoosingMode,
+                           trnLF_blastParsingMode=trnLF_blastParsingMode,
                            )
 
 
