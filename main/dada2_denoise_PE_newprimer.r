@@ -146,10 +146,6 @@ for (a in 1:ncol(AP)) {
       write.table(r2fas[, 1:2], file = paste0(path_denoise, "/r2/", filename), append = FALSE, sep = "\n", quote = FALSE,
                   row.names = FALSE, col.names = FALSE)
 
-      # # rc r2 for debug
-      # write.table(rc(r2fas[, 1:2]), file = paste0(path_denoise, "/r2rc/", filename), append = FALSE, sep = "\n", quote = FALSE,
-      #             row.names = FALSE, col.names = FALSE)
-
       # 順便存一個(barcodeName,sampleName)的namePair list
       barcode_name = paste(region, amplicon[sample_number, Fp], amplicon[sample_number, Rp], sep = "_")
       sample_name = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")
@@ -160,7 +156,6 @@ for (a in 1:ncol(AP)) {
 
       # third step: 請DADA2對r1 r2 merge (necessary)
       tryCatch({
-        print("merging... dada2::mergePairs()")
         mergers <- mergePairs(dadaFs, r1, dadaRs, r2, minOverlap = minoverlap, verbose = TRUE)
       }, error = function(e) {
         message("Error occurred during mergePairs(): ", conditionMessage(e))

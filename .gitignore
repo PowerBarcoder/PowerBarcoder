@@ -6,4 +6,4 @@ result/
 result2/
 ssl/
 main/config.yml
-main/config.sh
+debug/config.sh
