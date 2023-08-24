@@ -329,7 +329,9 @@
                         <span id="tooltip98">Develop Mode: <i class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
-                                If you want to use the develop mode, please set it to "1", otherwise, set it to "0
+                                If you want to use the develop mode, please set it to "1", otherwise, set it to "0<br>
+                                # 0: off (keep all the intermediate files),<br>
+                                # 1: on  (cleanup all the intermediate files)
                             </i>
                         </span>
                     </label>
@@ -670,7 +672,17 @@
                         <span id="tooltip94">Blast Parsing Mode: <i class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
-                                Blast Parsing Mode, details can be found in PowerBarcoder manual.
+                                Blast Parsing Mode, details can be found in PowerBarcoder manual.<br>
+                                # # blast_parsing_mode == "0":<br>
+                                # 1.identity: 用3排序，取最高者出來，但不低於85<br>
+                                # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半<br>
+                                # # blast_parsing_mode == "1":<br>
+                                # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度(qseqid_length)的一半<br>
+                                # 2.identity: 用3排序，取最高者出來，但不低於85<br>
+                                # # blast_parsing_mode == "2":<br>
+                                # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85<br>
+                                # # blast_parsing_mode == "3":<br>
+                                # 1. e-value, 越小越好，但不高於0.01，1/10000代表每10000次align才可能出現一次更好的結果
                             </i>
                         </span>
                     </label>

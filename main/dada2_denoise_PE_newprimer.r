@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript
 
+debug_filter_list = c("trnLF_L5675_br02_F4121_br04", "trnLF_L5675_br02_F4121_br07", "trnLF_L5675_br02_F4121_br09", "trnLF_L5675_br02_F4121_br15", "trnLF_L5675_br03_F4121_br12", "trnLF_L5675_br03_F4121_br18", "trnLF_L5675_br04_F4121_br07", "trnLF_L5675_br04_F4121_br12", "trnLF_L5675_br04_F4121_br16", "trnLF_L5675_br05_F4121_br06", "trnLF_L5675_br05_F4121_br09", "trnLF_L5675_br05_F4121_br13", "trnLF_L5675_br05_F4121_br14", "trnLF_L5675_br06_F4121_br02", "trnLF_L5675_br06_F4121_br06", "trnLF_L5675_br06_F4121_br09", "trnLF_L5675_br06_F4121_br14", "trnLF_L5675_br06_F4121_br17", "trnLF_L5675_br07_F4121_br10", "trnLF_L5675_br07_F4121_br11", "trnLF_L5675_br07_F4121_br14", "trnLF_L5675_br07_F4121_br15", "trnLF_L5675_br07_F4121_br16", "trnLF_L5675_br08_F4121_br04", "trnLF_L5675_br09_F4121_br02", "trnLF_L5675_br09_F4121_br03", "trnLF_L5675_br09_F4121_br07", "trnLF_L5675_br10_F4121_br06", "trnLF_L5675_br10_F4121_br16", "trnLF_L5675_br10_F4121_br17", "trnLF_L5675_br11_F4121_br16", "trnLF_L5675_br12_F4121_br16", "trnLF_L5675_br13_F4121_br01", "trnLF_L5675_br13_F4121_br03", "trnLF_L5675_br13_F4121_br06", "trnLF_L5675_br13_F4121_br10", "trnLF_L5675_br14_F4121_br07", "trnLF_L5675_br14_F4121_br10", "trnLF_L5675_br14_F4121_br15", "trnLF_L5675_br15_F4121_br02", "trnLF_L5675_br15_F4121_br07", "trnLF_L5675_br15_F4121_br12", "trnLF_L5675_br16_F4121_br03", "trnLF_L5675_br16_F4121_br10", "trnLF_L5675_br16_F4121_br14", "trnLF_L5675_br16_F4121_br18", "trnLF_L5675_br17_F4121_br01", "trnLF_L5675_br17_F4121_br06", "trnLF_L5675_br17_F4121_br07", "trnLF_L5675_br17_F4121_br13", "trnLF_L5675_br18_F4121_br06", "trnLF_L5675_br18_F4121_br16")
 args = commandArgs(trailingOnly = TRUE)
 
 # shell封裝的時候，要先裝好給這裡的R來用
@@ -116,6 +117,12 @@ for (a in 1:ncol(AP)) {
       rbind(missing_sample_list, mis) -> missing_sample_list
     }else {
 
+      # 這裡加入debug的filter，可以移併處理到sample跟qc
+      filtering_list = paste0(region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp])
+      if (!filtering_list %in% debug_filter_list){
+        return(NULL)
+      }
+
       # 核心運行:denoise
       dadaFs <- dada(r1, err = errF, multithread = TRUE)
       dadaRs <- dada(r2, err = errR, multithread = TRUE)
@@ -139,6 +146,10 @@ for (a in 1:ncol(AP)) {
       write.table(r2fas[, 1:2], file = paste0(path_denoise, "/r2/", filename), append = FALSE, sep = "\n", quote = FALSE,
                   row.names = FALSE, col.names = FALSE)
 
+      # # rc r2 for debug
+      # write.table(rc(r2fas[, 1:2]), file = paste0(path_denoise, "/r2rc/", filename), append = FALSE, sep = "\n", quote = FALSE,
+      #             row.names = FALSE, col.names = FALSE)
+
       # 順便存一個(barcodeName,sampleName)的namePair list
       barcode_name = paste(region, amplicon[sample_number, Fp], amplicon[sample_number, Rp], sep = "_")
       sample_name = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")
@@ -149,6 +160,7 @@ for (a in 1:ncol(AP)) {
 
       # third step: 請DADA2對r1 r2 merge (necessary)
       tryCatch({
+        print("merging... dada2::mergePairs()")
         mergers <- mergePairs(dadaFs, r1, dadaRs, r2, minOverlap = minoverlap, verbose = TRUE)
       }, error = function(e) {
         message("Error occurred during mergePairs(): ", conditionMessage(e))
