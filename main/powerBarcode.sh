@@ -17,17 +17,6 @@ bash illumina_PE_demultiplex_all_newprimer.sh "$1"
 echo "[INFO] end illumina_PE_demultiplex"
 # # ----------------------------------------------------------
 
-sourceDir="${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/trimmed"
-outputDir="${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/reverse_complement"
-
-mkdir -p "$outputDir"
-
-for file in "$sourceDir"/*.fq; do
-    filename=$(basename "$file")
-    outputfile="$outputDir/${filename%.*}.fq"
-    seqkit seq -r -p "$file" -o "$outputfile"
-done
-
 # # -----------------------3. denoise-------------------------
 cd ${workingDirectory}
 echo "[INFO] start dada2_denoise"
