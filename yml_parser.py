@@ -39,7 +39,10 @@ def parsingYmlToShell(batch_name:str):
     script += f"ampliconMinimumLength='{str(config['ampliconMinimumLength']).strip()}'\n" # ampliconMinimumLength (default: 1)
     script += f"minimumOverlapBasePair='{str(config['minimumOverlapBasePair']).strip()}'\n" # minimumOverlapBasePair (default: 4)
     # Dev Only
-    script += f"devMode='{str(config['devMode']).strip()}'\n"  # devMode (default: 0) 0: off, 1: on #TODO 上線前關掉
+    script += f"devMode='{str(config['devMode']).strip()}'\n"
+    # devMode (default: 0)
+        # 0: off (keep all the intermediate files),
+        # 1: on  (cleanup all the intermediate files)
 
     # loci
     for i in range(len(config['nameOfLoci'])):
@@ -59,8 +62,20 @@ def parsingYmlToShell(batch_name:str):
         script += f"minimumLengthCutadaptorInLoop+=('{str(config['minimumLengthCutadaptorInLoop'][i]).strip()}')\n"  # minimumLengthCutadaptorInLoop
         script += f"customizedCoreNumber+=('{str(config['customizedCoreNumber'][i]).strip()}')\n"  # customizedCoreNumber
         # Dev Only
-        script += f"blastReadChoosingMode+=('{str(config['blastReadChoosingMode'][i]).strip()}')\n" # blastReadChoosingMode (default: 1): 0: 10Ncat Blast, 1: split R1 R2 Blast
-        script += f"blastParsingMode+=('{str(config['blastParsingMode'][i]).strip()}')\n" # blastParsingMode (default: 2)
+        script += f"blastReadChoosingMode+=('{str(config['blastReadChoosingMode'][i]).strip()}')\n"
+            # blastReadChoosingMode (default: 1): 0: 10Ncat Blast, 1: split R1 R2 Blast
+        script += f"blastParsingMode+=('{str(config['blastParsingMode'][i]).strip()}')\n"
+            # blastParsingMode (default: 2)
+                # # blast_parsing_mode == "0":
+                # 1.identity: 用3排序，取最高者出來，但不低於85
+                # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半
+                # # blast_parsing_mode == "1":
+                # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度(qseqid_length)的一半
+                # 2.identity: 用3排序，取最高者出來，但不低於85
+                # # blast_parsing_mode == "2":
+                # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85
+                # # blast_parsing_mode == "3":
+                # 1. e-value, 越小越好，但不高於0.01，1/10000代表每10000次align才可能出現一次更好的結果
 
     script += 'echo \'[INFO] config imported!\'\n'
 
