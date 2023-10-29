@@ -142,6 +142,7 @@ for filename in candidate_list:
 
         # 步驟一
         # 先建立物件，再呼叫方法獲得拼接資訊 (這步主要看Miseq.py的邏輯有沒有寫對)
+        # TODO 在r1,r2分開blast後，需檢查ref_r1與ref_r2是否為一樣的序列
         r1Object = Miseq()
         Miseq.stickSiteFinder(r1Object, filename, r1, ref_r1, "r1")
         r2Object = Miseq()

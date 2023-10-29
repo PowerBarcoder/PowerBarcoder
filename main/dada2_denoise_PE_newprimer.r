@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 
-debug_filter_list = c("trnLF_L5675_br02_F4121_br04", "trnLF_L5675_br02_F4121_br07", "trnLF_L5675_br02_F4121_br09", "trnLF_L5675_br02_F4121_br15", "trnLF_L5675_br03_F4121_br12", "trnLF_L5675_br03_F4121_br18", "trnLF_L5675_br04_F4121_br07", "trnLF_L5675_br04_F4121_br12", "trnLF_L5675_br04_F4121_br16", "trnLF_L5675_br05_F4121_br06", "trnLF_L5675_br05_F4121_br09", "trnLF_L5675_br05_F4121_br13", "trnLF_L5675_br05_F4121_br14", "trnLF_L5675_br06_F4121_br02", "trnLF_L5675_br06_F4121_br06", "trnLF_L5675_br06_F4121_br09", "trnLF_L5675_br06_F4121_br14", "trnLF_L5675_br06_F4121_br17", "trnLF_L5675_br07_F4121_br10", "trnLF_L5675_br07_F4121_br11", "trnLF_L5675_br07_F4121_br14", "trnLF_L5675_br07_F4121_br15", "trnLF_L5675_br07_F4121_br16", "trnLF_L5675_br08_F4121_br04", "trnLF_L5675_br09_F4121_br02", "trnLF_L5675_br09_F4121_br03", "trnLF_L5675_br09_F4121_br07", "trnLF_L5675_br10_F4121_br06", "trnLF_L5675_br10_F4121_br16", "trnLF_L5675_br10_F4121_br17", "trnLF_L5675_br11_F4121_br16", "trnLF_L5675_br12_F4121_br16", "trnLF_L5675_br13_F4121_br01", "trnLF_L5675_br13_F4121_br03", "trnLF_L5675_br13_F4121_br06", "trnLF_L5675_br13_F4121_br10", "trnLF_L5675_br14_F4121_br07", "trnLF_L5675_br14_F4121_br10", "trnLF_L5675_br14_F4121_br15", "trnLF_L5675_br15_F4121_br02", "trnLF_L5675_br15_F4121_br07", "trnLF_L5675_br15_F4121_br12", "trnLF_L5675_br16_F4121_br03", "trnLF_L5675_br16_F4121_br10", "trnLF_L5675_br16_F4121_br14", "trnLF_L5675_br16_F4121_br18", "trnLF_L5675_br17_F4121_br01", "trnLF_L5675_br17_F4121_br06", "trnLF_L5675_br17_F4121_br07", "trnLF_L5675_br17_F4121_br13", "trnLF_L5675_br18_F4121_br06", "trnLF_L5675_br18_F4121_br16")
 args = commandArgs(trailingOnly = TRUE)
 
 # shell封裝的時候，要先裝好給這裡的R來用
@@ -13,6 +12,9 @@ library("doParallel")
 # 兩個list要1對1 pair，看是要用map還是讓list塞一個空值，針對file size==0的
 
 #learn error rate illumina
+
+# TODO  DADA2 requires no Ns if filtered reads are not worked
+
 #path is a VARIABLE
 path_of_error_learning <- args[4]   #指定資料，給dada2學error # 預設讀這個，如果他想讀別的，要寫條件判斷去抓一個新的參數 done
 path_of_reads <- args[1]                        #cutadapt讀取資料的位置
@@ -117,11 +119,21 @@ for (a in 1:ncol(AP)) {
       rbind(missing_sample_list, mis) -> missing_sample_list
     }else {
 
-      # 這裡加入debug的filter，可以移併處理到sample跟qc
-      filtering_list = paste0(region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp])
-      if (!filtering_list %in% debug_filter_list){
-        return(NULL)
-      }
+      # # # TODO 這裡僅供測試
+      # # 使用DADA2merge結果作為BLAST REF，identical仍為N/A者
+      # debug_filter_list = c("trnLF_L5675_br02_F4121_br04", "trnLF_L5675_br02_F4121_br07", "trnLF_L5675_br02_F4121_br09", "trnLF_L5675_br02_F4121_br15", "trnLF_L5675_br03_F4121_br12", "trnLF_L5675_br03_F4121_br18", "trnLF_L5675_br04_F4121_br07", "trnLF_L5675_br04_F4121_br12", "trnLF_L5675_br04_F4121_br16", "trnLF_L5675_br05_F4121_br06", "trnLF_L5675_br05_F4121_br09", "trnLF_L5675_br05_F4121_br13", "trnLF_L5675_br05_F4121_br14", "trnLF_L5675_br06_F4121_br02", "trnLF_L5675_br06_F4121_br06", "trnLF_L5675_br06_F4121_br09", "trnLF_L5675_br06_F4121_br14", "trnLF_L5675_br06_F4121_br17", "trnLF_L5675_br07_F4121_br10", "trnLF_L5675_br07_F4121_br11", "trnLF_L5675_br07_F4121_br14", "trnLF_L5675_br07_F4121_br15", "trnLF_L5675_br07_F4121_br16", "trnLF_L5675_br08_F4121_br04", "trnLF_L5675_br09_F4121_br02", "trnLF_L5675_br09_F4121_br03", "trnLF_L5675_br09_F4121_br07", "trnLF_L5675_br10_F4121_br06", "trnLF_L5675_br10_F4121_br16", "trnLF_L5675_br10_F4121_br17", "trnLF_L5675_br11_F4121_br16", "trnLF_L5675_br12_F4121_br16", "trnLF_L5675_br13_F4121_br01", "trnLF_L5675_br13_F4121_br03", "trnLF_L5675_br13_F4121_br06", "trnLF_L5675_br13_F4121_br10", "trnLF_L5675_br14_F4121_br07", "trnLF_L5675_br14_F4121_br10", "trnLF_L5675_br14_F4121_br15", "trnLF_L5675_br15_F4121_br02", "trnLF_L5675_br15_F4121_br07", "trnLF_L5675_br15_F4121_br12", "trnLF_L5675_br16_F4121_br03", "trnLF_L5675_br16_F4121_br10", "trnLF_L5675_br16_F4121_br14", "trnLF_L5675_br16_F4121_br18", "trnLF_L5675_br17_F4121_br01", "trnLF_L5675_br17_F4121_br06", "trnLF_L5675_br17_F4121_br07", "trnLF_L5675_br17_F4121_br13", "trnLF_L5675_br18_F4121_br06", "trnLF_L5675_br18_F4121_br16")
+
+      # # 202310281735 DADA2失敗，merger成功 (8)
+      debug_filter_list = c("trnLF_L5675_br01_F4121_br11","trnLF_L5675_br04_F4121_br08","trnLF_L5675_br04_F4121_br11","trnLF_L5675_br05_F4121_br11","trnLF_L5675_br13_F4121_br08","trnLF_L5675_br14_F4121_br11","trnLF_L5675_br15_F4121_br11","trnLF_L5675_br17_F4121_br11")
+
+      # # 202310281735 拿去做2nd denoise的learn error samples (39個)
+      # debug_filter_list = c("trnLF_L5675_br12_F4121_br11","trnLF_L5675_br18_F4121_br11","trnLF_L5675_br03_F4121_br11","trnLF_L5675_br07_F4121_br03","trnLF_L5675_br08_F4121_br05","trnLF_L5675_br01_F4121_br05","trnLF_L5675_br08_F4121_br10","trnLF_L5675_br01_F4121_br06","trnLF_L5675_br04_F4121_br15","trnLF_L5675_br05_F4121_br03","trnLF_L5675_br14_F4121_br10","trnLF_L5675_br13_F4121_br03","trnLF_L5675_br05_F4121_br16","trnLF_L5675_br07_F4121_br05","trnLF_L5675_br12_F4121_br17","trnLF_L5675_br16_F4121_br13","trnLF_L5675_br04_F4121_br16","trnLF_L5675_br02_F4121_br15","trnLF_L5675_br09_F4121_br12","trnLF_L5675_br17_F4121_br06","trnLF_L5675_br04_F4121_br04","trnLF_L5675_br07_F4121_br11","trnLF_L5675_br06_F4121_br02","trnLF_L5675_br08_F4121_br12","trnLF_L5675_br14_F4121_br06","trnLF_L5675_br16_F4121_br15","trnLF_L5675_br08_F4121_br07","trnLF_L5675_br01_F4121_br03","trnLF_L5675_br13_F4121_br17","trnLF_L5675_br17_F4121_br01","trnLF_L5675_br15_F4121_br07","trnLF_L5675_br18_F4121_br10","trnLF_L5675_br18_F4121_br14","trnLF_L5675_br10_F4121_br16","trnLF_L5675_br07_F4121_br14","trnLF_L5675_br18_F4121_br01","trnLF_L5675_br05_F4121_br14","trnLF_L5675_br13_F4121_br15","trnLF_L5675_br17_F4121_br13")
+
+      # # 這裡加入debug的filter，可以一併處理到sample跟qc
+      # filtering_list = paste0(region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp])
+      # if (!filtering_list %in% debug_filter_list){
+      #   return(NULL)
+      # }
 
       # 核心運行:denoise
       dadaFs <- dada(r1, err = errF, multithread = TRUE)
@@ -137,6 +149,8 @@ for (a in 1:ncol(AP)) {
       r2fas[order(as.numeric(r2fas[, 3]), decreasing = TRUE),] -> r2fas
       matrix(r2fas, ncol = 3) -> r2fas
 
+
+      # TODO "只做best的"開關 (暫時不用)
 
       # # save r1 and r2 seq from dada() results (unnecessary for dada(), but necessary for mergeModule)
       # 匯出denoise後的r1序列，一條序列兩種檔名把檔名，如: "KTHU2084_Wade5880_Calymmodon_societatis_.fas", "fVGF_br01_rECL_br02"

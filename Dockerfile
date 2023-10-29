@@ -52,3 +52,7 @@ EXPOSE 5000
 CMD ["python", "app.py"]
 
 #sudo apt-get -y install util-linux
+
+#  docker build -t powerbarcoder .
+#  docker run -d -p 5000:5000 -v ${PWD}:/PowerBarcoder --name powerbarcoder powerbarcoder
+#  docker exec -it powerbarcoder bash
