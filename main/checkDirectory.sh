@@ -24,6 +24,7 @@ for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/denoiseResult/r2
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/dada2
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger
+  mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/qcResult/validator
   # create Layer 4th folders
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/dada2/merged
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/nCatR1R2
@@ -34,6 +35,9 @@ for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/aligned
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/rawMerged
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/merged
+  mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/qcResult/validator/all
+  mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/qcResult/validator/denoise
+  mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/qcResult/validator/merge
   # create Layer 5th folders
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/nCatR1R2/forSplit
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/aligned/mafft
