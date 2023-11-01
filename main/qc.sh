@@ -12,6 +12,8 @@ for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
 
   python3 ./qcModule/csvParser.py "$resultDataPath" "${nameOfLoci[i]}"
 
+  python3 ./qcModule/validator.py "$resultDataPath" "${nameOfLoci[i]}"
+
 done
 
 python3 ./qcModule/validator.py "$resultDataPath" "${nameOfLoci[i]}"
