@@ -14,4 +14,7 @@ for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
 
 done
 
+python3 ./qcModule/validator.py "$resultDataPath" "${nameOfLoci[i]}"
+
+
 echo "[INFO] End of generating quality control report !"
