@@ -11,9 +11,9 @@ input_r2_path = f'{BASE_URL}denoiseResult/r2/'
 input_ref_path = f'{BASE_URL}mergeResult/merger/r1Ref/'
 input_dada2_path = f'{BASE_URL}mergeResult/dada2/merged/'
 input_merger_path = f'{BASE_URL}mergeResult/merger/merged/'
-output_denoise_path = f'{BASE_URL}output/denoise/'
-output_merge_path = f'{BASE_URL}output/merge/'
-output_all_path = f'{BASE_URL}output/all/'
+output_denoise_path = f'{BASE_URL}qcResult/validator/denoise/'
+output_merge_path = f'{BASE_URL}qcResult/validator/merge/'
+output_all_path = f'{BASE_URL}qcResult/validator/all/'
 
 
 def reverse_complement_pairwise_alignment(query_seq: str, target_seq: str):
@@ -43,9 +43,9 @@ def reverse_complement_pairwise_alignment(query_seq: str, target_seq: str):
         alignment_score = reverse_complement_score
         alignment_sequence = str(Seq.Seq(query_seq).reverse_complement())
 
-    print(f'isReversed: {reverse_complement_score > forward_score}, '
-          f'forward_score: {forward_score}, '
-          f'reverse_complement_score: {reverse_complement_score}')
+    # print(f'isReversed: {reverse_complement_score > forward_score}, '
+    #       f'forward_score: {forward_score}, '
+    #       f'reverse_complement_score: {reverse_complement_score}')
     # print(f'alignment_sequence: {alignment_sequence}')
 
     return alignment_sequence
@@ -75,10 +75,12 @@ def concatenate_files_from_one_folder(folder_path, output_file):
 
 def concatenate_files_from_two_files(folder_file1, folder_file2, output_file):
     with open(output_file, 'w') as output:
-        with open(folder_file1, 'r') as file1:
-            output.write(file1.read())
-        with open(folder_file2, 'r') as file2:
-            output.write(file2.read())
+        if os.path.exists(folder_file1):
+            with open(folder_file1, 'r') as file1:
+                output.write(file1.read())
+        if os.path.exists(folder_file2):
+            with open(folder_file2, 'r') as file2:
+                output.write(file2.read())
 
 
 def denoise_alignment():
@@ -90,11 +92,16 @@ def denoise_alignment():
     merger_file_list = os.listdir(input_ref_path)
 
     for alignment_sample_name in alignment_file_list:
+        print(f'denoise_alignment: {alignment_sample_name}')
         merger_file_name = ""
         for merger_sample_name in merger_file_list:
             if alignment_sample_name.replace('.fas', '') in merger_sample_name:
                 merger_file_name = merger_sample_name
                 break
+
+        # Leave the file that can't find the corresponding merger file
+        if merger_file_name == "":
+            continue
 
         # Read the input r1 r2 files # 這裡的r1跟r2是abundance最高的那條
         r1SeqRecord = next(SeqIO.parse(input_r1_path + alignment_sample_name, "fasta"))
@@ -110,8 +117,8 @@ def denoise_alignment():
         r1SeqRecord.seq = reverse_complement_pairwise_alignment(str(r1SeqRecord.seq), str(ref1SeqRecord.seq))
         r2SeqRecord.seq = reverse_complement_pairwise_alignment(str(r2SeqRecord.seq), str(ref1SeqRecord.seq))
 
-        print(f'r1Fasta: {r1SeqRecord.seq}')
-        print(f'r2Fasta: {r2SeqRecord.seq}')
+        # print(f'r1Fasta: {r1SeqRecord.seq}')
+        # print(f'r2Fasta: {r2SeqRecord.seq}')
 
         # Perform sequence alignment
         aligner2 = Align.PairwiseAligner(scoring="blastn")  # 直接用blastn的，方便
@@ -120,8 +127,8 @@ def denoise_alignment():
         aligned_r1 = (alignment[0].format("fasta")).splitlines()[1]
         aligned_r2 = (alignment[0].format("fasta")).splitlines()[3]
 
-        print(f'aligned_r1: {aligned_r1}')
-        print(f'aligned_r2: {aligned_r2}')
+        # print(f'aligned_r1: {aligned_r1}')
+        # print(f'aligned_r2: {aligned_r2}')
 
         # # Write the alignment to a file
         output_file = output_denoise_path + alignment_sample_name
@@ -150,6 +157,7 @@ def merger_alignment():
         dada2的結果都是一個fasta裡有很多序列
             # Alsophila_sp._Wade4916_KTHU1767_.fas
         '''
+        print(f'merger_alignment: {dada2_file_name}')
         best_aligned_dada2_seq_list = []
         best_aligned_merger_seq_list = []
         best_aligned_dada2_header_list = []
@@ -199,7 +207,7 @@ def merger_alignment():
                 dada2_score = longest_ATCG_sequence(aligned_dada2)
                 merger_score = longest_ATCG_sequence(aligned_merger)
                 pairwise_score = min(dada2_score, merger_score)
-                print(f'pairwise_score: {pairwise_score}; dada2: {dada2_score}, merger: {merger_score}')
+                # print(f'pairwise_score: {pairwise_score}; dada2: {dada2_score}, merger: {merger_score}')
                 # Determine which alignment has a higher score
                 if pairwise_score > best_score:
                     best_score = pairwise_score
@@ -211,9 +219,9 @@ def merger_alignment():
             best_aligned_merger_header_list.append(best_aligned_merger_header)
             best_aligned_dada2_seq_list.append(best_aligned_dada2_seq)
             best_aligned_merger_seq_list.append(best_aligned_merger_seq)
-            print(f'best_score: {best_score};')
-            print(f'best_aligned_dada2: {best_aligned_dada2_header};')
-            print(f'best_aligned_merger: {best_aligned_merger_header};')
+            # print(f'best_score: {best_score};')
+            # print(f'best_aligned_dada2: {best_aligned_dada2_header};')
+            # print(f'best_aligned_merger: {best_aligned_merger_header};')
 
             # # Write the alignment to a file
         output_file = f'{output_merge_path}{dada2_file_name}'
@@ -244,4 +252,3 @@ if __name__ == '__main__':
     print(f"[INFO] Start to validate in {sys.argv[2]}!")
     main()
     print(f"[INFO] End of validation in {sys.argv[2]}!")
-
