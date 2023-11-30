@@ -248,3 +248,38 @@ class BlastRef:
         #  14.   sstartMinusSend
         #  15.   rWhoList(r1或r2)
         #  16.   refList(???)
+
+
+
+    # r1 r2方向經過10Ncat後都一致了，不需要rc
+    # 所以有兩個情況
+    # 先用send-sstart判斷方向，>0者，必為正
+        # (r1 send - r2 sstart)*1
+    # 再用send-sstart判斷方向，<0者，乘負號轉正
+        # (r1 send - r2 sstart)*-1
+    # 兩個數值pool起來，取出最大者
+
+
+if __name__ == '__main__':
+    load_dir = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202311291745/trnLF"
+    loci_name = "trnLF"
+    blast_parsing_mode = "0"
+    blastRef = BlastRef()
+    blastRef.blastRef(load_dir, loci_name, blast_parsing_mode)
+    # print(blastRef.qseqidList)
+    # print(blastRef.sseqidList)
+    # print(blastRef.pidentList)
+    # print(blastRef.lengthList)
+    # print(blastRef.mismatchList)
+    # print(blastRef.gapopenList)
+    # print(blastRef.qstartList)
+    # print(blastRef.qendList)
+    # print(blastRef.sstartList)
+    # print(blastRef.sendList)
+    # print(blastRef.evalueList)
+    # print(blastRef.bitscoreList)
+    # print(blastRef.qstartMinusQendList)
+    # print(blastRef.sstartMinusSendList)
+    # print(blastRef.rWhoList)
+    # print(blastRef.refList)
+
