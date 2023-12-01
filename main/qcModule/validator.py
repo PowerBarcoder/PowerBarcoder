@@ -83,6 +83,16 @@ def concatenate_files_from_two_files(folder_file1, folder_file2, output_file):
                 output.write(file2.read())
 
 
+def concatenate_files_from_multiple_files(file_paths, output_file):
+    with open(output_file, 'w') as output:
+        for file_path in file_paths:
+            if os.path.exists(file_path):
+                with open(file_path, 'r') as file:
+                    output.write(file.read())
+            else:
+                print(f'[WARNING] {file_path} does not exist!')
+
+
 def denoise_alignment():
     """
     align dada2 denoise後的abundance最高的r1,r2
@@ -99,23 +109,21 @@ def denoise_alignment():
                 merger_file_name = merger_sample_name
                 break
 
-        # Leave the file that can't find the corresponding merger file
-        if merger_file_name == "":
-            continue
-
         # Read the input r1 r2 files # 這裡的r1跟r2是abundance最高的那條
         r1SeqRecord = next(SeqIO.parse(input_r1_path + alignment_sample_name, "fasta"))
         r2SeqRecord = next(SeqIO.parse(input_r2_path + alignment_sample_name, "fasta"))
 
-        # Read Ref file
-        records = SeqIO.parse(input_ref_path + merger_file_name, "fasta")
-        for _ in range(1):  # Skip the first two records
-            next(records)
-        ref1SeqRecord = next(records)
+        # if merger的ref存在，我們就檢查r1 r2方向有沒有正確，沒有ref就算了
+        if merger_file_name != "":
+            # Read Ref file
+            records = SeqIO.parse(input_ref_path + merger_file_name, "fasta")
+            for _ in range(1):  # Skip the first two records
+                next(records)
+            ref1SeqRecord = next(records)
 
-        # Check and do Reverse complement the r1 and r2 sequences
-        r1SeqRecord.seq = reverse_complement_pairwise_alignment(str(r1SeqRecord.seq), str(ref1SeqRecord.seq))
-        r2SeqRecord.seq = reverse_complement_pairwise_alignment(str(r2SeqRecord.seq), str(ref1SeqRecord.seq))
+            # Check and do Reverse complement the r1 and r2 sequences
+            r1SeqRecord.seq = reverse_complement_pairwise_alignment(str(r1SeqRecord.seq), str(ref1SeqRecord.seq))
+            r2SeqRecord.seq = reverse_complement_pairwise_alignment(str(r2SeqRecord.seq), str(ref1SeqRecord.seq))
 
         # print(f'r1Fasta: {r1SeqRecord.seq}')
         # print(f'r2Fasta: {r2SeqRecord.seq}')
@@ -236,10 +244,25 @@ def merger_alignment():
 def concate_denoise_and_merger():
     output_denoise_file_list = os.listdir(output_denoise_path)
     for i in range(len(output_denoise_file_list)):
-        filename = output_denoise_file_list[i]
-        concatenate_files_from_two_files(output_denoise_path + filename,
-                                         output_merge_path + filename,
-                                         output_all_path + filename)
+        filename = output_denoise_file_list[i]  # 如：Abrodictyum_cumingii_ZXC002739_KTHU1461_.fas
+
+        file_paths = []
+        # 加入dada2 denoise
+        file_paths.append(output_denoise_path + filename)
+        # 加入dada2 merge
+        file_paths.append(output_merge_path + filename)
+        # 交替加入r1,r2 align (寫法不太好，有空再改)
+        merge_align_path = f'{BASE_URL}mergeResult/merger/aligned/'
+        merger_align_file_list = os.listdir(
+            merge_align_path)  # 如：Abrodictyum_cumingii_ZXC002739_KTHU1461_01_0.557_abundance_59_r1.fas
+        for merger_align_file_name in merger_align_file_list:
+            if filename.replace('.fas', '') in merger_align_file_name and 'r1' in merger_align_file_name:
+                file_paths.append(merge_align_path + merger_align_file_name)
+            if filename.replace('.fas', '') in merger_align_file_name and 'r2' in merger_align_file_name:
+                file_paths.append(merge_align_path + merger_align_file_name)
+
+        # print(f'file_paths: {file_paths}')
+        concatenate_files_from_multiple_files(file_paths, output_all_path + filename)
 
 
 def main():
