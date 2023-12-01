@@ -18,6 +18,9 @@ import linecache as lc
 #  12.	 bitscore	 bit score                                 405
 
 
+# TARGET_FILE_NAME = "_refResult.txt"
+TARGET_FILE_NAME = "_refResult_filtered.txt"
+
 class BlastRef:
 
     def __init__(self):
@@ -49,7 +52,7 @@ class BlastRef:
         qseqid_file_dir_r2 = load_dir + "_result/mergeResult/merger/r2/"
         qseqid_file_dir_cat = load_dir + "_result/mergeResult/merger/nCatR1R2/forSplit/"
         # Step 1: Read file
-        with open(load_dir + "_result/blastResult/" + loci_name + "_refResult.txt", encoding='iso-8859-1') as f:
+        with open(load_dir + "_result/blastResult/" + loci_name + TARGET_FILE_NAME, encoding='iso-8859-1') as f:
             lines = f.readlines()
 
         # Step 2: Initialize the category dictionary and value list

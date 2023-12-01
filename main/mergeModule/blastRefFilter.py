@@ -39,19 +39,16 @@ def blastRefFilter(load_dir, loci_name, blast_parsing_mode):
             r2_set.add("_".join([query_name, text_list[SSEQID_INDEX]]))
 
     r1r2_set = r1_set.intersection(r2_set)
-
     # Output to refResult_intersection.txt
-    with open(intersection_file_path, "r+") as file:
+    with open(intersection_file_path, "a") as file:
         # Clean the file
         file.truncate(0)
         file.seek(0)  # Move the cursor to the beginning
-
         for line in lines:
             if not line.strip():
                 break
             text_list = line.split("\t")
-            query = "_".join(text_list[QSSEQID_INDEX].split("_")[:-1])
-
+            query = "_".join(text_list[QSSEQID_INDEX].rsplit("_", 1)[:-1]) + "_" + text_list[SSEQID_INDEX]
             if query in r1r2_set:
                 file.write(line)
 
@@ -133,6 +130,10 @@ def blastRefFilter(load_dir, loci_name, blast_parsing_mode):
 
     # Write to refResult_filtered.txt
     with open(filtered_file_path, "a") as file:
+        # Clean the file
+        file.truncate(0)
+        file.seek(0)  # Move the cursor to the beginning
+
         for key in rWhoRefPairDict.keys():
             for key2 in rWhoRefPairDict[key].keys():
                 file.write(lines[rWhoRefPairDict[key][key2][0][0]])
@@ -151,7 +152,8 @@ def blastRefFilter(load_dir, loci_name, blast_parsing_mode):
 
 
 if __name__ == '__main__':
-    load_dir = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202311291745/trnLF"
+    load_dir = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202312011906/trnLF"
     loci_name = "trnLF"
-    blast_parsing_mode = "0"
+    blast_parsing_mode = "2"
+    print(f"execute file directly with path: {load_dir}")
     blastRefFilter(load_dir, loci_name, blast_parsing_mode)

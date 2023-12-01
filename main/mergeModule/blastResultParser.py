@@ -9,7 +9,7 @@
 
 import sys
 from BlastRef import BlastRef
-from main.mergeModule.blastRefFilter import blastRefFilter
+from blastRefFilter import blastRefFilter
 
 ampliconInfo = sys.argv[1]
 resultDataPath = sys.argv[2]
