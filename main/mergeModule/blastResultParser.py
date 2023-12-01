@@ -9,6 +9,7 @@
 
 import sys
 from BlastRef import BlastRef
+from main.mergeModule.blastRefFilter import blastRefFilter
 
 ampliconInfo = sys.argv[1]
 resultDataPath = sys.argv[2]
@@ -17,13 +18,12 @@ nameOfLoci = sys.argv[4]
 
 print("[INFO] blastResultParser.py is running on loci: " + nameOfLoci)
 
+# 先執行blastRefFilter.py，篩選出需要的序列
+blastRefFilter(resultDataPath + nameOfLoci, nameOfLoci, blast_parsing_mode)
+
+# 再執行parsing作業，這部分在20231202新增blastRefFilter.py後，雖有重工，但其產出檔案會給後續的qc使用，所以直接保留
 localBlast = BlastRef()
-
-# loadpath="/home/sktang/powerBC/"
-# "/home2/barcoder_test/RUN_sk_20230111_10N/PowerBarcoder/result20230206_rbcL/"
-loadpath = resultDataPath
-
-localBlast.blastRef(loadpath + nameOfLoci, nameOfLoci, blast_parsing_mode)
+localBlast.blastRef(resultDataPath + nameOfLoci, nameOfLoci, blast_parsing_mode)
 
 # 測試用
 # localBlast.blastRef("C:/Users/123/")
@@ -116,7 +116,7 @@ def determineDirection(i):
 
 # 20230206 似乎不需要用append了，因為先前已經按loci區分了
 # 20230206 之前應該是因為迴圈位置的關係，所以才用append的
-with open(loadpath + nameOfLoci + "_result/blastResult/" + nameOfLoci + "_blastResult.txt", "w") as file:
+with open(resultDataPath + nameOfLoci + "_result/blastResult/" + nameOfLoci + "_blastResult.txt", "w") as file:
     for i in range(0, len(qseqidList)):
         # print(determineDirection(i))
         if "\t\t0\t0\t0\t0\t0\t0\t0\t0\t\t\t0\t0\t" not in determineDirection(i):
