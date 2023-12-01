@@ -135,7 +135,7 @@ def home():
     trnLF_sseqidFileName = "ftol_sanger_alignment_trnLLF_full_f.fasta"
     trnLF_minimumLengthCutadaptorInLoop = 150
     trnLF_customizedCoreNumber = 30
-    trnLF_blastReadChoosingMode = 1
+    trnLF_blastReadChoosingMode = 1  # 0: r1 r2 cat後blast, 1: r1 r2分開blast
     trnLF_blastParsingMode = 2
 
     return render_template('index.html',

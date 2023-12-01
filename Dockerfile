@@ -56,3 +56,15 @@ CMD ["python", "app.py"]
 #  docker build -t powerbarcoder .
 #  docker run -d -p 5000:5000 -v ${PWD}:/PowerBarcoder --name powerbarcoder powerbarcoder
 #  docker exec -it powerbarcoder bash
+
+#  if WSL ext4.vhdx too large, run this command to shrink it
+    #  docker builder prune
+    #  wsl --shutdown
+    #  diskpart
+    #  select vdisk file="C:\Users\kwz50\AppData\Local\Docker\wsl\data\ext4.vhdx"
+    #  attach vdisk readonly
+    #  compact vdisk
+    #  detach vdisk
+    #  exit
+    #  wsl
+

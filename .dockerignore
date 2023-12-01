@@ -1,0 +1,34 @@
+.venv/
+test_GUI/__pycache__/example_ui.cpython-310.pyc
+.idea/
+main/mergeModule/__pycache__/
+result/
+result2/
+data/result/
+ssl/
+main/config.yml
+debug/config.sh
+# Exclude version control directories
+.git
+.svn
+# Exclude files and directories generated during local development
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+# Exclude editor-specific files
+.vscode
+.idea
+*.swp
+# Exclude Docker-specific files
+.dockerignore
+Dockerfile
+# Exclude any build artifacts or temporary files
+/build
+/tmp
+# Exclude unnecessary or sensitive files
+*.log
+*.bak
+*.tmp
+*.env
+*.sql
