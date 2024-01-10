@@ -1,12 +1,14 @@
 # PowerBarcoder
 
-## Why PowerBarcoder ?
+## Why PowerBarcoder ? 
 - Save your time and money with PowerBarcoder. 
 - PowerBarcoder is a NGS data cleaning solution for Illumina Miseq. 
 - It is designed to clean NGS data with high performance. 
 - PowerBarcoder is a GUI based software, which is easy to use. 
 - PowerBarcoder is a free software, which is open source. 
 - PowerBarcoder is a cross-platform software, which can be used in Windows, Linux, and Mac OS.
+  
+- More details in https://docs.google.com/presentation/d/19bZbIb3AJ-kiar02kEzdDUU-y5KkmoGy/edit?usp=sharing&ouid=107280427804502451722&rtpof=true&sd=true
 
 ## Features (we are trying to achieve)
 1. NGS Data Cleaning Solution (Miseq)
