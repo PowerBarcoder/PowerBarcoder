@@ -10,7 +10,7 @@
   
 - More details in https://docs.google.com/presentation/d/19bZbIb3AJ-kiar02kEzdDUU-y5KkmoGy/edit?usp=sharing&ouid=107280427804502451722&rtpof=true&sd=true
 
-## Features (we are trying to achieve)
+## Features
 1. NGS Data Cleaning Solution (Miseq)
 2. High performance with coroutines, multi-threading, and multiprocessing design
 3. GUI for easy use
@@ -22,6 +22,25 @@
 
 ![pipeline](https://github.com/PowerBarcoder/PowerBarcoder/blob/main/pipeline.png)
 
+
+## Installation
+- With Docker (CLI & GUI):
+```
+1. git clone
+2. run docker container
+  - docker build -t powerbarcoder .
+  - docker run -d -p 5000:5000 -v ${PWD}:/PowerBarcoder --name powerbarcoder powerbarcoder
+3. open 127.0.0.1:5000 in browser
+```
+
+- Without Docker (CLI only):
+```
+1. install dependencies
+2. prepare config.yml
+3. git clone
+4. cd {{PATH}}
+5. bash powerbarcode.sh {{yyyyMMddhhmm}}
+```
 
 ## QC Report indices
 1. Cutadapt:
