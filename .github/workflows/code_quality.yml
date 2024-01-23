@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - 'releases/*'
+      - feature-optimizingIO_20230812
 
 jobs:
   qodana:
