@@ -7,6 +7,7 @@ on:
       - main
       - 'releases/*'
       - feature-optimizingIO_20230812
+      - feature-codeQualityImprovement_20240129
 
 jobs:
   qodana:
