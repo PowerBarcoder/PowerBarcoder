@@ -4,8 +4,8 @@
 
 echo "[INFO] Start cleaning !"
 
-# if devMode is 1, then clean the directory, else do nothing
-if [ "${devMode}" -eq 1 ]; then
+# if dev_mode is 1, then clean the directory, else do nothing
+if [ "${dev_mode}" -eq 1 ]; then
 
   for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
 

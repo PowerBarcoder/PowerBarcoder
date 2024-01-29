@@ -36,11 +36,11 @@ def parsingYmlToShell(batch_name:str):
     script += f"summaryHtmlFileName='summary.html'\n"
     script += f"dada2LearnErrorFile='{str(config['dada2LearnErrorFile']).strip()}'\n"  # dada2LearnErrorFile
     script += f"dada2BarcodeFile='{str(config['dada2BarcodeFile']).strip()}'\n"  # dada2BarcodeFile
-    script += f"ampliconMinimumLength='{str(config['ampliconMinimumLength']).strip()}'\n" # ampliconMinimumLength (default: 1)
-    script += f"minimumOverlapBasePair='{str(config['minimumOverlapBasePair']).strip()}'\n" # minimumOverlapBasePair (default: 4)
+    script += f"amplicon_minimum_length='{str(config['amplicon_minimum_length']).strip()}'\n" # amplicon_minimum_length (default: 1)
+    script += f"minimum_overlap_base_pair='{str(config['minimum_overlap_base_pair']).strip()}'\n" # minimum_overlap_base_pair (default: 4)
     # Dev Only
-    script += f"devMode='{str(config['devMode']).strip()}'\n"
-    # devMode (default: 0)
+    script += f"dev_mode='{str(config['dev_mode']).strip()}'\n"
+    # dev_mode (default: 0)
         # 0: off (keep all the intermediate files),
         # 1: on  (cleanup all the intermediate files)
 
