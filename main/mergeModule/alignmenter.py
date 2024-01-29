@@ -41,8 +41,10 @@ def align_sequence(qseqid, forward):
             subprocess.run(AlignmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
         # r1r2 cat起來blast
         elif forward == "rWho":
-            AlignmentR1 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid.replace(".fas","_r1.fas") + "'"
-            AlignmentR2 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid.replace(".fas","_r2.fas") + "'"
+            AlignmentR1 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid.replace(
+                ".fas", "_r1.fas") + "'"
+            AlignmentR2 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid.replace(
+                ".fas", "_r2.fas") + "'"
             subprocess.run(AlignmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
             subprocess.run(AlignmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
         else:
@@ -58,8 +60,8 @@ with open(fastaFile, "r") as file:
         futures = []
         for line in lines:
             line = line.strip()
-            qseqid = line.split("\t")[0] # 第一個放qseqid
-            forward = line.split("\t")[-1] # 最後一個放forward
+            qseqid = line.split("\t")[0]  # 第一個放qseqid
+            forward = line.split("\t")[-1]  # 最後一個放forward
             futures.append(executor.submit(align_sequence, qseqid, forward))
         concurrent.futures.wait(futures)
 

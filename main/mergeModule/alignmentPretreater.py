@@ -106,20 +106,20 @@ try:
             try:
                 # r1r2分開blast
                 qseqidFileStr = qseqidFile(outputLoadpath, forward, qseqid)
-                if forward=="r1":
+                if forward == "r1":
                     r1RowList = []
                     with open(qseqidFileStr, "r") as qR1File:
                         lines = qR1File.readlines()
                         r1RowList += lines
-                elif forward=="r2":
+                elif forward == "r2":
                     r2RowList = []
                     with open(qseqidFileStr, "r") as qR2File:
                         lines = qR2File.readlines()
                         r2RowList += lines
                 # r1r2 cat起來blast
-                elif forward=="rWho":
+                elif forward == "rWho":
                     # 待測序列r1製作
-                    qseqidFileStr = qseqidFile(outputLoadpath, "r1", qseqid.replace(".fas","_r1.fas"))
+                    qseqidFileStr = qseqidFile(outputLoadpath, "r1", qseqid.replace(".fas", "_r1.fas"))
                     # print(qseqidFile(loadpath,forward,qseqid))
                     r1RowList = []
                     with open(qseqidFileStr, "r") as qR1File:
@@ -130,7 +130,7 @@ try:
                         # print(r1RowList)
 
                     # 待測序列r2製作
-                    qseqidFileStr = qseqidFile(outputLoadpath, "r2", qseqid.replace(".fas","_r2.fas"))
+                    qseqidFileStr = qseqidFile(outputLoadpath, "r2", qseqid.replace(".fas", "_r2.fas"))
                     # print(qseqidFile(loadpath,forward,qseqid))
                     r2RowList = []
                     with open(qseqidFileStr, "r") as qR2File:
@@ -140,7 +140,7 @@ try:
                         r2RowList += lines
                         # print(r2RowList)
                 else:
-                    print("forward error in alignmentPretreater.py 118: "+qseqidFileStr)
+                    print("forward error in alignmentPretreater.py 118: " + qseqidFileStr)
 
 
             except Exception as e:

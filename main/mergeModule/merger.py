@@ -64,8 +64,8 @@ for filename in files:
 for filename in candidate_list:
     try:
         #  把alignment好的r1跟r2讀進來變單行
-        r1_loadpath = loadpath + filename + "_r1.fas" # r1_loadpath = loadpath+0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r1.al
-        r2_loadpath = loadpath + filename + "_r2.fas" # r2_loadpath = "C:/Users/kwz50/aligned/0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r2.al"
+        r1_loadpath = loadpath + filename + "_r1.fas"  # r1_loadpath = loadpath+0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r1.al
+        r2_loadpath = loadpath + filename + "_r2.fas"  # r2_loadpath = "C:/Users/kwz50/aligned/0514-016_CYH20090514-016_Microlepia_substrigosa_.fas_r2.al"
 
         # 若因為沒有blast到東西，那這對就不要往下做了，直接換下一對ASV
         if not path.exists(r1_loadpath):
@@ -83,7 +83,6 @@ for filename in candidate_list:
 
         r1_seqMap = r1_fastaUnit.seqMap
         r2_seqMap = r2_fastaUnit.seqMap
-
 
         # 讀兩個.fs進來當r1、ref_r1、r2、ref_r2(20220423)
         r1 = ""
@@ -343,6 +342,5 @@ for filename in candidate_list:
     except Exception as e:
         print(traceback.print_exc())
         print("[WARNING] merger.py 319: something wrong.", filename)
-
 
 print("[INFO] merger.py is ended on loci: " + sys.argv[3])
