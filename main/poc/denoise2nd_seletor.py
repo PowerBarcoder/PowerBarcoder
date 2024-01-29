@@ -53,6 +53,7 @@ def copy_folder_content(output_path, candidate_list):
     output_file_list = os.listdir(output_path)
     print(output_file_list)
 
+
 def atcg_checker(output_path):
     # print file name in output_url folder
     output_file_list = os.listdir(output_path)
@@ -68,8 +69,6 @@ def atcg_checker(output_path):
                     if lines[i].strip()[j] not in ['A', 'T', 'C', 'G']:
                         print(f'{file_name} has alphabet not in ["A", "T", "C", "G"] in line {i} and position {j}')
                         break
-
-
 
 
 copy_folder_content(output_path_pure, candidate_list_pure)

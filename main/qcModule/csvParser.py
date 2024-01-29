@@ -37,13 +37,13 @@ def parsingDenoisePairIntoDict():
     return maps
 
 
-def parsingFastqReadsNumber(path:str, prefix:str, file_name:str, rwho:str):
+def parsingFastqReadsNumber(path: str, prefix: str, file_name: str, rwho: str):
     """
     demultiplex_untrimmed_result_path: "rbcLN_fVGF_br01_rECL_br01_r1.fq"
     demultiplex_trimmed_result_path: "trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
     demultiplex_filtered_result_path: "filtered_trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
     """
-    with open(path + "/" + prefix + file_name + "_" + rwho +".fq", "r") as f:
+    with open(path + "/" + prefix + file_name + "_" + rwho + ".fq", "r") as f:
         # calculate the number of lines
         num_lines = sum(1 for line in f)
         fastq_reads_number = num_lines / 4
@@ -55,7 +55,7 @@ def parsingBlastResultIntoDict():
     with open(blast_result_path, 'r', encoding='iso-8859-1') as file:
         for line in file:
             columns = line.strip().split('\t')
-            key = columns[0].replace("_r1.fas","").replace("_r2.fas","").replace(".fas","") + ".fas"
+            key = columns[0].replace("_r1.fas", "").replace("_r2.fas", "").replace(".fas", "") + ".fas"
             value = [columns[1], columns[2], columns[12]]
             data_dict[key] = value
     return data_dict
@@ -149,7 +149,7 @@ def processAbundanceFile(file_path):
     sequence_info[0] = len(abundance_count)
     sequence_info[1] = max(best_asv_abundance_proportion)
     sequence_info[2] = max(best_asv_abundance_number)
-    with open(file_path, "r") as file: # 計算hash，須獨立拿出讀，不然readlines讀完指針就已經讀到底了，後面hash等於拿空的東西去算
+    with open(file_path, "r") as file:  # 計算hash，須獨立拿出讀，不然readlines讀完指針就已經讀到底了，後面hash等於拿空的東西去算
         file_content_hash = hashlib.md5(file.read().encode()).hexdigest()
         sequence_info[3] = file_content_hash
     # print(sequence_info[3])
@@ -227,10 +227,10 @@ def parsingAllDataIntoCsv(destination: str):
                         + [step[1] for step in steps]
                         + ['header', 'sequence', 'length', 'ambiguous sites number', 'lowercase sites number',
                            'BLAST subjectID', 'BLAST identity', 'BLAST qstart-qend', 'Identical to DADA2 merge']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number','hash value']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number','hash value']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number','hash value']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number','hash value']
+                        + ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
+                        + ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
+                        + ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
+                        + ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
                         )
 
         # Write file list info data
@@ -256,18 +256,28 @@ def parsingAllDataIntoCsv(destination: str):
                         # "Cutadapt trim the primer sites r2",
                         # "DADA2 filter r1",
                         # "DADA2 filter r2",
-                        if file_set_parameter_list[file_set_list.index(file_set)] == "Cutadapt demultiplex by sample barcode r1":
-                            temp_row.append(parsingFastqReadsNumber(demultiplex_untrimmed_result_path, "", barcode_name, "r1"))
-                        elif file_set_parameter_list[file_set_list.index(file_set)] == "Cutadapt demultiplex by sample barcode r2":
-                            temp_row.append(parsingFastqReadsNumber(demultiplex_untrimmed_result_path, "", barcode_name, "r2"))
-                        elif file_set_parameter_list[file_set_list.index(file_set)] == "Cutadapt trim the primer sites r1":
-                            temp_row.append(parsingFastqReadsNumber(demultiplex_trimmed_result_path, "trim_", barcode_name, "r1"))
-                        elif file_set_parameter_list[file_set_list.index(file_set)] == "Cutadapt trim the primer sites r2":
-                            temp_row.append(parsingFastqReadsNumber(demultiplex_trimmed_result_path, "trim_", barcode_name, "r2"))
+                        if file_set_parameter_list[
+                            file_set_list.index(file_set)] == "Cutadapt demultiplex by sample barcode r1":
+                            temp_row.append(
+                                parsingFastqReadsNumber(demultiplex_untrimmed_result_path, "", barcode_name, "r1"))
+                        elif file_set_parameter_list[
+                            file_set_list.index(file_set)] == "Cutadapt demultiplex by sample barcode r2":
+                            temp_row.append(
+                                parsingFastqReadsNumber(demultiplex_untrimmed_result_path, "", barcode_name, "r2"))
+                        elif file_set_parameter_list[
+                            file_set_list.index(file_set)] == "Cutadapt trim the primer sites r1":
+                            temp_row.append(
+                                parsingFastqReadsNumber(demultiplex_trimmed_result_path, "trim_", barcode_name, "r1"))
+                        elif file_set_parameter_list[
+                            file_set_list.index(file_set)] == "Cutadapt trim the primer sites r2":
+                            temp_row.append(
+                                parsingFastqReadsNumber(demultiplex_trimmed_result_path, "trim_", barcode_name, "r2"))
                         elif file_set_parameter_list[file_set_list.index(file_set)] == "DADA2 filter r1":
-                            temp_row.append(parsingFastqReadsNumber(demultiplex_filtered_result_path, "filtered_trim_", barcode_name, "r1"))
+                            temp_row.append(parsingFastqReadsNumber(demultiplex_filtered_result_path, "filtered_trim_",
+                                                                    barcode_name, "r1"))
                         elif file_set_parameter_list[file_set_list.index(file_set)] == "DADA2 filter r2":
-                            temp_row.append(parsingFastqReadsNumber(demultiplex_filtered_result_path, "filtered_trim_", barcode_name, "r2"))
+                            temp_row.append(parsingFastqReadsNumber(demultiplex_filtered_result_path, "filtered_trim_",
+                                                                    barcode_name, "r2"))
                         else:
                             temp_row.append("V")
 
@@ -297,7 +307,8 @@ def parsingAllDataIntoCsv(destination: str):
                 blast_result_dict = parsingBlastResultIntoDict()
                 blast_subject_id = blast_result_dict.get(merger_merge_file_name)[0] if fasta_seq != "N/A" else "N/A"
                 blast_identity = blast_result_dict.get(merger_merge_file_name)[1] if fasta_seq != "N/A" else "N/A"
-                blast_qstart_qend = abs(int(blast_result_dict.get(merger_merge_file_name)[2])) if fasta_seq != "N/A" else "N/A"
+                blast_qstart_qend = abs(
+                    int(blast_result_dict.get(merger_merge_file_name)[2])) if fasta_seq != "N/A" else "N/A"
 
                 # Write file list info data (part from dada2 merge)
                 # # need to check the file exist first
@@ -314,22 +325,28 @@ def parsingAllDataIntoCsv(destination: str):
                         if sample_name in file:
                             # sample : Adiantum_hispidulum_CYH20090701.011_KTHU2052
                             # file : Adiantum_hispidulum_CYH20090701.011_KTHU2052_01_0.973_abundance_110.fas
-                            with open(merger_merged_path + fasta_header.replace(">", "") + ".fas", "r") as merger_merge_file:
+                            with open(merger_merged_path + fasta_header.replace(">", "") + ".fas",
+                                      "r") as merger_merge_file:
                                 for line in merger_merge_file:
                                     if line.startswith(">"):
                                         continue
                                     else:
                                         merger_merged_seq = line.strip()
                                         break
-                                with open(dada2_merged_path + sample_name + "_.fas", "r") as dada2_merge_file: #dada2 merged file has multiple seq.
+                                with open(dada2_merged_path + sample_name + "_.fas",
+                                          "r") as dada2_merge_file:  # dada2 merged file has multiple seq.
                                     for line in dada2_merge_file:
                                         dada2_merge_seq = line.strip()
                                         if dada2_merge_seq.upper() == merger_merged_seq.upper():
                                             # print(f"[INFO] {dada2_merge_seq} is identical to {merger_merged_seq} in {file}")
-                                            abundant = file.split(sample_name)[1].split("_")[1].replace("01","1").replace("02","2").replace("03","3").replace("04","4").replace("05","5").replace("06","6").replace("07","7").replace("08","8").replace("09","9")
+                                            abundant = file.split(sample_name)[1].split("_")[1].replace("01",
+                                                                                                        "1").replace(
+                                                "02", "2").replace("03", "3").replace("04", "4").replace("05",
+                                                                                                         "5").replace(
+                                                "06", "6").replace("07", "7").replace("08", "8").replace("09", "9")
                                             identical_to_DADA2_merge.append(int(abundant))
                                             break
-                    if len(identical_to_DADA2_merge) > 0 : #sort the list and convert to string
+                    if len(identical_to_DADA2_merge) > 0:  # sort the list and convert to string
                         identical_to_DADA2_merge_str = list(str(e) for e in sorted(identical_to_DADA2_merge))
                         identical_to_DADA2_merge = ','.join(identical_to_DADA2_merge_str)
                     else:
@@ -345,7 +362,7 @@ def parsingAllDataIntoCsv(destination: str):
                     sequence_info = processAbundanceFile(dada2_denoise_r1_file)
                     abundance_info_list.extend(sequence_info)
                 else:
-                    abundance_info_list.extend(["N/A", "N/A", "N/A","N/A"])
+                    abundance_info_list.extend(["N/A", "N/A", "N/A", "N/A"])
 
                 # Process DADA2 denoise r2's abundance data
                 # # ['Christella', 'arida', 'Lu31801', 'KTHU2029', '01', 'r1', '1.000', 'abundance', '25']
@@ -354,7 +371,7 @@ def parsingAllDataIntoCsv(destination: str):
                     sequence_info = processAbundanceFile(dada2_denoise_r2_file)
                     abundance_info_list.extend(sequence_info)
                 else:
-                    abundance_info_list.extend(["N/A", "N/A", "N/A","N/A"])
+                    abundance_info_list.extend(["N/A", "N/A", "N/A", "N/A"])
 
                 # Process DADA2 merge's abundance data
                 # # ['Christella', 'arida', 'Lu31801', 'KTHU2029', '01', 'r1', '1.000', 'abundance', '25']
@@ -363,7 +380,7 @@ def parsingAllDataIntoCsv(destination: str):
                     sequence_info = processAbundanceFile(dada2_merged_file)
                     abundance_info_list.extend(sequence_info)
                 else:
-                    abundance_info_list.extend(["N/A", "N/A", "N/A","N/A"])
+                    abundance_info_list.extend(["N/A", "N/A", "N/A", "N/A"])
 
                 # Process DADA2 10N cat's abundance data
                 # # ['Christella', 'arida', 'Lu31801', 'KTHU2029', '01', '1.000', 'abundance', '24']
@@ -372,18 +389,19 @@ def parsingAllDataIntoCsv(destination: str):
                     sequence_info = processAbundanceFile(dada2_10N_cat_file)
                     abundance_info_list.extend(sequence_info)
                 else:
-                    abundance_info_list.extend(["N/A", "N/A", "N/A","N/A"])
+                    abundance_info_list.extend(["N/A", "N/A", "N/A", "N/A"])
 
                 # Step 5 : Write all columns to the csv file
                 # Write file list info data (finally we write the row here)
                 writer.writerow([barcode_name, sample_name]
                                 + temp_row
-                                + [fasta_header, fasta_seq, fasta_length, ambiguous_sites_number, lowercase_sites_number,
+                                + [fasta_header, fasta_seq, fasta_length, ambiguous_sites_number,
+                                   lowercase_sites_number,
                                    blast_subject_id, blast_identity, blast_qstart_qend, identical_to_DADA2_merge]
                                 + abundance_info_list
                                 )
             except Exception as e:
-                print("Error occurred when processing sample: " + sample_name +" in qcReport")
+                print("Error occurred when processing sample: " + sample_name + " in qcReport")
                 print(traceback.print_exc())
 
     # Step 6 : Write successful rate info in the last row
@@ -397,7 +415,7 @@ def parsingAllDataIntoCsv(destination: str):
             column_values = [row[column_index] for row in rows[11:]]  # From the first data row
             v_count = column_values.count('N/A')
             # Add the count to the last row
-            v_count_list.append(str(len(column_values) - v_count)+"/"+str((len(column_values))))
+            v_count_list.append(str(len(column_values) - v_count) + "/" + str((len(column_values))))
         identical_to_DADA2_merge_count = len([row[23] for row in rows[11:] if (row[23] != 'N/A') and (row[23] != '')])
     # # Write the updated data back to the CSV file
     with open(destination, 'a', newline='') as csvfile:
