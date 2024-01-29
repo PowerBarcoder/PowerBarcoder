@@ -158,7 +158,7 @@ def home():
                            # Locus (rbcL demo)
                            rbcl_name_of_loci=rbcl_name_of_loci,
                            rbcl_error_rate_cutadaptor=rbcl_error_rate_cutadaptor,
-                           rbcl_minimum_length_cutadaptor=rbcl_minimum_length_cutadaptor, #TODO check what is "inloop"
+                           rbcl_minimum_length_cutadaptor=rbcl_minimum_length_cutadaptor,
                            rbcl_primer_f=rbcl_primer_f,
                            rbcl_primer_f_name=rbcl_primer_f_name,
                            rbcl_primer_r=rbcl_primer_r,
