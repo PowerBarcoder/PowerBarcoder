@@ -175,10 +175,10 @@ try:
             #     r2RowList[1]=ReverseComplement(r2RowList[1])
 
             # 20230206-10N新版 TODO 需要用trnLF測試正確性
-            if ((sign == NEGATIVE_DIRECTION)):
+            if sign == NEGATIVE_DIRECTION:
                 targetRowList[1] = ReverseComplement(targetRowList[1])
                 # print("negative: " + fastaFile)
-            elif ((sign == POSITIVE_DIRECTION)):
+            elif sign == POSITIVE_DIRECTION:
                 # print("positive: "+fastaFile)
                 pass
 

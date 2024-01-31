@@ -1,5 +1,3 @@
-import linecache as lc
-
 # blast參考物件，blastRef
 
 # load_dir="C:/Users/123/"
@@ -95,9 +93,9 @@ class BlastRef:
             if query_name != temp_query_name:  # 不篩的話讀檔次數要從幾千變幾十萬
                 temp_query_name = query_name
                 # r1r2分開blast
-                if (query_name.find("_r1") != -1):
+                if query_name.find("_r1") != -1:
                     qseqid_file_path = qseqid_file_dir_r1 + query_name
-                elif (query_name.find("_r2") != -1):
+                elif query_name.find("_r2") != -1:
                     qseqid_file_path = qseqid_file_dir_r2 + query_name
                 # r1r2 cat起來blast
                 else:

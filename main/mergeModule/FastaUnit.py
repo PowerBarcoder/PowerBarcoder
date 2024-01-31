@@ -117,13 +117,12 @@ class FastaUnit:
 
     def replaceFilenameWithHeader(self, loadPath, outputDir, deleteOriginalFile=False):
         extension = self.getFileExtensionFromPath(loadPath)
-        headerText = ""
         with open(loadPath, "r") as inputFile:
             headerText = linecache.getline(loadPath, 1)[1:].replace("\n", "")
             with open(outputDir + headerText + "." + extension, "w") as outputFile:
                 for line in inputFile:
                     outputFile.write(line)
-        if (deleteOriginalFile):
+        if deleteOriginalFile:
             os.remove(loadPath)
 
     # inputPath = 'C:/Users/kwz50/Desktop/i18n/workTool/seq/raw/KTHU2220_Wade5673_Tectaria_pleiosora_.fas'

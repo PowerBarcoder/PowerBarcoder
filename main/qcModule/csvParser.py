@@ -54,6 +54,7 @@ def parsingBlastResultIntoDict():
     data_dict = {}
     with open(blast_result_path, 'r', encoding='iso-8859-1') as file:
         for line in file:
+            # TODO 如果r1 r2 blast到的最好的序列不一樣，那會有覆蓋問題，而且你不知道是誰覆蓋誰
             columns = line.strip().split('\t')
             key = columns[0].replace("_r1.fas", "").replace("_r2.fas", "").replace(".fas", "") + ".fas"
             value = [columns[1], columns[2], columns[12]]

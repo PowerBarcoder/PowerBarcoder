@@ -32,13 +32,13 @@ class Miseq:
         OVERLAP_UNKNOWN = 99
 
         for j in range(0, len(ref)):
-            if ((r[j] == "-") and (ref[j] == "-")):
+            if (r[j] == "-") and (ref[j] == "-"):
                 r_arr_overlap[j] = OVERLAP_NONE
             elif (r[j] != "-") and (ref[j] != "-"):
                 r_arr_overlap[j] = OVERLAP_BOTH
-            elif ((r[j] == "-") and (ref[j] != "-")):
+            elif (r[j] == "-") and (ref[j] != "-"):
                 r_arr_overlap[j] = OVERLAP_INSERT
-            elif ((r[j] != "-") and (ref[j] == "-")):
+            elif (r[j] != "-") and (ref[j] == "-"):
                 r_arr_overlap[j] = OVERLAP_DELETE
 
         # print("---------------------------")
@@ -46,10 +46,10 @@ class Miseq:
         # print("---------------------------")
 
         # 直接從r是r1或r2來定義r是起始於ref的左側或右側
-        if (rWho == "r1"):
+        if rWho == "r1":
             # target_direction="start from the left side of reference"
             self.forword = True
-        elif (rWho == "r2"):
+        elif rWho == "r2":
             # target_direction="start from the right side of reference"
             self.forword = False
 
@@ -81,19 +81,19 @@ class Miseq:
         indel_start_site = 0
         for j in range(0, len(ref)):
             # 迴圈逐點檢視，判定當前位點是否與下一點相同，
-            if ((j + 1) != len(ref)):
+            if (j + 1) != len(ref):
                 # 位點非最後一位
-                if (r_arr_overlap[j] == OVERLAP_INSERT):
+                if r_arr_overlap[j] == OVERLAP_INSERT:
                     # insertion
                     if (site_status != OVERLAP_INSERT) and (site_number == 0):
                         # 入口
-                        if (r_arr_overlap[j] == r_arr_overlap[j + 1]):
+                        if r_arr_overlap[j] == r_arr_overlap[j + 1]:
                             # 入口但非出口
                             site_status = OVERLAP_INSERT
                             indel_start_site = j
                             self.inSite[j] = 1
                             site_number = site_number + 1
-                        elif (r_arr_overlap[j] != r_arr_overlap[j + 1]):
+                        elif r_arr_overlap[j] != r_arr_overlap[j + 1]:
                             # 入口即出口(即indel僅為單一位點)
                             site_status = OVERLAP_INSERT
                             indel_start_site = j
@@ -106,11 +106,11 @@ class Miseq:
                             print("Miseq 107: something wrong. ", filename)
                     elif (site_status == OVERLAP_INSERT) and (site_number != 0):
                         # 非入口
-                        if (r_arr_overlap[j] == r_arr_overlap[j + 1]):
+                        if r_arr_overlap[j] == r_arr_overlap[j + 1]:
                             # 非入口且非出口
                             site_number = site_number + 1
                             self.inSite[indel_start_site] = site_number
-                        elif (r_arr_overlap[j] != r_arr_overlap[j + 1]):
+                        elif r_arr_overlap[j] != r_arr_overlap[j + 1]:
                             # 出口
                             site_number = site_number + 1
                             self.inSite[indel_start_site] = site_number
@@ -123,17 +123,17 @@ class Miseq:
                     else:
                         print("Miseq 125: something wrong. ", filename)
 
-                elif (r_arr_overlap[j] == OVERLAP_DELETE):
+                elif r_arr_overlap[j] == OVERLAP_DELETE:
                     # deletion
                     if (site_status != OVERLAP_DELETE) and (site_number == 0):
                         # 入口
-                        if (r_arr_overlap[j] == r_arr_overlap[j + 1]):
+                        if r_arr_overlap[j] == r_arr_overlap[j + 1]:
                             # 入口但非出口
                             site_status = OVERLAP_DELETE
                             indel_start_site = j
                             self.delSite[j] = 1
                             site_number = site_number + 1
-                        elif (r_arr_overlap[j] != r_arr_overlap[j + 1]):
+                        elif r_arr_overlap[j] != r_arr_overlap[j + 1]:
                             # 入口即出口(即indel僅為單一位點)
                             site_status = OVERLAP_DELETE
                             indel_start_site = j
@@ -146,11 +146,11 @@ class Miseq:
                             print("Miseq 147: something wrong. ", filename)
                     elif (site_status == OVERLAP_DELETE) and (site_number != 0):
                         # 非入口
-                        if (r_arr_overlap[j] == r_arr_overlap[j + 1]):
+                        if r_arr_overlap[j] == r_arr_overlap[j + 1]:
                             # 非入口且非出口
                             site_number = site_number + 1
                             self.delSite[indel_start_site] = site_number
-                        elif (r_arr_overlap[j] != r_arr_overlap[j + 1]):
+                        elif r_arr_overlap[j] != r_arr_overlap[j + 1]:
                             # 出口
                             site_number = site_number + 1
                             self.delSite[indel_start_site] = site_number
@@ -163,11 +163,11 @@ class Miseq:
                     else:
                         print("Miseq 165: something wrong. ", filename)
             # 位點是最後一位
-            elif ((j + 1) == len(ref)):
-                if (r_arr_overlap[j] == OVERLAP_INSERT):
+            elif (j + 1) == len(ref):
+                if r_arr_overlap[j] == OVERLAP_INSERT:
                     site_number = site_number + 1
                     self.inSite[indel_start_site] = site_number
-                elif (r_arr_overlap[j] == OVERLAP_DELETE):
+                elif r_arr_overlap[j] == OVERLAP_DELETE:
                     site_number = site_number + 1
                     self.delSite[indel_start_site] = site_number
                 else:  # OVERLAP_BOTH

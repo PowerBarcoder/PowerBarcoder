@@ -1,7 +1,7 @@
+import sys
+
 import networkx as nx
 from pyvis.network import Network
-from networkx.algorithms import bipartite
-import sys
 
 loadPath = sys.argv[1] + sys.argv[2] + "_result/qcResult/"
 # loadPath = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202306181609/"

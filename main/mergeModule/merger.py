@@ -184,10 +184,10 @@ for filename in candidate_list:
         # # 步驟三
         # # 開始拼接，若有重疊才於第四步進行alignment
 
-        if (overlape == False):  # 不用拼(跳步驟五)
+        if not overlape:  # 不用拼(跳步驟五)
             pass
 
-        elif (overlape == True):  # 要拼
+        elif overlape:  # 要拼
             # 先取出需要align的兩個片段(r1_p1~r1_p2、r2_p1~r2_p2)
             # 獲得ref內的拼接長度
 
@@ -222,7 +222,7 @@ for filename in candidate_list:
             # 步驟四(執行alignment)
             # if(ovelap區間的序列內容跟長度完全一樣):
             # 不用align
-            if (r1_for_align == r2_for_align):
+            if r1_for_align == r2_for_align:
                 # print("序列長得一模一樣，不用alignment")
                 r1_overlap = r1_for_align
                 r2_overlap = r2_for_align
@@ -241,7 +241,7 @@ for filename in candidate_list:
                 except Exception as e:
                     print("[WARNING] error occured:", e)
 
-                while ((path.exists(loadpath + "mafft/" + filename + "tempAlign.fasta") == False)):
+                while not path.exists(loadpath + "mafft/" + filename + "tempAlign.fasta"):
                     print("[WARNING]" + filename + "tempAlign.fasta未生成，等待一秒")
                     time.sleep(1)
 
@@ -266,13 +266,13 @@ for filename in candidate_list:
         trim_1_overlap_align = ""
 
         # 開始判斷並拼接
-        if (overlape == False):
+        if not overlape:
             # 沒overlap就補NNNNN   # print("non-overlap",filename)# print("Ns")
             ns_num = abs(
                 r2Object.stickSite[1] - r1Object.stickSite[1])  # 原本這樣寫，有問題 ns_num=r1_p2_trimed - r2_p1_trimed-1
             ns_seq = "N" * ns_num
             merge_seq = merge_seq + r1[:r1Object.stickSite[1]].upper() + ns_seq + r2[r2Object.stickSite[1]:].upper()
-        elif (overlape == True):
+        elif overlape:
             # 有overlap才需要merge # print("overlap")
             overlap_seq = ""
             trim_0_overlap_align = r1_overlap
@@ -281,13 +281,13 @@ for filename in candidate_list:
             gapNumInOverlap = 0
             for i in range(0, overlap_num_align):
                 # print(i+1,"and",j) # print(trim_0_overlap_align[i],trim_1_overlap_align[i])
-                if (trim_0_overlap_align[i] == "a" and trim_1_overlap_align[i] == "a"):
+                if trim_0_overlap_align[i] == "a" and trim_1_overlap_align[i] == "a":
                     overlap_seq = overlap_seq + "A"
-                elif (trim_0_overlap_align[i] == "t" and trim_1_overlap_align[i] == "t"):
+                elif trim_0_overlap_align[i] == "t" and trim_1_overlap_align[i] == "t":
                     overlap_seq = overlap_seq + "T"
-                elif (trim_0_overlap_align[i] == "c" and trim_1_overlap_align[i] == "c"):
+                elif trim_0_overlap_align[i] == "c" and trim_1_overlap_align[i] == "c":
                     overlap_seq = overlap_seq + "C"
-                elif (trim_0_overlap_align[i] == "g" and trim_1_overlap_align[i] == "g"):
+                elif trim_0_overlap_align[i] == "g" and trim_1_overlap_align[i] == "g":
                     overlap_seq = overlap_seq + "G"
                 elif ((trim_0_overlap_align[i] == "a" and trim_1_overlap_align[i] == "g") or (
                         trim_0_overlap_align[i] == "g" and trim_1_overlap_align[i] == "a")):  # R	A/G
@@ -307,13 +307,13 @@ for filename in candidate_list:
                 elif ((trim_0_overlap_align[i] == "a" and trim_1_overlap_align[i] == "t") or (
                         trim_0_overlap_align[i] == "t" and trim_1_overlap_align[i] == "a")):  # W A/T
                     overlap_seq = overlap_seq + "W"
-                elif ((trim_0_overlap_align[i] == "-") and (trim_1_overlap_align[i] == "-")):  # gap+gap=N
+                elif (trim_0_overlap_align[i] == "-") and (trim_1_overlap_align[i] == "-"):  # gap+gap=N
                     overlap_seq = overlap_seq + "N"
                     gapNumInOverlap += 1
-                elif ((trim_0_overlap_align[i] == "-" and trim_1_overlap_align[i] != "-")):
+                elif trim_0_overlap_align[i] == "-" and trim_1_overlap_align[i] != "-":
                     # gap+ATCG=atcg
                     overlap_seq = overlap_seq + trim_1_overlap_align[i]
-                elif ((trim_0_overlap_align[i] != "-" and trim_1_overlap_align[i] == "-")):
+                elif trim_0_overlap_align[i] != "-" and trim_1_overlap_align[i] == "-":
                     # ATCG+gap=atcg
                     overlap_seq = overlap_seq + trim_0_overlap_align[i]  # TODO 研究一下小寫的原因
                 # D G/A/T # V G/A/C # B G/T/C # H A/T/C 兩條序列不會出現

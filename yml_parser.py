@@ -1,7 +1,6 @@
 # GUI請先生出yml，再來用這支程式轉成shell script
 import os
 import yaml
-from datetime import datetime
 
 
 # convert the formData to YAML
