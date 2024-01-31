@@ -49,8 +49,8 @@ def run_procedure(data):
 
     # Access form data
     form_data = data
-    yml_parser.parsingFormDataToYml(form_data)
-    yml_parser.parsingYmlToShell(formatted_datetime)
+    yml_parser.parsing_form_data_to_yml(form_data)
+    yml_parser.parsing_yml_to_shell(formatted_datetime)
 
     ws_emit_procedure_result('Data procedure started\r\n', formatted_datetime)
 
@@ -88,7 +88,7 @@ def run_procedure(data):
 @app.route('/')
 def home():
     # passing default value to html (some parameters are not used in demo,
-    # and are hard-coded in parsingYmlToShell() method)
+    # and are hard-coded in parsing_yml_to_shell() method)
     # Path
     default_mycutadapt_path = "/venv/cutadapt-venv/bin/"
     default_myfastp_path = "/usr/local/bin/"

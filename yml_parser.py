@@ -4,7 +4,7 @@ import yaml
 
 
 # convert the formData to YAML
-def parsingFormDataToYml(data):
+def parsing_form_data_to_yml(data):
     yaml_data = yaml.dump(data)
     with open('main/config.yml', 'w') as f:
         f.write("---\n")
@@ -12,7 +12,7 @@ def parsingFormDataToYml(data):
 
 
 # convert the YAML to shell script, with some fixed field
-def parsingYmlToShell(batch_name: str):
+def parsing_yml_to_shell(batch_name: str):
     # Load YAML file
     with open('main/config.yml', 'r') as file:
         config = yaml.safe_load(file)
