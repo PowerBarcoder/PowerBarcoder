@@ -1,10 +1,7 @@
 import os
-from Bio import Align
-from Bio import Seq
-from Bio import SeqIO
+from Bio import Align, Seq, SeqIO
 import sys
 
-# BASE_URL = 'C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202310290738_test/trnLF_result/'
 BASE_URL = sys.argv[1] + sys.argv[2] + "_result/"
 input_r1_path = f'{BASE_URL}denoiseResult/r1/'
 input_r2_path = f'{BASE_URL}denoiseResult/r2/'
@@ -17,41 +14,39 @@ output_all_path = f'{BASE_URL}qcResult/validator/all/'
 
 
 def reverse_complement_pairwise_alignment(query_seq: str, target_seq: str):
-    # print(f'query_seq: {query_seq.seq}')
-    # print(f'target_seq: {target_seq.seq}')
+    """
+    Performs pairwise alignment between query_seq and target_seq.
+    Returns the sequence with the longest ATCG subsequence.
 
-    # Perform sequence alignment
-    aligner = Align.PairwiseAligner(scoring="blastn")  # 直接用blastn的，方便
+    :param query_seq: Query sequence to align.
+    :param target_seq: Target sequence to align against.
+    :return: Alignment sequence with the longest ATCG subsequence.
+    """
+    aligner = Align.PairwiseAligner(scoring="blastn")
 
-    # forward_alignment
     forward_alignment = aligner.align(query_seq, target_seq)
     forward_alignment_query_sequence = (forward_alignment[0].format("fasta")).splitlines()[1]
-    # print(f'forward_alignment_query_sequence: {forward_alignment_query_sequence}')
     forward_score = longest_ATCG_sequence(forward_alignment_query_sequence)
 
-    # reverse_complement_alignment
     reverse_complement_alignment = aligner.align(str(Seq.Seq(query_seq).reverse_complement()), target_seq)
     reverse_complement_alignment_query_sequence = (reverse_complement_alignment[0].format("fasta")).splitlines()[1]
-    # print(f'reverse_complement_alignment_query_sequence: {reverse_complement_alignment_query_sequence}')
     reverse_complement_score = longest_ATCG_sequence(reverse_complement_alignment_query_sequence)
 
-    # Determine which alignment has a higher score
     if forward_score >= reverse_complement_score:
-        alignment_score = forward_score
         alignment_sequence = query_seq
     else:
-        alignment_score = reverse_complement_score
         alignment_sequence = str(Seq.Seq(query_seq).reverse_complement())
-
-    # print(f'isReversed: {reverse_complement_score > forward_score}, '
-    #       f'forward_score: {forward_score}, '
-    #       f'reverse_complement_score: {reverse_complement_score}')
-    # print(f'alignment_sequence: {alignment_sequence}')
 
     return alignment_sequence
 
 
 def longest_ATCG_sequence(sequence: str):
+    """
+    Returns the length of the longest consecutive ATCG subsequence in the given sequence.
+
+    :param sequence: Input sequence.
+    :return: Length of the longest consecutive ATCG subsequence.
+    """
     longest_length = 0
     current_length = 0
     for char in sequence:
@@ -65,15 +60,28 @@ def longest_ATCG_sequence(sequence: str):
 
 
 def concatenate_files_from_one_folder(folder_path, output_file):
+    """
+    Concatenates files from a single folder into a single output file.
+
+    :param folder_path: Path to the folder containing files to concatenate.
+    :param output_file: Output file to store the concatenated content.
+    """
     with open(output_file, 'w') as output:
         for filename in os.listdir(folder_path):
-            if filename.endswith('.fas'):  # Change the extension to match the files you want to concatenate
+            if filename.endswith('.fas'):
                 file_path = os.path.join(folder_path, filename)
                 with open(file_path, 'r') as file:
                     output.write(file.read())
 
 
 def concatenate_files_from_two_files(folder_file1, folder_file2, output_file):
+    """
+    Concatenates content from two files into a single output file.
+
+    :param folder_file1: Path to the first file.
+    :param folder_file2: Path to the second file.
+    :param output_file: Output file to store the concatenated content.
+    """
     with open(output_file, 'w') as output:
         if os.path.exists(folder_file1):
             with open(folder_file1, 'r') as file1:
@@ -84,6 +92,12 @@ def concatenate_files_from_two_files(folder_file1, folder_file2, output_file):
 
 
 def concatenate_files_from_multiple_files(file_paths, output_file):
+    """
+    Concatenates content from multiple files into a single output file.
+
+    :param file_paths: List of paths to input files.
+    :param output_file: Output file to store the concatenated content.
+    """
     with open(output_file, 'w') as output:
         for file_path in file_paths:
             if os.path.exists(file_path):
@@ -95,9 +109,8 @@ def concatenate_files_from_multiple_files(file_paths, output_file):
 
 def denoise_alignment():
     """
-    align dada2 denoise後的abundance最高的r1,r2
+    Aligns the dada2 denoise output sequences and writes the results to files.
     """
-
     alignment_file_list = os.listdir(input_r1_path)
     merger_file_list = os.listdir(input_ref_path)
 
@@ -115,9 +128,8 @@ def denoise_alignment():
 
         # if merger的ref存在，我們就檢查r1 r2方向有沒有正確，沒有ref就算了
         if merger_file_name != "":
-            # Read Ref file
             records = SeqIO.parse(input_ref_path + merger_file_name, "fasta")
-            for _ in range(1):  # Skip the first two records
+            for _ in range(1):
                 next(records)
             ref1SeqRecord = next(records)
 
@@ -125,20 +137,12 @@ def denoise_alignment():
             r1SeqRecord.seq = reverse_complement_pairwise_alignment(str(r1SeqRecord.seq), str(ref1SeqRecord.seq))
             r2SeqRecord.seq = reverse_complement_pairwise_alignment(str(r2SeqRecord.seq), str(ref1SeqRecord.seq))
 
-        # print(f'r1Fasta: {r1SeqRecord.seq}')
-        # print(f'r2Fasta: {r2SeqRecord.seq}')
-
         # Perform sequence alignment
         aligner2 = Align.PairwiseAligner(scoring="blastn")  # 直接用blastn的，方便
         alignment = aligner2.align(r1SeqRecord.seq, r2SeqRecord.seq)
-        # Access the aligned sequences
         aligned_r1 = (alignment[0].format("fasta")).splitlines()[1]
         aligned_r2 = (alignment[0].format("fasta")).splitlines()[3]
 
-        # print(f'aligned_r1: {aligned_r1}')
-        # print(f'aligned_r2: {aligned_r2}')
-
-        # # Write the alignment to a file
         output_file = output_denoise_path + alignment_sample_name
         with open(output_file, "w") as handle:
             handle.write(f">dada2 r1 best ASV: {r1SeqRecord.id}\n")
@@ -149,12 +153,11 @@ def denoise_alignment():
 
 def merger_alignment():
     """
-    align merger跟dada2的result
-    如果ASV分別有5&6，那會有30種alignment結果，這裡只從中挑選成績最好的一組
-    成績好壞：兩序列中，最高連續ATCG片段最長的作為該序列代表，跟align對象互比，找到較短的一方做為整組代表
-    預設情境：兩序列若很不相似，則單次alignment中，會有一端出現gap很多，意味著該序列跟對象不相似，因此被選為代表後，會比不過其他組alignment
+    Aligns the merger and dada2 result sequences and writes the results to files.
+        如果ASV分別有5&6，那會有30種alignment結果，這裡只從中挑選成績最好的一組
+        成績好壞：兩序列中，最高連續ATCG片段最長的作為該序列代表，跟align對象互比，找到較短的一方做為整組代表
+        預設情境：兩序列若很不相似，則單次alignment中，會有一端出現gap很多，意味著該序列跟對象不相似，因此被選為代表後，會比不過其他組alignment
     """
-
     dada2_file_list = os.listdir(input_dada2_path)
     merger_file_list = os.listdir(input_merger_path)
 
@@ -173,24 +176,16 @@ def merger_alignment():
 
         # Read the input dada2 file
         dada2_records = SeqIO.parse(input_dada2_path + dada2_file_name, "fasta")
-        dada2_record_list = []
-        for record in dada2_records:
-            dada2_record_list.append(record)
+        dada2_record_list = [record for record in dada2_records]
 
         # Read the input merger file
         merger_record_list = []
         for merger_file_name in merger_file_list:
             if dada2_file_name.replace('.fas', '') in merger_file_name:
-                # Read the input merger file
                 merger_records = SeqIO.parse(input_merger_path + merger_file_name, "fasta")
-                for record in merger_records:
-                    merger_record_list.append(record)
+                merger_record_list.extend(list(merger_records))
 
-        # print(f'dada2_record_list: {dada2_record_list}')
-        # print(f'merger_record_list: {merger_record_list}')
-
-        # Do pairwise alignment between dada2 and merger
-        for merger_record in merger_record_list:  # 如：merger有7筆ASV
+        for merger_record in merger_record_list:
             """
             10Ncat不須考慮overlap，
             所以下游的merger merge的ASV數量一定大於等於dada2 merge的ASV數量，
@@ -202,36 +197,28 @@ def merger_alignment():
             best_aligned_merger_seq = ""
             best_aligned_dada2_header = ""
             best_aligned_merger_header = ""
-            for dada2_record in dada2_record_list:  # 如：dada2有5筆ASV
-                # Pretreatment for uppercase sequence
+            for dada2_record in dada2_record_list:
                 merger_record.seq = merger_record.seq.upper()
-                # Perform sequence alignment
                 aligner = Align.PairwiseAligner(scoring="blastn")
                 alignment = aligner.align(dada2_record.seq, merger_record.seq)
-                # Access the aligned sequences
                 aligned_dada2 = (alignment[0].format("fasta")).splitlines()[1]
                 aligned_merger = (alignment[0].format("fasta")).splitlines()[3]
-                # Count the longest ATCG subsequence
                 dada2_score = longest_ATCG_sequence(aligned_dada2)
                 merger_score = longest_ATCG_sequence(aligned_merger)
                 pairwise_score = min(dada2_score, merger_score)
-                # print(f'pairwise_score: {pairwise_score}; dada2: {dada2_score}, merger: {merger_score}')
-                # Determine which alignment has a higher score
+
                 if pairwise_score > best_score:
                     best_score = pairwise_score
                     best_aligned_dada2_seq = aligned_dada2
                     best_aligned_merger_seq = aligned_merger
                     best_aligned_dada2_header = dada2_record.id
                     best_aligned_merger_header = merger_record.id
+
             best_aligned_dada2_header_list.append(best_aligned_dada2_header)
             best_aligned_merger_header_list.append(best_aligned_merger_header)
             best_aligned_dada2_seq_list.append(best_aligned_dada2_seq)
             best_aligned_merger_seq_list.append(best_aligned_merger_seq)
-            # print(f'best_score: {best_score};')
-            # print(f'best_aligned_dada2: {best_aligned_dada2_header};')
-            # print(f'best_aligned_merger: {best_aligned_merger_header};')
 
-            # # Write the alignment to a file
         output_file = f'{output_merge_path}{dada2_file_name}'
         with open(output_file, "w") as handle:
             for i in range(len(best_aligned_dada2_seq_list)):
@@ -241,37 +228,37 @@ def merger_alignment():
                 handle.write(best_aligned_dada2_seq_list[i] + "\n")
 
 
-def concate_denoise_and_merger():
+def concatenate_denoise_and_merger():
+    """
+    Concatenates denoise and merger results into a single output file.
+    """
     output_denoise_file_list = os.listdir(output_denoise_path)
     for i in range(len(output_denoise_file_list)):
-        filename = output_denoise_file_list[i]  # 如：Abrodictyum_cumingii_ZXC002739_KTHU1461_.fas
+        filename = output_denoise_file_list[i]
 
-        file_paths = []
-        # 加入dada2 denoise
-        file_paths.append(output_denoise_path + filename)
-        # 加入dada2 merge
-        file_paths.append(output_merge_path + filename)
-        # 交替加入r1,r2 align (寫法不太好，有空再改)
+        file_paths = [output_denoise_path + filename, output_merge_path + filename]
         merge_align_path = f'{BASE_URL}mergeResult/merger/aligned/'
-        merger_align_file_list = os.listdir(
-            merge_align_path)  # 如：Abrodictyum_cumingii_ZXC002739_KTHU1461_01_0.557_abundance_59_r1.fas
+        merger_align_file_list = os.listdir(merge_align_path)
+
         for merger_align_file_name in merger_align_file_list:
             if filename.replace('.fas', '') in merger_align_file_name and 'r1' in merger_align_file_name:
                 file_paths.append(merge_align_path + merger_align_file_name)
             if filename.replace('.fas', '') in merger_align_file_name and 'r2' in merger_align_file_name:
                 file_paths.append(merge_align_path + merger_align_file_name)
 
-        # print(f'file_paths: {file_paths}')
         concatenate_files_from_multiple_files(file_paths, output_all_path + filename)
 
 
 def main():
+    """
+    Main function to execute denoise alignment, merger alignment, and concatenation them together.
+    """
+    print(f"[INFO] Start to validate in {sys.argv[2]}!")
     denoise_alignment()
     merger_alignment()
-    concate_denoise_and_merger()
+    concatenate_denoise_and_merger()
+    print(f"[INFO] End of validation in {sys.argv[2]}!")
 
 
 if __name__ == '__main__':
-    print(f"[INFO] Start to validate in {sys.argv[2]}!")
     main()
-    print(f"[INFO] End of validation in {sys.argv[2]}!")
