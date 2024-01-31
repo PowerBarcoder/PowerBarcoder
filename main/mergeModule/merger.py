@@ -78,8 +78,8 @@ for filename in candidate_list:
         r1_fastaUnit = FastaUnit()
         r2_fastaUnit = FastaUnit()
 
-        r1_fastaUnit.fastaUnit(r1_loadpath)
-        r2_fastaUnit.fastaUnit(r2_loadpath)
+        r1_fastaUnit.fasta_unit(r1_loadpath)
+        r2_fastaUnit.fasta_unit(r2_loadpath)
 
         r1_seqMap = r1_fastaUnit.seqMap
         r2_seqMap = r2_fastaUnit.seqMap

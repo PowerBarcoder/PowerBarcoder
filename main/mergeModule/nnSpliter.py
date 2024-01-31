@@ -53,11 +53,11 @@ def nn_spliter(loadpath, filename, r1_outputLoadpath, r2_outputLoadpath):
     with open(r1_outputLoadpath + filename, "w", encoding="iso-8859-1") as r1_file:
         r1_file.write(seqHeader + "_r1" + "\n")
         r1_file.write(seqTextr1 + "\n")  # r1結尾需要多補一個換行
-    nCatFastaFile.replaceFilenameWithHeader(r1_outputLoadpath + filename, r1_outputLoadpath, True)
+    nCatFastaFile.replace_filename_with_header(r1_outputLoadpath + filename, r1_outputLoadpath, True)
     with open(r2_outputLoadpath + filename, "w", encoding="iso-8859-1") as r2_file:
         r2_file.write(seqHeader + "_r2" + "\n")
         r2_file.write(seqTextr2)
-    nCatFastaFile.replaceFilenameWithHeader(r2_outputLoadpath + filename, r2_outputLoadpath, True)
+    nCatFastaFile.replace_filename_with_header(r2_outputLoadpath + filename, r2_outputLoadpath, True)
 
 
 # 取得所有檔案與子目錄名稱
@@ -68,9 +68,9 @@ for filename in rawFiles:
     try:
         fullpath = join(loadpath, filename)
         if isfile(fullpath):
-            nCatFastaFile.splitMulitpleSeqFastaIntoFiles(fullpath, splitPath)
+            nCatFastaFile.split_multiple_seq_fasta_into_files(fullpath, splitPath)
     except:
-        print("[ERROR] Something wrong in " + filename + " when splitMulitpleSeqFastaIntoFiles().")
+        print("[ERROR] Something wrong in " + filename + " when split_multiple_seq_fasta_into_files().")
         print(traceback.print_exc())
 
 # 檔名用header替換
@@ -79,9 +79,9 @@ for filename in splitFiles:
     try:
         fullpath = join(splitPath, filename)
         if isfile(fullpath):
-            nCatFastaFile.replaceFilenameWithHeader(fullpath, splitPath, True)
+            nCatFastaFile.replace_filename_with_header(fullpath, splitPath, True)
     except:
-        print("[ERROR] Something wrong in " + filename + " when replaceFilenameWithHeader().")
+        print("[ERROR] Something wrong in " + filename + " when replace_filename_with_header().")
         print(traceback.print_exc())
 
 # 取得切分後所有檔案與子目錄名稱
