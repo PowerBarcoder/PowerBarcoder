@@ -26,11 +26,11 @@ def reverse_complement_pairwise_alignment(query_seq: str, target_seq: str):
 
     forward_alignment = aligner.align(query_seq, target_seq)
     forward_alignment_query_sequence = (forward_alignment[0].format("fasta")).splitlines()[1]
-    forward_score = longest_ATCG_sequence(forward_alignment_query_sequence)
+    forward_score = longest_atcg_sequence(forward_alignment_query_sequence)
 
     reverse_complement_alignment = aligner.align(str(Seq.Seq(query_seq).reverse_complement()), target_seq)
     reverse_complement_alignment_query_sequence = (reverse_complement_alignment[0].format("fasta")).splitlines()[1]
-    reverse_complement_score = longest_ATCG_sequence(reverse_complement_alignment_query_sequence)
+    reverse_complement_score = longest_atcg_sequence(reverse_complement_alignment_query_sequence)
 
     if forward_score >= reverse_complement_score:
         alignment_sequence = query_seq
@@ -40,7 +40,7 @@ def reverse_complement_pairwise_alignment(query_seq: str, target_seq: str):
     return alignment_sequence
 
 
-def longest_ATCG_sequence(sequence: str):
+def longest_atcg_sequence(sequence: str):
     """
     Returns the length of the longest consecutive ATCG subsequence in the given sequence.
 
@@ -123,31 +123,35 @@ def denoise_alignment():
                 break
 
         # Read the input r1 r2 files # 這裡的r1跟r2是abundance最高的那條
-        r1SeqRecord = next(SeqIO.parse(input_r1_path + alignment_sample_name, "fasta"))
-        r2SeqRecord = next(SeqIO.parse(input_r2_path + alignment_sample_name, "fasta"))
+        r1_seq_record = next(SeqIO.parse(input_r1_path + alignment_sample_name, "fasta"))
+        r2_seq_record = next(SeqIO.parse(input_r2_path + alignment_sample_name, "fasta"))
 
         # if merger的ref存在，我們就檢查r1 r2方向有沒有正確，沒有ref就算了
         if merger_file_name != "":
             records = SeqIO.parse(input_ref_path + merger_file_name, "fasta")
             for _ in range(1):
                 next(records)
-            ref1SeqRecord = next(records)
+            ref1_seq_record = next(records)
 
             # Check and do Reverse complement the r1 and r2 sequences
-            r1SeqRecord.seq = reverse_complement_pairwise_alignment(str(r1SeqRecord.seq), str(ref1SeqRecord.seq))
-            r2SeqRecord.seq = reverse_complement_pairwise_alignment(str(r2SeqRecord.seq), str(ref1SeqRecord.seq))
+            r1_seq_record.seq = reverse_complement_pairwise_alignment(
+                str(r1_seq_record.seq), str(ref1_seq_record.seq)
+            )
+            r2_seq_record.seq = reverse_complement_pairwise_alignment(
+                str(r2_seq_record.seq), str(ref1_seq_record.seq)
+            )
 
         # Perform sequence alignment
         aligner2 = Align.PairwiseAligner(scoring="blastn")  # 直接用blastn的，方便
-        alignment = aligner2.align(r1SeqRecord.seq, r2SeqRecord.seq)
+        alignment = aligner2.align(r1_seq_record.seq, r2_seq_record.seq)
         aligned_r1 = (alignment[0].format("fasta")).splitlines()[1]
         aligned_r2 = (alignment[0].format("fasta")).splitlines()[3]
 
         output_file = output_denoise_path + alignment_sample_name
         with open(output_file, "w") as handle:
-            handle.write(f">dada2 r1 best ASV: {r1SeqRecord.id}\n")
+            handle.write(f">dada2 r1 best ASV: {r1_seq_record.id}\n")
             handle.write(aligned_r1 + "\n")
-            handle.write(f">dada2 r2 best ASV: {r2SeqRecord.id}\n")
+            handle.write(f">dada2 r2 best ASV: {r2_seq_record.id}\n")
             handle.write(aligned_r2 + "\n")
 
 
@@ -203,8 +207,8 @@ def merger_alignment():
                 alignment = aligner.align(dada2_record.seq, merger_record.seq)
                 aligned_dada2 = (alignment[0].format("fasta")).splitlines()[1]
                 aligned_merger = (alignment[0].format("fasta")).splitlines()[3]
-                dada2_score = longest_ATCG_sequence(aligned_dada2)
-                merger_score = longest_ATCG_sequence(aligned_merger)
+                dada2_score = longest_atcg_sequence(aligned_dada2)
+                merger_score = longest_atcg_sequence(aligned_merger)
                 pairwise_score = min(dada2_score, merger_score)
 
                 if pairwise_score > best_score:
