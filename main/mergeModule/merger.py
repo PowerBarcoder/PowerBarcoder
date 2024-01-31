@@ -1,15 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from Miseq import Miseq
 import subprocess
-from subprocess import PIPE
-from FastaUnit import FastaUnit
-from os import listdir
-from os.path import isfile, isdir, join
 import sys
-from os import path
 import time
 import traceback
+from os import listdir
+from os import path
+from os.path import isfile, join
+from subprocess import PIPE
+
+from FastaUnit import FastaUnit
+from Miseq import Miseq
 
 print("[INFO] merger.py is running on loci: " + sys.argv[3])
 
@@ -75,14 +76,14 @@ for filename in candidate_list:
             print("[INFO] " + r2_loadpath + " not found, skip this pair")
             continue
 
-        r1_fastaUnit = FastaUnit()
-        r2_fastaUnit = FastaUnit()
+        r1_fasta_unit = FastaUnit()
+        r2_fasta_unit = FastaUnit()
 
-        r1_fastaUnit.fasta_unit(r1_loadpath)
-        r2_fastaUnit.fasta_unit(r2_loadpath)
+        r1_fasta_unit.fasta_unit(r1_loadpath)
+        r2_fasta_unit.fasta_unit(r2_loadpath)
 
-        r1_seqMap = r1_fastaUnit.seqMap
-        r2_seqMap = r2_fastaUnit.seqMap
+        r1_seq_map = r1_fasta_unit.seq_map
+        r2_seq_map = r2_fasta_unit.seq_map
 
         # 讀兩個.fs進來當r1、ref_r1、r2、ref_r2(20220423)
         r1 = ""
@@ -92,13 +93,13 @@ for filename in candidate_list:
         r2_header_name = ""
         ref_r2 = ""
 
-        for key, value in r1_seqMap.items():
+        for key, value in r1_seq_map.items():
             if "r1" in key:
                 r1 = value
                 r1_header_name = "_".join(key.split("_")[-5:])
             else:
                 ref_r1 = value
-        for key, value in r2_seqMap.items():
+        for key, value in r2_seq_map.items():
             if "r2" in key:
                 r2 = value
                 r2_header_name = "_".join(key.split("_")[-5:])
@@ -245,18 +246,18 @@ for filename in candidate_list:
                     print("[WARNING]" + filename + "tempAlign.fasta未生成，等待一秒")
                     time.sleep(1)
 
-                aligned_fastaUnit = FastaUnit()
-                aligned_fastaUnit.fastaUnit(loadpath + "mafft/" + filename + "tempAlign.fasta")
-                aligned_seqMap = aligned_fastaUnit.seqMap
+                aligned_fasta_unit = FastaUnit()
+                aligned_fasta_unit.fasta_unit(loadpath + "mafft/" + filename + "tempAlign.fasta")
+                aligned_seq_map = aligned_fasta_unit.seq_map
                 r1_overlap = ""
                 r2_overlap = ""
 
-                for key, value in aligned_seqMap.items():
+                for key, value in aligned_seq_map.items():
                     if "r1" in key:
                         r1_overlap = value
                     else:
                         r2_overlap = value
-        # print(aligned_seqMap) # print(r1_overlap) # print(r2_overlap)
+        # print(aligned_seq_map) # print(r1_overlap) # print(r2_overlap)
 
         # # 步驟五
         # # 依alignment結果拼接重疊區塊
