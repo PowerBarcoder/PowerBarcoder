@@ -40,7 +40,7 @@ sseqid_list = localBlast.sseqid_list
 
 #  3.	 pident	 percentage of identical matches
 # print(localBlast.pident_list)
-pident_list = localBlast.pidentList
+pident_list = localBlast.pident_list
 # print(type(pident_list))
 
 #  4.	 length	 alignment length
