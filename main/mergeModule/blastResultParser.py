@@ -23,121 +23,121 @@ blastRefFilter(resultDataPath + nameOfLoci, nameOfLoci, blast_parsing_mode)
 
 # 再執行parsing作業，這部分在20231202新增blastRefFilter.py後，雖有重工，但其產出檔案會給後續的qc使用，所以直接保留
 localBlast = BlastRef()
-localBlast.blastRef(resultDataPath + nameOfLoci, nameOfLoci, blast_parsing_mode)
+localBlast.blast_ref(resultDataPath + nameOfLoci, nameOfLoci, blast_parsing_mode)
 
 # 測試用
-# localBlast.blastRef("C:/Users/123/")
+# localBlast.blast_ref("C:/Users/123/")
 
 #  1.	 qseqid	 query (e.g., gene) sequence id
-# print(localBlast.qseqidList)
-qseqidList = localBlast.qseqidList
-# print(type(qseqidList))
+# print(localBlast.qseqid_list)
+qseqid_list = localBlast.qseqid_list
+# print(type(qseqid_list))
 
 #  2.	 sseqid	 subject (e.g., reference genome) sequence id
-# print(localBlast.sseqidList)
-sseqidList = localBlast.sseqidList
-# print(type(sseqidList))
+# print(localBlast.sseqid_list)
+sseqid_list = localBlast.sseqid_list
+# print(type(sseqid_list))
 
 #  3.	 pident	 percentage of identical matches
-# print(localBlast.pidentList)
-pidentList = localBlast.pidentList
-# print(type(pidentList))
+# print(localBlast.pident_list)
+pident_list = localBlast.pidentList
+# print(type(pident_list))
 
 #  4.	 length	 alignment length
-# print(localBlast.lengthList)
-lengthList = localBlast.lengthList
+# print(localBlast.length_list)
+length_list = localBlast.length_list
 # print(type(lengthList))
 
 #  5.	 mismatch	 number of mismatches
-# print(localBlast.mismatchList)
-mismatchList = localBlast.mismatchList
-# print(type(mismatchList))
+# print(localBlast.mismatch_list)
+mismatch_list = localBlast.mismatch_list
+# print(type(mismatch_list))
 
 #  6.	 gapopen	 number of gap openings
-# print(localBlast.gapopenList)
-gapopenList = localBlast.gapopenList
-# print(type(gapopenList))
+# print(localBlast.gapopen_list)
+gapopen_list = localBlast.gapopen_list
+# print(type(gapopen_list))
 
 #  7.	 qstart	 start of alignment in query
-# print(localBlast.qstartList)
-qstartList = localBlast.qstartList
-# print(type(qstartList))
+# print(localBlast.qstart_list)
+qstart_list = localBlast.qstart_list
+# print(type(qstart_list))
 
 #  8.	 qend	 end of alignment in query
-# print(localBlast.qendList)
-qendList = localBlast.qendList
-# print(type(qendList))
+# print(localBlast.qend_list)
+qend_list = localBlast.qend_list
+# print(type(qend_list))
 
 #  9.	 sstart	 start of alignment in subject
-# print(localBlast.sstartList)
-sstartList = localBlast.sstartList
-# print(type(sstartList))
+# print(localBlast.sstart_list)
+sstart_list = localBlast.sstart_list
+# print(type(sstart_list))
 
 #  10.	 send	 end of alignment in subject
-# print(localBlast.sendList)
-sendList = localBlast.sendList
-# print(type(sendList))
+# print(localBlast.send_list)
+send_list = localBlast.send_list
+# print(type(send_list))
 
 #  11.	 evalue	 expect value
-# print(localBlast.evalueList)
-evalueList = localBlast.evalueList
-# print(type(evalueList))
+# print(localBlast.evalue_list)
+evalue_list = localBlast.evalue_list
+# print(type(evalue_list))
 
 #  12.	 bitscore	 bit score
-# print(localBlast.bitscoreList)
-bitscoreList = localBlast.bitscoreList
-# print(type(bitscoreList))
+# print(localBlast.bitscore_list)
+bitscore_list = localBlast.bitscore_list
+# print(type(bitscore_list))
 
 #  13.   qstartMinusQend
-# print(localBlast.qstartMinusQendList)
-qstartMinusQendList = localBlast.qstartMinusQendList
-# print(type(qstartMinusQendList))
+# print(localBlast.qstart_minus_qend_list)
+qstart_minus_qend_list = localBlast.qstart_minus_qend_list
+# print(type(qstart_minus_qend_list))
 
 #  14.   sstartMinusSend
-# print(localBlast.sstartMinusSendList)
-sstartMinusSendList = localBlast.sstartMinusSendList
-# print(type(sstartMinusSendList))
+# print(localBlast.sstart_minus_send_list)
+sstart_minus_send_list = localBlast.sstart_minus_send_list
+# print(type(sstart_minus_send_list))
 
-#  15.   rWhoList(r1或r2)
-# print(localBlast.rWhoList)
-rWhoList = localBlast.rWhoList
+#  15.   rwho_list(r1或r2)
+# print(localBlast.rwho_list)
+rwho_list = localBlast.rwho_list
 
 
-# print(type(rWhoList))
+# print(type(rwho_list))
 
 def determineDirection(i):
-    result = str(qseqidList[i]) + '\t' + str(sseqidList[i]) + '\t' + str(pidentList[i]) + '\t' + str(
-        lengthList[i]) + '\t' + str(mismatchList[i]) + '\t' + str(gapopenList[i]) + '\t' + str(
-        qstartList[i]) + '\t' + str(qendList[i]) + '\t' + str(sstartList[i]) + '\t' + str(sendList[i]) + '\t' + str(
-        evalueList[i]) + '\t' + str(bitscoreList[i])[:-2] + '\t' + str(qstartMinusQendList[i]) + '\t' + str(
-        sstartMinusSendList[i]) + '\t' + str(rWhoList[i])
+    result = str(qseqid_list[i]) + '\t' + str(sseqid_list[i]) + '\t' + str(pident_list[i]) + '\t' + str(
+        length_list[i]) + '\t' + str(mismatch_list[i]) + '\t' + str(gapopen_list[i]) + '\t' + str(
+        qstart_list[i]) + '\t' + str(qend_list[i]) + '\t' + str(sstart_list[i]) + '\t' + str(send_list[i]) + '\t' + str(
+        evalue_list[i]) + '\t' + str(bitscore_list[i])[:-2] + '\t' + str(qstart_minus_qend_list[i]) + '\t' + str(
+        sstart_minus_send_list[i]) + '\t' + str(rwho_list[i])
     return result
 
 
 # 20230206 似乎不需要用append了，因為先前已經按loci區分了
 # 20230206 之前應該是因為迴圈位置的關係，所以才用append的
 with open(resultDataPath + nameOfLoci + "_result/blastResult/" + nameOfLoci + "_blastResult.txt", "w") as file:
-    for i in range(0, len(qseqidList)):
+    for i in range(0, len(qseqid_list)):
         # print(determineDirection(i))
         if "\t\t0\t0\t0\t0\t0\t0\t0\t0\t\t\t0\t0\t" not in determineDirection(i):
             file.write(determineDirection(i) + "\n")
 
 # column info：
-# str(qseqidList[i]) +'\t'+
-# str(sseqidList[i])+'\t'+
-# str(pidentList[i]) +'\t'+
-# str(lengthList[i])+'\t'+
-# str(mismatchList[i])+'\t'+
-# str(gapopenList[i])+'\t'+
-# str(qstartList[i])+'\t'+
-# str(qendList[i])+'\t'+
-# str(sstartList[i])+'\t'+
-# str(sendList[i])+'\t'+
-# str(evalueList[i])+'\t'+
-# str(bitscoreList[i])[:-2] +'\t'+
-# str(qstartMinusQendList[i])+'\t'+
-# str(sstartMinusSendList[i])+'\t'+
-# str(rWhoList[i])
+# str(qseqid_list[i]) +'\t'+
+# str(sseqid_list[i])+'\t'+
+# str(pident_list[i]) +'\t'+
+# str(length_list[i])+'\t'+
+# str(mismatch_list[i])+'\t'+
+# str(gapopen_list[i])+'\t'+
+# str(qstart_list[i])+'\t'+
+# str(qend_list[i])+'\t'+
+# str(sstart_list[i])+'\t'+
+# str(send_list[i])+'\t'+
+# str(evalue_list[i])+'\t'+
+# str(bitscore_list[i])[:-2] +'\t'+
+# str(qstart_minus_qend_list[i])+'\t'+
+# str(sstart_minus_send_list[i])+'\t'+
+# str(rwho_list[i])
 
 
 print("[INFO] blastResultParser.py is ended on loci: " + nameOfLoci)

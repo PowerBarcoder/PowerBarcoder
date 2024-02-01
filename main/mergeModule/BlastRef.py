@@ -14,7 +14,6 @@
 #  11.	 evalue	 expect value                                  3.03e-115
 #  12.	 bitscore	 bit score                                 405
 
-
 # TARGET_FILE_NAME = "_refResult.txt"
 TARGET_FILE_NAME = "_refResult_filtered.txt"
 
@@ -22,30 +21,29 @@ TARGET_FILE_NAME = "_refResult_filtered.txt"
 class BlastRef:
 
     def __init__(self):
-        self.qseqidList = []
-        self.sseqidList = []
-        self.pidentList = []
-        self.lengthList = []  # 3
-        self.mismatchList = []
-        self.gapopenList = []
-        self.qstartList = []  # 6
-        self.qendList = []  # 7
-        self.sstartList = []
-        self.sendList = []
-        self.evalueList = []
-        self.bitscoreList = []
-        self.qstartMinusQendList = []  # 12
-        self.sstartMinusSendList = []
-        self.rWhoList = []
-        self.refList = []
+        self.qseqid_list = []
+        self.sseqid_list = []
+        self.pident_list = []
+        self.length_list = []  # 3
+        self.mismatch_list = []
+        self.gapopen_list = []
+        self.qstart_list = []  # 6
+        self.qend_list = []  # 7
+        self.sstart_list = []
+        self.send_list = []
+        self.evalue_list = []
+        self.bitscore_list = []
+        self.qstart_minus_qend_list = []  # 12
+        self.sstart_minus_send_list = []
+        self.rwho_list = []
+        self.ref_list = []
 
-    """
-    Step 1 O(N)製作所有key(queryName)清單
-    Step 2 O(N)按key塞入所有refBlast的12個值+自己新增的四個值
-    Step 3 迴圈跑dict裡的所有key，取出值放進個別欄位的list裡(所以回傳出來16個list，每個list都是Object的一個properties)
-    """
-
-    def blastRef(self, load_dir, loci_name, blast_parsing_mode):
+    def blast_ref(self, load_dir, loci_name, blast_parsing_mode):
+        """
+        Step 1 O(N)製作所有key(queryName)清單
+        Step 2 O(N)按key塞入所有refBlast的12個值+自己新增的四個值
+        Step 3 迴圈跑dict裡的所有key，取出值放進個別欄位的list裡(所以回傳出來16個list，每個list都是Object的一個properties)
+        """
         qseqid_file_dir_r1 = load_dir + "_result/mergeResult/merger/r1/"
         qseqid_file_dir_r2 = load_dir + "_result/mergeResult/merger/r2/"
         qseqid_file_dir_cat = load_dir + "_result/mergeResult/merger/nCatR1R2/forSplit/"
@@ -154,80 +152,80 @@ class BlastRef:
         # print(len(cate.keys()))
 
         # Step 4: 物件拼裝
-        qseqidList = []
+        qseqid_list = []
         for key in cate:
-            qseqidList.append(cate[key][0])
-        self.qseqidList = qseqidList
+            qseqid_list.append(cate[key][0])
+        self.qseqid_list = qseqid_list
 
-        sseqidList = []
+        sseqid_list = []
         for key in cate:
-            sseqidList.append(cate[key][1])
-        self.sseqidList = sseqidList
+            sseqid_list.append(cate[key][1])
+        self.sseqid_list = sseqid_list
 
-        pidentList = []
+        pident_list = []
         for key in cate:
-            pidentList.append(cate[key][2])
-        self.pidentList = pidentList
+            pident_list.append(cate[key][2])
+        self.pident_list = pident_list
 
-        lengthList = []
+        length_list = []
         for key in cate:
-            lengthList.append(cate[key][3])
-        self.lengthList = lengthList
+            length_list.append(cate[key][3])
+        self.length_list = length_list
 
-        mismatchList = []
+        mismatch_list = []
         for key in cate:
-            mismatchList.append(cate[key][4])
-        self.mismatchList = mismatchList
+            mismatch_list.append(cate[key][4])
+        self.mismatch_list = mismatch_list
 
-        gapopenList = []
+        gapopen_list = []
         for key in cate:
-            gapopenList.append(cate[key][5])
-        self.gapopenList = gapopenList
+            gapopen_list.append(cate[key][5])
+        self.gapopen_list = gapopen_list
 
-        qstartList = []
+        qstart_list = []
         for key in cate:
-            qstartList.append(cate[key][6])
-        self.qstartList = qstartList
+            qstart_list.append(cate[key][6])
+        self.qstart_list = qstart_list
 
-        qendList = []
+        qend_list = []
         for key in cate:
-            qendList.append(cate[key][7])
-        self.qendList = qendList
+            qend_list.append(cate[key][7])
+        self.qend_list = qend_list
 
-        sstartList = []
+        sstart_list = []
         for key in cate:
-            sstartList.append(cate[key][8])
-        self.sstartList = sstartList
+            sstart_list.append(cate[key][8])
+        self.sstart_list = sstart_list
 
-        sendList = []
+        send_list = []
         for key in cate:
-            sendList.append(cate[key][9])
-        self.sendList = sendList
+            send_list.append(cate[key][9])
+        self.send_list = send_list
 
-        evalueList = []
+        evalue_list = []
         for key in cate:
-            evalueList.append(cate[key][10])
-        self.evalueList = evalueList
+            evalue_list.append(cate[key][10])
+        self.evalue_list = evalue_list
 
-        bitscoreList = []
+        bitscore_list = []
         for key in cate:
-            bitscoreList.append(str(cate[key][11]).replace("\n", ""))  # 這裡莫名其妙有個換行
-        self.bitscoreList = bitscoreList
+            bitscore_list.append(str(cate[key][11]).replace("\n", ""))  # 這裡莫名其妙有個換行
+        self.bitscore_list = bitscore_list
 
-        qstartMinusQendList = []
+        qstart_minus_qend_list = []
         for key in cate:
-            qstartMinusQendList.append(cate[key][12])
-        self.qstartMinusQendList = qstartMinusQendList
+            qstart_minus_qend_list.append(cate[key][12])
+        self.qstart_minus_qend_list = qstart_minus_qend_list
 
-        sstartMinusSendList = []
+        sstart_minus_send_list = []
         for key in cate:
-            sstartMinusSendList.append(cate[key][13])
-        self.sstartMinusSendList = sstartMinusSendList
+            sstart_minus_send_list.append(cate[key][13])
+        self.sstart_minus_send_list = sstart_minus_send_list
 
-        rWhoList = []
+        rwho_list = []
         for key in cate:
-            rWhoList.append(cate[key][14])
-        self.rWhoList = rWhoList
+            rwho_list.append(cate[key][14])
+        self.rwho_list = rwho_list
 
         return self
 
@@ -245,8 +243,8 @@ class BlastRef:
         #  12.	 bitscore	 bit score
         #  13.   qstartMinusQend
         #  14.   sstartMinusSend
-        #  15.   rWhoList(r1或r2)
-        #  16.   refList(???)
+        #  15.   rwho_list(r1或r2)
+        #  16.   ref_list(???)
 
     # r1 r2方向經過10Ncat後都一致了，不需要rc
     # 所以有兩個情況
@@ -262,20 +260,20 @@ if __name__ == '__main__':
     loci_name = "trnLF"
     blast_parsing_mode = "0"
     blastRef = BlastRef()
-    blastRef.blastRef(load_dir, loci_name, blast_parsing_mode)
-    # print(blastRef.qseqidList)
-    # print(blastRef.sseqidList)
-    # print(blastRef.pidentList)
-    # print(blastRef.lengthList)
-    # print(blastRef.mismatchList)
-    # print(blastRef.gapopenList)
-    # print(blastRef.qstartList)
-    # print(blastRef.qendList)
-    # print(blastRef.sstartList)
-    # print(blastRef.sendList)
-    # print(blastRef.evalueList)
-    # print(blastRef.bitscoreList)
-    # print(blastRef.qstartMinusQendList)
-    # print(blastRef.sstartMinusSendList)
-    # print(blastRef.rWhoList)
-    # print(blastRef.refList)
+    blastRef.blast_ref(load_dir, loci_name, blast_parsing_mode)
+    # print(blastRef.qseqid_list)
+    # print(blastRef.sseqid_list)
+    # print(blastRef.pident_list)
+    # print(blastRef.length_list)
+    # print(blastRef.mismatch_list)
+    # print(blastRef.gapopen_list)
+    # print(blastRef.qstart_list)
+    # print(blastRef.qend_list)
+    # print(blastRef.sstart_list)
+    # print(blastRef.send_list)
+    # print(blastRef.evalue_list)
+    # print(blastRef.bitscore_list)
+    # print(blastRef.qstart_minus_qend_list)
+    # print(blastRef.sstart_minus_send_list)
+    # print(blastRef.rwho_list)
+    # print(blastRef.ref_list)
