@@ -57,9 +57,6 @@ for filename in files:
         filename_trim = filename_trim.replace("_r1.fas", "")
         filename_trim = filename_trim.replace("_r2.fas", "")
         candidate_list.add(filename_trim)
-#   elif isdir(fullpath):
-#     print("目錄：", filename)
-# print (candidate_list)
 
 # 開始成對處理r1及r2
 for filename in candidate_list:
@@ -144,29 +141,29 @@ for filename in candidate_list:
         # 先建立物件，再呼叫方法獲得拼接資訊 (這步主要看Miseq.py的邏輯有沒有寫對)
         # TODO 在r1,r2分開blast後，需檢查ref_r1與ref_r2是否為一樣的序列
         r1Object = Miseq()
-        Miseq.stickSiteFinder(r1Object, filename, r1, ref_r1, "r1")
+        Miseq.stick_site_finder(r1Object, filename, r1, ref_r1, "r1")
         r2Object = Miseq()
-        Miseq.stickSiteFinder(r2Object, filename, r2, ref_r2, "r2")
-        # print(r1Object.show()) # forword: True, stickSite(r1_p2,r2_p1): 237, F_Rtrim: deprecated_parameter, delSite: {22: 7, 234: 2}, inSite: {45: 6, 230: 3, 237: 96}
-        # print(r2Object.show()) # forword: False, stickSite(r1_p2,r2_p1): 221, F_Rtrim: deprecated_parameter, delSite: {227: 2, 326: 168}, inSite: {0: 221}
+        Miseq.stick_site_finder(r2Object, filename, r2, ref_r2, "r2")
+        # print(r1Object.show()) # forword: True, stick_site(r1_p2,r2_p1): 237, F_Rtrim: deprecated_parameter, del_site: {22: 7, 234: 2}, inSite: {45: 6, 230: 3, 237: 96}
+        # print(r2Object.show()) # forword: False, stick_site(r1_p2,r2_p1): 221, F_Rtrim: deprecated_parameter, del_site: {227: 2, 326: 168}, inSite: {0: 221}
 
         # # 步驟二
         # # 以r1_p2跟r2_p1判斷兩物件是否重疊
         overlape = False
         merge_list = [r1, r2]
 
-        r1_p2 = r1Object.stickSite[1]
-        r1_p2_trimed = r1Object.stickSite[1]
-        r1_delSite = r1Object.delSite
-        for key, value in r1_delSite.items():
+        r1_p2 = r1Object.stick_site[1]
+        r1_p2_trimed = r1Object.stick_site[1]
+        r1_del_site = r1Object.del_site
+        for key, value in r1_del_site.items():
             if r1_p2 > key:
                 r1_p2_trimed = r1_p2_trimed - value
         # print (r1_p2_trimed)
 
-        r2_p1 = r2Object.stickSite[1]
-        r2_p1_trimed = r2Object.stickSite[1]
-        r2_delSite = r2Object.delSite
-        for key, value in r2_delSite.items():
+        r2_p1 = r2Object.stick_site[1]
+        r2_p1_trimed = r2Object.stick_site[1]
+        r2_del_site = r2Object.del_site
+        for key, value in r2_del_site.items():
             if r2_p1 > key:
                 r2_p1_trimed = r2_p1_trimed - value
         # print(r2_p1_trimed)
@@ -194,20 +191,20 @@ for filename in candidate_list:
 
             align_length_in_ref = r1_p2_trimed - r2_p1_trimed
 
-            r1_delSite_in_overlap_seq = 0
-            for key, value in r1_delSite.items():
+            r1_del_site_in_overlap_seq = 0
+            for key, value in r1_del_site.items():
                 if r1_p2 - align_length_in_ref < key + value:
-                    r1_delSite_in_overlap_seq = r1_delSite_in_overlap_seq + value
+                    r1_del_site_in_overlap_seq = r1_del_site_in_overlap_seq + value
 
-            r2_delSite_in_overlap_seq = 0
-            for key, value in r2_delSite.items():
+            r2_del_site_in_overlap_seq = 0
+            for key, value in r2_del_site.items():
                 if r2_p1 + align_length_in_ref > key:
-                    r2_delSite_in_overlap_seq = r2_delSite_in_overlap_seq + value
+                    r2_del_site_in_overlap_seq = r2_del_site_in_overlap_seq + value
 
             modify_index = 1
 
-            r1_p1 = r1_p2 - align_length_in_ref - r1_delSite_in_overlap_seq + modify_index
-            r2_p2 = r2_p1 + align_length_in_ref + r2_delSite_in_overlap_seq - modify_index
+            r1_p1 = r1_p2 - align_length_in_ref - r1_del_site_in_overlap_seq + modify_index
+            r2_p2 = r2_p1 + align_length_in_ref + r2_del_site_in_overlap_seq - modify_index
 
             r1_for_align = r1[r1_p1 - 1:r1_p2]  # print(r1_for_align)
             r2_for_align = r2[r2_p1:r2_p2 + 1]  # print(r2_for_align)
@@ -270,9 +267,9 @@ for filename in candidate_list:
         if not overlape:
             # 沒overlap就補NNNNN   # print("non-overlap",filename)# print("Ns")
             ns_num = abs(
-                r2Object.stickSite[1] - r1Object.stickSite[1])  # 原本這樣寫，有問題 ns_num=r1_p2_trimed - r2_p1_trimed-1
+                r2Object.stick_site[1] - r1Object.stick_site[1])  # 原本這樣寫，有問題 ns_num=r1_p2_trimed - r2_p1_trimed-1
             ns_seq = "N" * ns_num
-            merge_seq = merge_seq + r1[:r1Object.stickSite[1]].upper() + ns_seq + r2[r2Object.stickSite[1]:].upper()
+            merge_seq = merge_seq + r1[:r1Object.stick_site[1]].upper() + ns_seq + r2[r2Object.stick_site[1]:].upper()
         elif overlape:
             # 有overlap才需要merge # print("overlap")
             overlap_seq = ""
