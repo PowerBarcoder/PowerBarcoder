@@ -103,7 +103,6 @@ for filename in candidate_list:
             else:
                 ref_r2 = value
 
-
         # print(r1)
         # -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------tagagctgtctatgaatgccttcgtggtggacttgatttcacaaaagatgatgagaacgtaaattcccaaccattcatgcgttggagggatcgtttcttattcgtggcagaagctcttttcaaatcccaggctgaaacaggcgaaattaagggacattacttaaatgccaccgcaggtacatgtgaagagatgttgaagagagctgtttttgctagagaattgggtgcaccaattgtcatgcacgactacctgaccggagggttca-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         # print(ref_r1)# atgtcaccacaaacggagactaaagcaggtgctggattcaaagctggtgttaaagattatcgattgacctattacactcccgaatataagaccaaagacactgatattttagcagccttccgaatgaccccacaacctggagtaccagctgaggaagccggagctgcggtagctgcggaatcctccacgggtacatggaccactgtatggacagatgggcttaccagtctcgatcgttacaagggccggtgctacgatatcgaacccgtcgctggagaagaaaaccagtatattgcatatgtagcttatcccttggatctattcgaagaaggttctgtaaccaatttgttcacttcaattgtaggtaatgttttcggattcaaggccctacgcgctctacgcctagaagaccttcgaattccccccgcttattctaaaactttcattggaccgcctcacggtattcaggtcgaaagggataaactgaacaaatatggacgtcccttattggggtgtacaatcaagccaaaattgggcttgtctgctaagaattatggtagagccgtctatgaatgccttcgtggtggacttgatttcacaaaagacgatgaaaacgtaaattcccaaccattcatgcgttggagagatcgcttcttattcgtagcagaagctcttttcaaatcccaggctgaaacaggtgaaatcaagggacattacttaaatgccactgcaggtacgtgtgaagaaatgatgaagagagctgtttttgctagagaattgggtgcaccaattgtcatgcatgactacctgaccgggggatttaccgcaaataccagcttagcttattattgcagagacaatgggctgcttcttcatattcaccgtgcaatgcatgctgtcatcgatagacaacgaaatcatggtatgcacttccgtgtattggccaaagcgttacgcatgtccggcggagaccacatccacgccggaaccgtagtaggcaaactagagggggagcgagacgtcaccttgggttttgtcgatttgcttcgcgatgattacatcgaaaaagatcgtagccgcggcatctatttcacgcaggattgggtatctatgccgggtgtactccccgtagcttcagggggtatccacgtctggcacatgcccgccctaaccgaaatcttcggggacgattctgtcttacagttcggtggcggaactttgggacatccctggggaaatgcgcccggtgccgtagctaaccgagtcgcattagaagcttgtgtacaagctcgtaatgagggccgcgacctcgctcgtgaaggtaatgagatcattcgtgaagcttctaagtggagtccggaattggctgctgcatgcgaaatatggaaagccatcaaatttgagttcgagacaatcgatacgttgtaa
@@ -128,14 +127,6 @@ for filename in candidate_list:
         # ref_r2 = "AAGCTGGTGTTAAAGATTATCGTATTACACTCCCGAATATAAGACCAAAGACACTGATATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCGGCTGAGGAAGCCGGAGCTGCAGTAGCTGCGGAATCCTCAGACGGGCTTACCAGTCTCGATCGCTACAAGGGCCGGTGCTACGATATCGAACCCGTTGCTGGGGAAGAAAACCAGTATATCGCATATG--GCTTATCCCTTGGATCTATTTGAAGAAGGTTCTGTAACCAATCTGTTCACTTCAATTGTAGGTAATGTTTTCGGATTCAAGGCCCTACGCGCTCTAC------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
         # #              *in 0,221                                                                                                                                                                                                                         *del 227: 2                                                                                         *del 326,168
         # #                                                                                                                                                                                                                                      VVVVVVVVV   (對r2來說，因為沒有del，所以取9個)
-
-        # 方法：取出字典裡最大key值裡面的value
-        # 步驟三會用到(現在不會了)
-        def keywithmaxval(d):
-            v = list(d.values())
-            k = list(d.keys())
-            return k[v.index(max(v))]
-
 
         # 步驟一
         # 先建立物件，再呼叫方法獲得拼接資訊 (這步主要看Miseq.py的邏輯有沒有寫對)
@@ -181,6 +172,11 @@ for filename in candidate_list:
 
         # # 步驟三
         # # 開始拼接，若有重疊才於第四步進行alignment
+        # Initialize variables with default values
+        r1_overlap = ""
+        r2_overlap = ""
+        r1_p1 = 0
+        r2_p2 = 0
 
         if not overlape:  # 不用拼(跳步驟五)
             pass
@@ -254,7 +250,6 @@ for filename in candidate_list:
                         r1_overlap = value
                     else:
                         r2_overlap = value
-        # print(aligned_seq_map) # print(r1_overlap) # print(r2_overlap)
 
         # # 步驟五
         # # 依alignment結果拼接重疊區塊
