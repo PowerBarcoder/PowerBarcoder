@@ -33,7 +33,7 @@ def get_files(loadpath):
 def write_to_file(output_filename, merge_seq):
     """步驟六：收尾寫檔"""
     mergepath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/rawMerged/"
-    degapMergepath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/merged/"
+    degap_merge_path = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/merged/"
 
     merge_seq_text = ">" + output_filename + "\n" + merge_seq + "\n"
     with open(mergepath + output_filename + ".fas", "w", encoding="iso-8859-1") as file:
@@ -41,7 +41,7 @@ def write_to_file(output_filename, merge_seq):
 
     de_gap_merge_seq = merge_seq.replace("N", "").replace("-", "")
     de_gap_merge_seq_text = ">" + output_filename + "\n" + de_gap_merge_seq + "\n"
-    with open(degapMergepath + output_filename + ".fas", "w", encoding="iso-8859-1") as file:
+    with open(degap_merge_path + output_filename + ".fas", "w", encoding="iso-8859-1") as file:
         file.write(de_gap_merge_seq_text)
 
 
@@ -100,35 +100,35 @@ def merger():
 
             # 步驟一
             # 先建立Miseq物件，再呼叫方法獲得拼接資訊
-            r1Object = Miseq()
-            Miseq.stick_site_finder(r1Object, filename, r1, ref_r1, "r1")
-            r2Object = Miseq()
-            Miseq.stick_site_finder(r2Object, filename, r2, ref_r2, "r2")
-            # print(r1Object.show()) # forword: True, stick_site(r1_p2,r2_p1): 237, F_Rtrim: deprecated_parameter, del_site: {22: 7, 234: 2}, inSite: {45: 6, 230: 3, 237: 96}
-            # print(r2Object.show()) # forword: False, stick_site(r1_p2,r2_p1): 221, F_Rtrim: deprecated_parameter, del_site: {227: 2, 326: 168}, inSite: {0: 221}
+            r1_object = Miseq()
+            Miseq.stick_site_finder(r1_object, filename, r1, ref_r1, "r1")
+            r2_object = Miseq()
+            Miseq.stick_site_finder(r2_object, filename, r2, ref_r2, "r2")
+            # print(r1_object.show()) # forword: True, stick_site(r1_p2,r2_p1): 237, F_Rtrim: deprecated_parameter, del_site: {22: 7, 234: 2}, inSite: {45: 6, 230: 3, 237: 96}
+            # print(r2_object.show()) # forword: False, stick_site(r1_p2,r2_p1): 221, F_Rtrim: deprecated_parameter, del_site: {227: 2, 326: 168}, inSite: {0: 221}
 
             # # 步驟二
             # # 以r1_p2跟r2_p1判斷兩物件是否重疊
             overlape = False
 
-            r1_p2 = r1Object.stick_site[1]
-            r1_p2_trimed = r1Object.stick_site[1]
-            r1_del_site = r1Object.del_site
+            r1_p2 = r1_object.stick_site[1]
+            r1_p2_trimed = r1_object.stick_site[1]
+            r1_del_site = r1_object.del_site
             for key, value in r1_del_site.items():
                 if r1_p2 > key:
                     r1_p2_trimed = r1_p2_trimed - value
             # print (r1_p2_trimed)
 
-            r2_p1 = r2Object.stick_site[1]
-            r2_p1_trimed = r2Object.stick_site[1]
-            r2_del_site = r2Object.del_site
+            r2_p1 = r2_object.stick_site[1]
+            r2_p1_trimed = r2_object.stick_site[1]
+            r2_del_site = r2_object.del_site
             for key, value in r2_del_site.items():
                 if r2_p1 > key:
                     r2_p1_trimed = r2_p1_trimed - value
             # print(r2_p1_trimed)
 
             # 要減一下
-            if (r1Object.forword == True) and (r2Object.forword != True):
+            if (r1_object.forword == True) and (r2_object.forword != True):
                 if r1_p2_trimed >= r2_p1_trimed:
                     # print("overlap1")
                     overlape = True
@@ -188,7 +188,7 @@ def merger():
                     r2_overlap = r2_for_align
                 else:  # 在py裡做shell，然後r1 r2兩個overlap去align
                     alignment = "mafft --thread 1 --localpair " + "'" + loadpath + "mafft/" + filename + "temp.fasta" + "'" + "> " + "'" + loadpath + "mafft/" + filename + "tempAlign.fasta" + "'"
-                    print(alignment)
+                    # print(alignment)
                     try:
                         subprocess.run(alignment, shell=True, check=True, stdout=PIPE, stderr=PIPE)
                     except Exception as e:
@@ -219,17 +219,17 @@ def merger():
             if not overlape:
                 # 沒overlap就補NNNNN   # print("non-overlap",filename)# print("Ns")
                 ns_num = abs(
-                    r2Object.stick_site[1] - r1Object.stick_site[1])  # 原本這樣寫，有問題 ns_num=r1_p2_trimed - r2_p1_trimed-1
+                    r2_object.stick_site[1] - r1_object.stick_site[1])  # 原本這樣寫，有問題 ns_num=r1_p2_trimed - r2_p1_trimed-1
                 ns_seq = "N" * ns_num
-                merge_seq = merge_seq + r1[:r1Object.stick_site[1]].upper() + ns_seq + r2[
-                                                                                       r2Object.stick_site[1]:].upper()
+                merge_seq = merge_seq + r1[:r1_object.stick_site[1]].upper() + ns_seq + r2[
+                                                                                       r2_object.stick_site[1]:].upper()
             elif overlape:
                 # 有overlap才需要merge # print("overlap")
                 overlap_seq = ""
                 trim_0_overlap_align = r1_overlap
                 trim_1_overlap_align = r2_overlap
                 overlap_num_align = len(trim_0_overlap_align)
-                gapNumInOverlap = 0
+                gap_num_in_overlap = 0
                 for i in range(0, overlap_num_align):
                     # print(i+1,"and",j) # print(trim_0_overlap_align[i],trim_1_overlap_align[i])
                     if trim_0_overlap_align[i] == "a" and trim_1_overlap_align[i] == "a":
@@ -260,7 +260,7 @@ def merger():
                         overlap_seq = overlap_seq + "W"
                     elif (trim_0_overlap_align[i] == "-") and (trim_1_overlap_align[i] == "-"):  # gap+gap=N
                         overlap_seq = overlap_seq + "N"
-                        gapNumInOverlap += 1
+                        gap_num_in_overlap += 1
                     elif trim_0_overlap_align[i] == "-" and trim_1_overlap_align[i] != "-":
                         # gap+ATCG=atcg
                         overlap_seq = overlap_seq + trim_1_overlap_align[i]
