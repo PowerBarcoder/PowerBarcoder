@@ -349,13 +349,13 @@ def parsing_all_data_into_csv(destination: str):
                                                 "02", "2").replace("03", "3").replace("04", "4").replace("05",
                                                                                                          "5").replace(
                                                 "06", "6").replace("07", "7").replace("08", "8").replace("09", "9")
-                                            identical_to_DADA2_merge.append(int(abundant))
+                                            identical_to_dada2_merge.append(int(abundant))
                                             break
-                    if len(identical_to_DADA2_merge) > 0:  # sort the list and convert to string
-                        identical_to_DADA2_merge_str = list(str(e) for e in sorted(identical_to_DADA2_merge))
-                        identical_to_DADA2_merge = ','.join(identical_to_DADA2_merge_str)
+                    if len(identical_to_dada2_merge) > 0:  # sort the list and convert to string
+                        identical_to_dada2_merge_str = list(str(e) for e in sorted(identical_to_dada2_merge))
+                        identical_to_dada2_merge = ','.join(identical_to_dada2_merge_str)
                     else:
-                        identical_to_DADA2_merge = "N/A"
+                        identical_to_dada2_merge = "N/A"
 
                 # Step 4 : Write "Abundance info" column: from "DADA2 denoise r1" to "DADA2 10N concat"
                 # start writing abundance info
@@ -375,7 +375,7 @@ def parsing_all_data_into_csv(destination: str):
                                 + temp_row
                                 + [fasta_header, fasta_seq, fasta_length, ambiguous_sites_number,
                                    lowercase_sites_number,
-                                   blast_subject_id, blast_identity, blast_qstart_qend, identical_to_DADA2_merge]
+                                   blast_subject_id, blast_identity, blast_qstart_qend, identical_to_dada2_merge]
                                 + abundance_info_list
                                 )
             except Exception as e:
@@ -394,13 +394,13 @@ def parsing_all_data_into_csv(destination: str):
             v_count = column_values.count('N/A')
             # Add the count to the last row
             v_count_list.append(str(len(column_values) - v_count) + "/" + str((len(column_values))))
-        identical_to_DADA2_merge_count = len([row[23] for row in rows[11:] if (row[23] != 'N/A') and (row[23] != '')])
+        identical_to_dada2_merge_count = len([row[23] for row in rows[11:] if (row[23] != 'N/A') and (row[23] != '')])
     # # Write the updated data back to the CSV file
     with open(destination, 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['Total success', '-']
                         + v_count_list
-                        + ['-', '-', '-', '-', '-', '-', '-', '-'] + [identical_to_DADA2_merge_count]
+                        + ['-', '-', '-', '-', '-', '-', '-', '-'] + [identical_to_dada2_merge_count]
                         + ['-', '-', '-', '-']
                         + ['-', '-', '-', '-']
                         + ['-', '-', '-', '-']
