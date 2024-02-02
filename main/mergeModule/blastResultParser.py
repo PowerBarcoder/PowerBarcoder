@@ -105,12 +105,12 @@ rwho_list = localBlast.rwho_list
 
 # print(type(rwho_list))
 
-def determineDirection(i):
-    result = str(qseqid_list[i]) + '\t' + str(sseqid_list[i]) + '\t' + str(pident_list[i]) + '\t' + str(
-        length_list[i]) + '\t' + str(mismatch_list[i]) + '\t' + str(gapopen_list[i]) + '\t' + str(
-        qstart_list[i]) + '\t' + str(qend_list[i]) + '\t' + str(sstart_list[i]) + '\t' + str(send_list[i]) + '\t' + str(
-        evalue_list[i]) + '\t' + str(bitscore_list[i])[:-2] + '\t' + str(qstart_minus_qend_list[i]) + '\t' + str(
-        sstart_minus_send_list[i]) + '\t' + str(rwho_list[i])
+def determineDirection(list_index: int):
+    result = str(qseqid_list[list_index]) + '\t' + str(sseqid_list[list_index]) + '\t' + str(pident_list[list_index]) + '\t' + str(
+        length_list[list_index]) + '\t' + str(mismatch_list[list_index]) + '\t' + str(gapopen_list[list_index]) + '\t' + str(
+        qstart_list[list_index]) + '\t' + str(qend_list[list_index]) + '\t' + str(sstart_list[list_index]) + '\t' + str(send_list[list_index]) + '\t' + str(
+        evalue_list[list_index]) + '\t' + str(bitscore_list[list_index])[:-2] + '\t' + str(qstart_minus_qend_list[list_index]) + '\t' + str(
+        sstart_minus_send_list[list_index]) + '\t' + str(rwho_list[list_index])
     return result
 
 
