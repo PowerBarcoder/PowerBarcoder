@@ -4,55 +4,57 @@ import os
 import sys
 import traceback
 
+from main.qcModule import OVERALL_INFO_STEP_LIST, FILE_SET_PARAMETER_LIST, STEPS
+
 print(f"[INFO] Start to parse csv in {sys.argv[2]}!")
 
-input_path = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.txt"
-demultiplex_untrimmed_result_path = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/untrimmed"
-demultiplex_trimmed_result_path = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/trimmed"
-demultiplex_filtered_result_path = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/filtered"
-denoise_pair_path = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_pairs.txt"
-blast_result_path = sys.argv[1] + sys.argv[2] + "_result/blastResult/" + sys.argv[2] + "_blastResult.txt"
-dada2_denoise_r1_path = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/r1/"
-dada2_denoise_r2_path = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/r2/"
-dada2_merged_path = sys.argv[1] + sys.argv[2] + "_result/mergeResult/dada2/merged/"
-dada2_10N_cat_path = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/"
-merger_merged_path = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/merged/"
-output_path = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.csv"
+INPUT_PATH = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.txt"
+DEMULTIPLEX_UNTRIMMED_PATH = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/untrimmed"
+DEMULTIPLEX_TRIMMED_PATH = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/trimmed"
+DEMULTIPLEX_FILTERED_PATH = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/filtered"
+DENOISE_PAIR_PATH = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_pairs.txt"
+BLAST_RESULT_PATH = sys.argv[1] + sys.argv[2] + "_result/blastResult/" + sys.argv[2] + "_blastResult.txt"
+DADA2_DENOISE_R1_PATH = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/r1/"
+DADA2_DENOISE_R2_PATH = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/r2/"
+DADA2_MERGED_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/dada2/merged/"
+DADA2_10N_CAT_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/"
+MERGER_MERGED_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/merged/"
+OUTPUT_PATH = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.csv"
 
 
 def parsing_denoise_pair_into_dict():
     maps = {}
     try:
         # Open the log.txt file for reading with the appropriate encoding
-        with open(denoise_pair_path, 'r', encoding='iso-8859-1') as file:
+        with open(DENOISE_PAIR_PATH, 'r', encoding='iso-8859-1') as file:
             content = file.readlines()
             # Process each line in the content
             for line in content:
                 line_pair = line.strip().split(',')
                 key, value = line_pair[0], line_pair[1]
                 maps[key] = value
-    except Exception as e:
-        print(f"Error decoding file: {e}")
+    except Exception as unknown_exception:
+        print(f"Error decoding file: {unknown_exception}")
     # example:  'rbcLN_fVGF_br16_rECL_br06': 'Deparia_edentula_Wade3820_KTHU2093'
     return maps
 
 
 def parsing_fastq_reads_number(path: str, prefix: str, file_name: str, rwho: str):
     """
-    demultiplex_untrimmed_result_path: "rbcLN_fVGF_br01_rECL_br01_r1.fq"
-    demultiplex_trimmed_result_path: "trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
-    demultiplex_filtered_result_path: "filtered_trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
+    DEMULTIPLEX_UNTRIMMED_PATH: "rbcLN_fVGF_br01_rECL_br01_r1.fq"
+    DEMULTIPLEX_TRIMMED_PATH: "trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
+    DEMULTIPLEX_FILTERED_PATH: "filtered_trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
     """
     with open(path + "/" + prefix + file_name + "_" + rwho + ".fq", "r") as f:
         # calculate the number of lines
-        num_lines = sum(1 for line in f)
+        num_lines = sum(1 for _ in f)
         fastq_reads_number = num_lines / 4
     return fastq_reads_number
 
 
 def parsing_blast_result_into_dict():
     data_dict = {}
-    with open(blast_result_path, 'r', encoding='iso-8859-1') as file:
+    with open(BLAST_RESULT_PATH, 'r', encoding='iso-8859-1') as file:
         for line in file:
             # TODO 如果r1 r2 blast到的最好的序列不一樣，那會有覆蓋問題，而且你不知道是誰覆蓋誰
             columns = line.strip().split('\t')
@@ -63,7 +65,7 @@ def parsing_blast_result_into_dict():
 
 
 def parsing_file_list_into_set(pipeline_step: str):
-    with open(input_path, 'r', encoding='iso-8859-1') as file:
+    with open(INPUT_PATH, 'r', encoding='iso-8859-1') as file:
         content = file.readlines()
         file_set = set()
         record_state = False
@@ -88,9 +90,9 @@ def parsing_merged_file_fasta_with_highest_abundance_into_list(filename_set: set
     if filtered_elements:
         highest_abundance_element = max(filtered_elements, key=lambda x: float(x.split("_")[-3]))
         # print("Highest abundance element:", highest_abundance_element)
-        if not os.path.exists(merger_merged_path + highest_abundance_element):
+        if not os.path.exists(MERGER_MERGED_PATH + highest_abundance_element):
             return ["N/A", "N/A"]
-        with open(merger_merged_path + highest_abundance_element, 'r', encoding='iso-8859-1') as file:
+        with open(MERGER_MERGED_PATH + highest_abundance_element, 'r', encoding='iso-8859-1') as file:
             content = file.readlines()
             # Process each line in the content
             for line in content:
@@ -105,7 +107,7 @@ def parsing_merged_file_fasta_with_highest_abundance_into_list(filename_set: set
 
 
 def parsing_overall_info_into_list(pipeline_step: str):
-    with open(input_path, 'r', encoding='iso-8859-1') as file:
+    with open(INPUT_PATH, 'r', encoding='iso-8859-1') as file:
         content = file.readlines()
         file_name, num_seqs, sum_len, min_len, max_len, avgQ, errQ = "", "", "", "", "", "", ""
         record_state = False
@@ -159,46 +161,9 @@ def process_abundance_file(file_path):
 
 
 def parsing_all_data_into_csv(destination: str):
-    overall_info_step_list = [
-        "Raw data r1",
-        "Raw data r2",
-        "Fastp quality trim r1",
-        "Fastp quality trim r2",
-        "Cutadapt demultiplex by locus primer r1",
-        "Cutadapt demultiplex by locus primer r2"
-    ]
-
-    file_set_parameter_list = [
-        "Cutadapt demultiplex by sample barcode r1",
-        "Cutadapt demultiplex by sample barcode r2",
-        "Cutadapt trim the primer sites r1",
-        "Cutadapt trim the primer sites r2",
-        "DADA2 filter r1",
-        "DADA2 filter r2",
-        "DADA2 denoise r1",
-        "DADA2 denoise r2",
-        "DADA2 merge",
-        "DADA2 10N concat",
-        "Merger blast r1",
-        "Merger blast r2",
-        "Merger merge"
-    ]
-
-    steps = [
-        ("Cutadapt demultiplex by sample barcode", "r1"),
-        ("", "r2"),
-        ("Cutadapt trim the primer sites", "r1"),
-        ("", "r2"),
-        ("DADA2 filter", "r1"),
-        ("", "r2"),
-        ("DADA2 denoise", "r1"),
-        ("", "r2"),
-        ("DADA2 merge", "-"),
-        ("DADA2 10N concat", "-"),
-        ("Merger blast", "r1"),
-        ("Merger blast", "r2"),
-        ("Merger merge", "-")
-    ]  # Create the illusion of merged cells
+    overall_info_step_list = OVERALL_INFO_STEP_LIST
+    file_set_parameter_list = FILE_SET_PARAMETER_LIST
+    steps = STEPS
 
     with open(destination, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
@@ -260,27 +225,27 @@ def parsing_all_data_into_csv(destination: str):
                         if file_set_parameter_list[
                             file_set_list.index(file_set)] == "Cutadapt demultiplex by sample barcode r1":
                             temp_row.append(
-                                parsing_fastq_reads_number(demultiplex_untrimmed_result_path, "", barcode_name, "r1"))
+                                parsing_fastq_reads_number(DEMULTIPLEX_UNTRIMMED_PATH, "", barcode_name, "r1"))
                         elif file_set_parameter_list[
                             file_set_list.index(file_set)] == "Cutadapt demultiplex by sample barcode r2":
                             temp_row.append(
-                                parsing_fastq_reads_number(demultiplex_untrimmed_result_path, "", barcode_name, "r2"))
+                                parsing_fastq_reads_number(DEMULTIPLEX_UNTRIMMED_PATH, "", barcode_name, "r2"))
                         elif file_set_parameter_list[
                             file_set_list.index(file_set)] == "Cutadapt trim the primer sites r1":
                             temp_row.append(
-                                parsing_fastq_reads_number(demultiplex_trimmed_result_path, "trim_", barcode_name,
+                                parsing_fastq_reads_number(DEMULTIPLEX_TRIMMED_PATH, "trim_", barcode_name,
                                                            "r1"))
                         elif file_set_parameter_list[
                             file_set_list.index(file_set)] == "Cutadapt trim the primer sites r2":
                             temp_row.append(
-                                parsing_fastq_reads_number(demultiplex_trimmed_result_path, "trim_", barcode_name,
+                                parsing_fastq_reads_number(DEMULTIPLEX_TRIMMED_PATH, "trim_", barcode_name,
                                                            "r2"))
                         elif file_set_parameter_list[file_set_list.index(file_set)] == "DADA2 filter r1":
-                            temp_row.append(parsing_fastq_reads_number(demultiplex_filtered_result_path,
+                            temp_row.append(parsing_fastq_reads_number(DEMULTIPLEX_FILTERED_PATH,
                                                                        "filtered_trim_",
                                                                        barcode_name, "r1"))
                         elif file_set_parameter_list[file_set_list.index(file_set)] == "DADA2 filter r2":
-                            temp_row.append(parsing_fastq_reads_number(demultiplex_filtered_result_path,
+                            temp_row.append(parsing_fastq_reads_number(DEMULTIPLEX_FILTERED_PATH,
                                                                        "filtered_trim_",
                                                                        barcode_name, "r2"))
                         else:
@@ -319,10 +284,10 @@ def parsing_all_data_into_csv(destination: str):
                 # # need to check the file exist first
                 # # for dada2 seq. we only retrieve the first seq. (highest abundance)
                 identical_to_dada2_merge = "N/A"
-                merger_merged_file_list = os.listdir(merger_merged_path)
-                if os.path.exists(dada2_merged_path + sample_name + "_.fas") and os.path.exists(
-                        merger_merged_path + fasta_header.replace(">", "") + ".fas"):
-                    dada2_merge_seq = "1"
+                merger_merged_file_list = os.listdir(MERGER_MERGED_PATH)
+                if os.path.exists(DADA2_MERGED_PATH + sample_name + "_.fas") and os.path.exists(
+                        MERGER_MERGED_PATH + fasta_header.replace(">", "") + ".fas"):
+                    # dada2_merge_seq = "1"
                     merger_merged_seq = "2"
                     # check all merger merged files with each ASV seq. from dada2 merged file
                     identical_to_dada2_merge = list()
@@ -330,7 +295,7 @@ def parsing_all_data_into_csv(destination: str):
                         if sample_name in file:
                             # sample : Adiantum_hispidulum_CYH20090701.011_KTHU2052
                             # file : Adiantum_hispidulum_CYH20090701.011_KTHU2052_01_0.973_abundance_110.fas
-                            with open(merger_merged_path + fasta_header.replace(">", "") + ".fas",
+                            with open(MERGER_MERGED_PATH + fasta_header.replace(">", "") + ".fas",
                                       "r") as merger_merge_file:
                                 for line in merger_merge_file:
                                     if line.startswith(">"):
@@ -338,7 +303,7 @@ def parsing_all_data_into_csv(destination: str):
                                     else:
                                         merger_merged_seq = line.strip()
                                         break
-                                with open(dada2_merged_path + sample_name + "_.fas",
+                                with open(DADA2_MERGED_PATH + sample_name + "_.fas",
                                           "r") as dada2_merge_file:  # dada2 merged file has multiple seq.
                                     for line in dada2_merge_file:
                                         dada2_merge_seq = line.strip()
@@ -361,13 +326,13 @@ def parsing_all_data_into_csv(destination: str):
                 # start writing abundance info
                 abundance_info_list = list()
                 # Process DADA2 denoise r1's abundance data
-                abundance_info_list.extend(process_dada2_abundance_data(dada2_denoise_r1_path, sample_name))
+                abundance_info_list.extend(process_dada2_abundance_data(DADA2_DENOISE_R1_PATH, sample_name))
                 # Process DADA2 denoise r2's abundance data
-                abundance_info_list.extend(process_dada2_abundance_data(dada2_denoise_r2_path, sample_name))
+                abundance_info_list.extend(process_dada2_abundance_data(DADA2_DENOISE_R2_PATH, sample_name))
                 # Process DADA2 merge's abundance data
-                abundance_info_list.extend(process_dada2_abundance_data(dada2_merged_path, sample_name))
+                abundance_info_list.extend(process_dada2_abundance_data(DADA2_MERGED_PATH, sample_name))
                 # Process DADA2 10N cat's abundance data
-                abundance_info_list.extend(process_dada2_abundance_data(dada2_10N_cat_path, sample_name))
+                abundance_info_list.extend(process_dada2_abundance_data(DADA2_10N_CAT_PATH, sample_name))
 
                 # Step 5 : Write all columns to the csv file
                 # Write file list info data (finally we write the row here)
@@ -378,8 +343,8 @@ def parsing_all_data_into_csv(destination: str):
                                    blast_subject_id, blast_identity, blast_qstart_qend, identical_to_dada2_merge]
                                 + abundance_info_list
                                 )
-            except Exception as e:
-                print("Error occurred when processing sample: " + sample_name + " in qcReport")
+            except Exception as unknown_exception:
+                print(f"Error occurred when processing sample: {sample_name} in qcReport, {unknown_exception}")
                 print(traceback.print_exc())
 
     # Step 6 : Write successful rate info in the last row
@@ -400,7 +365,7 @@ def parsing_all_data_into_csv(destination: str):
         writer = csv.writer(csvfile)
         writer.writerow(['Total success', '-']
                         + v_count_list
-                        + ['-', '-', '-', '-', '-', '-', '-', '-'] + [identical_to_dada2_merge_count]
+                        + ['-', '-', '-', '-', '-', '-', '-', '-'] + [str(identical_to_dada2_merge_count)]
                         + ['-', '-', '-', '-']
                         + ['-', '-', '-', '-']
                         + ['-', '-', '-', '-']
@@ -429,10 +394,14 @@ def process_dada2_abundance_data(dada2_path, sample_name):
         return ["N/A", "N/A", "N/A", "N/A"]
 
 
-try:
-    print(parsing_all_data_into_csv(output_path))
-except Exception as e:
-    print(f"[ERROR] Something went wrong when parsing csv in {sys.argv[2]}!")
-    print(traceback.print_exc())
+def main():
+    try:
+        print(parsing_all_data_into_csv(OUTPUT_PATH))
+    except Exception as unknown_exception:
+        print(f"[ERROR] Something went wrong when parsing csv in {sys.argv[2]}, {unknown_exception}")
+        print(traceback.print_exc())
+    print(f"[INFO] End of parsing csv in {sys.argv[2]}!")
 
-print(f"[INFO] End of parsing csv in {sys.argv[2]}!")
+
+if __name__ == "__main__":
+    main()
