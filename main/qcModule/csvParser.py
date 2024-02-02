@@ -108,7 +108,7 @@ def parsing_merged_file_fasta_with_highest_abundance_into_list(filename_set: set
 def parsing_overall_info_into_list(pipeline_step: str):
     with open(INPUT_PATH, 'r', encoding='iso-8859-1') as file:
         content = file.readlines()
-        file_name, num_seqs, sum_len, min_len, max_len, avgQ, errQ = "", "", "", "", "", "", ""
+        file_name, num_seqs, sum_len, min_len, max_len, avg_q, err_q = "", "", "", "", "", "", ""
         record_state = False
         # Process each line in the content
         for line in content:
@@ -120,14 +120,14 @@ def parsing_overall_info_into_list(pipeline_step: str):
             if record_state:
                 parameter_list = line.split(" ")
                 if len(parameter_list) == 2:
-                    avgQ = parameter_list[0].strip()
-                    errQ = parameter_list[1].strip()
+                    avg_q = parameter_list[0].strip()
+                    err_q = parameter_list[1].strip()
                 elif len(parameter_list) == 4:
                     num_seqs = parameter_list[0].strip()
                     sum_len = parameter_list[1].strip()
                     min_len = parameter_list[2].strip()
                     max_len = parameter_list[3].strip()
-        data = [file_name, num_seqs, sum_len, min_len, max_len, avgQ, errQ]
+        data = [file_name, num_seqs, sum_len, min_len, max_len, avg_q, err_q]
     return data
 
 
@@ -171,7 +171,7 @@ def parsing_all_data_into_csv(destination: str):
         #     (  )這是最後一步，mapping reads/total reads，以後再詳細討論
 
         # Write overall info header
-        writer.writerow(['File', 'num_seqs', 'sum_len', 'min_len', 'max_len', 'avgQ', 'errQ'])
+        writer.writerow(['File', 'num_seqs', 'sum_len', 'min_len', 'max_len', 'avg_q', 'err_q'])
         # Write overall info data
         for step in overall_info_step_list:
             overall_info_list = parsing_overall_info_into_list(step)
