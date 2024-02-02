@@ -19,14 +19,13 @@ for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
   count=$(ls -1 "$dir" | grep ".fas" | wc -l) #計算檔案結尾是.fas的數量
   echo "[INFO] Number of '.fas' files: $count"
 
-  if [ "${count}" -gt 1 ]; then #有檔案的才做
-    #    ((count = $count/2))
+  if [ "${count}" -ge 1 ]; then #大於或等於1個檔案的才做
     echo "[INFO] ${count} nonmerged files found in ${nameOfLoci[i]}"
 
     if [ "${blastReadChoosingMode}" -eq 0 ]; then
-        # r1r2 cat起來blast
-        #  就是這裡拆NN到原先的nonmerged/r1,r2資料夾裡(只負責拆，判斷方向交給下一步驟)
-        python3 ./mergeModule/nnSpliter.py "$resultDataPath" "${nameOfLoci[i]}" #blast完，需要拆10N
+      # r1r2 cat起來blast
+      #  就是這裡拆NN到原先的nonmerged/r1,r2資料夾裡(只負責拆，判斷方向交給下一步驟)
+      python3 ./mergeModule/nnSpliter.py "$resultDataPath" "${nameOfLoci[i]}" #blast完，需要拆10N
     fi
 
     #  準備parsing各loci local blast的結果 --- input：10N seq 的 blast refResult; output：10N blastResult
