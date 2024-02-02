@@ -52,7 +52,7 @@ class BlastRef:
             lines = f.readlines()
 
         # Step 2: Initialize the category dictionary and value list
-        default_value_List = ["", "", 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, "", ""]
+        default_value_list = ["", "", 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, "", ""]
         cate = {}
 
         # Step 3: Process the lines and update the category dictionary
@@ -62,30 +62,30 @@ class BlastRef:
             if not line.strip():
                 break
 
-            textList = (line.split("\t"))
-            # print(textList) # ['Arachniodes_aristata_122_12_2_01_0.632_abundance_127', 'Cu_po_JP_1', '100.000', '269', '0', '0', '286', '554', '135', '403', '6.28e-143', '497\n']
+            text_list = (line.split("\t"))
+            # print(text_list) # ['Arachniodes_aristata_122_12_2_01_0.632_abundance_127', 'Cu_po_JP_1', '100.000', '269', '0', '0', '286', '554', '135', '403', '6.28e-143', '497\n']
 
-            # 20230619 因為所有abundance都要做，所以檔名直接用textList[0]，不用再parsing了
-            query_name = textList[0] + ".fas"
+            # 20230619 因為所有abundance都要做，所以檔名直接用text_list[0]，不用再parsing了
+            query_name = text_list[0] + ".fas"
             qseqid = query_name
-            sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue, bitscore = textList[1:12]
-            qstartMinusQend = abs(int(qstart) - int(qend))  # 20230702 應該是之前用到負數來比了，所以才會取反，這裡補上abs()
-            sstartMinusSend = abs(int(sstart) - int(send))
+            sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue, bitscore = text_list[1:12]
+            qstart_minus_qend = abs(int(qstart) - int(qend))  # 20230702 應該是之前用到負數來比了，所以才會取反，這裡補上abs()
+            sstart_minus_send = abs(int(sstart) - int(send))
 
             # r1r2 cat起來blast
-            rWho = "rWho"
+            rwho = "rWho"
             # r1r2分開blast
             if query_name.find("_r1") != -1:
-                rWho = "r1"
+                rwho = "r1"
             elif query_name.find("_r2") != -1:
-                rWho = "r2"
+                rwho = "r2"
 
             # # add default value in the category dictionary
             if query_name not in cate:
-                cate[query_name] = default_value_List
+                cate[query_name] = default_value_list
 
-            value_List = [qseqid, sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue,
-                          bitscore, qstartMinusQend, sstartMinusSend, rWho]
+            value_list = [qseqid, sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue,
+                          bitscore, qstart_minus_qend, sstart_minus_send, rwho]
             # print(value_List)
             # 20230715 修改float(cate[query_name][3])，改成去讀檔算長度，不然這裡的length其實是有align到的範圍的length
             if query_name != temp_query_name:  # 不篩的話讀檔次數要從幾千變幾十萬
@@ -117,33 +117,33 @@ class BlastRef:
                 # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半
                 if float(cate[query_name][2]) < float(pident):
                     # if float(cate[query_name][2]) < float(pident) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(qseqid_length):
-                    cate[query_name] = value_List
+                    cate[query_name] = value_list
                 elif float(cate[query_name][2]) == float(pident):
-                    if float(cate[query_name][12]) < float(qstartMinusQend):
-                        cate[query_name] = value_List
+                    if float(cate[query_name][12]) < float(qstart_minus_qend):
+                        cate[query_name] = value_list
             elif blast_parsing_mode == "1":
                 # # 模式二:
                 # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度(qseqid_length)的一半
                 # 2.identity: 用3排序，取最高者出來，但不低於85
-                if float(cate[query_name][12]) < float(qstartMinusQend):
-                    # if float(cate[query_name][12]) < float(qstartMinusQend) and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
-                    cate[query_name] = value_List
-                elif float(cate[query_name][12]) == float(qstartMinusQend):
+                if float(cate[query_name][12]) < float(qstart_minus_qend):
+                    # if float(cate[query_name][12]) < float(qstart_minus_qend) and float(pident) >= 85 and float(qstart_minus_qend) >= 0.5*float(qseqid_length):
+                    cate[query_name] = value_list
+                elif float(cate[query_name][12]) == float(qstart_minus_qend):
                     if float(cate[query_name][2]) < float(pident):
-                        cate[query_name] = value_List
+                        cate[query_name] = value_list
             elif blast_parsing_mode == "2":
                 # # 模式三:
                 # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85
-                # if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
-                if float(cate[query_name][12]) * float(cate[query_name][2]) < float(qstartMinusQend) * float(pident):
-                    # if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstartMinusQend)*float(pident) and float(pident) >= 85:
-                    cate[query_name] = value_List
+                # if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstart_minus_qend)*float(pident) and float(pident) >= 85 and float(qstart_minus_qend) >= 0.5*float(qseqid_length):
+                if float(cate[query_name][12]) * float(cate[query_name][2]) < float(qstart_minus_qend) * float(pident):
+                    # if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstart_minus_qend)*float(pident) and float(pident) >= 85:
+                    cate[query_name] = value_list
             elif blast_parsing_mode == "3":
                 # # 模式四:
                 # 1. e-value, 越小越好，但不高於0.01，1/10000代表每10000次align才可能出現一次更好的結果
                 if float(cate[query_name][10]) > float(evalue) and float(evalue) < 0.01:
-                    # if float(cate[query_name][10]) > float(evalue) and float(evalue) < 0.01 and float(pident) >= 85 and float(qstartMinusQend) >= 0.5*float(qseqid_length):
-                    cate[query_name] = value_List
+                    # if float(cate[query_name][10]) > float(evalue) and float(evalue) < 0.01 and float(pident) >= 85 and float(qstart_minus_qend) >= 0.5*float(qseqid_length):
+                    cate[query_name] = value_list
             else:
                 print("can't choose the right blastParsingMode: " + query_name)
 
@@ -259,21 +259,21 @@ if __name__ == '__main__':
     load_dir = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202311291745/trnLF"
     loci_name = "trnLF"
     blast_parsing_mode = "0"
-    blastRef = BlastRef()
-    blastRef.blast_ref(load_dir, loci_name, blast_parsing_mode)
-    # print(blastRef.qseqid_list)
-    # print(blastRef.sseqid_list)
-    # print(blastRef.pident_list)
-    # print(blastRef.length_list)
-    # print(blastRef.mismatch_list)
-    # print(blastRef.gapopen_list)
-    # print(blastRef.qstart_list)
-    # print(blastRef.qend_list)
-    # print(blastRef.sstart_list)
-    # print(blastRef.send_list)
-    # print(blastRef.evalue_list)
-    # print(blastRef.bitscore_list)
-    # print(blastRef.qstart_minus_qend_list)
-    # print(blastRef.sstart_minus_send_list)
-    # print(blastRef.rwho_list)
-    # print(blastRef.ref_list)
+    blast_ref = BlastRef()
+    blast_ref.blast_ref(load_dir, loci_name, blast_parsing_mode)
+    # print(blast_ref.qseqid_list)
+    # print(blast_ref.sseqid_list)
+    # print(blast_ref.pident_list)
+    # print(blast_ref.length_list)
+    # print(blast_ref.mismatch_list)
+    # print(blast_ref.gapopen_list)
+    # print(blast_ref.qstart_list)
+    # print(blast_ref.qend_list)
+    # print(blast_ref.sstart_list)
+    # print(blast_ref.send_list)
+    # print(blast_ref.evalue_list)
+    # print(blast_ref.bitscore_list)
+    # print(blast_ref.qstart_minus_qend_list)
+    # print(blast_ref.sstart_minus_send_list)
+    # print(blast_ref.rwho_list)
+    # print(blast_ref.ref_list)

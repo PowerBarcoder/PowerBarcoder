@@ -20,13 +20,13 @@ import sys
 
 print("[INFO] alignmenter.py is running on loci: " + sys.argv[3])
 
-outputLoadpath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/"
-localBlastLoadpath = sys.argv[2]
+output_loadpath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/"
+local_blast_loadpath = sys.argv[2]
 
 # localblast完的序列
-fastaFileDir = localBlastLoadpath + sys.argv[3] + "_result/blastResult/"
-fastaFileName = sys.argv[3] + "_blastResult.txt"
-fastaFile = fastaFileDir + fastaFileName
+fasta_file_dir = local_blast_loadpath + sys.argv[3] + "_result/blastResult/"
+fasta_file_name = sys.argv[3] + "_blastResult.txt"
+fasta_file = fasta_file_dir + fasta_file_name
 
 
 def align_sequence(qseqid, forward):
@@ -34,19 +34,19 @@ def align_sequence(qseqid, forward):
     try:
         # r1r2分開blast
         if forward == "r1":
-            AlignmentR1 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
-            subprocess.run(AlignmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+            alignment_r1 = "mafft --thread 10 --localpair " + "'" + output_loadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + output_loadpath + "aligned/" + qseqid + "'"
+            subprocess.run(alignment_r1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
         elif forward == "r2":
-            AlignmentR2 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid + "'"
-            subprocess.run(AlignmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+            alignment_r2 = "mafft --thread 10 --localpair " + "'" + output_loadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + output_loadpath + "aligned/" + qseqid + "'"
+            subprocess.run(alignment_r2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
         # r1r2 cat起來blast
-        elif forward == "rWho":
-            AlignmentR1 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid.replace(
+        elif forward == "rwho":
+            alignment_r1 = "mafft --thread 10 --localpair " + "'" + output_loadpath + "r1Ref/" + qseqid + "'" + "> " + "'" + output_loadpath + "aligned/" + qseqid.replace(
                 ".fas", "_r1.fas") + "'"
-            AlignmentR2 = "mafft --thread 10 --localpair " + "'" + outputLoadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + outputLoadpath + "aligned/" + qseqid.replace(
+            alignment_r2 = "mafft --thread 10 --localpair " + "'" + output_loadpath + "r2Ref/" + qseqid + "'" + "> " + "'" + output_loadpath + "aligned/" + qseqid.replace(
                 ".fas", "_r2.fas") + "'"
-            subprocess.run(AlignmentR1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
-            subprocess.run(AlignmentR2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+            subprocess.run(alignment_r1, shell=True, check=True, stdout=PIPE, stderr=PIPE)
+            subprocess.run(alignment_r2, shell=True, check=True, stdout=PIPE, stderr=PIPE)
         else:
             print("[ERROR] forward is not r1,r2 or rWho")
         print("[INFO] aligned: " + qseqid)
@@ -54,7 +54,7 @@ def align_sequence(qseqid, forward):
         print("[ERROR] failed to aligned with error message", e)
 
 
-with open(fastaFile, "r") as file:
+with open(fasta_file, "r") as file:
     lines = file.readlines()
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
         futures = []
