@@ -12,11 +12,11 @@ NEGATIVE_DIRECTION = "negative"
 
 
 # 製造待測序列路徑的方法
-def qseqidFile(outputLoadpath, rWho, fileName):
-    qseqidFileDir = outputLoadpath + rWho + "/"
-    qseqidFileName = fileName
-    qseqidFile = qseqidFileDir + qseqidFileName
-    return qseqidFile
+def qseqid_file(output_loadpath, r_who, file_name):
+    qseqid_file_dir = output_loadpath + r_who + "/"
+    qseqid_file_name = file_name
+    qseqid_file = qseqid_file_dir + qseqid_file_name
+    return qseqid_file
 
 
 """
@@ -29,7 +29,7 @@ def qseqidFile(outputLoadpath, rWho, fileName):
 """
 
 
-def negativeTest(a, b):
+def negative_test(a, b):
     if ((a[0] == "-") and (b[0] == "-")) or ((a[0] != "-") and (b[0] != "-")):
         return POSITIVE_DIRECTION
     elif ((a[0] != "-") and (b[0] == "-")) or ((a[0] == "-") and (b[0] != "-")):
@@ -37,7 +37,7 @@ def negativeTest(a, b):
 
 
 # 反轉序列的方法
-def ReverseComplement(seq):
+def reverse_complement(seq):
     # """Return reverse complement fastaID_seq_dic, ignore gaps"""
     seq = seq.replace(' ', '')  # Remove space
     seq = seq.replace('\n', '')  # Remove LF
@@ -50,52 +50,50 @@ def ReverseComplement(seq):
 
 
 # 兩條序列匯出成一檔的方法
-def createRefFile(rWho, rWhoRowList):
-    with open(outputLoadpath + rWho + "Ref/" + qseqid, "w") as RefFile:
-        finalRowList = rWhoRowList + targetRowList
-        # print(finalRowList) #TODO 20230206 這邊r1開頭就少n了
-        RefFile.writelines(finalRowList)
-        # print(RefFile.read())
+def create_ref_file(r_who, r_who_row_list):
+    with open(output_loadpath + r_who + "Ref/" + qseqid, "w") as ref_file:
+        final_row_list = r_who_row_list + target_row_list
+        ref_file.writelines(final_row_list)
 
 
 print("[INFO] alignmentPretreater.py is running on loci: " + sys.argv[4])
 
 # loadpath="/home/sktang/powerBC/"
-localBlastLoadpath = sys.argv[3]
-outputLoadpath = sys.argv[3] + sys.argv[4] + "_result/mergeResult/merger/"
+local_blast_loadpath = sys.argv[3]
+output_loadpath = sys.argv[3] + sys.argv[4] + "_result/mergeResult/merger/"
 
 # localblast完的序列檔案
-fastaFileDir = localBlastLoadpath + sys.argv[4] + "_result/blastResult/"
-fastaFileName = sys.argv[4] + "_blastResult.txt"
-fastaFile = fastaFileDir + fastaFileName
-# print(fastaFile)
+fasta_file_dir = local_blast_loadpath + sys.argv[4] + "_result/blastResult/"
+fasta_file_name = sys.argv[4] + "_blastResult.txt"
+fasta_file = fasta_file_dir + fasta_file_name
+# print(fasta_file)
 
 # ref
-# sseqidFileDir="/home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/"
-sseqidFileDir = sys.argv[1]
-# sseqidFileName="fermalies_rbcL.fasta"
-sseqidFileName = sys.argv[2]
+# sseqid_file_dir="/home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/"
+sseqid_file_dir = sys.argv[1]
+# sseqid_file_name="fermalies_rbcL.fasta"
+sseqid_file_name = sys.argv[2]
 
-sseqidFile = sseqidFileDir + sseqidFileName
+sseqid_file = sseqid_file_dir + sseqid_file_name
 
-r1RowList = []
-r2RowList = []
-targetRowList = []
+r1_row_list = []
+r2_row_list = []
+target_row_list = []
 
 try:
-    with open(fastaFile, "r") as file:
+    with open(fasta_file, "r") as file:
         lines = file.readlines()
         for line in lines:
             if not line.strip():
                 break
             # print (line)
             line = line.replace("\n", "")
-            lineSplit = line.split("\t")
-            # print(lineSplit)
-            qseqid = lineSplit[0]
-            sseqid = lineSplit[1]
-            sign = negativeTest(lineSplit[12], lineSplit[13])
-            forward = lineSplit[14]
+            line_split = line.split("\t")
+            # print(line_split)
+            qseqid = line_split[0]
+            sseqid = line_split[1]
+            sign = negative_test(line_split[12], line_split[13])
+            forward = line_split[14]
             # print(qseqid+" "+sseqid+" "+sign+" "+forward)
 
             # 已獲得所有資訊，開始分四狀況來寫alignment了
@@ -105,42 +103,42 @@ try:
             # r1
             try:
                 # r1r2分開blast
-                qseqidFileStr = qseqidFile(outputLoadpath, forward, qseqid)
+                qseqid_file_str = qseqid_file(output_loadpath, forward, qseqid)
                 if forward == "r1":
-                    r1RowList = []
-                    with open(qseqidFileStr, "r") as qR1File:
-                        lines = qR1File.readlines()
-                        r1RowList += lines
+                    r1_row_list = []
+                    with open(qseqid_file_str, "r") as q_r1_file:
+                        lines = q_r1_file.readlines()
+                        r1_row_list += lines
                 elif forward == "r2":
-                    r2RowList = []
-                    with open(qseqidFileStr, "r") as qR2File:
-                        lines = qR2File.readlines()
-                        r2RowList += lines
+                    r2_row_list = []
+                    with open(qseqid_file_str, "r") as q_r2_file:
+                        lines = q_r2_file.readlines()
+                        r2_row_list += lines
                 # r1r2 cat起來blast
                 elif forward == "rWho":
                     # 待測序列r1製作
-                    qseqidFileStr = qseqidFile(outputLoadpath, "r1", qseqid.replace(".fas", "_r1.fas"))
-                    # print(qseqidFile(loadpath,forward,qseqid))
-                    r1RowList = []
-                    with open(qseqidFileStr, "r") as qR1File:
-                        # print(qseqidFileStr)
-                        lines = qR1File.readlines()
+                    qseqid_file_str = qseqid_file(output_loadpath, "r1", qseqid.replace(".fas", "_r1.fas"))
+                    # print(qseqid_file(loadpath,forward,qseqid))
+                    r1_row_list = []
+                    with open(qseqid_file_str, "r") as q_r1_file:
+                        # print(qseqid_file_str)
+                        lines = q_r1_file.readlines()
                         # print(lines)
-                        r1RowList += lines
-                        # print(r1RowList)
+                        r1_row_list += lines
+                        # print(r1_row_list)
 
                     # 待測序列r2製作
-                    qseqidFileStr = qseqidFile(outputLoadpath, "r2", qseqid.replace(".fas", "_r2.fas"))
-                    # print(qseqidFile(loadpath,forward,qseqid))
-                    r2RowList = []
-                    with open(qseqidFileStr, "r") as qR2File:
-                        # print(qseqidFileStr)
-                        lines = qR2File.readlines()
+                    qseqid_file_str = qseqid_file(output_loadpath, "r2", qseqid.replace(".fas", "_r2.fas"))
+                    # print(qseqid_file(loadpath,forward,qseqid))
+                    r2_row_list = []
+                    with open(qseqid_file_str, "r") as q_r2_file:
+                        # print(qseqid_file_str)
+                        lines = q_r2_file.readlines()
                         # print(lines)
-                        r2RowList += lines
-                        # print(r2RowList)
+                        r2_row_list += lines
+                        # print(r2_row_list)
                 else:
-                    print("forward error in alignmentPretreater.py 118: " + qseqidFileStr)
+                    print("forward error in alignmentPretreater.py 118: " + qseqid_file_str)
 
 
             except Exception as e:
@@ -149,50 +147,50 @@ try:
                 continue
 
             # ref seq製作
-            targetRowList = []
-            targetRowNumber = int(-1)
-            with open(sseqidFile, "r") as sFile:
-                lines = sFile.readlines()
+            target_row_list = []
+            target_row_number = int(-1)
+            with open(sseqid_file, "r") as s_file:
+                lines = s_file.readlines()
                 for line in lines:
-                    targetRowNumber += 1
+                    target_row_number += 1
                     if line.find(sseqid) != -1:
                         break
-                targetRowList += (lines[targetRowNumber:targetRowNumber + 2])
-                # print(targetRowList)
+                target_row_list += (lines[target_row_number:target_row_number + 2])
+                # print(target_row_list)
 
             # if else判斷方向(多行的fasta之後再處理成一行的)
 
             # 2022年舊版
             # if ((sign=="negative")and(forward=="r1")):
-            #     targetRowList[1]=ReverseComplement(targetRowList[1])
-            #     r2RowList[1]=ReverseComplement(r2RowList[1])
+            #     target_row_list[1]=reverse_complement(target_row_list[1])
+            #     r2_row_list[1]=reverse_complement(r2_row_list[1])
             # elif ((sign=="positive")and(forward=="r1")):
-            #     r2RowList[1]=ReverseComplement(r2RowList[1])
+            #     r2_row_list[1]=reverse_complement(r2_row_list[1])
             # elif ((sign=="negative")and(forward=="r2")):
-            #     r2RowList[1]=ReverseComplement(r2RowList[1])
+            #     r2_row_list[1]=reverse_complement(r2_row_list[1])
             # elif ((sign=="positive")and(forward=="r2")):
-            #     targetRowList[1]=ReverseComplement(targetRowList[1])
-            #     r2RowList[1]=ReverseComplement(r2RowList[1])
+            #     target_row_list[1]=reverse_complement(target_row_list[1])
+            #     r2_row_list[1]=reverse_complement(r2_row_list[1])
 
             # 20230206-10N新版 TODO 需要用trnLF測試正確性
             if sign == NEGATIVE_DIRECTION:
-                targetRowList[1] = ReverseComplement(targetRowList[1])
-                # print("negative: " + fastaFile)
+                target_row_list[1] = reverse_complement(target_row_list[1])
+                # print("negative: " + fasta_file)
             elif sign == POSITIVE_DIRECTION:
-                # print("positive: "+fastaFile)
+                # print("positive: "+fasta_file)
                 pass
 
             # # r1r2分開blast
             if forward == "r1":
-                createRefFile("r1", r1RowList)
+                create_ref_file("r1", r1_row_list)
             elif forward == "r2":
-                createRefFile("r2", r2RowList)
+                create_ref_file("r2", r2_row_list)
             # # r1r2 cat起來blast
             elif forward == "rWho":
-                createRefFile("r1", r1RowList)
-                createRefFile("r2", r2RowList)
+                create_ref_file("r1", r1_row_list)
+                create_ref_file("r2", r2_row_list)
             else:
-                print("forward error in alignmentPretreater.py 183: " + qseqidFileStr)
+                print("forward error in alignmentPretreater.py 183: " + qseqid_file_str)
 
 except Exception as e:
     print("[ERROR] An exception happen in " + sys.argv[4] + " before alignment")
