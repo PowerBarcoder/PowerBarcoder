@@ -23,7 +23,7 @@ from os.path import isfile, join
 import sys
 import linecache
 import traceback
-from FastaUnit import FastaUnit
+from FastaUnit import FastaUnit, replace_filename_with_header, split_multiple_seq_fasta_into_files
 
 print("[INFO] nnSpliter.py is running on loci: " + sys.argv[2])
 
@@ -56,11 +56,11 @@ def nn_spliter(load_path, target_filename, r1_output_load_path, r2_output_load_p
         with open(r1_output_load_path + target_filename, "w", encoding="iso-8859-1") as r1_file:
             r1_file.write(seq_header + "_r1" + "\n")
             r1_file.write(seq_text_r1 + "\n")  # r1結尾需要多補一個換行
-        nCat_fasta_file.replace_filename_with_header(r1_output_load_path + target_filename, r1_output_load_path, True)
+        replace_filename_with_header(r1_output_load_path + target_filename, r1_output_load_path, True)
         with open(r2_output_load_path + target_filename, "w", encoding="iso-8859-1") as r2_file:
             r2_file.write(seq_header + "_r2" + "\n")
             r2_file.write(seq_text_r2)
-        nCat_fasta_file.replace_filename_with_header(r2_output_load_path + target_filename, r2_output_load_path, True)
+        replace_filename_with_header(r2_output_load_path + target_filename, r2_output_load_path, True)
     except FileNotFoundError:
         print(f"[ERROR] File not found: {target_filename}")
         print(traceback.print_exc())
@@ -77,7 +77,7 @@ for filename in raw_files:
     try:
         full_path = join(LOAD_PATH, filename)
         if isfile(full_path):
-            nCat_fasta_file.split_multiple_seq_fasta_into_files(full_path, SPLIT_PATH)
+            split_multiple_seq_fasta_into_files(full_path, SPLIT_PATH)
     except Exception as e:
         print(f"[ERROR] Something wrong in {filename} when split_multiple_seq_fasta_into_files(): {str(e)}")
 
@@ -87,7 +87,7 @@ for filename in split_files:
     try:
         full_path = join(SPLIT_PATH, filename)
         if isfile(full_path):
-            nCat_fasta_file.replace_filename_with_header(full_path, SPLIT_PATH, True)
+            replace_filename_with_header(full_path, SPLIT_PATH, True)
     except Exception as e:
         print(f"[ERROR] Something wrong in {filename} when replace_filename_with_header(): {str(e)}")
 
