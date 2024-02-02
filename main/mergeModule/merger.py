@@ -13,6 +13,49 @@ from FastaUnit import FastaUnit
 from Miseq import Miseq
 
 
+def get_files(loadpath):
+    files = listdir(loadpath)
+    candidate_list = set()
+
+    for filename in files:
+        if ("tempAlign.fasta" in filename) or ("temp.fasta" in filename):
+            continue
+        fullpath = join(loadpath, filename)
+        if isfile(fullpath) and (filename != "temp.fasta"):
+            filename_trim = str(filename)
+            filename_trim = filename_trim.replace("_r1.fas", "")
+            filename_trim = filename_trim.replace("_r2.fas", "")
+            candidate_list.add(filename_trim)
+
+    return candidate_list
+
+
+def write_to_file(output_filename, merge_seq):
+    """步驟六：收尾寫檔"""
+    mergepath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/rawMerged/"
+    degapMergepath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/merged/"
+
+    merge_seq_text = ">" + output_filename + "\n" + merge_seq + "\n"
+    with open(mergepath + output_filename + ".fas", "w", encoding="iso-8859-1") as file:
+        file.write(merge_seq_text)
+
+    de_gap_merge_seq = merge_seq.replace("N", "").replace("-", "")
+    de_gap_merge_seq_text = ">" + output_filename + "\n" + de_gap_merge_seq + "\n"
+    with open(degapMergepath + output_filename + ".fas", "w", encoding="iso-8859-1") as file:
+        file.write(de_gap_merge_seq_text)
+
+
+def get_sequence_from_map(seq_map, keyword):
+    seq = ""
+    ref_seq = ""
+    for key, value in seq_map.items():
+        if keyword in key:
+            seq = value
+        else:
+            ref_seq = value
+    return seq, ref_seq
+
+
 def merger():
     print("[INFO] merger.py is running on loci: " + sys.argv[3])
 
@@ -25,40 +68,8 @@ def merger():
     # 拼接r1[0:重疊區前]+overlap+r2[重疊區後:]，trim完，打印結果並存到"/home/sktang/powerBC/mergeSeq/"
     ######################################
 
-    # 指定要列出的檔案目錄
-    # loadpath="C:/Users/kwz50/aligned/"
-    # loadpath="/home/sktang/powerBC/aligned/"
-
     loadpath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/aligned/"
-    # loadpath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\"
-
-    # (deprecated 20230611)(retained 20230624，為了方便除錯，還是留著看gap在哪)
-    # # mergepath="/home/sktang/powerBC/mergeSeq/"
-    mergepath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/rawMerged/"
-    # # mergepath="C:\\Users\\kwz50\\powerbarcoder\\PowerBarcoder\\debug\\result\\"
-
-    degapMergepath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/merged/"
-
-    # 取得所有檔案與子目錄名稱
-    files = listdir(loadpath)
-
-    # 創建要處理的清單
-    candidate_list = set()
-
-    # 以迴圈處理
-    for filename in files:
-        if ("tempAlign.fasta" in filename) or ("temp.fasta" in filename):  # 跳過中繼檔，有必要之後可以每run完刪除一次
-            continue
-        #   print(filename)
-        # 產生檔案的絕對路徑
-        fullpath = join(loadpath, filename)
-        # 判斷 fullpath 是檔案還是目錄
-        if isfile(fullpath) and (filename != "temp.fasta"):
-            # print("檔案：", filename)
-            filename_trim = str(filename)
-            filename_trim = filename_trim.replace("_r1.fas", "")
-            filename_trim = filename_trim.replace("_r2.fas", "")
-            candidate_list.add(filename_trim)
+    candidate_list = get_files(loadpath)
 
     # 開始成對處理r1及r2
     for filename in candidate_list:
@@ -84,44 +95,11 @@ def merger():
             r1_seq_map = r1_fasta_unit.seq_map
             r2_seq_map = r2_fasta_unit.seq_map
 
-            # 讀兩個.fs進來當r1、ref_r1、r2、ref_r2(20220423)
-            r1 = ""
-            ref_r1 = ""
-            r2 = ""
-            ref_r2 = ""
-
-            for key, value in r1_seq_map.items():
-                if "r1" in key:
-                    r1 = value
-                else:
-                    ref_r1 = value
-            for key, value in r2_seq_map.items():
-                if "r2" in key:
-                    r2 = value
-                else:
-                    ref_r2 = value
-
-            # # # # 之前的假資料
-            # # # 全部做完試trnL-F
-            # # # trim
-            # # ------------------------------第二組例子(複雜度提高，重疊區域有indel)----------------------------------
-            # #                                                                                                                                                                                                                                    overlap*********overlap
-            # r1 =     "AAGCTGGTGTTAAAGATTATCGATTGACCTATTACACTCCCGAAT------CTAAAGACACTGATATCTTAGCAGCCTCCCGCATGACCCCACAACCCGGAGTACCTGCCGAGGAAGCAGGAGCTGCGGTAGCTGCGGAATCCTCAGATGGACTTACCAGTCTCGATCGGTACAAGGGCCGATGCTACGATATCGAACCCGTCGCTGGAGAGGAAAACCAGTATATTGCA---GTAG------------------------------------------------------------------------------------------------"
-            # ref_r1 = "AAGCTGGTGTTAAAGATTATCG-------TATTACACTCCCGAATATAAGACCAAAGACACTGATATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCGGCTGAGGAAGCCGGAGCTGCAGTAGCTGCGGAATCCTCAGACGGGCTTACCAGTCTCGATCGCTACAAGGGCCGGTGCTACGATATCGAACCCGTTGCTGGGGAAGAAAACCAGTATATCGCATATG--GCTTATCCCTTGGATCTATTTGAAGAAGGTTCTGTAACCAATCTGTTCACTTCAATTGTAGGTAATGTTTTCGGATTCAAGGCCCTACGCGCTCTAC"
-            # #                             *del 22,7              *in 45,6                                                                                                                                                                                *in 230,3  *del 234,2  *in 237,96
-            # #                                                                                                                                                                                                                                           VVVVVVVVV   (對r1來說，需取9-3個)
-
-            # ref_ori = "AAGCTGGTGTTAAAGATTATCGTATTACACTCCCGAATATAAGACCAAAGACACTGATATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCGGCTGAGGAAGCCGGAGCTGCAGTAGCTGCGGAATCCTCAGACGGGCTTACCAGTCTCGATCGCTACAAGGGCCGGTGCTACGATATCGAACCCGTTGCTGGGGAAGAAAACCAGTATATCGCATATGGCTTATCCCTTGGATCTATTTGAAGAAGGTTCTGTAACCAATCTGTTCACTTCAATTGTAGGTAATGTTTTCGGATTCAAGGCCCTACGCGCTCTAC"
-            # #                                                                                                                                                                                                                                     VVVVVVV (222-228)
-
-            # r2 =     "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------CCCCCCCCCCTTATCCCCTGGATCTATTCGAGGAAGGTTCCGTTACTAATTTGTTCACTTCCATTGTAGGTAATGTTTTCGGATTTAAGGCCCTACGCGCTTTACGCCTAGAAGACCTTCGAATTCCCCCTGCCTATTCCAAAACTTTCATTGGACCACCTCATGGTATTCAGGTCGAAAGAGACAAACTGAACAAATATGGACGTCCTTTATTGGGATGTACAATCAAGCCAAAATTGGGCTTGTCCGCTAAGAATTATGGTAGAGCTGTCT"
-            # ref_r2 = "AAGCTGGTGTTAAAGATTATCGTATTACACTCCCGAATATAAGACCAAAGACACTGATATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCGGCTGAGGAAGCCGGAGCTGCAGTAGCTGCGGAATCCTCAGACGGGCTTACCAGTCTCGATCGCTACAAGGGCCGGTGCTACGATATCGAACCCGTTGCTGGGGAAGAAAACCAGTATATCGCATATG--GCTTATCCCTTGGATCTATTTGAAGAAGGTTCTGTAACCAATCTGTTCACTTCAATTGTAGGTAATGTTTTCGGATTCAAGGCCCTACGCGCTCTAC------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
-            # #              *in 0,221                                                                                                                                                                                                                         *del 227: 2                                                                                         *del 326,168
-            # #                                                                                                                                                                                                                                      VVVVVVVVV   (對r2來說，因為沒有del，所以取9個)
+            r1, ref_r1 = get_sequence_from_map(r1_seq_map, "r1")
+            r2, ref_r2 = get_sequence_from_map(r2_seq_map, "r2")
 
             # 步驟一
-            # 先建立物件，再呼叫方法獲得拼接資訊 (這步主要看Miseq.py的邏輯有沒有寫對)
-            # TODO 在r1,r2分開blast後，需檢查ref_r1與ref_r2是否為一樣的序列
+            # 先建立Miseq物件，再呼叫方法獲得拼接資訊
             r1Object = Miseq()
             Miseq.stick_site_finder(r1Object, filename, r1, ref_r1, "r1")
             r2Object = Miseq()
@@ -204,22 +182,13 @@ def merger():
                     file.write(aligntext)
 
                 # 步驟四(執行alignment)
-                # if(ovelap區間的序列內容跟長度完全一樣):
-                # 不用align
                 if r1_for_align == r2_for_align:
                     # print("序列長得一模一樣，不用alignment")
                     r1_overlap = r1_for_align
                     r2_overlap = r2_for_align
-                # elif(ovelap區間的序列長度一樣):
-                # 10N： 也不用align
-                # (考慮到trnLF的複雜性，還是拿去下面else區塊做alignment)
-                # elif(len(r1_for_align)==len(r2_for_align)):
-                #     # print("序列一樣長，不用alignment")
-                #     r1_overlap = r1_for_align
-                #     r2_overlap = r2_for_align
                 else:  # 在py裡做shell，然後r1 r2兩個overlap去align
                     alignment = "mafft --thread 1 --localpair " + "'" + loadpath + "mafft/" + filename + "temp.fasta" + "'" + "> " + "'" + loadpath + "mafft/" + filename + "tempAlign.fasta" + "'"
-                    # print(alignment)
+                    print(alignment)
                     try:
                         subprocess.run(alignment, shell=True, check=True, stdout=PIPE, stderr=PIPE)
                     except Exception as e:
@@ -307,18 +276,9 @@ def merger():
                                                                                r2_p2 + 1:].upper()  # print(merge_seq)
                 # merge_seq=merge_seq.replace("-","")
 
-            # 步驟六：收尾  # print(merge_seq)
+            # 步驟六：收尾寫檔
             output_filename = filename.replace(".fas", "")
-
-            # (deprecated 20230611)(retained 20230624，為了方便除錯，還是留著看gap在哪)
-            merge_seq_text = ">" + output_filename + "\n" + merge_seq + "\n"  # 處理mergeseq
-            with open(mergepath + filename + ".fas", "w", encoding="iso-8859-1") as file:
-                file.write(merge_seq_text)
-
-            de_gap_merge_seq = merge_seq.replace("N", "").replace("-", "")  # 處理degapmergeseq
-            de_gap_merge_seq_text = ">" + output_filename + "\n" + de_gap_merge_seq + "\n"
-            with open(degapMergepath + filename + ".fas", "w", encoding="iso-8859-1") as file:
-                file.write(de_gap_merge_seq_text)
+            write_to_file(output_filename, merge_seq)
 
 
         except Exception as unknown_exception:
@@ -330,4 +290,22 @@ def merger():
 
 
 if __name__ == "__main__":
-    pass
+    merger() # python3 merger.py '/PowerBarcoder/data/amplicon_data/' '/PowerBarcoder/data/result/202402021655/' 'trnLF'
+
+# # # # 之前的假資料
+# # # 全部做完試trnL-F
+# # # trim
+# # ------------------------------第二組例子(複雜度提高，重疊區域有indel)----------------------------------
+# #                                                                                                                                                                                                                                    overlap*********overlap
+# r1 =     "AAGCTGGTGTTAAAGATTATCGATTGACCTATTACACTCCCGAAT------CTAAAGACACTGATATCTTAGCAGCCTCCCGCATGACCCCACAACCCGGAGTACCTGCCGAGGAAGCAGGAGCTGCGGTAGCTGCGGAATCCTCAGATGGACTTACCAGTCTCGATCGGTACAAGGGCCGATGCTACGATATCGAACCCGTCGCTGGAGAGGAAAACCAGTATATTGCA---GTAG------------------------------------------------------------------------------------------------"
+# ref_r1 = "AAGCTGGTGTTAAAGATTATCG-------TATTACACTCCCGAATATAAGACCAAAGACACTGATATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCGGCTGAGGAAGCCGGAGCTGCAGTAGCTGCGGAATCCTCAGACGGGCTTACCAGTCTCGATCGCTACAAGGGCCGGTGCTACGATATCGAACCCGTTGCTGGGGAAGAAAACCAGTATATCGCATATG--GCTTATCCCTTGGATCTATTTGAAGAAGGTTCTGTAACCAATCTGTTCACTTCAATTGTAGGTAATGTTTTCGGATTCAAGGCCCTACGCGCTCTAC"
+# #                             *del 22,7              *in 45,6                                                                                                                                                                                *in 230,3  *del 234,2  *in 237,96
+# #                                                                                                                                                                                                                                           VVVVVVVVV   (對r1來說，需取9-3個)
+
+# ref_ori = "AAGCTGGTGTTAAAGATTATCGTATTACACTCCCGAATATAAGACCAAAGACACTGATATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCGGCTGAGGAAGCCGGAGCTGCAGTAGCTGCGGAATCCTCAGACGGGCTTACCAGTCTCGATCGCTACAAGGGCCGGTGCTACGATATCGAACCCGTTGCTGGGGAAGAAAACCAGTATATCGCATATGGCTTATCCCTTGGATCTATTTGAAGAAGGTTCTGTAACCAATCTGTTCACTTCAATTGTAGGTAATGTTTTCGGATTCAAGGCCCTACGCGCTCTAC"
+# #                                                                                                                                                                                                                                     VVVVVVV (222-228)
+
+# r2 =     "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------CCCCCCCCCCTTATCCCCTGGATCTATTCGAGGAAGGTTCCGTTACTAATTTGTTCACTTCCATTGTAGGTAATGTTTTCGGATTTAAGGCCCTACGCGCTTTACGCCTAGAAGACCTTCGAATTCCCCCTGCCTATTCCAAAACTTTCATTGGACCACCTCATGGTATTCAGGTCGAAAGAGACAAACTGAACAAATATGGACGTCCTTTATTGGGATGTACAATCAAGCCAAAATTGGGCTTGTCCGCTAAGAATTATGGTAGAGCTGTCT"
+# ref_r2 = "AAGCTGGTGTTAAAGATTATCGTATTACACTCCCGAATATAAGACCAAAGACACTGATATCTTAGCAGCCTTCCGAATGACCCCACAACCCGGAGTACCGGCTGAGGAAGCCGGAGCTGCAGTAGCTGCGGAATCCTCAGACGGGCTTACCAGTCTCGATCGCTACAAGGGCCGGTGCTACGATATCGAACCCGTTGCTGGGGAAGAAAACCAGTATATCGCATATG--GCTTATCCCTTGGATCTATTTGAAGAAGGTTCTGTAACCAATCTGTTCACTTCAATTGTAGGTAATGTTTTCGGATTCAAGGCCCTACGCGCTCTAC------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+# #              *in 0,221                                                                                                                                                                                                                         *del 227: 2                                                                                         *del 326,168
+# #                                                                                                                                                                                                                                      VVVVVVVVV   (對r2來說，因為沒有del，所以取9個)
