@@ -38,7 +38,7 @@ class BlastRef:
         self.rwho_list = []
         self.ref_list = []
 
-    def blast_ref(self, load_dir, loci_name, blast_parsing_mode):
+    def blast_ref(self, load_dir: str, loci_name: str, blast_parsing_mode: str):
         """
         Step 1 O(N)製作所有key(queryName)清單
         Step 2 O(N)按key塞入所有refBlast的12個值+自己新增的四個值
@@ -103,7 +103,7 @@ class BlastRef:
                 with open(qseqid_file_path, encoding='iso-8859-1') as f:
                     lines = f.readlines()
                     qseqid_length = len(lines[1].strip())
-                    # print(qseqid_file_path,str(qseqid_length))
+                    print(qseqid_file_path, str(qseqid_length))
                     # /PowerBarcoder/data/result/202307150850/trnLF_result/mergeResult/merger/r1/Diplazium_sp._Wade5374_KTHU1451_02_0.387_abundance_251_r1.fas 271
 
             # 一個Sample會blast到多筆，每讀出一行就要檢查是否有更符合條件的值，有的話就更新
@@ -256,24 +256,24 @@ class BlastRef:
 
 
 if __name__ == '__main__':
-    load_dir = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202311291745/trnLF"
-    loci_name = "trnLF"
-    blast_parsing_mode = "0"
-    blast_ref = BlastRef()
-    blast_ref.blast_ref(load_dir, loci_name, blast_parsing_mode)
-    # print(blast_ref.qseqid_list)
-    # print(blast_ref.sseqid_list)
-    # print(blast_ref.pident_list)
-    # print(blast_ref.length_list)
-    # print(blast_ref.mismatch_list)
-    # print(blast_ref.gapopen_list)
-    # print(blast_ref.qstart_list)
-    # print(blast_ref.qend_list)
-    # print(blast_ref.sstart_list)
-    # print(blast_ref.send_list)
-    # print(blast_ref.evalue_list)
-    # print(blast_ref.bitscore_list)
-    # print(blast_ref.qstart_minus_qend_list)
-    # print(blast_ref.sstart_minus_send_list)
-    # print(blast_ref.rwho_list)
-    # print(blast_ref.ref_list)
+    test_load_dir = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202311291745/trnLF"
+    test_loci_name = "trnLF"
+    test_blast_parsing_mode = "0"
+    blast_ref_instance = BlastRef()
+    blast_ref_instance.blast_ref(test_load_dir, test_loci_name, test_blast_parsing_mode)
+    # print(blast_ref_instance.qseqid_list)
+    # print(blast_ref_instance.sseqid_list)
+    # print(blast_ref_instance.pident_list)
+    # print(blast_ref_instance.length_list)
+    # print(blast_ref_instance.mismatch_list)
+    # print(blast_ref_instance.gapopen_list)
+    # print(blast_ref_instance.qstart_list)
+    # print(blast_ref_instance.qend_list)
+    # print(blast_ref_instance.sstart_list)
+    # print(blast_ref_instance.send_list)
+    # print(blast_ref_instance.evalue_list)
+    # print(blast_ref_instance.bitscore_list)
+    # print(blast_ref_instance.qstart_minus_qend_list)
+    # print(blast_ref_instance.sstart_minus_send_list)
+    # print(blast_ref_instance.rwho_list)
+    # print(blast_ref_instance.ref_list)

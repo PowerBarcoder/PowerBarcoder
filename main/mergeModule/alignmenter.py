@@ -29,7 +29,7 @@ fasta_file_name = sys.argv[3] + "_blastResult.txt"
 fasta_file = fasta_file_dir + fasta_file_name
 
 
-def align_sequence(qseqid, forward):
+def align_sequence(qseqid: str, forward: str):
     # we need to avoid the situation that the filename with special characters, so we add "'" around the path string
     try:
         # r1r2分開blast
@@ -60,9 +60,9 @@ with open(fasta_file, "r") as file:
         futures = []
         for line in lines:
             line = line.strip()
-            qseqid = line.split("\t")[0]  # 第一個放qseqid
-            forward = line.split("\t")[-1]  # 最後一個放forward
-            futures.append(executor.submit(align_sequence, qseqid, forward))
+            target_qseqid = line.split("\t")[0]  # 第一個放qseqid
+            target_forward = line.split("\t")[-1]  # 最後一個放forward
+            futures.append(executor.submit(align_sequence, target_qseqid, target_forward))
         concurrent.futures.wait(futures)
 
 # [2023-04-20][test] 635 reads in AMD Ryzen 5 5600U with Radeon Graphics, 32GB RAM
