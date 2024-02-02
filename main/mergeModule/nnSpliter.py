@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-aim 拆分10N file into 2 seperated files
+aim 拆分10N file into 2 separated files
 do
   as is
       單序列 (r1,r2)在DADA2就做好了
@@ -42,24 +42,31 @@ nn_spliter使用時須確認檔案是否為單條序列，因為我們只讀前�
 def nn_spliter(load_path, target_filename, r1_output_load_path, r2_output_load_path):
     pattern_for_split = r'NNNNNNNNNN'
 
-    seq_header = linecache.getline(load_path + target_filename, 1).replace("\n", "")
-    seq_text = linecache.getline(load_path + target_filename, 2)
+    try:
+        seq_header = linecache.getline(load_path + target_filename, 1).replace("\n", "")
+        seq_text = linecache.getline(load_path + target_filename, 2)
 
-    # print(load_path+target_filename)
-    # print(seq_header)
-    # print(seq_text)
-    seq_text_splitted = re.split(pattern_for_split, seq_text, maxsplit=1)
-    # print(seq_text_splitted)
-    seq_text_r1 = seq_text_splitted[0]
-    seq_text_r2 = seq_text_splitted[1]
-    with open(r1_output_load_path + target_filename, "w", encoding="iso-8859-1") as r1_file:
-        r1_file.write(seq_header + "_r1" + "\n")
-        r1_file.write(seq_text_r1 + "\n")  # r1結尾需要多補一個換行
-    nCat_fasta_file.replace_filename_with_header(r1_output_load_path + target_filename, r1_output_load_path, True)
-    with open(r2_output_load_path + target_filename, "w", encoding="iso-8859-1") as r2_file:
-        r2_file.write(seq_header + "_r2" + "\n")
-        r2_file.write(seq_text_r2)
-    nCat_fasta_file.replace_filename_with_header(r2_output_load_path + target_filename, r2_output_load_path, True)
+        # print(load_path+target_filename)
+        # print(seq_header)
+        # print(seq_text)
+        seq_text_splitted = re.split(pattern_for_split, seq_text, maxsplit=1)
+        # print(seq_text_splitted)
+        seq_text_r1 = seq_text_splitted[0]
+        seq_text_r2 = seq_text_splitted[1]
+        with open(r1_output_load_path + target_filename, "w", encoding="iso-8859-1") as r1_file:
+            r1_file.write(seq_header + "_r1" + "\n")
+            r1_file.write(seq_text_r1 + "\n")  # r1結尾需要多補一個換行
+        nCat_fasta_file.replace_filename_with_header(r1_output_load_path + target_filename, r1_output_load_path, True)
+        with open(r2_output_load_path + target_filename, "w", encoding="iso-8859-1") as r2_file:
+            r2_file.write(seq_header + "_r2" + "\n")
+            r2_file.write(seq_text_r2)
+        nCat_fasta_file.replace_filename_with_header(r2_output_load_path + target_filename, r2_output_load_path, True)
+    except FileNotFoundError:
+        print(f"[ERROR] File not found: {target_filename}")
+        print(traceback.print_exc())
+    except Exception as unknown_exception:
+        print(f"[ERROR] Something went wrong with {target_filename}: {str(unknown_exception)}")
+        print(traceback.print_exc())
 
 
 # 取得所有檔案與子目錄名稱
@@ -72,8 +79,7 @@ for filename in raw_files:
         if isfile(full_path):
             nCat_fasta_file.split_multiple_seq_fasta_into_files(full_path, SPLIT_PATH)
     except Exception as e:
-        print("[ERROR] Something wrong in " + filename + " when split_multiple_seq_fasta_into_files().")
-        print(traceback.print_exc())
+        print(f"[ERROR] Something wrong in {filename} when split_multiple_seq_fasta_into_files(): {str(e)}")
 
 # 檔名用header替換
 split_files = listdir(SPLIT_PATH)
@@ -83,8 +89,7 @@ for filename in split_files:
         if isfile(full_path):
             nCat_fasta_file.replace_filename_with_header(full_path, SPLIT_PATH, True)
     except Exception as e:
-        print("[ERROR] Something wrong in " + filename + " when replace_filename_with_header().")
-        print(traceback.print_exc())
+        print(f"[ERROR] Something wrong in {filename} when replace_filename_with_header(): {str(e)}")
 
 # 取得切分後所有檔案與子目錄名稱
 split_files = listdir(SPLIT_PATH)
@@ -102,7 +107,7 @@ for filename in split_files:
         else:  # 20230415 可以考慮把r1,r2,r1ref,r2ref,mergeSeq,deGapMergeSeq,align都先排除
             print("[WARNING]" + filename, "is not a file or the filename is not end with .fas")
     except Exception as e:
-        print("[ERROR] Something wrong in " + filename + " in nnSpliter.py.")
+        print(f"[ERROR] Something wrong in {filename} in nnSpliter.py: {str(e)}")
         print(traceback.print_exc())
 
 print("[INFO] " + str(process_file_number), " files are split.")
