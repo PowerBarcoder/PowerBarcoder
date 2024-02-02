@@ -3,8 +3,7 @@ import hashlib
 import os
 import sys
 import traceback
-
-from main.qcModule import OVERALL_INFO_STEP_LIST, FILE_SET_PARAMETER_LIST, STEPS
+from constants import OVERALL_INFO_STEP_LIST, FILE_SET_PARAMETER_LIST, STEPS
 
 print(f"[INFO] Start to parse csv in {sys.argv[2]}!")
 
