@@ -12,11 +12,11 @@ NEGATIVE_DIRECTION = "negative"
 
 
 # 製造待測序列路徑的方法
-def qseqid_file(output_loadpath, r_who, file_name):
-    qseqid_file_dir = output_loadpath + r_who + "/"
-    qseqid_file_name = file_name
-    qseqid_file = qseqid_file_dir + qseqid_file_name
-    return qseqid_file
+def qseqid_file(target_output_loadpath, r_who, file_name):
+    target_qseqid_file_dir = target_output_loadpath + r_who + "/"
+    target_qseqid_file_name = file_name
+    target_qseqid_file = target_qseqid_file_dir + target_qseqid_file_name
+    return target_qseqid_file
 
 
 """
@@ -151,9 +151,9 @@ try:
             target_row_number = int(-1)
             with open(sseqid_file, "r") as s_file:
                 lines = s_file.readlines()
-                for line in lines:
+                for target_line in lines:
                     target_row_number += 1
-                    if line.find(sseqid) != -1:
+                    if target_line.find(sseqid) != -1:
                         break
                 target_row_list += (lines[target_row_number:target_row_number + 2])
                 # print(target_row_list)

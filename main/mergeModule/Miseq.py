@@ -98,8 +98,8 @@ class Miseq:
                             site_number = site_number + 1
                         elif r_arr_overlap[j] != r_arr_overlap[j + 1]:
                             # 入口即出口(即indel僅為單一位點)
-                            site_status = OVERLAP_INSERT
-                            indel_start_site = j
+                            # site_status = OVERLAP_INSERT
+                            # indel_start_site = j
                             self.in_site[j] = 1
                             # 出口的話要重置
                             site_status = OVERLAP_UNKNOWN
@@ -138,8 +138,8 @@ class Miseq:
                             site_number = site_number + 1
                         elif r_arr_overlap[j] != r_arr_overlap[j + 1]:
                             # 入口即出口(即indel僅為單一位點)
-                            site_status = OVERLAP_DELETE
-                            indel_start_site = j
+                            # site_status = OVERLAP_DELETE
+                            # indel_start_site = j
                             self.del_site[j] = 1
                             # 出口的話要重置
                             site_status = OVERLAP_UNKNOWN
