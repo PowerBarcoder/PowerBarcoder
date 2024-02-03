@@ -21,8 +21,17 @@ path_of_reads <- args[1]                        #cutadapt讀取資料的位置
 path_of_result <- args[3]                       #cutadapt輸出資料的位置
 filename_of_error_learning_Fs <- sort(list.files(path_of_error_learning, pattern = ".r1.fq", full.names = TRUE))
 filename_of_error_learning_Rs <- sort(list.files(path_of_error_learning, pattern = ".r2.fq", full.names = TRUE))
+
+#  learn error rate and plot the png
 errF <- learnErrors(filename_of_error_learning_Fs, multithread = TRUE)
+png(paste0(path_of_result, "/error_rate_F.png"))
+plotErrors(errF, nominalQ = TRUE)
+dev.off()
 errR <- learnErrors(filename_of_error_learning_Rs, multithread = TRUE)
+png(paste0(path_of_result, "/error_rate_R.png"))
+plotErrors(errR, nominalQ = TRUE)
+dev.off()
+
 
 # 準備一些變數
 # (用於標示abundance排序，意味一個sample最多就99個ASV)
@@ -44,7 +53,7 @@ locus_elements # "fVGF" "rECL" "L5675" "F4121" "fNYG"   "rVVG" "oneIf1" "L7556"
 AP <- data.frame(matrix(nrow = 2, ncol = length(locus_names)))
 colnames(AP) <- locus_names
 AP[1,] <- locus_elements[1:(length(locus_elements) %/% 2)] # 取primerF
-AP[2,] <- locus_elements[((length(locus_elements) %/% 2)+1):length(locus_elements)] # 取primerR
+AP[2,] <- locus_elements[((length(locus_elements) %/% 2) + 1):length(locus_elements)] # 取primerR
 
 # Print the resulting data frame
 print(AP)
@@ -124,7 +133,7 @@ for (a in 1:ncol(AP)) {
       # debug_filter_list = c("trnLF_L5675_br02_F4121_br04", "trnLF_L5675_br02_F4121_br07", "trnLF_L5675_br02_F4121_br09", "trnLF_L5675_br02_F4121_br15", "trnLF_L5675_br03_F4121_br12", "trnLF_L5675_br03_F4121_br18", "trnLF_L5675_br04_F4121_br07", "trnLF_L5675_br04_F4121_br12", "trnLF_L5675_br04_F4121_br16", "trnLF_L5675_br05_F4121_br06", "trnLF_L5675_br05_F4121_br09", "trnLF_L5675_br05_F4121_br13", "trnLF_L5675_br05_F4121_br14", "trnLF_L5675_br06_F4121_br02", "trnLF_L5675_br06_F4121_br06", "trnLF_L5675_br06_F4121_br09", "trnLF_L5675_br06_F4121_br14", "trnLF_L5675_br06_F4121_br17", "trnLF_L5675_br07_F4121_br10", "trnLF_L5675_br07_F4121_br11", "trnLF_L5675_br07_F4121_br14", "trnLF_L5675_br07_F4121_br15", "trnLF_L5675_br07_F4121_br16", "trnLF_L5675_br08_F4121_br04", "trnLF_L5675_br09_F4121_br02", "trnLF_L5675_br09_F4121_br03", "trnLF_L5675_br09_F4121_br07", "trnLF_L5675_br10_F4121_br06", "trnLF_L5675_br10_F4121_br16", "trnLF_L5675_br10_F4121_br17", "trnLF_L5675_br11_F4121_br16", "trnLF_L5675_br12_F4121_br16", "trnLF_L5675_br13_F4121_br01", "trnLF_L5675_br13_F4121_br03", "trnLF_L5675_br13_F4121_br06", "trnLF_L5675_br13_F4121_br10", "trnLF_L5675_br14_F4121_br07", "trnLF_L5675_br14_F4121_br10", "trnLF_L5675_br14_F4121_br15", "trnLF_L5675_br15_F4121_br02", "trnLF_L5675_br15_F4121_br07", "trnLF_L5675_br15_F4121_br12", "trnLF_L5675_br16_F4121_br03", "trnLF_L5675_br16_F4121_br10", "trnLF_L5675_br16_F4121_br14", "trnLF_L5675_br16_F4121_br18", "trnLF_L5675_br17_F4121_br01", "trnLF_L5675_br17_F4121_br06", "trnLF_L5675_br17_F4121_br07", "trnLF_L5675_br17_F4121_br13", "trnLF_L5675_br18_F4121_br06", "trnLF_L5675_br18_F4121_br16")
 
       # # 202310281735 DADA2失敗，merger成功 (8)
-      debug_filter_list = c("trnLF_L5675_br01_F4121_br11","trnLF_L5675_br04_F4121_br08","trnLF_L5675_br04_F4121_br11","trnLF_L5675_br05_F4121_br11","trnLF_L5675_br13_F4121_br08","trnLF_L5675_br14_F4121_br11","trnLF_L5675_br15_F4121_br11","trnLF_L5675_br17_F4121_br11")
+      debug_filter_list = c("trnLF_L5675_br01_F4121_br11", "trnLF_L5675_br04_F4121_br08", "trnLF_L5675_br04_F4121_br11", "trnLF_L5675_br05_F4121_br11", "trnLF_L5675_br13_F4121_br08", "trnLF_L5675_br14_F4121_br11", "trnLF_L5675_br15_F4121_br11", "trnLF_L5675_br17_F4121_br11")
 
       # # 202310281735 拿去做2nd denoise的learn error samples (39個)
       # debug_filter_list = c("trnLF_L5675_br12_F4121_br11","trnLF_L5675_br18_F4121_br11","trnLF_L5675_br03_F4121_br11","trnLF_L5675_br07_F4121_br03","trnLF_L5675_br08_F4121_br05","trnLF_L5675_br01_F4121_br05","trnLF_L5675_br08_F4121_br10","trnLF_L5675_br01_F4121_br06","trnLF_L5675_br04_F4121_br15","trnLF_L5675_br05_F4121_br03","trnLF_L5675_br14_F4121_br10","trnLF_L5675_br13_F4121_br03","trnLF_L5675_br05_F4121_br16","trnLF_L5675_br07_F4121_br05","trnLF_L5675_br12_F4121_br17","trnLF_L5675_br16_F4121_br13","trnLF_L5675_br04_F4121_br16","trnLF_L5675_br02_F4121_br15","trnLF_L5675_br09_F4121_br12","trnLF_L5675_br17_F4121_br06","trnLF_L5675_br04_F4121_br04","trnLF_L5675_br07_F4121_br11","trnLF_L5675_br06_F4121_br02","trnLF_L5675_br08_F4121_br12","trnLF_L5675_br14_F4121_br06","trnLF_L5675_br16_F4121_br15","trnLF_L5675_br08_F4121_br07","trnLF_L5675_br01_F4121_br03","trnLF_L5675_br13_F4121_br17","trnLF_L5675_br17_F4121_br01","trnLF_L5675_br15_F4121_br07","trnLF_L5675_br18_F4121_br10","trnLF_L5675_br18_F4121_br14","trnLF_L5675_br10_F4121_br16","trnLF_L5675_br07_F4121_br14","trnLF_L5675_br18_F4121_br01","trnLF_L5675_br05_F4121_br14","trnLF_L5675_br13_F4121_br15","trnLF_L5675_br17_F4121_br13")
