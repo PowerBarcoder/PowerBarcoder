@@ -6,7 +6,7 @@ batchRunNumber=2
 configFile="SuperRed_35"
 
 for ((i = 0; i <= batchRunNumber; i++)); do
-    targetDir="/PowerBarcoder/data/result/batchRun/SuperRed_35$i"
+    targetDir="/PowerBarcoder/data/result/batchRun/$configFile$i"
 
     # Check if the directory already exists
     if [ ! -d "$targetDir" ]; then
@@ -16,8 +16,8 @@ for ((i = 0; i <= batchRunNumber; i++)); do
         # Execute the bash script powerBarcode.sh using $configFile
         bash powerBarcode.sh "$configFile"
 
-        # Copy the contents from /PowerBarcoder/data/result/blasttest1 to the target directory
-        cp -r /PowerBarcoder/data/result/blasttest1/* "$targetDir/"
+        # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
+        cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
 
         # Remove all files in the target directory except "config.sh"
         find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
@@ -30,7 +30,7 @@ batchRunNumber=2
 configFile="filtered_selected_pure"
 
 for ((i = 0; i <= batchRunNumber; i++)); do
-    targetDir="/PowerBarcoder/data/result/batchRun/filtered_selected_pure$i"
+    targetDir="/PowerBarcoder/data/result/batchRun/$configFile$i"
 
     # Check if the directory already exists
     if [ ! -d "$targetDir" ]; then
@@ -40,8 +40,8 @@ for ((i = 0; i <= batchRunNumber; i++)); do
         # Execute the bash script powerBarcode.sh using $configFile
         bash powerBarcode.sh "$configFile"
 
-        # Copy the contents from /PowerBarcoder/data/result/blasttest1 to the target directory
-        cp -r /PowerBarcoder/data/result/blasttest1/* "$targetDir/"
+        # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
+        cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
 
         # Remove all files in the target directory except "config.sh"
         find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
@@ -55,7 +55,7 @@ batchRunNumber=2
 configFile="filtered"
 
 for ((i = 0; i <= batchRunNumber; i++)); do
-    targetDir="/PowerBarcoder/data/result/batchRun/filtered$i"
+    targetDir="/PowerBarcoder/data/result/batchRun/$configFile$i"
 
     # Check if the directory already exists
     if [ ! -d "$targetDir" ]; then
@@ -65,8 +65,8 @@ for ((i = 0; i <= batchRunNumber; i++)); do
         # Execute the bash script powerBarcode.sh using $configFile
         bash powerBarcode.sh "$configFile"
 
-        # Copy the contents from /PowerBarcoder/data/result/blasttest1 to the target directory
-        cp -r /PowerBarcoder/data/result/blasttest1/* "$targetDir/"
+        # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
+        cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
 
         # Remove all files in the target directory except "config.sh"
         find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
