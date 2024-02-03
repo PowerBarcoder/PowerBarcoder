@@ -2,11 +2,11 @@
 
 mkdir -p "/PowerBarcoder/data/result/batchRun"
 
-batchRunNumber=15
+batchRunNumber=2
 configFile="SuperRed_35"
 
 for ((i = 0; i <= batchRunNumber; i++)); do
-    targetDir="/PowerBarcoder/data/result/batchRun/SuperRed_35_$i"
+    targetDir="/PowerBarcoder/data/result/batchRun/SuperRed_35$i"
 
     # Check if the directory already exists
     if [ ! -d "$targetDir" ]; then
@@ -26,11 +26,11 @@ for ((i = 0; i <= batchRunNumber; i++)); do
     fi
 done
 
-batchRunNumber=15
+batchRunNumber=2
 configFile="filtered_selected_pure"
 
 for ((i = 0; i <= batchRunNumber; i++)); do
-    targetDir="/PowerBarcoder/data/result/batchRun/filtered_selected_pure_$i"
+    targetDir="/PowerBarcoder/data/result/batchRun/filtered_selected_pure$i"
 
     # Check if the directory already exists
     if [ ! -d "$targetDir" ]; then
@@ -51,11 +51,11 @@ for ((i = 0; i <= batchRunNumber; i++)); do
 done
 
 
-batchRunNumber=15
+batchRunNumber=2
 configFile="filtered"
 
 for ((i = 0; i <= batchRunNumber; i++)); do
-    targetDir="/PowerBarcoder/data/result/batchRun/filtered_$i"
+    targetDir="/PowerBarcoder/data/result/batchRun/filtered$i"
 
     # Check if the directory already exists
     if [ ! -d "$targetDir" ]; then
