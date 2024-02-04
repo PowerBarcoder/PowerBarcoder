@@ -1,81 +1,33 @@
 #!/bin/bash
 
-######
-# 需將config檔放置於 /PowerBarcoder/data/result/$configFile/，
-# 並注意要修改config.sh中的時間戳記，改成configFile的名稱
-# 若有新library引入，記得重啟docker
-######
+# Function to process a configuration
+process_config() {
+  local configFile="$1"
+  local batchRunNumber="$2"
 
-mkdir -p "/PowerBarcoder/data/result/batchRun"
+  for ((i = 0; i <= batchRunNumber; i++)); do
+    targetDir="/PowerBarcoder/data/result/batchRun/${configFile}${i}"
+    sourceDir="/PowerBarcoder/data/result/${configFile}"
 
-batchRunNumber=0
-configFile="SuperRed_35"
+    # Check if the directory already exists
+    if [ ! -d "${targetDir}" ]; then
+      # Create the directory if it doesn't exist
+      mkdir -p "${targetDir}"
+      # Execute the bash script powerBarcode.sh using $configFile
+      bash powerBarcode.sh "$configFile"
+      # Copy the contents from sourceDir to the targetDir
+      cp -r "${sourceDir}/"* "${targetDir}/"
+      # Remove all files in the source directory except "config.sh"
+      find "${sourceDir}" -type f ! -name "config.sh" -exec rm {} \;
+    else
+      echo "Directory ${targetDir} already exists. Skipping..."
+    fi
+  done
+}
 
-for ((i = 0; i <= batchRunNumber; i++)); do
-  targetDir="/PowerBarcoder/data/result/batchRun/$configFile$i"
-
-  # Check if the directory already exists
-  if [ ! -d "$targetDir" ]; then
-    # Create the directory if it doesn't exist
-    mkdir -p "$targetDir"
-    # Execute the bash script powerBarcode.sh using $configFile
-    bash powerBarcode.sh "$configFile"
-    wait
-    # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
-    cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
-    wait
-    # Remove all files in the target directory except "config.sh"
-    find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
-  else
-    echo "Directory $targetDir already exists. Skipping..."
-  fi
+# Process different configurations
+configs=("SuperRed_35" "filtered_selected_pure" "filtered")
+loopRun="1"
+for configFile in "${configs[@]}"; do
+  process_config "${configFile}" "${loopRun}"
 done
-
-#batchRunNumber=1
-#configFile="filtered_selected_pure"
-#
-#for ((i = 0; i <= batchRunNumber; i++)); do
-#  targetDir="/PowerBarcoder/data/result/batchRun/$configFile$i"
-#
-#  # Check if the directory already exists
-#  if [ ! -d "$targetDir" ]; then
-#    # Create the directory if it doesn't exist
-#    mkdir -p "$targetDir"
-#    # Execute the bash script powerBarcode.sh using $configFile
-#    bash powerBarcode.sh "$configFile"
-#    wait
-#    # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
-#    cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
-#    wait
-#    # Remove all files in the target directory except "config.sh"
-#    find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
-#  else
-#    echo "Directory $targetDir already exists. Skipping..."
-#  fi
-#done
-#
-#batchRunNumber=1
-#configFile="filtered"
-#
-#for ((i = 0; i <= batchRunNumber; i++)); do
-#  targetDir="/PowerBarcoder/data/result/batchRun/$configFile$i"
-#
-#  # Check if the directory already exists
-#  if [ ! -d "$targetDir" ]; then
-#    # Create the directory if it doesn't exist
-#    mkdir -p "$targetDir"
-#    # Execute the bash script powerBarcode.sh using $configFile
-#    bash powerBarcode.sh "$configFile"
-#    wait
-#    # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
-#    cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
-#    wait
-#    # Remove all files in the target directory except "config.sh"
-#    find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
-#  else
-#    echo "Directory $targetDir already exists. Skipping..."
-#  fi
-#done
-
-#    mkdir -p "/PowerBarcoder/data/result/batchRun/SuperRed_351/"
-#    cp -r /PowerBarcoder/data/result/SuperRed_35/* "/PowerBarcoder/data/result/batchRun/SuperRed_351/"
