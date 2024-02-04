@@ -8,7 +8,7 @@
 
 mkdir -p "/PowerBarcoder/data/result/batchRun"
 
-batchRunNumber=1
+batchRunNumber=0
 configFile="SuperRed_35"
 
 for ((i = 0; i <= batchRunNumber; i++)); do
@@ -18,15 +18,12 @@ for ((i = 0; i <= batchRunNumber; i++)); do
   if [ ! -d "$targetDir" ]; then
     # Create the directory if it doesn't exist
     mkdir -p "$targetDir"
-
     # Execute the bash script powerBarcode.sh using $configFile
     bash powerBarcode.sh "$configFile"
-
+    wait
     # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
     cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
-
     wait
-
     # Remove all files in the target directory except "config.sh"
     find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
   else
@@ -34,54 +31,51 @@ for ((i = 0; i <= batchRunNumber; i++)); do
   fi
 done
 
-batchRunNumber=1
-configFile="filtered_selected_pure"
+#batchRunNumber=1
+#configFile="filtered_selected_pure"
+#
+#for ((i = 0; i <= batchRunNumber; i++)); do
+#  targetDir="/PowerBarcoder/data/result/batchRun/$configFile$i"
+#
+#  # Check if the directory already exists
+#  if [ ! -d "$targetDir" ]; then
+#    # Create the directory if it doesn't exist
+#    mkdir -p "$targetDir"
+#    # Execute the bash script powerBarcode.sh using $configFile
+#    bash powerBarcode.sh "$configFile"
+#    wait
+#    # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
+#    cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
+#    wait
+#    # Remove all files in the target directory except "config.sh"
+#    find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
+#  else
+#    echo "Directory $targetDir already exists. Skipping..."
+#  fi
+#done
+#
+#batchRunNumber=1
+#configFile="filtered"
+#
+#for ((i = 0; i <= batchRunNumber; i++)); do
+#  targetDir="/PowerBarcoder/data/result/batchRun/$configFile$i"
+#
+#  # Check if the directory already exists
+#  if [ ! -d "$targetDir" ]; then
+#    # Create the directory if it doesn't exist
+#    mkdir -p "$targetDir"
+#    # Execute the bash script powerBarcode.sh using $configFile
+#    bash powerBarcode.sh "$configFile"
+#    wait
+#    # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
+#    cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
+#    wait
+#    # Remove all files in the target directory except "config.sh"
+#    find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
+#  else
+#    echo "Directory $targetDir already exists. Skipping..."
+#  fi
+#done
 
-for ((i = 0; i <= batchRunNumber; i++)); do
-  targetDir="/PowerBarcoder/data/result/batchRun/$configFile$i"
-
-  # Check if the directory already exists
-  if [ ! -d "$targetDir" ]; then
-    # Create the directory if it doesn't exist
-    mkdir -p "$targetDir"
-
-    # Execute the bash script powerBarcode.sh using $configFile
-    bash powerBarcode.sh "$configFile"
-
-    # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
-    cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
-
-    wait
-
-    # Remove all files in the target directory except "config.sh"
-    find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
-  else
-    echo "Directory $targetDir already exists. Skipping..."
-  fi
-done
-
-batchRunNumber=1
-configFile="filtered"
-
-for ((i = 0; i <= batchRunNumber; i++)); do
-  targetDir="/PowerBarcoder/data/result/batchRun/$configFile$i"
-
-  # Check if the directory already exists
-  if [ ! -d "$targetDir" ]; then
-    # Create the directory if it doesn't exist
-    mkdir -p "$targetDir"
-
-    # Execute the bash script powerBarcode.sh using $configFile
-    bash powerBarcode.sh "$configFile"
-
-    # Copy the contents from /PowerBarcoder/data/result/$configFile to the target directory
-    cp -r /PowerBarcoder/data/result/$configFile/* "$targetDir/"
-
-    wait
-
-    # Remove all files in the target directory except "config.sh"
-    find "$targetDir" -type f ! -name "config.sh" -exec rm {} \;
-  else
-    echo "Directory $targetDir already exists. Skipping..."
-  fi
-done
+#    mkdir -p "/PowerBarcoder/data/result/batchRun/SuperRed_351/"
+#    cp -r /PowerBarcoder/data/result/SuperRed_35/* "/PowerBarcoder/data/result/batchRun/SuperRed_351/"
