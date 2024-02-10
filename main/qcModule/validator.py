@@ -268,24 +268,25 @@ def extract_best_denoise_and_merger():
 
     input_dada2_file_list = os.listdir(input_dada2_path)
     for filename in input_dada2_file_list:
-        print(f'extract_best_dada2: {filename}')
         with open(input_dada2_path + filename, 'r') as file:
             lines = file.readlines()
             dada2_merge_content = [lines[0], lines[1]]
         with open(output_best_path + filename, 'w') as new_file:
-            new_file.write(dada2_merge_content[0])
+            print(f'[INFO] extract_best_dada2: {filename}')
+            new_file.write(dada2_merge_content[0].replace(">",">dada2 merged: "))
             new_file.write(dada2_merge_content[1])
 
-    output_best_file_list = os.listdir(output_best_path)
+    output_best_file_list = set(os.listdir(output_best_path))
     input_merger_file_list = os.listdir(input_merger_path)
     for filename in input_merger_file_list:
-        print(f'extract_best_merger: {filename}')
         with open(input_merger_path + filename, 'r') as file:
             lines = file.readlines()
             merger_merge_content = [lines[0], lines[1]]
-        if filename not in output_best_file_list:
-            with open(output_best_path + filename, 'w') as new_file:
-                new_file.write(merger_merge_content[0])
+        trimmed_filename = "_".join(filename.split("_")[:-4]) + "_.fas"
+        if trimmed_filename not in output_best_file_list:
+            with open(output_best_path + trimmed_filename, 'w') as new_file:
+                print(f'[INFO] extract_best_merger: {trimmed_filename}')
+                new_file.write(merger_merge_content[0].replace(">",">merger merged: "))
                 new_file.write(merger_merge_content[1])
 
 
