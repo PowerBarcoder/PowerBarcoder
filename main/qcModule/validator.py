@@ -11,6 +11,7 @@ input_merger_path = f'{BASE_URL}mergeResult/merger/merged/'
 output_denoise_path = f'{BASE_URL}qcResult/validator/denoise/'
 output_merge_path = f'{BASE_URL}qcResult/validator/merge/'
 output_all_path = f'{BASE_URL}qcResult/validator/all/'
+output_best_path = f'{BASE_URL}qcResult/validator/best/'
 
 
 def reverse_complement_pairwise_alignment(query_seq: str, target_seq: str):
@@ -253,6 +254,41 @@ def concatenate_denoise_and_merger():
         concatenate_files_from_multiple_files(file_paths, output_all_path + filename)
 
 
+def extract_best_denoise_and_merger():
+    """
+    We check the file in /mergeResult/dada2/merged/ and /mergeResult/merger/merged/ directory.
+    Extract the best denoise or merger results into the directory.
+    If dada2 merged file exists, we extract the first occurrence of the line (header) and its next line (seq.).
+    If merger merged file exists, we also extract the first occurrence of the line (header) and its next line (seq.).
+    If both dada2 merged file and merger merged file exist, we only choose the dada2 merged sequence.
+    If only merger merged file exists, we choose the merger merge sequence.
+    If both does not exist, we do not extract the content.
+    :return:
+    """
+
+    input_dada2_file_list = os.listdir(input_dada2_path)
+    for filename in input_dada2_file_list:
+        print(f'extract_best_dada2: {filename}')
+        with open(input_dada2_path + filename, 'r') as file:
+            lines = file.readlines()
+            dada2_merge_content = [lines[0], lines[1]]
+        with open(output_best_path + filename, 'w') as new_file:
+            new_file.write(dada2_merge_content[0])
+            new_file.write(dada2_merge_content[1])
+
+    output_best_file_list = os.listdir(output_best_path)
+    input_merger_file_list = os.listdir(input_merger_path)
+    for filename in input_merger_file_list:
+        print(f'extract_best_merger: {filename}')
+        with open(input_merger_path + filename, 'r') as file:
+            lines = file.readlines()
+            merger_merge_content = [lines[0], lines[1]]
+        if filename not in output_best_file_list:
+            with open(output_best_path + filename, 'w') as new_file:
+                new_file.write(merger_merge_content[0])
+                new_file.write(merger_merge_content[1])
+
+
 def main():
     """
     Main function to execute denoise alignment, merger alignment, and concatenation them together.
@@ -261,6 +297,7 @@ def main():
     denoise_alignment()
     merger_alignment()
     concatenate_denoise_and_merger()
+    extract_best_denoise_and_merger()
     print(f"[INFO] End of validation in {sys.argv[2]}!")
 
 

@@ -35,6 +35,7 @@ for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/rawMerged
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/mergeResult/merger/merged
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/qcResult/validator/all
+  mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/qcResult/validator/best
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/qcResult/validator/denoise
   mkdir -p ${resultDataPath}${nameOfLoci[i]}_result/qcResult/validator/merge
   # create Layer 5th folders
