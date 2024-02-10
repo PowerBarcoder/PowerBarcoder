@@ -19,6 +19,8 @@ DADA2_MERGED_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/dada2/merge
 DADA2_10N_CAT_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/"
 MERGER_MERGED_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/merged/"
 OUTPUT_PATH = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.csv"
+SEGMENTATION = "--------------------------------------------------------------------------------"
+BEST_ASV_INFO_COLUMN_NAMES = ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
 
 
 def parsing_denoise_pair_into_dict():
@@ -72,7 +74,7 @@ def parsing_file_list_into_set(pipeline_step: str):
         for line in content:
             if pipeline_step in line:
                 record_state = True
-            elif "--------------------------------------------------------------------------------" in line:
+            elif SEGMENTATION in line:
                 record_state = False
             if record_state:
                 file_set.add(line.strip())
@@ -115,7 +117,7 @@ def parsing_overall_info_into_list(pipeline_step: str):
             if pipeline_step in line:
                 record_state = True
                 file_name = pipeline_step
-            elif "--------------------------------------------------------------------------------" in line:
+            elif SEGMENTATION in line:
                 record_state = False
             if record_state:
                 parameter_list = line.split(" ")
@@ -151,10 +153,16 @@ def process_abundance_file(file_path):
     sequence_info[0] = len(abundance_count)
     sequence_info[1] = max(best_asv_abundance_proportion)
     sequence_info[2] = max(best_asv_abundance_number)
-    with open(file_path, "r") as file:  # 計算hash，須獨立拿出讀，不然readlines讀完指針就已經讀到底了，後面hash等於拿空的東西去算
-        file_content_hash = hashlib.md5(file.read().encode()).hexdigest()
-        sequence_info[3] = file_content_hash
-    # print(sequence_info[3])
+
+    # 計算best seq. hash，須獨立拿出讀，不然readlines讀完指針就已經讀到底了，後面hash等於拿空的東西去算
+    line_number = 2
+    with open(file_path, "r") as file:
+        for i, line in enumerate(file):
+            if i + 1 == line_number:
+                line = line.strip()
+                line_hash = hashlib.md5(line.encode()).hexdigest()
+                break
+    sequence_info[3] = line_hash
 
     return sequence_info
 
@@ -182,20 +190,20 @@ def parsing_all_data_into_csv(destination: str):
         # Write file list info header
         writer.writerow(['', '']
                         + [step[0] for step in steps]
-                        + ['Highest Abundance ASV', '-', '-', '-', '-', '-', '-', '-', '-']
-                        + ['DADA2 denoise r1', '-', '-', '-']
-                        + ['DADA2 denoise r2', '-', '-', '-']
-                        + ['DADA2 merge', '-', '-', '-']
-                        + ['DADA2 10N concat', '-', '-', '-']
+                        + ['Highest Abundance ASV'] + _get_dash_list(8)
+                        + ['DADA2 denoise r1'] + _get_dash_list(3)
+                        + ['DADA2 denoise r2'] + _get_dash_list(3)
+                        + ['DADA2 merge'] + _get_dash_list(3)
+                        + ['DADA2 10N concat'] + _get_dash_list(3)
                         )
         writer.writerow(['Barcode', 'Sample Name']
                         + [step[1] for step in steps]
                         + ['header', 'sequence', 'length', 'ambiguous sites number', 'lowercase sites number',
                            'BLAST subjectID', 'BLAST identity', 'BLAST qstart-qend', 'Identical to DADA2 merge']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
-                        + ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
+                        + BEST_ASV_INFO_COLUMN_NAMES
+                        + BEST_ASV_INFO_COLUMN_NAMES
+                        + BEST_ASV_INFO_COLUMN_NAMES
+                        + BEST_ASV_INFO_COLUMN_NAMES
                         )
 
         # Write file list info data
@@ -364,14 +372,18 @@ def parsing_all_data_into_csv(destination: str):
         writer = csv.writer(csvfile)
         writer.writerow(['Total success', '-']
                         + v_count_list
-                        + ['-', '-', '-', '-', '-', '-', '-', '-'] + [str(identical_to_dada2_merge_count)]
-                        + ['-', '-', '-', '-']
-                        + ['-', '-', '-', '-']
-                        + ['-', '-', '-', '-']
-                        + ['-', '-', '-', '-']
+                        + _get_dash_list(8) + [str(identical_to_dada2_merge_count)]
+                        + _get_dash_list(4)
+                        + _get_dash_list(4)
+                        + _get_dash_list(4)
+                        + _get_dash_list(4)
                         )
 
     return "Csv generated!"
+
+
+def _get_dash_list(number: int) -> list:
+    return ["-"] * number
 
 
 def process_dada2_abundance_data(dada2_path, sample_name):
