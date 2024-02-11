@@ -1,13 +1,16 @@
+import os
 import subprocess
 import time
 from datetime import datetime
 
-from flask import Flask, render_template
+from flask import Flask, render_template, send_file
 from flask_cors import CORS
 from flask_socketio import SocketIO
 import flask_socketio as ws
 import uuid
 import yml_parser
+import os
+import zipfile
 
 app = Flask(__name__)
 CORS(app)
@@ -38,6 +41,7 @@ def run_procedure(data):
 
     # socketio.emit('procedure-result', '<br>')
     ws.emit('procedure-result', '\r\n', room=formatted_datetime)
+    ws.emit('procedure-result', f'Socket room name: {formatted_datetime}\r\n', room=formatted_datetime)
     ws_emit_procedure_result('Generating config file...\r\n', formatted_datetime)
 
     # [For Debug]
@@ -193,6 +197,44 @@ def start_data_procedure():
     #     # Call the run_procedure() function by emitting a socket event
     #     # socketio.emit('run-procedure', {'param1': 'value1', 'param2': 'value2'})
     return "Data procedure started."
+
+
+@app.route('/download/<room_name>', methods=['GET'])
+def download_result(room_name):
+    """
+    Download result from {room} (e.g. 202402102048) by loci,
+    trnLF result: /PowerBarcoder/data/result/{room}/trnLF_result/qcResult/validator/best
+    rbcL result: /PowerBarcoder/data/result/{room}/rbcL_result/qcResult/validator/best
+    ... add more if more loci are added
+    zip the result folders and return the zip file
+    """
+    # list all result folder in room_name folder
+    room_name_folder = f'/PowerBarcoder/data/result/{room_name}'
+    result_folders = os.listdir(room_name_folder)
+    # get only the folder, not files
+    result_folders = [f for f in result_folders if os.path.isdir(os.path.join(room_name_folder, f))]
+    best_seq_folders = []
+    for folder in result_folders:
+        best_seq_folders.append(os.path.join(room_name_folder, folder, 'qcResult', 'validator', 'best'))
+
+    # Create a zip file
+    zip_file_name = f'{room_name}_best_seq.zip'
+    zip_file_path = os.path.join(room_name_folder, zip_file_name)
+
+    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
+        for index in range(len(best_seq_folders)):
+            folder = best_seq_folders[index]
+            loci_name = result_folders[index]
+            # Iterate through files in the 'best' folders and add them to the zip directly under 'rbcLN_result'
+            for root, dirs, files in os.walk(folder):
+                for file in files:
+                    src_file = os.path.join(root, file)
+                    # Define the relative path within the zip file
+                    rel_path = os.path.relpath(src_file, os.path.join(room_name_folder, folder))
+                    zipf.write(src_file, os.path.join(loci_name, rel_path))
+
+    # download the zip file
+    return send_file(zip_file_path, as_attachment=True)
 
 
 if __name__ == '__main__':

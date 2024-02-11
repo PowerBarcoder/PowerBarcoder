@@ -378,7 +378,8 @@
 
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control minimum_overlap_base_pair" id="minimum_overlap_base_pair"
+                            <input type="text" class="form-control minimum_overlap_base_pair"
+                                   id="minimum_overlap_base_pair"
                                    name="minimum_overlap_base_pair"
                                    required="required" value="{{minimum_overlap_base_pair}}"
                                    placeholder="{{minimum_overlap_base_pair}}">
@@ -818,6 +819,8 @@
                             </div>
                         </div>
                         <div class="col-sm d-md-flex justify-content-md-end">
+                            <button class="btn btn-warning" id="downloadButton" disabled>Download Result</button>
+                            &nbsp;
                             <button class="btn btn-secondary" id="clearButton">Clear Log</button>
                             &nbsp;
                             <button class="btn btn-primary" id="saveButton">Save Execution Log</button>
@@ -900,6 +903,19 @@
                     //     top: consoleDiv.scrollHeight,
                     //     behavior: 'smooth'
                     // })
+
+                    // set room name in session storage
+                    if (data.includes("Socket room name:")) {
+                        let roomName = data.split(":")[1].trim();
+                        sessionStorage.setItem('roomName', roomName);
+                    }
+
+                    // add download button when the result is ready
+                    if (data.includes("Find your results in")) {
+                        // Download Result
+                        document.getElementById('downloadButton').disabled = false;
+                    }
+
                 });
 
                 // Event listener for the button click event
@@ -918,6 +934,16 @@
                         $("#loadPreviousButton").hide();
                     }
                 });
+
+
+                // Download result button
+                document.getElementById('downloadButton').addEventListener('click', function () {
+                    // get room name from session storage
+                    let roomName = sessionStorage.getItem('roomName');
+                    // call api to download the result by room name (path parameter) in new page
+                    window.open('{{ request.host_url }}' + 'download/' + roomName, '_blank');
+                });
+
 
                 $('#darkModeToggle').on("change", function (event) {
                     if ($(this).is(":checked")) {
@@ -1168,8 +1194,8 @@
                     <label for="minimumLengthCutadaptor">Minimum Length Cutadaptor:</label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control minimumLengthCutadaptor" id="minimumLengthCutadaptor" required="required"
-                                   name="minimumLengthCutadaptor" placeholder="{{rbcL_minimumLengthCutadaptor}}">
+                            <input type="text" class="form-control minimumLengthCutadaptor" id="rbcl_minimum_length_cutadaptor" required="required"
+                                   name="rbcl_minimum_length_cutadaptor" placeholder="{{rbcl_minimum_length_cutadaptor}}">
                         </div>
                     </div>
                 </div>
@@ -1198,37 +1224,27 @@
                 </div>
                 <div class="form-group advanceMode hideAdvanceMode">
                     <label for="blastReadChoosingMode">
-                        <span id="tooltip95">Blast Read Choosing Mode: <i class="fa fa-question-circle"></i></span>
-                        <span class="text-secondary information">
-                            <i>
-                                Blast Read Choosing Mode, details can be found in PowerBarcoder manual.
-                            </i>
-                        </span>
+                        Blast Read Choosing Mode:
                     </label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control advanceMode" id="blastReadChoosingMode"
+                            <input type="text" class="form-control advanceMode blastReadChoosingMode" id="blastReadChoosingMode"
                                    name="blastReadChoosingMode"
-                                   required="required" value="{{blastReadChoosingMode}}"
-                                   placeholder="{{blastReadChoosingMode}}">
+                                   required="required" value="{{rbcl_blast_read_choosing_mode}}"
+                                   placeholder="{{rbcl_blast_read_choosing_mode}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group advanceMode hideAdvanceMode">
                     <label for="blastParsingMode">
-                        <span id="tooltip94">Blast Parsing Mode: <i class="fa fa-question-circle"></i></span>
-                        <span class="text-secondary information">
-                            <i>
-                                Blast Parsing Mode, details can be found in PowerBarcoder manual.
-                            </i>
-                        </span>
+                        Blast Parsing Mode:
                     </label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control advanceMode" id="blastParsingMode"
+                            <input type="text" class="form-control advanceMode blastParsingMode" id="blastParsingMode"
                                    name="blastParsingMode"
-                                   required="required" value="{{blastParsingMode}}"
-                                   placeholder="{{blastParsingMode}}">
+                                   required="required" value="{{rbcl_blast_parsing_mode}}"
+                                   placeholder="{{rbcl_blast_parsing_mode}}}">
                         </div>
                     </div>
                 </div>
