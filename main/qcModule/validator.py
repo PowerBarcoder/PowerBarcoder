@@ -273,7 +273,7 @@ def extract_best_denoise_and_merger():
             dada2_merge_content = [lines[0], lines[1]]
         with open(output_best_path + filename, 'w') as new_file:
             print(f'[INFO] extract_best_dada2: {filename}')
-            new_file.write(dada2_merge_content[0].replace(">",">dada2 merged: "))
+            new_file.write(dada2_merge_content[0].replace(">", ">dada2 merged: "))
             new_file.write(dada2_merge_content[1])
 
     output_best_file_list = set(os.listdir(output_best_path))
@@ -286,7 +286,7 @@ def extract_best_denoise_and_merger():
         if trimmed_filename not in output_best_file_list:
             with open(output_best_path + trimmed_filename, 'w') as new_file:
                 print(f'[INFO] extract_best_merger: {trimmed_filename}')
-                new_file.write(merger_merge_content[0].replace(">",">merger merged: "))
+                new_file.write(merger_merge_content[0].replace(">", ">merger merged: "))
                 new_file.write(merger_merge_content[1])
 
 

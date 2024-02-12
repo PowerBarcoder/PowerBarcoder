@@ -35,7 +35,7 @@ def parsing_yml_to_shell(batch_name: str):
     script += f"dada2LearnErrorFile='{str(config['dada2LearnErrorFile']).strip()}'\n"  # dada2LearnErrorFile
     script += f"dada2BarcodeFile='{str(config['dada2BarcodeFile']).strip()}'\n"  # dada2BarcodeFile
     script += f"amplicon_minimum_length='{str(config['amplicon_minimum_length']).strip()}'\n"  # amplicon_minimum_length (default: 1)
-    script += f"minimum_overlap_base_pair='{str(config['minimum_overlap_base_pair']).strip()}'\n"  # minimum_overlap_base_pair (default: 4)
+    # script += f"minimum_overlap_base_pair='{str(config['minimum_overlap_base_pair']).strip()}'\n"  # minimum_overlap_base_pair (default: 4)
     # Dev Only
     script += f"dev_mode='{str(config['dev_mode']).strip()}'\n"
     # dev_mode (default: 0)
@@ -59,6 +59,8 @@ def parsing_yml_to_shell(batch_name: str):
         script += f"sseqidFileName+=('{str(config['sseqidFileName'][i]).strip()}')\n"  # sseqidFileName
         script += f"minimumLengthCutadaptInLoop+=('{str(config['minimumLengthCutadaptInLoop'][i]).strip()}')\n"  # minimumLengthCutadaptInLoop
         script += f"customizedCoreNumber+=('{str(config['customizedCoreNumber'][i]).strip()}')\n"  # customizedCoreNumber
+        script += f"minimumOverlapBasePair+=('{str(config['minimum_overlap_base_pair'][i]).strip()}')\n"  # minimumOverlapBasePair
+        script += f"maximumMismatch+=('{str(config['maximum_mismatch_base_pair'][i]).strip()}')\n"  # maximumMismatch
         # Dev Only
         script += f"blastReadChoosingMode+=('{str(config['blastReadChoosingMode'][i]).strip()}')\n"
         # blastReadChoosingMode (default: 1): 0: 10Ncat Blast, 1: split R1 R2 Blast
