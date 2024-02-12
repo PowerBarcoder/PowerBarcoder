@@ -324,6 +324,9 @@ def parsing_all_data_into_csv(destination: str):
                                             identical_to_dada2_merge.append(int(abundant))
                                             break
                     if len(identical_to_dada2_merge) > 0:  # sort the list and convert to string
+                        """
+                        這裡是"最高abundance的merger ASV"與"所有dada2 merge的ASV"做配對，如果序列相同，就寫入list
+                        """
                         identical_to_dada2_merge_str = list(str(e) for e in sorted(identical_to_dada2_merge))
                         identical_to_dada2_merge = ','.join(identical_to_dada2_merge_str)
                     else:
