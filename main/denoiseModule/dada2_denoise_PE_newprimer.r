@@ -2,20 +2,20 @@
 
 args = commandArgs(trailingOnly = TRUE)
 
-# shell封裝的時候，要先裝好給這裡的R來用
+# When packaging in the shell, install the dependencies for R here
 library("devtools")
 library("dada2")
 library("foreach")
 library("doParallel")
 
-#path is a VARIABLE
-path_of_error_learning <- args[4]   #指定資料，給dada2學error # 預設讀這個，如果他想讀別的，要寫條件判斷去抓一個新的參數 done
-path_of_reads <- args[1]                        #cutadapt讀取資料的位置
-path_of_result <- args[3]                       #cutadapt輸出資料的位置
+# path_of_error_learning is a VARIABLE
+path_of_error_learning <- args[4]   # Specify the data for error learning in DADA2
+path_of_reads <- args[1]                        # Location where Cutadapt reads data
+path_of_result <- args[3]                       # Location to output Cutadapt data
 filename_of_error_learning_Fs <- sort(list.files(path_of_error_learning, pattern = ".r1.fq", full.names = TRUE))
 filename_of_error_learning_Rs <- sort(list.files(path_of_error_learning, pattern = ".r2.fq", full.names = TRUE))
 
-#  learn error rate and plot the png
+# Learn error rate and plot the png
 errF <- learnErrors(filename_of_error_learning_Fs, multithread = TRUE)
 png(paste0(path_of_result, "/error_rate_F.png"))
 plotErrors(errF, nominalQ = TRUE)
@@ -27,9 +27,9 @@ dev.off()
 
 # Prepare the parameters for the dada2 denoise function
 # Notices: deprecated args：args[2] "$workingDirectory", args[7] "$minimum_overlap_base_pair"
-# (用於標示abundance排序，意味一個sample最多就99個ASV)
+# (Used for marking abundance sorting, meaning one sample has at most 99 ASVs)
 numbers <- c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
-AP_minlength <- as.numeric(args[6])  # 這個也變參數(序列長度)
+AP_minlength <- as.numeric(args[6])
 
 # Get the locus names and their elements as parameters
 # Example: "a" "b" "c" "d" "e" "rbcLN" "trnLF" "rbcLC" "trnL" "fVGF" "rECL" "L5675" "F4121" "fNYG" "rVVG" "oneIf1" "L7556"
@@ -45,40 +45,43 @@ locus_maximum_mismatch_base_pair <- args[(8 + (loci_count * 3)):(8 + (loci_count
 # Create a data frame using the locus names and elements
 AP <- data.frame(matrix(nrow = 4, ncol = length(locus_names)))
 colnames(AP) <- locus_names
-AP[1,] <- locus_elements[1:(length(locus_elements) %/% 2)] # 取primerF
-AP[2,] <- locus_elements[((length(locus_elements) %/% 2) + 1):length(locus_elements)] # 取primerR
+AP[1,] <- locus_elements[1:(length(locus_elements) %/% 2)] # Take primerF
+AP[2,] <- locus_elements[((length(locus_elements) %/% 2) + 1):length(locus_elements)] # Take primerR
 AP[3,] <- locus_minimum_overlap_base_pair
 AP[4,] <- locus_maximum_mismatch_base_pair
 
 # Print the resulting data frame
 print(AP)
 
-multiplex_cpDNAbarcode_clean_path <- paste0(path_of_reads, args[5]) #20230107 "multiplex_cpDNAbarcode_clean.txt"請改成變數 done
+# Set the path for the barcode file using a variable, assuming the file is tab-separated with a header
+multiplex_cpDNAbarcode_clean_path <- paste0(path_of_reads, args[5])
 multiplex <- read.table(
   multiplex_cpDNAbarcode_clean_path,
   sep = "\t", header = TRUE)
-#1:ncol(AP) to loop all regions
+# Loop through all regions specified in the variable AP
 for (a in 1:ncol(AP)) {
   colnames(AP[a]) -> region
+  # Extract parameters for the current region
   AP[, a][1] -> Fp
   AP[, a][2] -> Rp
   AP[, a][3] -> minoverlap
   AP[, a][4] -> maxmismatch
 
-  # 檢查amplicon欄為空，則刪除table內該列資料
+  # Remove rows from the multiplex table where the amplicon column is empty
   multiplex[!multiplex[, AP[, a][2]] %in% "",] -> amplicon
 
-
+  # Initialize variables for tracking missing samples, sequence table, and DADA2 merge failures
   missing_sample_list <- c()
   seqtable <- c()
   dadamergfail <- c()
-  merg <- c() #Kuo_modified
-  nonmerg <- c() #Kuo_modified
+  merg <- c()
+  nonmerg <- c()
   path_demultiplex <- paste0(path_of_result, region, "_result/demultiplexResult")
   path_denoise <- paste0(path_of_result, region, "_result/denoiseResult")
   path_merge <- paste0(path_of_result, region, "_result/mergeResult")
-
   path_trim <- paste0(path_demultiplex, "/trimmed")
+
+  # Get lists of file names for R1 and R2 reads
   sort(list.files(path_trim, pattern = ".r1.fq", full.names = FALSE)) -> R1.names
   sort(list.files(path_trim, pattern = ".r2.fq", full.names = FALSE)) -> R2.names
   sort(list.files(path_trim, pattern = ".r1.fq", full.names = TRUE)) -> R1
@@ -87,36 +90,33 @@ for (a in 1:ncol(AP)) {
   paste0(path_filter, "/filtered_", R1.names) -> filtFs
   paste0(path_filter, "/filtered_", R2.names) -> filtRs
 
-  # first step: filter
-  # 這一步做pair，先用了r1的seq_along來迭代，可以改成指定數字， (this step is really slow)
-  # 64s vs. 24s
-  # Set the number of cores to utilize
+  # First step: Filter reads in parallel
+  # This step is slow, so parallelize it to speed up processing
   numCores <- detectCores()
-  # Register parallel backend
   registerDoParallel(cores = numCores)
-  # Create a parallelized version of the loop using foreach
   foreach(i = seq_along(R1), .packages = c("dada2")) %dopar% {
     fastqPairedFilter(c(R1[i], R2[i]), c(filtFs[i], filtRs[i]),
                       verbose = TRUE, matchIDs = TRUE, compress = FALSE)
   }
-  # Stop the parallel backend
   stopImplicitCluster()
 
-  # second step: denoise
+  # Second step: Denoise reads in parallel
   numCores <- detectCores()
   registerDoParallel(cores = numCores)
-  foreach(sample_number = 1:nrow(amplicon), .packages = c("dplyr")) %dopar% { #20230421 we use multi-thread to speed up
+  foreach(sample_number = 1:nrow(amplicon), .packages = c("dplyr")) %dopar% {
+    # Process each sample in parallel
+    # Extract filenames and other parameters for denoising
     sample_filename <- paste0("filtered_trim_", region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp], "_r1.fq")
     r1 <- paste0(path_filter, "/filtered_trim_", region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp], "_r1.fq")
     r2 <- paste0(path_filter, "/filtered_trim_", region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp], "_r2.fq")
     r0 <- paste0(amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp])
-    # filename = paste(amplicon[sample_number, 1], amplicon[sample_number, 2], amplicon[sample_number, 3], amplicon[sample_number, 4], ".fas", sep = "_")  #看起來應該就是檔名了
-    filename = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], ".fas", sep = "_")    #20230623 檔名改跟header一樣
-    seqname = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")           #這個式header的文字
+    filename = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], ".fas", sep = "_")    #檔名改跟header一樣
+    seqname = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")           #header的文字
     header = paste0(">", seqname) #加上了header的符號
 
     #這邊只檢查了r1的名字有沒有對，有對boolean就是TRUE
     if (purrr::has_element(list.files(path = path_filter), sample_filename) == FALSE) {
+      # If not, add it to the list of missing samples
       cbind(r1, header) -> mis
       rbind(missing_sample_list, mis) -> missing_sample_list
     }else {
@@ -238,7 +238,6 @@ for (a in 1:ncol(AP)) {
       cbind(rep(r2, length(dadaRs[["clustering"]][["abundance"]])), r2list) -> seqtable02
       rbind(seqtable, seqtable01, seqtable02) -> seqtable
     }
-
   }
   stopImplicitCluster()
 }
