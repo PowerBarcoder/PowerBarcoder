@@ -47,7 +47,7 @@ def get_csv_cell_content_in_batch(batch_mane: str, loci_name: str, desired_row_i
     """
     batch_result_list = list()
     for i in range(0, run_number):
-        file_path = CSV_FILE_PATH_PREFIX + batch_mane + str(run_number) + loci_name + CSV_FILE_PATH_SUFFIX
+        file_path = CSV_FILE_PATH_PREFIX + batch_mane + str(i) + loci_name + CSV_FILE_PATH_SUFFIX
         single_run_result = get_csv_cell_content(file_path, desired_row_index, desired_col_index)
         batch_result_list.append(single_run_result)
     return batch_result_list

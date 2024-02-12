@@ -3,12 +3,13 @@ from collections import Counter
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill
 
-# CSV_FILE_PATH_PREFIX = '/PowerBarcoder/data/result/batchRun/'
-CSV_FILE_PATH_PREFIX = 'C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/batchRun/'
+CSV_FILE_PATH_PREFIX = '/PowerBarcoder/data/result/batchRun/'
+# CSV_FILE_PATH_PREFIX = 'C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/batchRun/'
 CSV_FILE_PATH_SUFFIX = '_result/qcResult/qcReport.csv'
-# CONCAT_CSV_FILE_PATH = '/PowerBarcoder/data/result/batchRun/matrix_data.csv'
-CONCAT_CSV_FILE_PATH = 'C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/batchRun/matrix_data.csv'
-CONCAT_EXCEL_FILE_PATH = 'C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/batchRun/matrix_data.xlsx'
+CONCAT_CSV_FILE_PATH = '/PowerBarcoder/data/result/batchRun/matrix_data.csv'
+# CONCAT_CSV_FILE_PATH = 'C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/batchRun/matrix_data.csv'
+CONCAT_EXCEL_FILE_PATH = '/PowerBarcoder/data/result/batchRun/matrix_data.xlsx'
+# CONCAT_EXCEL_FILE_PATH = 'C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/batchRun/matrix_data.xlsx'
 
 FIRST_ASV_ROW_INDEX = 12 - 1
 DADA2_IDENTICAL_ROW_INDEX = 334 - 1
