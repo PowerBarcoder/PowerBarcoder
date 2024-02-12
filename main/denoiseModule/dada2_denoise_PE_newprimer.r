@@ -34,11 +34,8 @@ AP_minlength <- as.numeric(args[6])
 # Get the locus names and their elements as parameters
 # Example: "a" "b" "c" "d" "e" "rbcLN" "trnLF" "rbcLC" "trnL" "fVGF" "rECL" "L5675" "F4121" "fNYG" "rVVG" "oneIf1" "L7556"
 loci_count <- length(args[8:length(args)]) / 5
-loci_count # 4
 locus_names <- args[8:(8 + loci_count - 1)]
-locus_names # "rbcLN" "trnLF" "rbcLC" "trnL"
 locus_elements <- args[(8 + loci_count):(8 + (loci_count * 2) - 1)]
-locus_elements # "fVGF" "rECL" "L5675" "F4121" "fNYG" "rVVG" "oneIf1" "L7556"
 locus_minimum_overlap_base_pair <- args[(8 + (loci_count * 2)):(8 + (loci_count * 3) - 1)]
 locus_maximum_mismatch_base_pair <- args[(8 + (loci_count * 3)):(8 + (loci_count * 4) - 1)]
 
