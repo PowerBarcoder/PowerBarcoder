@@ -25,7 +25,7 @@ HASH_VALUE_COL_INDEX_LIST = [DADA2_DENOISE_R1_HASH_VALUE_COL_INDEX, DADA2_DENOIS
 
 
 def get_csv_cells_content_map_by_column(file_path: str, start_row_index: int, key_col_index: int,
-                                        value_col_index: int) -> dict:
+                                        value_col_index: int) -> dict[str, str] | None:
     """
     Function to get all cell content in a specific column in a CSV file
     :param file_path: the file path of the CSV file
@@ -224,15 +224,16 @@ if __name__ == '__main__':
     result_matrix = dict()
     for index_number in range(len(HASH_VALUE_COL_INDEX_LIST)):
         for csv_file_batch_run_name in csv_file_batch_run_name_list:
-            concat_key = HASH_VALUE_COL_NAME_LIST[index_number] + '_' + csv_file_batch_run_name
-            value = get_aggregated_csv_cells_content_most_show_value_map_by_column_in_batch(csv_file_batch_run_name,
-                                                                                            csv_file_path_midfield,
-                                                                                            FIRST_ASV_ROW_INDEX,
-                                                                                            ASV_BARCODE_COL_INDEX,
-                                                                                            HASH_VALUE_COL_INDEX_LIST[
-                                                                                                index_number],
-                                                                                            batch_run_number)
-            result_matrix[concat_key] = value
+            concat_matrix_key = HASH_VALUE_COL_NAME_LIST[index_number] + '_' + csv_file_batch_run_name
+            matrix_value = get_aggregated_csv_cells_content_most_show_value_map_by_column_in_batch(
+                csv_file_batch_run_name,
+                csv_file_path_midfield,
+                FIRST_ASV_ROW_INDEX,
+                ASV_BARCODE_COL_INDEX,
+                HASH_VALUE_COL_INDEX_LIST[
+                    index_number],
+                batch_run_number)
+            result_matrix[concat_matrix_key] = matrix_value
             # print(f"{concat_key}")
             # print(f"{result_matrix[concat_key]}")
 
