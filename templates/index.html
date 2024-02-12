@@ -365,29 +365,6 @@
                     </div>
                 </div>
 
-
-                <div class="form-group advanceMode hideAdvanceMode">
-                    <label for="minimum_overlap_base_pair">
-                        <span id="tooltip96">Minimum Overlap Base Pair: <i class="fa fa-question-circle"></i></span>
-                        <span class="text-secondary information">
-                            <i>
-                                The minimum overlap base pair, default is 4
-                            </i>
-                        </span>
-                    </label>
-
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control minimum_overlap_base_pair"
-                                   id="minimum_overlap_base_pair"
-                                   name="minimum_overlap_base_pair"
-                                   required="required" value="{{minimum_overlap_base_pair}}"
-                                   placeholder="{{minimum_overlap_base_pair}}">
-                        </div>
-                    </div>
-                </div>
-
-
                 <br>
                 <div class="d-flex align-items-center">
                     <button id="autoCompletePath" class="btn btn-warning" type="button"
@@ -574,8 +551,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="errorRateCutadaptor">
-                        <span id="tooltip5">Error Rate Cutadaptor: <i class="fa fa-question-circle"></i></span>
+                    <label for="errorRateCutadapt">
+                        <span id="tooltip5"> Cutadapt Error Rate: <i class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
                                 Trimming sensitivity for cutadapt, details can be found in cutadapt manual
@@ -584,15 +561,15 @@
                     </label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control errorRateCutadaptor" id="errorRateCutadaptor"
-                                   name="errorRateCutadaptor" required="required"
-                                   placeholder="{{rbcl_error_rate_cutadaptor}}">
+                            <input type="text" class="form-control errorRateCutadapt" id="errorRateCutadapt"
+                                   name="errorRateCutadapt" required="required"
+                                   placeholder="{{rbcl_error_rate_cutadapt}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="minimumLengthCutadaptor">
-                        <span id="tooltip6">Minimum Length Cutadaptor: <i class="fa fa-question-circle"></i></span>
+                    <label for="minimumLengthCutadapt">
+                        <span id="tooltip6">Cutadapt Minimum Length: <i class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
                                 Trimming length threshold for cutadapt, details can be found in cutadapt manual
@@ -601,15 +578,15 @@
                     </label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control minimumLengthCutadaptor" id="minimumLengthCutadaptor"
-                                   name="minimumLengthCutadaptor" required="required"
-                                   placeholder="{{rbcl_minimum_length_cutadaptor}}">
+                            <input type="text" class="form-control minimumLengthCutadapt" id="minimumLengthCutadapt"
+                                   name="minimumLengthCutadapt" required="required"
+                                   placeholder="{{rbcl_minimum_length_cutadapt}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="minimumLengthCutadaptorInLoop">
-                        <span id="tooltip14">Minimum Length Cutadaptor In Loop: <i
+                    <label for="minimumLengthCutadaptInLoop">
+                        <span id="tooltip14"> Cutadapt Minimum Length In Loop: <i
                                 class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
@@ -620,20 +597,20 @@
 
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control minimumLengthCutadaptorInLoop"
-                                   id="minimumLengthCutadaptorInLoop"
-                                   name="minimumLengthCutadaptorInLoop"
+                            <input type="text" class="form-control minimumLengthCutadaptInLoop"
+                                   id="minimumLengthCutadaptInLoop"
+                                   name="minimumLengthCutadaptInLoop"
                                    required="required"
-                                   placeholder="{{rbcl_minimum_length_cutadaptor_in_loop}}">
+                                   placeholder="{{rbcl_minimum_length_cutadapt_in_loop}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="customizedCoreNumber">
-                        <span id="tooltip15">Customized Core Number: <i class="fa fa-question-circle"></i></span>
+                        <span id="tooltip15"> Cutadapt Customized Core Number: <i class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
-                                PowerBarcoder supports multi-threading, set proper core number to speed up the analysis.
+                                PowerBarcoder supports multi-threading, set proper core number to speed up the analysis in Cutadapt.
                             </i>
                         </span>
                     </label>
@@ -647,6 +624,28 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="minimum_overlap_base_pair">
+                        <span id="tooltip96">Minimum Overlap Base Pair: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The minimum overlap base pair, default is 4
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control minimum_overlap_base_pair"
+                                   id="minimum_overlap_base_pair"
+                                   name="minimum_overlap_base_pair"
+                                   required="required" value="{{minimum_overlap_base_pair}}"
+                                   placeholder="{{minimum_overlap_base_pair}}">
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="form-group advanceMode hideAdvanceMode">
                     <label for="blastReadChoosingMode">
@@ -717,8 +716,8 @@
         <script>
             function autoCompleteWithRBCLLoci() {
                 document.getElementById('nameOfLoci').value = '{{rbcl_name_of_loci}}'
-                document.getElementById('errorRateCutadaptor').value = '{{rbcl_error_rate_cutadaptor}}'
-                document.getElementById('minimumLengthCutadaptor').value = '{{rbcl_minimum_length_cutadaptor}}'
+                document.getElementById('errorRateCutadapt').value = '{{rbcl_error_rate_cutadapt}}'
+                document.getElementById('minimumLengthCutadapt').value = '{{rbcl_minimum_length_cutadapt}}'
                 document.getElementById('primerFName').value = '{{rbcl_primer_f_name}}'
                 document.getElementById('primerF').value = '{{rbcl_primer_f}}'
                 document.getElementById('primerRName').value = '{{rbcl_primer_r_name}}'
@@ -728,7 +727,7 @@
                 document.getElementById('barcodesFile1').value = '{{rbcl_barcodes_file1}}'
                 document.getElementById('barcodesFile2').value = '{{rbcl_barcodes_file2}}'
                 document.getElementById('sseqidFileName').value = '{{rbcl_sseqid_file_name}}'
-                document.getElementById('minimumLengthCutadaptorInLoop').value = '{{rbcl_minimum_length_cutadaptor_in_loop}}'
+                document.getElementById('minimumLengthCutadaptInLoop').value = '{{rbcl_minimum_length_cutadapt_in_loop}}'
                 document.getElementById('customizedCoreNumber').value = '{{rbcl_customized_core_number}}'
                 document.getElementById('blastReadChoosingMode').value = '{{rbcl_blast_read_choosing_mode}}'
                 document.getElementById('blastParsingMode').value = '{{rbcl_blast_parsing_mode}}'
@@ -737,8 +736,8 @@
 
             function autoCompleteWithTRNLFLoci() {
                 document.getElementById('nameOfLoci').value = '{{trnlf_name_of_loci}}'
-                document.getElementById('errorRateCutadaptor').value = '{{trnlf_error_rate_cutadaptor}}'
-                document.getElementById('minimumLengthCutadaptor').value = '{{trnlf_minimum_length_cutadaptor}}'
+                document.getElementById('errorRateCutadapt').value = '{{trnlf_error_rate_cutadapt}}'
+                document.getElementById('minimumLengthCutadapt').value = '{{trnlf_minimum_length_cutadapt}}'
                 document.getElementById('primerFName').value = '{{trnlf_primer_f_name}}'
                 document.getElementById('primerF').value = '{{trnlf_primer_f}}'
                 document.getElementById('primerRName').value = '{{trnlf_primer_r_name}}'
@@ -748,7 +747,7 @@
                 document.getElementById('barcodesFile1').value = '{{trnlf_barcodes_file1}}'
                 document.getElementById('barcodesFile2').value = '{{trnlf_barcodes_file2}}'
                 document.getElementById('sseqidFileName').value = '{{trnlf_sseqid_file_name}}'
-                document.getElementById('minimumLengthCutadaptorInLoop').value = '{{trnlf_minimum_length_cutadaptor_in_loop}}'
+                document.getElementById('minimumLengthCutadaptInLoop').value = '{{trnlf_minimum_length_cutadapt_in_loop}}'
                 document.getElementById('customizedCoreNumber').value = '{{trnlf_customized_core_number}}'
                 document.getElementById('blastReadChoosingMode').value = '{{trnlf_blast_read_choosing_mode}}'
                 document.getElementById('blastParsingMode').value = '{{trnlf_blast_parsing_mode}}'
@@ -981,10 +980,10 @@
                         'nameOfLoci': $('.nameOfLoci').map(function () {
                             return $(this).val();
                         }).get(),
-                        'errorRateCutadaptor': $('.errorRateCutadaptor').map(function () {
+                        'errorRateCutadapt': $('.errorRateCutadapt').map(function () {
                             return $(this).val();
                         }).get(),
-                        'minimumLengthCutadaptor': $('.minimumLengthCutadaptor').map(function () {
+                        'minimumLengthCutadapt': $('.minimumLengthCutadapt').map(function () {
                             return $(this).val();
                         }).get(),
                         'primerFName': $('.primerFName').map(function () {
@@ -1014,7 +1013,7 @@
                         'sseqidFileName': $('.sseqidFileName').map(function () {
                             return $(this).val();
                         }).get(),
-                        'minimumLengthCutadaptorInLoop': $('.minimumLengthCutadaptorInLoop').map(function () {
+                        'minimumLengthCutadaptInLoop': $('.minimumLengthCutadaptInLoop').map(function () {
                             return $(this).val();
                         }).get(),
                         'customizedCoreNumber': $('.customizedCoreNumber').map(function () {
@@ -1182,32 +1181,32 @@
                     </div>
                 </div>
                                 <div class="form-group">
-                    <label for="errorRateCutadaptor">Error Rate Cutadaptor:</label>
+                    <label for="errorRateCutadapt">Error Rate Cutadapt:</label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control errorRateCutadaptor" id="errorRateCutadaptor" required="required"
-                                   name="errorRateCutadaptor" placeholder="{{rbcl_error_rate_cutadaptor}}">
+                            <input type="text" class="form-control errorRateCutadapt" id="errorRateCutadapt" required="required"
+                                   name="errorRateCutadapt" placeholder="{{rbcl_error_rate_cutadapt}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="minimumLengthCutadaptor">Minimum Length Cutadaptor:</label>
+                    <label for="minimumLengthCutadapt">Minimum Length Cutadapt:</label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control minimumLengthCutadaptor" id="rbcl_minimum_length_cutadaptor" required="required"
-                                   name="rbcl_minimum_length_cutadaptor" placeholder="{{rbcl_minimum_length_cutadaptor}}">
+                            <input type="text" class="form-control minimumLengthCutadapt" id="rbcl_minimum_length_cutadapt" required="required"
+                                   name="rbcl_minimum_length_cutadapt" placeholder="{{rbcl_minimum_length_cutadapt}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="minimumLengthCutadaptorInLoop">Minimum Length
-                        Cutadaptor In
+                    <label for="minimumLengthCutadaptInLoop">Minimum Length
+                        Cutadapt In
                         Loop:</label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control minimumLengthCutadaptorInLoop"
-                                   id="minimumLengthCutadaptorInLoop" required="required"
-                                   name="minimumLengthCutadaptorInLoop" placeholder="{{rbcl_minimum_length_cutadaptor_in_loop}}">
+                            <input type="text" class="form-control minimumLengthCutadaptInLoop"
+                                   id="minimumLengthCutadaptInLoop" required="required"
+                                   name="minimumLengthCutadaptInLoop" placeholder="{{rbcl_minimum_length_cutadapt_in_loop}}">
                         </div>
                     </div>
                 </div>

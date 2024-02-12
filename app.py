@@ -1,16 +1,16 @@
 import os
 import subprocess
 import time
+import uuid
+import zipfile
 from datetime import datetime
 
+import flask_socketio as ws
 from flask import Flask, render_template, send_file
 from flask_cors import CORS
 from flask_socketio import SocketIO
-import flask_socketio as ws
-import uuid
+
 import yml_parser
-import os
-import zipfile
 
 app = Flask(__name__)
 CORS(app)
@@ -112,8 +112,8 @@ def home():
 
     # Locus (rbcL demo)
     rbcl_name_of_loci = "rbcLN"
-    rbcl_error_rate_cutadaptor = 0.125
-    rbcl_minimum_length_cutadaptor = 70
+    rbcl_error_rate_cutadapt = 0.125
+    rbcl_minimum_length_cutadapt = 70
     rbcl_primer_f = "GAGACTAAAGCAGGTGTTGGATTCA"
     rbcl_primer_f_name = "fVGF"
     rbcl_primer_r = "TCAAGTCCACCRCGAAGRCATTC"
@@ -121,15 +121,17 @@ def home():
     rbcl_barcodes_file1 = "barcodes_rbcL_start_0.fasta"
     rbcl_barcodes_file2 = "barcodes_rbcLN_start2_0.fasta"
     rbcl_sseqid_file_name = "fermalies_rbcL.fasta"
-    rbcl_minimum_length_cutadaptor_in_loop = 150
+    rbcl_minimum_length_cutadapt_in_loop = 150
     rbcl_customized_core_number = 30
     rbcl_blast_read_choosing_mode = 1
     rbcl_blast_parsing_mode = 2
+    rbcl_minimum_overlap_base_pair = 12
+    rbcl_maximum_mismatch_base_pair = 0
 
     # Locus (trnLF demo)
     trnlf_name_of_loci = "trnLF"
-    trnlf_error_rate_cutadaptor = 0.125
-    trnlf_minimum_length_cutadaptor = 70
+    trnlf_error_rate_cutadapt = 0.125
+    trnlf_minimum_length_cutadapt = 70
     trnlf_primer_f = "TGAGGGTTCGANTCCCTCTA"
     trnlf_primer_f_name = "L5675"
     trnlf_primer_r = "GGATTTTCAGTCCYCTGCTCT"
@@ -137,10 +139,12 @@ def home():
     trnlf_barcodes_file1 = "barcodes_trnL_3exonSTART_0.fasta"
     trnlf_barcodes_file2 = "barcodes_trnF_0.fasta"
     trnlf_sseqid_file_name = "ftol_sanger_alignment_trnLLF_full_f.fasta"
-    trnlf_minimum_length_cutadaptor_in_loop = 150
+    trnlf_minimum_length_cutadapt_in_loop = 150
     trnlf_customized_core_number = 30
     trnlf_blast_read_choosing_mode = 1  # 0: r1 r2 cat後blast, 1: r1 r2分開blast
     trnlf_blast_parsing_mode = 2
+    trnlf_minimum_overlap_base_pair = 12
+    trnlf_maximum_mismatch_base_pair = 1
 
     return render_template('index.html',
                            # Path
@@ -158,11 +162,11 @@ def home():
                            default_dada2_barcode_file=default_dada2_barcode_file,
                            dev_mode=dev_mode,
                            amplicon_minimum_length=amplicon_minimum_length,
-                           minimum_overlap_base_pair=minimum_overlap_base_pair,
+                           # minimum_overlap_base_pair=minimum_overlap_base_pair, // 移動至個別loci
                            # Locus (rbcL demo)
                            rbcl_name_of_loci=rbcl_name_of_loci,
-                           rbcl_error_rate_cutadaptor=rbcl_error_rate_cutadaptor,
-                           rbcl_minimum_length_cutadaptor=rbcl_minimum_length_cutadaptor,
+                           rbcl_error_rate_cutadapt=rbcl_error_rate_cutadapt,
+                           rbcl_minimum_length_cutadapt=rbcl_minimum_length_cutadapt,
                            rbcl_primer_f=rbcl_primer_f,
                            rbcl_primer_f_name=rbcl_primer_f_name,
                            rbcl_primer_r=rbcl_primer_r,
@@ -170,14 +174,16 @@ def home():
                            rbcl_barcodes_file1=rbcl_barcodes_file1,
                            rbcl_barcodes_file2=rbcl_barcodes_file2,
                            rbcl_sseqid_file_name=rbcl_sseqid_file_name,
-                           rbcl_minimum_length_cutadaptor_in_loop=rbcl_minimum_length_cutadaptor_in_loop,
+                           rbcl_minimum_length_cutadapt_in_loop=rbcl_minimum_length_cutadapt_in_loop,
                            rbcl_customized_core_number=rbcl_customized_core_number,
                            rbcl_blast_read_choosing_mode=rbcl_blast_read_choosing_mode,
                            rbcl_blast_parsing_mode=rbcl_blast_parsing_mode,
+                           rbcl_minimum_overlap_base_pair=rbcl_minimum_overlap_base_pair,
+                           rbcl_maximum_mismatch_base_pair=rbcl_maximum_mismatch_base_pair,
                            # Locus (trnLF demo)
                            trnlf_name_of_loci=trnlf_name_of_loci,
-                           trnlf_error_rate_cutadaptor=trnlf_error_rate_cutadaptor,
-                           trnlf_minimum_length_cutadaptor=trnlf_minimum_length_cutadaptor,
+                           trnlf_error_rate_cutadapt=trnlf_error_rate_cutadapt,
+                           trnlf_minimum_length_cutadapt=trnlf_minimum_length_cutadapt,
                            trnlf_primer_f=trnlf_primer_f,
                            trnlf_primer_f_name=trnlf_primer_f_name,
                            trnlf_primer_r=trnlf_primer_r,
@@ -185,10 +191,12 @@ def home():
                            trnlf_barcodes_file1=trnlf_barcodes_file1,
                            trnlf_barcodes_file2=trnlf_barcodes_file2,
                            trnlf_sseqid_file_name=trnlf_sseqid_file_name,
-                           trnlf_minimum_length_cutadaptor_in_loop=trnlf_minimum_length_cutadaptor_in_loop,
+                           trnlf_minimum_length_cutadapt_in_loop=trnlf_minimum_length_cutadapt_in_loop,
                            trnlf_customized_core_number=trnlf_customized_core_number,
                            trnlf_blast_read_choosing_mode=trnlf_blast_read_choosing_mode,
                            trnlf_blast_parsing_mode=trnlf_blast_parsing_mode,
+                           trnlf_minimum_overlap_base_pair=trnlf_minimum_overlap_base_pair,
+                           trnlf_maximum_mismatch_base_pair=trnlf_maximum_mismatch_base_pair
                            )
 
 
