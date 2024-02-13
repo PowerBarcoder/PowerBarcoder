@@ -108,7 +108,6 @@ def home():
     default_dada2_barcode_file = "multiplex_cpDNAbarcode_clean.txt"
     dev_mode = 1
     amplicon_minimum_length = 1
-    minimum_overlap_base_pair = 12  # default: 12, least: 4
 
     # Locus (rbcL demo)
     rbcl_name_of_loci = "rbcLN"
@@ -162,7 +161,6 @@ def home():
                            default_dada2_barcode_file=default_dada2_barcode_file,
                            dev_mode=dev_mode,
                            amplicon_minimum_length=amplicon_minimum_length,
-                           # minimum_overlap_base_pair=minimum_overlap_base_pair, // 移動至個別loci
                            # Locus (rbcL demo)
                            rbcl_name_of_loci=rbcl_name_of_loci,
                            rbcl_error_rate_cutadapt=rbcl_error_rate_cutadapt,
