@@ -25,6 +25,10 @@ def ws_emit_procedure_result(msg, room_name):
 
 @socketio.on('run-procedure')
 def run_procedure(data):
+    """
+    Run PowerBarcoder procedure
+    """
+
     # Get current datetime
     formatted_datetime = datetime.now().strftime("%Y%m%d%H%M")
 
@@ -43,13 +47,6 @@ def run_procedure(data):
     ws.emit('procedure-result', '\r\n', room=formatted_datetime)
     ws.emit('procedure-result', f'Socket room name: {formatted_datetime}\r\n', room=formatted_datetime)
     ws_emit_procedure_result('Generating config file...\r\n', formatted_datetime)
-
-    # [For Debug]
-    # n=0
-    # while True:
-    #     socketio.emit('procedure-result', str(n)+'\r\n')
-    #     n+=1
-    #     time.sleep(1)
 
     # Access form data
     form_data = data
@@ -76,11 +73,6 @@ def run_procedure(data):
             temp_line += "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + line.decode('utf-8', 'ignore')
     socketio.emit('procedure-result', temp_line, room=formatted_datetime)
 
-    # [For Debug]
-    # for line in iter(p.stdout.readline, b''):
-    #     # Process each line of output
-    #     socketio.emit('procedure-result', "["+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"]"+line.decode('utf-8'))
-
     ws_emit_procedure_result('done\r\n', formatted_datetime)
     ws_emit_procedure_result('Find your results in data/result/ folder\r\n', formatted_datetime)
 
@@ -91,8 +83,11 @@ def run_procedure(data):
 
 @app.route('/')
 def home():
-    # passing default value to html (some parameters are not used in demo,
-    # and are hard-coded in parsing_yml_to_shell() method)
+    """
+    passing default value to html (some parameters are not used in demo, and are hard-coded in parsing_yml_to_shell() method)
+    :return:
+    """
+
     # Path
     default_mycutadapt_path = "/venv/cutadapt-venv/bin/"
     default_myfastp_path = "/usr/local/bin/"
@@ -198,48 +193,47 @@ def home():
                            )
 
 
-@app.route('/start-data-procedure', methods=['POST'])
-def start_data_procedure():
-    #     # Call the run_procedure() function by emitting a socket event
-    #     # socketio.emit('run-procedure', {'param1': 'value1', 'param2': 'value2'})
-    return "Data procedure started."
-
-
 @app.route('/download/<room_name>', methods=['GET'])
 def download_result(room_name):
     """
     Download result from {room} (e.g. 202402102048) by loci,
-    trnLF result: /PowerBarcoder/data/result/{room}/trnLF_result/qcResult/validator/best
-    rbcL result: /PowerBarcoder/data/result/{room}/rbcL_result/qcResult/validator/best
+    trnLF result:
+        - /PowerBarcoder/data/result/{room}/trnLF_result/qcResult/validator/best
+        - /PowerBarcoder/data/result/{room}/trnLF_result/qcResult/validator/all
+        - /PowerBarcoder/data/result/{room}/trnLF_result/qcResult/qcReport.csv
+    rbcL result:
+        - /PowerBarcoder/data/result/{room}/rbcL_result/qcResult/validator/best
+        - /PowerBarcoder/data/result/{room}/rbcL_result/qcResult/validator/all
+        - /PowerBarcoder/data/result/{room}/rbcL_result/qcResult/qcReport.csv
     ... add more if more loci are added
     zip the result folders and return the zip file
     """
-    # list all result folder in room_name folder
+    # list all result folders in room_name folder
     room_name_folder = f'/PowerBarcoder/data/result/{room_name}'
     result_folders = os.listdir(room_name_folder)
-    # get only the folder, not files
+    # get only the folders, not files
     result_folders = [f for f in result_folders if os.path.isdir(os.path.join(room_name_folder, f))]
-    best_seq_folders = []
-    for folder in result_folders:
-        best_seq_folders.append(os.path.join(room_name_folder, folder, 'qcResult', 'validator', 'best'))
 
     # Create a zip file
     zip_file_name = f'{room_name}_best_seq.zip'
     zip_file_path = os.path.join(room_name_folder, zip_file_name)
 
     with zipfile.ZipFile(zip_file_path, 'w') as zipf:
-        for index in range(len(best_seq_folders)):
-            folder = best_seq_folders[index]
-            loci_name = result_folders[index]
-            # Iterate through files in the 'best' folders and add them to the zip directly under 'rbcLN_result'
-            for root, dirs, files in os.walk(folder):
+        for folder in result_folders:
+            # Include 'best' folder contents
+            best_seq_folder = os.path.join(room_name_folder, folder, 'qcResult', 'validator', 'best')
+            for root, dirs, files in os.walk(best_seq_folder):
                 for file in files:
                     src_file = os.path.join(root, file)
-                    # Define the relative path within the zip file
-                    rel_path = os.path.relpath(src_file, os.path.join(room_name_folder, folder))
-                    zipf.write(src_file, os.path.join(loci_name, rel_path))
+                    rel_path = os.path.relpath(src_file, best_seq_folder)
+                    zipf.write(src_file, os.path.join(folder, rel_path))
 
-    # download the zip file
+            # Include 'qcReport.csv' file
+            qc_report_file = os.path.join(room_name_folder, folder, 'qcResult', 'qcReport.csv')
+            if os.path.exists(qc_report_file):
+                zipf.write(qc_report_file, os.path.join(folder, 'qcReport.csv'))
+
+    # Download the zip file
     return send_file(zip_file_path, as_attachment=True)
 
 
@@ -247,10 +241,3 @@ if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0')
     app.config['CORS_HEADERS'] = 'Content-Type'
     socketio.run(app, debug=True, host='0.0.0.0', allow_unsafe_werkzeug=True)
-
-    # # Specify the path to the ssl folder
-    # ssl_folder = 'ssl'
-    # # Use the SSL certificate and key files from the ssl folder
-    # ssl_context = (f'{ssl_folder}/smallfarmer_shop.crt', f'{ssl_folder}/smallfarmer.key')
-    # # Run the app with socketio and HTTPS enabled
-    # socketio.run(app, debug=True, host='0.0.0.0', port=5000, ssl_context=ssl_context, allow_unsafe_werkzeug=True)
