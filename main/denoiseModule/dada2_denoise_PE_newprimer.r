@@ -32,13 +32,11 @@ numbers <- c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
 AP_minlength <- as.numeric(args[6])
 
 # Get the locus names and their elements as parameters
-# Example: "a" "b" "c" "d" "e" "rbcLN" "trnLF" "rbcLC" "trnL" "fVGF" "rECL" "L5675" "F4121" "fNYG" "rVVG" "oneIf1" "L7556"
-args
-loci_count <- length(args[8:length(args)]) / 5
-locus_names <- args[8:(8 + loci_count - 1)]
-locus_elements <- args[(8 + loci_count):(8 + (loci_count * 2) - 1)]
-locus_minimum_overlap_base_pair <- args[(8 + (loci_count * 2)):(8 + (loci_count * 3) - 1)]
-locus_maximum_mismatch_base_pair <- args[(8 + (loci_count * 3)):(8 + (loci_count * 4) - 1)]
+loci_count <- length(args[8:length(args)]) / 5 # 1
+locus_names <- args[8:(8 + loci_count - 1)] # rbcL 8
+locus_elements <- args[(8 + loci_count):(8 + (loci_count * 3) - 1)] # "fVGF" "rECL" 9 10
+locus_minimum_overlap_base_pair <- args[(8 + (loci_count * 3)):(8 + (loci_count * 4) - 1)] # 11
+locus_maximum_mismatch_base_pair <- args[(8 + (loci_count * 4)):(8 + (loci_count * 5) - 1)] # 12
 
 # Create a data frame using the locus names and elements
 AP <- data.frame(matrix(nrow = 4, ncol = length(locus_names)))
@@ -64,6 +62,7 @@ for (a in 1:ncol(AP)) {
   AP[, a][2] -> Rp
   AP[, a][3] -> minoverlap
   AP[, a][4] -> maxmismatch
+  print(paste0("Forward primer: ", Fp, "; Reverse primer: ", Rp, "; Minimum overlap: ", minoverlap, "; Maximum mismatch: ", maxmismatch))
 
   # Remove rows from the multiplex table where the amplicon column is empty
   multiplex[!multiplex[, AP[, a][2]] %in% "",] -> amplicon
@@ -97,7 +96,7 @@ for (a in 1:ncol(AP)) {
                       verbose = TRUE, matchIDs = TRUE, compress = FALSE)
   }
   stopImplicitCluster()
-  AP[, a]
+
   # Second step: Denoise reads in parallel
   numCores <- detectCores()
   registerDoParallel(cores = numCores)
