@@ -208,10 +208,10 @@ def download_result(room_name):
     ... add more if more loci are added
     zip the result folders and return the zip file
     """
-    # list all result folders in room_name folder
+    # List all result folders in room_name folder
     room_name_folder = f'/PowerBarcoder/data/result/{room_name}'
     result_folders = os.listdir(room_name_folder)
-    # get only the folders, not files
+    # Get only the folders, not files
     result_folders = [f for f in result_folders if os.path.isdir(os.path.join(room_name_folder, f))]
 
     # Create a zip file
@@ -226,7 +226,15 @@ def download_result(room_name):
                 for file in files:
                     src_file = os.path.join(root, file)
                     rel_path = os.path.relpath(src_file, best_seq_folder)
-                    zipf.write(src_file, os.path.join(folder, rel_path))
+                    zipf.write(src_file, os.path.join(folder, 'best', rel_path))
+
+            # Include 'all' folder contents
+            all_seq_folder = os.path.join(room_name_folder, folder, 'qcResult', 'validator', 'all')
+            for root, dirs, files in os.walk(all_seq_folder):
+                for file in files:
+                    src_file = os.path.join(root, file)
+                    rel_path = os.path.relpath(src_file, all_seq_folder)
+                    zipf.write(src_file, os.path.join(folder, 'all', rel_path))
 
             # Include 'qcReport.csv' file
             qc_report_file = os.path.join(room_name_folder, folder, 'qcResult', 'qcReport.csv')
