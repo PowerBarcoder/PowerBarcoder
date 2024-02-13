@@ -2,20 +2,20 @@
 
 . /PowerBarcoder/data/result/"$1"/config.sh
 
-# # -----------------------1. prepare env.---------------------
-bash ./envCheckModule/checkRequirement.sh "$1"
-echo "[INFO] environment OK !"
-bash ./envCheckModule/checkDirectory.sh "$1"
-echo "[INFO] file directories are created !"
-# # ----------------------------------------------------------
-
-echo "[INFO] Start running PowerBarcode !"
-
-# # -----------------------2. demultiplex---------------------
-echo "[INFO] start illumina_PE_demultiplex"
-bash ./demultiplexModule/illumina_PE_demultiplex_all_newprimer.sh "$1"
-echo "[INFO] end illumina_PE_demultiplex"
-# # ----------------------------------------------------------
+## # -----------------------1. prepare env.---------------------
+#bash ./envCheckModule/checkRequirement.sh "$1"
+#echo "[INFO] environment OK !"
+#bash ./envCheckModule/checkDirectory.sh "$1"
+#echo "[INFO] file directories are created !"
+## # ----------------------------------------------------------
+#
+#echo "[INFO] Start running PowerBarcode !"
+#
+## # -----------------------2. demultiplex---------------------
+#echo "[INFO] start illumina_PE_demultiplex"
+#bash ./demultiplexModule/illumina_PE_demultiplex_all_newprimer.sh "$1"
+#echo "[INFO] end illumina_PE_demultiplex"
+## # ----------------------------------------------------------
 
 # # -----------------------3. denoise-------------------------
 cd ${workingDirectory}

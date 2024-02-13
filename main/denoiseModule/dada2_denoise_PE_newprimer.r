@@ -33,6 +33,7 @@ AP_minlength <- as.numeric(args[6])
 
 # Get the locus names and their elements as parameters
 # Example: "a" "b" "c" "d" "e" "rbcLN" "trnLF" "rbcLC" "trnL" "fVGF" "rECL" "L5675" "F4121" "fNYG" "rVVG" "oneIf1" "L7556"
+args
 loci_count <- length(args[8:length(args)]) / 5
 locus_names <- args[8:(8 + loci_count - 1)]
 locus_elements <- args[(8 + loci_count):(8 + (loci_count * 2) - 1)]
@@ -91,16 +92,16 @@ for (a in 1:ncol(AP)) {
   # This step is slow, so parallelize it to speed up processing
   numCores <- detectCores()
   registerDoParallel(cores = numCores)
-  foreach(i = seq_along(R1), .packages = c("dada2")) %dopar% {
+  foreach(i = seq_along(R1), .packages = "dada2") %dopar% {
     fastqPairedFilter(c(R1[i], R2[i]), c(filtFs[i], filtRs[i]),
                       verbose = TRUE, matchIDs = TRUE, compress = FALSE)
   }
   stopImplicitCluster()
-
+  AP[, a]
   # Second step: Denoise reads in parallel
   numCores <- detectCores()
   registerDoParallel(cores = numCores)
-  foreach(sample_number = 1:nrow(amplicon), .packages = c("dplyr")) %dopar% {
+  foreach(sample_number = 1:nrow(amplicon), .packages = "dplyr") %dopar% {
     # Process each sample in parallel
     # Extract filenames and other parameters for denoising
     sample_filename <- paste0("filtered_trim_", region, "_", amplicon[sample_number, Fp], "_", amplicon[sample_number, Rp], "_r1.fq")
