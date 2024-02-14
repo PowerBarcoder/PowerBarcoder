@@ -72,3 +72,31 @@
     - Best ASV Number
     - Hash Value (for different steps: DADA2 Denoise, DADA2 Merge, DADA2 10N Concat)
 
+## Result Directory Structure
+   ```
+   └── PowerBarcoder
+       └── data
+           └── result
+               └── 202402131807
+                   ├── config.sh            # Configuration file
+                   ├── error_rate_F.png     # Learn error matrix
+                   ├── error_rate_R.png     # Learn error matrix
+                   └── trnL_result
+                       ├── blastResult        # Blast results
+                       ├── demultiplexResult
+                       │   ├── filtered      # Intermediate files
+                       │   ├── trimmed       # Intermediate files
+                       │   └── untrimmed     # Intermediate files
+                       ├── denoiseResult
+                       │   ├── r1            # Intermediate files
+                       │   └── r2            # Intermediate files
+                       ├── mergeResult
+                       │   ├── dada2         # Intermediate files
+                       │   └── merger        # Intermediate files
+                       └── qcResult
+                           ├── qcReport.csv   # Quality control report
+                           └── validator
+                               ├── all        # Retrieve all results
+                               ├── best       # Retrieve ASV with highest abundance, prioritized: DADA2 merged > merger merged
+                               ├── denoise    # Intermediate files
+                               └── merge      # Intermediate files
