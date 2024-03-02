@@ -187,7 +187,7 @@ def merger():
                     r1_overlap = r1_for_align
                     r2_overlap = r2_for_align
                 else:  # 在py裡做shell，然後r1 r2兩個overlap去align
-                    alignment = "mafft --thread 1 --localpair " + "'" + loadpath + "mafft/" + filename + "temp.fasta" + "'" + "> " + "'" + loadpath + "mafft/" + filename + "tempAlign.fasta" + "'"
+                    alignment = "mafft --thread 10 --localpair " + "'" + loadpath + "mafft/" + filename + "temp.fasta" + "'" + "> " + "'" + loadpath + "mafft/" + filename + "tempAlign.fasta" + "'"
                     # print(alignment)
                     try:
                         subprocess.run(alignment, shell=True, check=True, stdout=PIPE, stderr=PIPE)
