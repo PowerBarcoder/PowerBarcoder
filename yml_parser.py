@@ -62,9 +62,9 @@ def parsing_yml_to_shell(batch_name: str):
         script += f"minimumOverlapBasePair+=('{str(config['minimum_overlap_base_pair'][i]).strip()}')\n"  # minimumOverlapBasePair
         script += f"maximumMismatchBasePair+=('{str(config['maximum_mismatch_base_pair'][i]).strip()}')\n"  # maximumMismatch
         # Dev Only
-        script += f"blastReadChoosingMode+=('{str(config['blastReadChoosingMode'][i]).strip()}')\n"
+        script += f"blastReadChoosingMode[{i}]='{config['blastReadChoosingMode'][i] if config['blastReadChoosingMode'][i] == '0' else '1'}'\n"
         # blastReadChoosingMode (default: 1): 0: 10Ncat Blast, 1: split R1 R2 Blast
-        script += f"blastParsingMode+=('{str(config['blastParsingMode'][i]).strip()}')\n"
+        script += f"blastParsingMode[{i}]='{config['blastParsingMode'][i] if config['blastParsingMode'][i] in ('0', '1', '2', '3') else '2'}'\n"
         # blastParsingMode (default: 2)
         # # blast_parsing_mode == "0":
         # 1.identity: 用3排序，取最高者出來，但不低於85
