@@ -104,6 +104,7 @@ docker exec -it powerbarcoder bash
      wsl
    ```
 2. different docker image for different platform
+   
    2.1. build the docker image for amd64
    ```
      docker build -t powerbarcoder .
