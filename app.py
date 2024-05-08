@@ -198,7 +198,7 @@ def start_data_procedure():
 if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0')
     app.config['CORS_HEADERS'] = 'Content-Type'
-    socketio.run(app, debug=True, host='0.0.0.0', allow_unsafe_werkzeug=True)
+    socketio.run(app, debug=True, port=15000, host='0.0.0.0', allow_unsafe_werkzeug=True)
 
     # # Specify the path to the ssl folder
     # ssl_folder = 'ssl'

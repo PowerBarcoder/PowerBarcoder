@@ -47,23 +47,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 15000
 
 CMD ["python", "app.py"]
 
-#sudo apt-get -y install util-linux
-
-#  docker build -t powerbarcoder .
-#  docker run -d -p 5000:5000 -v ${PWD}:/PowerBarcoder --name powerbarcoder powerbarcoder
-#  docker exec -it powerbarcoder bash
-
-#  if WSL ext4.vhdx too large, run this command to shrink it
-    #  docker builder prune
-    #  wsl --shutdown
-    #  diskpart
-    #  select vdisk file="C:\Users\kwz50\AppData\Local\Docker\wsl\data\ext4.vhdx"
-    #  attach vdisk readonly
-    #  compact vdisk
-    #  detach vdisk
-    #  exit
-    #  wsl
+# sudo apt-get -y install util-linux
