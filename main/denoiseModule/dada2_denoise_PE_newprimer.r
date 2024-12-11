@@ -62,8 +62,12 @@ main <- function(args) {
   filename_of_error_learning_Rs <- sort(list.files(path_of_error_learning, pattern = ".r2.fq", full.names = TRUE))
 
   # Learn and plot errors
-  errF <- learn_and_plot_errors(filename_of_error_learning_Fs, path_of_result, "/error_rate_F.png")
-  errR <- learn_and_plot_errors(filename_of_error_learning_Rs, path_of_result, "/error_rate_R.png")
+  errF <- learn_and_plot_errors(filename_of_error_learning_Fs, path_of_result, "error_rate_F.png")
+  errR <- learn_and_plot_errors(filename_of_error_learning_Rs, path_of_result, "error_rate_R.png")
+
+  # save err matrix to file
+  write.table(errF, file = paste0(path_of_result, "error_rate_F.txt"), append = FALSE, sep = "\t", quote = FALSE, row.names = FALSE, col.names = FALSE)
+  write.table(errR, file = paste0(path_of_result, "error_rate_R.txt"), append = FALSE, sep = "\t", quote = FALSE, row.names = FALSE, col.names = FALSE)
 
   # (Used for marking abundance sorting, meaning one sample has at most 99 ASVs)
   numbers <- c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
