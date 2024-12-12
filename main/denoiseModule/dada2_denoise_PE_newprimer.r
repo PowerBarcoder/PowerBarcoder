@@ -60,6 +60,7 @@ main <- function(args) {
     path_demultiplex <- paste0(path_of_result, region, "_result/demultiplexResult")
     path_denoise <- paste0(path_of_result, region, "_result/denoiseResult")
     path_merge <- paste0(path_of_result, region, "_result/mergeResult")
+    path_regional <- paste0(path_of_result, region, "_result/")
     path_trim <- paste0(path_demultiplex, "/trimmed")
     path_filter <- paste0(path_demultiplex, "/filtered")
 
@@ -81,19 +82,19 @@ main <- function(args) {
 
     # Learn and plot errors using filtered reads
     errF <- learn_and_plot_errors(filtFs.exists, 
-                                path_of_result, 
+                                path_regional,
                                 paste0(region, "_error_rate_F.png"))
     errR <- learn_and_plot_errors(filtRs.exists, 
-                                path_of_result, 
+                                path_regional,
                                 paste0(region, "_error_rate_R.png"))
 
     # Save err matrix to file with locus prefix
     write.table(errF, 
-                file = paste0(path_of_result, region, "_error_rate_F.txt"), 
+                file = paste0(path_regional, region, "_error_rate_F.txt"),
                 append = FALSE, sep = "\t", 
                 quote = FALSE, row.names = FALSE, col.names = FALSE)
     write.table(errR, 
-                file = paste0(path_of_result, region, "_error_rate_R.txt"), 
+                file = paste0(path_regional, region, "_error_rate_R.txt"),
                 append = FALSE, sep = "\t", 
                 quote = FALSE, row.names = FALSE, col.names = FALSE)
 
