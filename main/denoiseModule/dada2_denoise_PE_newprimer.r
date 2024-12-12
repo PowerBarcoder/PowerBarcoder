@@ -1,56 +1,33 @@
 #!/usr/bin/env Rscript
 
+#' DADA2 Paired-End Read Denoising Pipeline
+#' 
+#' This script implements a DADA2-based pipeline for denoising paired-end amplicon sequences:
+#' 1. Learns error rates from training data
+#' 2. Filters and trims reads
+#' 3. Denoises forward and reverse reads separately
+#' 4. Merges paired reads
+#' 5. Optionally concatenates unmerged pairs with Ns
+#' 
+#' Required arguments:
+#' args[1]: Input reads directory
+#' args[3]: Output results directory
+#' args[4]: Error learning directory
+#' args[5]: Barcode mapping file
+#' args[6]: Minimum length threshold
+#' args[8+]: Locus-specific parameters
+
+# Load required modules
+source(paste0(getwd(), "/denoiseModule/constants.R"))
+source(paste0(getwd(), "/denoiseModule/install_dependencies.R"))
+source(paste0(getwd(), "/denoiseModule/file_utils.R"))
+source(paste0(getwd(), "/denoiseModule/dada2_core.R"))
+
 # Notices: deprecated args：args[2] "$workingDirectory", args[7] "$minimum_overlap_base_pair"
 args = commandArgs(trailingOnly = TRUE)
 
-# Learn error rate and plot the png
-learn_and_plot_errors <- function(file_list, result_path, output_suffix) {
-  err <- learnErrors(file_list, multithread = TRUE)
-  png(paste0(result_path, output_suffix))
-  plotErrors(err, nominalQ = TRUE)
-  dev.off()
-  return(err)
-}
-
-# Prepare parameters for the dada2 denoise function
-prepare_parameters <- function(args) {
-  loci_count <- length(args[8:length(args)]) / 5
-  locus_names <- args[8:(8 + loci_count - 1)]
-  locus_elements <- args[(8 + loci_count):(8 + (loci_count * 3) - 1)]
-  locus_minimum_overlap_base_pair <- args[(8 + (loci_count * 3)):(8 + (loci_count * 4) - 1)]
-  locus_maximum_mismatch_base_pair <- args[(8 + (loci_count * 4)):(8 + (loci_count * 5) - 1)]
-
-  AP <- data.frame(matrix(nrow = 4, ncol = length(locus_names)))
-  colnames(AP) <- locus_names
-  AP[1,] <- locus_elements[1:(length(locus_elements) %/% 2)]
-  AP[2,] <- locus_elements[((length(locus_elements) %/% 2) + 1):length(locus_elements)]
-  AP[3,] <- locus_minimum_overlap_base_pair
-  AP[4,] <- locus_maximum_mismatch_base_pair
-
-  return(AP)
-}
-
-# Function to read barcode file
-read_barcode_file <- function(path_of_reads, barcode_file) {
-  barcode_file_path <- paste0(path_of_reads, barcode_file)
-  return(read.table(barcode_file_path, sep = "\t", header = TRUE))
-}
-
-# Function to filter reads in parallel
-filter_reads_parallel <- function(R1, R2, filtFs, filtRs) {
-  numCores <- detectCores()
-  registerDoParallel(cores = numCores)
-  foreach(i = seq_along(R1), .packages = "dada2") %dopar% {
-    fastqPairedFilter(c(R1[i], R2[i]), c(filtFs[i], filtRs[i]),
-                      verbose = TRUE, matchIDs = TRUE, compress = FALSE)
-  }
-  stopImplicitCluster()
-}
-
 # Main function
 main <- function(args) {
-  source(paste0(getwd(), "/denoiseModule/constants.R"))
-  source(paste0(getwd(), "/denoiseModule/install_dependencies.R"))
   install_dependencies()
 
   path_of_error_learning <- args[4]
