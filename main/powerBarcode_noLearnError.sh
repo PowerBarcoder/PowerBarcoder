@@ -20,7 +20,8 @@ echo "[INFO] end illumina_PE_demultiplex"
 # # -----------------------3. denoise-------------------------
 cd ${workingDirectory}
 echo "[INFO] start dada2_denoise"
-Rscript "${workingDirectory}/denoiseModule/dada2DenoiserNoLearnError.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$dada2LearnErrorFile" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}"
+DEFAULT_ERROR_LEARN_PATH=""
+Rscript "${workingDirectory}/denoiseModule/dada2DenoiserNoLearnError.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$DEFAULT_ERROR_LEARN_PATH" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}"
 echo "[INFO] end dada2_denoise"
 # # ----------------------------------------------------------
 

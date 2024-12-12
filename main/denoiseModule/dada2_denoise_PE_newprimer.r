@@ -4,7 +4,7 @@
 #' 
 #' This script implements a DADA2-based pipeline for processing paired-end amplicon sequences:
 #' 1. Filters and trims input reads
-#' 2. Learns error rates from the filtered data
+#' 2. Learns error rates from either custom files or filtered data
 #' 3. Denoises forward and reverse reads separately using DADA2
 #' 4. Outputs denoised R1 and R2 sequences separately
 #' 5. Performs two types of read merging:
@@ -14,7 +14,7 @@
 #' Required arguments:
 #' args[1]: Input reads directory
 #' args[3]: Output results directory 
-#' args[4]: Error learning directory (deprecated)
+#' args[4]: Custom error learning directory path (optional, if empty will use filtered reads)
 #' args[5]: Barcode mapping file
 #' args[6]: Minimum length threshold
 #' args[8+]: Locus-specific parameters (forward primer, reverse primer, min overlap, max mismatch)
@@ -81,12 +81,9 @@ main <- function(args) {
     filtRs.exists <- filtRs[file.exists(filtRs)]
 
     # Learn and plot errors using filtered reads
-    errF <- learn_and_plot_errors(filtFs.exists, 
-                                path_regional,
-                                paste0(region, "_error_rate_F.png"))
-    errR <- learn_and_plot_errors(filtRs.exists, 
-                                path_regional,
-                                paste0(region, "_error_rate_R.png"))
+    err_results <- learn_error_rates(filtFs.exists, filtRs.exists, args[4], path_regional, region)
+    errF <- err_results$errF
+    errR <- err_results$errR
 
     # Save err matrix to file with locus prefix
     write.table(errF, 

@@ -138,7 +138,7 @@ def home():
     trnlf_blast_read_choosing_mode = 1  # 0: r1 r2 cat後blast, 1: r1 r2分開blast
     trnlf_blast_parsing_mode = 2
     trnlf_minimum_overlap_base_pair = 12
-    trnlf_maximum_mismatch_base_pair = 1
+    trnlf_maximum_mismatch_base_pair = 0  # 為了一致使用預設的，都取 0
 
     return render_template('index.html',
                            # Path
