@@ -2,20 +2,24 @@
 
 #' DADA2 Paired-End Read Denoising Pipeline
 #' 
-#' This script implements a DADA2-based pipeline for denoising paired-end amplicon sequences:
-#' 1. Learns error rates from training data
-#' 2. Filters and trims reads
-#' 3. Denoises forward and reverse reads separately
-#' 4. Merges paired reads
-#' 5. Optionally concatenates unmerged pairs with Ns
+#' This script implements a DADA2-based pipeline for processing paired-end amplicon sequences:
+#' 1. Filters and trims input reads
+#' 2. Learns error rates from the filtered data
+#' 3. Denoises forward and reverse reads separately using DADA2
+#' 4. Outputs denoised R1 and R2 sequences separately
+#' 5. Performs two types of read merging:
+#'    a. Standard DADA2 merging with overlap detection
+#'    b. Concatenation of unmerged pairs with N spacers
 #' 
 #' Required arguments:
 #' args[1]: Input reads directory
-#' args[3]: Output results directory
-#' args[4]: Error learning directory
+#' args[3]: Output results directory 
+#' args[4]: Error learning directory (deprecated)
 #' args[5]: Barcode mapping file
 #' args[6]: Minimum length threshold
-#' args[8+]: Locus-specific parameters
+#' args[8+]: Locus-specific parameters (forward primer, reverse primer, min overlap, max mismatch)
+#'
+#' Note: args[2] (working directory) and args[7] (minimum overlap base pair) are deprecated
 
 # Load required modules
 source(paste0(getwd(), "/denoiseModule/constants.R"))
@@ -23,14 +27,12 @@ source(paste0(getwd(), "/denoiseModule/install_dependencies.R"))
 source(paste0(getwd(), "/denoiseModule/file_utils.R"))
 source(paste0(getwd(), "/denoiseModule/dada2_core.R"))
 
-# Notices: deprecated args：args[2] "$workingDirectory", args[7] "$minimum_overlap_base_pair"
 args = commandArgs(trailingOnly = TRUE)
 
 # Main function
 main <- function(args) {
   install_dependencies()
 
-  path_of_error_learning <- args[4]
   path_of_reads <- args[1]
   path_of_result <- args[3]
 
@@ -54,20 +56,34 @@ main <- function(args) {
 
     print(paste0("Forward primer: ", Fp, "; Reverse primer: ", Rp, "; Minimum overlap: ", minoverlap, "; Maximum mismatch: ", maxmismatch))
 
-    # 為每個 locus 進行 error learning
-    # 篩選出屬於當前 locus 的 error learning files
-    filename_of_error_learning_Fs <- sort(list.files(path_of_error_learning, 
-                                                   pattern = paste0(region, ".*\\.r1\\.fq"), 
-                                                   full.names = TRUE))
-    filename_of_error_learning_Rs <- sort(list.files(path_of_error_learning, 
-                                                   pattern = paste0(region, ".*\\.r2\\.fq"), 
-                                                   full.names = TRUE))
+    # Set up file paths
+    path_demultiplex <- paste0(path_of_result, region, "_result/demultiplexResult")
+    path_denoise <- paste0(path_of_result, region, "_result/denoiseResult")
+    path_merge <- paste0(path_of_result, region, "_result/mergeResult")
+    path_trim <- paste0(path_demultiplex, "/trimmed")
+    path_filter <- paste0(path_demultiplex, "/filtered")
 
-    # Learn and plot errors for current locus
-    errF <- learn_and_plot_errors(filename_of_error_learning_Fs, 
+    # Get lists of file names for R1 and R2 reads
+    R1.names <- sort(list.files(path_trim, pattern = ".r1.fq", full.names = FALSE))
+    R2.names <- sort(list.files(path_trim, pattern = ".r2.fq", full.names = FALSE))
+    R1 <- sort(list.files(path_trim, pattern = ".r1.fq", full.names = TRUE))
+    R2 <- sort(list.files(path_trim, pattern = ".r2.fq", full.names = TRUE))
+    filtFs <- paste0(path_filter, "/filtered_", R1.names)
+    filtRs <- paste0(path_filter, "/filtered_", R2.names)
+
+    # First step: Filter reads in parallel
+    filter_reads_parallel(R1, R2, filtFs, filtRs)
+
+    # Second step: Learn error rates from filtered reads
+    # Get filtered file paths
+    filtFs.exists <- filtFs[file.exists(filtFs)]
+    filtRs.exists <- filtRs[file.exists(filtRs)]
+
+    # Learn and plot errors using filtered reads
+    errF <- learn_and_plot_errors(filtFs.exists, 
                                 path_of_result, 
                                 paste0(region, "_error_rate_F.png"))
-    errR <- learn_and_plot_errors(filename_of_error_learning_Rs, 
+    errR <- learn_and_plot_errors(filtRs.exists, 
                                 path_of_result, 
                                 paste0(region, "_error_rate_R.png"))
 
@@ -90,24 +106,8 @@ main <- function(args) {
     dadamergfail <- c()
     merg <- c()
     nonmerg <- c()
-    path_demultiplex <- paste0(path_of_result, region, "_result/demultiplexResult")
-    path_denoise <- paste0(path_of_result, region, "_result/denoiseResult")
-    path_merge <- paste0(path_of_result, region, "_result/mergeResult")
-    path_trim <- paste0(path_demultiplex, "/trimmed")
 
-    # Get lists of file names for R1 and R2 reads
-    sort(list.files(path_trim, pattern = ".r1.fq", full.names = FALSE)) -> R1.names
-    sort(list.files(path_trim, pattern = ".r2.fq", full.names = FALSE)) -> R2.names
-    sort(list.files(path_trim, pattern = ".r1.fq", full.names = TRUE)) -> R1
-    sort(list.files(path_trim, pattern = ".r2.fq", full.names = TRUE)) -> R2
-    path_filter <- paste0(path_demultiplex, "/filtered")
-    paste0(path_filter, "/filtered_", R1.names) -> filtFs
-    paste0(path_filter, "/filtered_", R2.names) -> filtRs
-
-    # First step: Filter reads in parallel
-    filter_reads_parallel(R1, R2, filtFs, filtRs)
-
-    # Second step: Denoise reads in parallel
+    # Third step: Denoise reads in parallel
     numCores <- detectCores()
     registerDoParallel(cores = numCores)
     foreach(sample_number = 1:nrow(amplicon), .packages = "dplyr") %dopar% {
@@ -121,7 +121,7 @@ main <- function(args) {
       seqname = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")           #header的文字
       header = paste0(">", seqname) #加上了header的符號
 
-      #這邊只檢查了r1���名字有沒有對，有對boolean就是TRUE
+      #這邊只檢查了r1的名字有沒有對，有對boolean就是TRUE
       if (purrr::has_element(list.files(path = path_filter), sample_filename) == FALSE) {
         # If not, add it to the list of missing samples
         cbind(r1, header) -> mis
@@ -167,7 +167,7 @@ main <- function(args) {
                     row.names = FALSE, col.names = FALSE)
 
 
-        # third step: 請DADA2對r1 r2 merge (necessary)
+        # fourth step: 請DADA2對r1 r2 merge (necessary)
         tryCatch({
           mergers <- mergePairs(dadaFs, r1, dadaRs, r2, minOverlap = minoverlap, verbose = TRUE, maxMismatch = maxmismatch)
         }, error = function(e) {
@@ -206,7 +206,7 @@ main <- function(args) {
         }
 
 
-        # fourth step: 請DADA2對r1 r2 做10N拼接 (unnecessary, because pyhton can do too)
+        # fifth step: 請DADA2對r1 r2 做10N拼接 (unnecessary, because pyhton can do too)
         tryCatch({
           nonmergers <- mergePairs(dadaFs, r1, dadaRs, r2, verbose = TRUE, justConcatenate = TRUE) #Kuo_modified in following lines else
         }, error = function(e) {
