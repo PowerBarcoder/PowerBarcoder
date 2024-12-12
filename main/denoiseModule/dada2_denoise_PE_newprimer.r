@@ -34,18 +34,6 @@ main <- function(args) {
   path_of_reads <- args[1]
   path_of_result <- args[3]
 
-  # Get filenames for error learning
-  filename_of_error_learning_Fs <- sort(list.files(path_of_error_learning, pattern = ".r1.fq", full.names = TRUE))
-  filename_of_error_learning_Rs <- sort(list.files(path_of_error_learning, pattern = ".r2.fq", full.names = TRUE))
-
-  # Learn and plot errors
-  errF <- learn_and_plot_errors(filename_of_error_learning_Fs, path_of_result, "error_rate_F.png")
-  errR <- learn_and_plot_errors(filename_of_error_learning_Rs, path_of_result, "error_rate_R.png")
-
-  # save err matrix to file
-  write.table(errF, file = paste0(path_of_result, "error_rate_F.txt"), append = FALSE, sep = "\t", quote = FALSE, row.names = FALSE, col.names = FALSE)
-  write.table(errR, file = paste0(path_of_result, "error_rate_R.txt"), append = FALSE, sep = "\t", quote = FALSE, row.names = FALSE, col.names = FALSE)
-
   # (Used for marking abundance sorting, meaning one sample has at most 99 ASVs)
   numbers <- c("01", "02", "03", "04", "05", "06", "07", "08", "09", 10:99)
   AP_minlength <- as.numeric(args[6])
@@ -65,6 +53,33 @@ main <- function(args) {
     AP[, a][4] -> maxmismatch
 
     print(paste0("Forward primer: ", Fp, "; Reverse primer: ", Rp, "; Minimum overlap: ", minoverlap, "; Maximum mismatch: ", maxmismatch))
+
+    # 為每個 locus 進行 error learning
+    # 篩選出屬於當前 locus 的 error learning files
+    filename_of_error_learning_Fs <- sort(list.files(path_of_error_learning, 
+                                                   pattern = paste0(region, ".*\\.r1\\.fq"), 
+                                                   full.names = TRUE))
+    filename_of_error_learning_Rs <- sort(list.files(path_of_error_learning, 
+                                                   pattern = paste0(region, ".*\\.r2\\.fq"), 
+                                                   full.names = TRUE))
+
+    # Learn and plot errors for current locus
+    errF <- learn_and_plot_errors(filename_of_error_learning_Fs, 
+                                path_of_result, 
+                                paste0(region, "_error_rate_F.png"))
+    errR <- learn_and_plot_errors(filename_of_error_learning_Rs, 
+                                path_of_result, 
+                                paste0(region, "_error_rate_R.png"))
+
+    # Save err matrix to file with locus prefix
+    write.table(errF, 
+                file = paste0(path_of_result, region, "_error_rate_F.txt"), 
+                append = FALSE, sep = "\t", 
+                quote = FALSE, row.names = FALSE, col.names = FALSE)
+    write.table(errR, 
+                file = paste0(path_of_result, region, "_error_rate_R.txt"), 
+                append = FALSE, sep = "\t", 
+                quote = FALSE, row.names = FALSE, col.names = FALSE)
 
     # Remove rows from the multiplex table where the amplicon column is empty
     multiplex[!multiplex[, AP[, a][2]] %in% "",] -> amplicon
@@ -106,7 +121,7 @@ main <- function(args) {
       seqname = paste(amplicon[sample_number, 3], amplicon[sample_number, 4], amplicon[sample_number, 2], amplicon[sample_number, 1], sep = "_")           #header的文字
       header = paste0(">", seqname) #加上了header的符號
 
-      #這邊只檢查了r1的名字有沒有對，有對boolean就是TRUE
+      #這邊只檢查了r1���名字有沒有對，有對boolean就是TRUE
       if (purrr::has_element(list.files(path = path_filter), sample_filename) == FALSE) {
         # If not, add it to the list of missing samples
         cbind(r1, header) -> mis
