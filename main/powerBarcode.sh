@@ -22,15 +22,15 @@ cd ${workingDirectory}
 echo "[INFO] start dada2_denoise"
 DEFAULT_ERROR_LEARN_PATH=""
 
-if [ "$denoiseMode" == "default" ]; then
+if [ "$denoise_mode" == "0" ]; then
     # # -----------------------3.1 default denoise-------------------
     Rscript "${workingDirectory}/denoiseModule/dada2_denoise_PE_newprimer.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$DEFAULT_ERROR_LEARN_PATH" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}" "${minimumOverlapBasePair[@]}" "${maximumMismatchBasePair[@]}"
     echo "[INFO] end dada2_denoise"
-elif [ "$denoiseMode" == "no_learn" ]; then
+elif [ "$denoise_mode" == "1" ]; then
     # # -----------------------3.2 no error learning denoise-------------------
     Rscript "${workingDirectory}/denoiseModule/dada2DenoiserNoLearnError.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$DEFAULT_ERROR_LEARN_PATH" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}"
     echo "[INFO] end dada2_denoise"
-elif [ "$denoiseMode" == "2nd_learn" ]; then
+elif [ "$denoise_mode" == "2" ]; then
     # # -----------------------3.3.1. first denoise-------------------
     Rscript "${workingDirectory}/denoiseModule/dada2_denoise_PE_newprimer.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$DEFAULT_ERROR_LEARN_PATH" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}" "${minimumOverlapBasePair[@]}" "${maximumMismatchBasePair[@]}"
     echo "[INFO] end first dada2_denoise"

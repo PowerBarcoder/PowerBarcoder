@@ -16,6 +16,10 @@
     transition: max-height 1s ease-in-out;
 }
 
+#tooltip100:hover + .information {
+    max-height: 1000px;
+}
+
 #tooltip99:hover + .information {
     max-height: 1000px;
 }

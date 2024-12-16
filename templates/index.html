@@ -213,6 +213,25 @@
                     </div>
                 </div>
 
+                <!--denoise_mode default = 0-->
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="denoise_mode">
+                        <span id="tooltip100">Denoise Mode: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The denoise mode, default is 0, no error learning is 1, 2nd error learning is 2
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control denoise_mode" id="denoise_mode" name="denoise_mode"
+                                   required="required" value="{{default_denoise_mode}}"
+                                   placeholder="{{default_denoise_mode}}">
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="form-group advanceMode hideAdvanceMode">
                     <label for="amplicon_minimum_length">
@@ -869,6 +888,7 @@
                         // 'summaryHtmlFileName': $('#summaryHtmlFileName').val(),
                         'dada2LearnErrorFile': $('#dada2LearnErrorFile').val(),
                         'dada2BarcodeFile': $('#dada2BarcodeFile').val(),
+                        'denoise_mode': $('#denoise_mode').val(),
                         'dev_mode': $('#dev_mode').val(),
                         'amplicon_minimum_length': $('#amplicon_minimum_length').val(),
 

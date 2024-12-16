@@ -37,6 +37,7 @@ def parsing_yml_to_shell(batch_name: str):
     script += f"amplicon_minimum_length='{str(config['amplicon_minimum_length']).strip()}'\n"  # amplicon_minimum_length (default: 1)
     # script += f"minimum_overlap_base_pair='{str(config['minimum_overlap_base_pair']).strip()}'\n"  # minimum_overlap_base_pair (default: 4)
     # Dev Only
+    script += f"denoise_mode='{str(config['denoise_mode']).strip()}'\n"  # denoise_mode (default: 0, no_error_learning: 1, 2nd_error_learning: 2)
     script += f"dev_mode='{str(config['dev_mode']).strip()}'\n"
     # dev_mode (default: 0)
     # 0: off (keep all the intermediate files),

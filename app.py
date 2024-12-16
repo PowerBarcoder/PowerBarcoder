@@ -101,6 +101,7 @@ def home():
     default_summary_html_file_name = "summary.html"
     default_dada2_learn_error_file = "/PowerBarcoder/data/dada2LearnErrorFile/"
     default_dada2_barcode_file = "multiplex_cpDNAbarcode_clean.txt"
+    default_denoise_mode = 0
     dev_mode = 1
     amplicon_minimum_length = 1
 
@@ -154,6 +155,7 @@ def home():
                            default_summary_html_file_name=default_summary_html_file_name,
                            default_dada2_learn_error_file=default_dada2_learn_error_file,
                            default_dada2_barcode_file=default_dada2_barcode_file,
+                           default_denoise_mode=default_denoise_mode,
                            dev_mode=dev_mode,
                            amplicon_minimum_length=amplicon_minimum_length,
                            # Locus (rbcL demo)
