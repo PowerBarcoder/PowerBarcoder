@@ -21,8 +21,33 @@ echo "[INFO] end illumina_PE_demultiplex"
 cd ${workingDirectory}
 echo "[INFO] start dada2_denoise"
 DEFAULT_ERROR_LEARN_PATH=""
-Rscript "${workingDirectory}/denoiseModule/dada2_denoise_PE_newprimer.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$DEFAULT_ERROR_LEARN_PATH" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}" "${minimumOverlapBasePair[@]}" "${maximumMismatchBasePair[@]}"
-echo "[INFO] end dada2_denoise"
+
+if [ "$denoiseMode" == "default" ]; then
+    # # -----------------------3.1 default denoise-------------------
+    Rscript "${workingDirectory}/denoiseModule/dada2_denoise_PE_newprimer.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$DEFAULT_ERROR_LEARN_PATH" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}" "${minimumOverlapBasePair[@]}" "${maximumMismatchBasePair[@]}"
+    echo "[INFO] end dada2_denoise"
+elif [ "$denoiseMode" == "no_learn" ]; then
+    # # -----------------------3.2 no error learning denoise-------------------
+    Rscript "${workingDirectory}/denoiseModule/dada2DenoiserNoLearnError.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$DEFAULT_ERROR_LEARN_PATH" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}"
+    echo "[INFO] end dada2_denoise"
+elif [ "$denoiseMode" == "2nd_learn" ]; then
+    # # -----------------------3.3.1. first denoise-------------------
+    Rscript "${workingDirectory}/denoiseModule/dada2_denoise_PE_newprimer.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$DEFAULT_ERROR_LEARN_PATH" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}" "${minimumOverlapBasePair[@]}" "${maximumMismatchBasePair[@]}"
+    echo "[INFO] end first dada2_denoise"
+
+    # # -----------------------3.3.2 select sequences for second error learning-------------------
+    echo "[INFO] start selecting sequences for second error learning"
+    for locus in "${nameOfLoci[@]}"; do
+        python3 "${workingDirectory}/denoiseModule/error_learning_2nd_selector.py" "$resultDataPath" "$locus"
+    done
+    echo "[INFO] end selecting sequences for second error learning"
+
+    # # -----------------------3.3.3. second denoise------------------
+    echo "[INFO] start second dada2_denoise"
+    SECOND_ERROR_LEARN_PATH="${resultDataPath}/error_learning_2nd"
+    Rscript "${workingDirectory}/denoiseModule/dada2_denoise_PE_newprimer.r" "$ampliconInfo" "$workingDirectory" "$resultDataPath" "$SECOND_ERROR_LEARN_PATH" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}" "${minimumOverlapBasePair[@]}" "${maximumMismatchBasePair[@]}"
+    echo "[INFO] end second dada2_denoise"
+fi
 # # ----------------------------------------------------------
 
 # # -----------------------4. merge---------------------------
