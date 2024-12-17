@@ -14,6 +14,9 @@ for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
 
   python3 ./qcModule/validator.py "$resultDataPath" "${nameOfLoci[i]}"
 
+#  # Export data from SQLite to CSV for each loci
+#  python3 ./qcModule/sql_to_csv.py "${resultDataPath}${nameOfLoci[i]}_result/"
+
 done
 
 echo "[INFO] End of generating quality control report !"

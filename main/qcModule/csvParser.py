@@ -178,15 +178,6 @@ def parsing_all_data_into_csv(destination: str):
         # 7. on-target (mapping, bwa)
         #     (  )這是最後一步，mapping reads/total reads，以後再詳細討論
 
-        # Write overall info header
-        writer.writerow(['File', 'num_seqs', 'sum_len', 'min_len', 'max_len', 'avg_q', 'err_q'])
-        # Write overall info data
-        for step in overall_info_step_list:
-            overall_info_list = parsing_overall_info_into_list(step)
-            writer.writerow(overall_info_list)
-        writer.writerow(['', '', '', '', '', '', ''])
-        writer.writerow(['', '', '', '', '', '', ''])
-
         # Write file list info header
         writer.writerow(['', '']
                         + [step[0] for step in steps]
