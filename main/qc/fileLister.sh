@@ -123,7 +123,7 @@ pv trim_R2FastqGz.fq | seqkit stats - | awk 'NR == 2 { print $4, $5 ,$6 ,$7 }' >
 echo "--------------------------------------------------------------------------------" >>"${resultDataPath}overallQcReport.txt"
 
 cd "${workingDirectory}"
-python3 "./qcModule/save_overall_qc_report.py" "${resultDataPath}"
+python3 "./qc/save_overall_qc_report.py" "${resultDataPath}"
 
 cd "${resultDataPath}"
 rm "${resultDataPath}rawR1Fastq.fq"

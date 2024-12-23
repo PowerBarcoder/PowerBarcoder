@@ -4,17 +4,15 @@ import sys
 from directory_manager import QcDirectoryManager
 
 BASE_URL = sys.argv[1] + sys.argv[2] + "_result/"
-directory_manager = QcDirectoryManager(BASE_URL)
-
-input_r1_path = directory_manager.get_input_r1_path()
-input_r2_path = directory_manager.get_input_r2_path()
-input_ref_path = directory_manager.get_input_ref_path()
-input_dada2_path = directory_manager.get_input_dada2_path()
-input_merger_path = directory_manager.get_input_merger_path()
-output_denoise_path = directory_manager.get_output_denoise_path()
-output_merge_path = directory_manager.get_output_merge_path()
-output_all_path = directory_manager.get_output_all_path()
-output_best_path = directory_manager.get_output_best_path()
+input_r1_path = f'{BASE_URL}denoiseResult/r1/'
+input_r2_path = f'{BASE_URL}denoiseResult/r2/'
+input_ref_path = f'{BASE_URL}mergeResult/merger/r1Ref/'
+input_dada2_path = f'{BASE_URL}mergeResult/dada2/merged/'
+input_merger_path = f'{BASE_URL}mergeResult/merger/merged/'
+output_denoise_path = f'{BASE_URL}qcResult/validator/denoise/'
+output_merge_path = f'{BASE_URL}qcResult/validator/merge/'
+output_all_path = f'{BASE_URL}qcResult/validator/all/'
+output_best_path = f'{BASE_URL}qcResult/validator/best/'
 
 
 def reverse_complement_pairwise_alignment(query_seq: str, target_seq: str):

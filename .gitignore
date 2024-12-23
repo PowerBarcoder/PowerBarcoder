@@ -1,7 +1,7 @@
 .venv/
 test_GUI/__pycache__/example_ui.cpython-310.pyc
 .idea/
-main/mergeModule/__pycache__/
+main/merge/__pycache__/
 result/
 result2/
 ssl/

@@ -13,7 +13,7 @@
 5. 效能瓶頸排除：
    1. dada2
    2. cutadapt(V done by parallel computing)
-   3. mergeModule(V done by coroutine)
+   3. merge(V done by coroutine)
 
 ## Pending
 

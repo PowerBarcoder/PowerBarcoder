@@ -1,10 +1,31 @@
 #!/usr/bin/env Rscript
 
+#' DADA2 Paired-End Read Denoising Pipeline
+#' 
+#' This script implements a DADA2-based pipeline for processing paired-end amplicon sequences:
+#' 1. Filters and trims input reads
+#' 2. Learns error rates from either custom files or filtered data
+#' 3. Denoises forward and reverse reads separately using DADA2
+#' 4. Outputs denoised R1 and R2 sequences separately
+#' 5. Performs two types of read merging:
+#'    a. Standard DADA2 merging with overlap detection
+#'    b. Concatenation of unmerged pairs with N spacers
+#' 
+#' Required arguments:
+#' args[1]: Input reads directory
+#' args[3]: Output results directory 
+#' args[4]: Custom error learning directory path (optional, if empty will use filtered reads)
+#' args[5]: Barcode mapping file
+#' args[6]: Minimum length threshold
+#' args[8+]: Locus-specific parameters (forward primer, reverse primer, min overlap, max mismatch)
+#'
+#' Note: args[2] (working directory) and args[7] (minimum overlap base pair) are deprecated
+
 # Load required modules
-source(paste0(getwd(), "/denoiseModule/constants.R"))
-source(paste0(getwd(), "/denoiseModule/install_dependencies.R"))
-source(paste0(getwd(), "/denoiseModule/file_utils.R"))
-source(paste0(getwd(), "/denoiseModule/dada2_core.R"))
+source(paste0(getwd(), "/denoise/constants.R"))
+source(paste0(getwd(), "/denoise/install_dependencies.R"))
+source(paste0(getwd(), "/denoise/file_utils.R"))
+source(paste0(getwd(), "/denoise/dada2_core.R"))
 
 args = commandArgs(trailingOnly = TRUE)
 
@@ -54,25 +75,25 @@ main <- function(args) {
     # First step: Filter reads in parallel
     filter_reads_parallel(R1, R2, filtFs, filtRs)
 
-#     # Second step: Learn error rates from filtered reads
-#     # Get filtered file paths
-#     filtFs.exists <- filtFs[file.exists(filtFs)]
-#     filtRs.exists <- filtRs[file.exists(filtRs)]
-#
-#     # Learn and plot errors using filtered reads
-#     err_results <- learn_error_rates(filtFs.exists, filtRs.exists, args[4], path_regional, region)
-#     errF <- err_results$errF
-#     errR <- err_results$errR
-#
-#     # Save err matrix to file with locus prefix
-#     write.table(errF,
-#                 file = paste0(path_regional, region, "_error_rate_F.txt"),
-#                 append = FALSE, sep = "\t",
-#                 quote = FALSE, row.names = FALSE, col.names = FALSE)
-#     write.table(errR,
-#                 file = paste0(path_regional, region, "_error_rate_R.txt"),
-#                 append = FALSE, sep = "\t",
-#                 quote = FALSE, row.names = FALSE, col.names = FALSE)
+    # Second step: Learn error rates from filtered reads
+    # Get filtered file paths
+    filtFs.exists <- filtFs[file.exists(filtFs)]
+    filtRs.exists <- filtRs[file.exists(filtRs)]
+
+    # Learn and plot errors using filtered reads
+    err_results <- learn_error_rates(filtFs.exists, filtRs.exists, args[4], path_regional, region)
+    errF <- err_results$errF
+    errR <- err_results$errR
+
+    # Save err matrix to file with locus prefix
+    write.table(errF, 
+                file = paste0(path_regional, region, "_error_rate_F.txt"),
+                append = FALSE, sep = "\t", 
+                quote = FALSE, row.names = FALSE, col.names = FALSE)
+    write.table(errR, 
+                file = paste0(path_regional, region, "_error_rate_R.txt"),
+                append = FALSE, sep = "\t", 
+                quote = FALSE, row.names = FALSE, col.names = FALSE)
 
     # Remove rows from the multiplex table where the amplicon column is empty
     multiplex[!multiplex[, AP[, a][2]] %in% "",] -> amplicon
@@ -114,10 +135,8 @@ main <- function(args) {
         # }
 
         # 核心運行:denoise
-#         dadaFs <- dada(r1, err = errF, multithread = TRUE)
-#         dadaRs <- dada(r2, err = errR, multithread = TRUE)
-        dadaFs <- dada(r1, err=NULL, selfConsist = TRUE, multithread = TRUE)
-        dadaRs <- dada(r2, err=NULL, selfConsist = TRUE, multithread = TRUE)
+        dadaFs <- dada(r1, err = errF, multithread = TRUE)
+        dadaRs <- dada(r2, err = errR, multithread = TRUE)
 
 
         paste0(rep(header, length(dadaFs[["clustering"]][["abundance"]])), "_", numbers[1:length(dadaFs[["clustering"]][["abundance"]])], rep("_r1_", length(dadaFs[["clustering"]][["abundance"]])), sprintf(dadaFs[["clustering"]][["abundance"]] / sum(dadaFs[["clustering"]][["abundance"]]), fmt = '%#.3f'), rep("_abundance_", length(dadaFs[["clustering"]][["abundance"]])), dadaFs[["clustering"]][["abundance"]]) -> r1list
@@ -130,7 +149,7 @@ main <- function(args) {
         matrix(r2fas, ncol = 3) -> r2fas
 
 
-        # # save r1 and r2 seq from dada() results (unnecessary for dada(), but necessary for mergeModule)
+        # # save r1 and r2 seq from dada() results (unnecessary for dada(), but necessary for merge module)
         # 匯出denoise後的r1序列，一條序列兩種檔名把檔名，如: "KTHU2084_Wade5880_Calymmodon_societatis_.fas", "fVGF_br01_rECL_br02"
         write.table(r1fas[, 1:2], file = paste0(path_denoise, "/r1/", filename), append = FALSE, sep = "\n", quote = FALSE,
                     row.names = FALSE, col.names = FALSE)
