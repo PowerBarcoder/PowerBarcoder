@@ -84,42 +84,43 @@ done
 echo "[INFO] Start to report overall qcReport!"
 
 echo "[INFO] Decompressing ${ampliconInfo}${R1FastqGz}..."
-pv -p "${ampliconInfo}${R1FastqGz}" | gunzip >"${resultDataPath}rawR1Fastq.fq"
+gunzip -c "${ampliconInfo}${R1FastqGz}" >"${resultDataPath}rawR1Fastq.fq"
 
 echo "[INFO] Decompressing ${ampliconInfo}${R2FastqGz}..."
-pv -p "${ampliconInfo}${R2FastqGz}" | gunzip >"${resultDataPath}rawR2Fastq.fq"
+gunzip -c "${ampliconInfo}${R2FastqGz}" >"${resultDataPath}rawR2Fastq.fq"
 
 echo "[INFO] Decompressing ${resultDataPath}trim_R1FastqGz.gz..."
-pv -p "${resultDataPath}trim_R1FastqGz.gz" | gunzip >"${resultDataPath}trim_R1FastqGz.fq"
+gunzip -c "${resultDataPath}trim_R1FastqGz.gz" >"${resultDataPath}trim_R1FastqGz.fq"
 
 echo "[INFO] Decompressing ${resultDataPath}trim_R2FastqGz.gz..."
-pv -p "${resultDataPath}trim_R2FastqGz.gz" | gunzip >"${resultDataPath}trim_R2FastqGz.fq"
+gunzip -c "${resultDataPath}trim_R2FastqGz.gz" >"${resultDataPath}trim_R2FastqGz.fq"
+
 echo " " >"${resultDataPath}overallQcReport.txt"
 
 cd "${resultDataPath}"
 
 echo "[INFO] Processing rawR1Fastq.fq..."
 echo "------------------------------------Raw data r1------------------------------------" >>"${resultDataPath}overallQcReport.txt"
-pv rawR1Fastq.fq | seqtk fqchk - | awk 'NR == 3 { print $8, $9 }' >>"${resultDataPath}overallQcReport.txt"
-pv rawR1Fastq.fq | seqkit stats - | awk 'NR == 2 { print $4, $5 ,$6 ,$7 }' >>"${resultDataPath}overallQcReport.txt"
+seqtk fqchk "rawR1Fastq.fq" | awk 'NR == 3 { print $8, $9 }' >>"${resultDataPath}overallQcReport.txt"
+seqkit stats "rawR1Fastq.fq" | awk 'NR == 2 { print $4, $5 ,$6 ,$7 }' >>"${resultDataPath}overallQcReport.txt"
 echo "--------------------------------------------------------------------------------" >>"${resultDataPath}overallQcReport.txt"
 
 echo "[INFO] Processing rawR2Fastq.fq..."
 echo "------------------------------------Raw data r2------------------------------------" >>"${resultDataPath}overallQcReport.txt"
-pv rawR2Fastq.fq | seqtk fqchk - | awk 'NR == 3 { print $8, $9 }' >>"${resultDataPath}overallQcReport.txt"
-pv rawR2Fastq.fq | seqkit stats - | awk 'NR == 2 { print $4, $5 ,$6 ,$7 }' >>"${resultDataPath}overallQcReport.txt"
+seqtk fqchk "rawR2Fastq.fq" | awk 'NR == 3 { print $8, $9 }' >>"${resultDataPath}overallQcReport.txt"
+seqkit stats "rawR2Fastq.fq" | awk 'NR == 2 { print $4, $5 ,$6 ,$7 }' >>"${resultDataPath}overallQcReport.txt"
 echo "--------------------------------------------------------------------------------" >>"${resultDataPath}overallQcReport.txt"
 
 echo "[INFO] Processing trim_R1FastqGz.fq..."
 echo "-------------------------------Fastp quality trim r1-------------------------------" >>"${resultDataPath}overallQcReport.txt"
-pv trim_R1FastqGz.fq | seqtk fqchk - | awk 'NR == 3 { print $8, $9 }' >>"${resultDataPath}overallQcReport.txt"
-pv trim_R1FastqGz.fq | seqkit stats - | awk 'NR == 2 { print $4, $5 ,$6 ,$7 }' >>"${resultDataPath}overallQcReport.txt"
+seqtk fqchk "trim_R1FastqGz.fq" | awk 'NR == 3 { print $8, $9 }' >>"${resultDataPath}overallQcReport.txt"
+seqkit stats "trim_R1FastqGz.fq" | awk 'NR == 2 { print $4, $5 ,$6 ,$7 }' >>"${resultDataPath}overallQcReport.txt"
 echo "--------------------------------------------------------------------------------" >>"${resultDataPath}overallQcReport.txt"
 
 echo "[INFO] Processing trim_R2FastqGz.fq..."
 echo "-------------------------------Fastp quality trim r2-------------------------------" >>"${resultDataPath}overallQcReport.txt"
-pv trim_R2FastqGz.fq | seqtk fqchk - | awk 'NR == 3 { print $8, $9 }' >>"${resultDataPath}overallQcReport.txt"
-pv trim_R2FastqGz.fq | seqkit stats - | awk 'NR == 2 { print $4, $5 ,$6 ,$7 }' >>"${resultDataPath}overallQcReport.txt"
+seqtk fqchk "trim_R2FastqGz.fq" | awk 'NR == 3 { print $8, $9 }' >>"${resultDataPath}overallQcReport.txt"
+seqkit stats "trim_R2FastqGz.fq" | awk 'NR == 2 { print $4, $5 ,$6 ,$7 }' >>"${resultDataPath}overallQcReport.txt"
 echo "--------------------------------------------------------------------------------" >>"${resultDataPath}overallQcReport.txt"
 
 cd "${workingDirectory}"

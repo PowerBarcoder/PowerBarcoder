@@ -4,7 +4,7 @@
 
 echo "[INFO] Start generating quality control report !"
 
-bash ./qcfileLister.sh "$1" # bash is faster then python when listing the directory
+bash ./qc/fileLister.sh "$1" # bash is faster then python when listing the directory
 
 for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
 
