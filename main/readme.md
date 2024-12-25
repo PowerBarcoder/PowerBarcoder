@@ -109,7 +109,7 @@ title: Execution order
     A[start] -->B[checkRequirement.sh]
     B --> C[checkDirectory.sh]
     C --> D[illumina_PE_demultiplex_all_newprimer.sh]
-    D --> E[dada2_denoise_PE_newprimer.r]
+    D --> E[dada2_denoise.r]
     E --> F[00_blastForRef.sh]
     F --> G[blastResultParser.py]
     G --> H[alignmentPretreater.py]

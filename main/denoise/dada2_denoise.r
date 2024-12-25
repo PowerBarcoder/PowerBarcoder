@@ -4,7 +4,7 @@
 #' 
 #' This script implements a DADA2-based pipeline for processing paired-end amplicon sequences:
 #' 1. Filters and trims input reads
-#' 2. Learns error rates from either custom files or filtered data
+#' 2. Learns error rates from either custom files or filtered data (optional based on args[2])
 #' 3. Denoises forward and reverse reads separately using DADA2
 #' 4. Outputs denoised R1 and R2 sequences separately
 #' 5. Performs two types of read merging:
@@ -13,6 +13,7 @@
 #' 
 #' Required arguments:
 #' args[1]: Input reads directory
+#' args[2]: Use error learning (TRUE/FALSE)
 #' args[3]: Output results directory 
 #' args[4]: Custom error learning directory path (optional, if empty will use filtered reads)
 #' args[5]: Barcode mapping file
@@ -34,6 +35,7 @@ main <- function(args) {
   install_dependencies()
 
   path_of_reads <- args[1]
+  use_error_learning <- as.logical(args[2])
   path_of_result <- args[3]
 
   # (Used for marking abundance sorting, meaning one sample has at most 99 ASVs)
@@ -75,25 +77,27 @@ main <- function(args) {
     # First step: Filter reads in parallel
     filter_reads_parallel(R1, R2, filtFs, filtRs)
 
-    # Second step: Learn error rates from filtered reads
-    # Get filtered file paths
-    filtFs.exists <- filtFs[file.exists(filtFs)]
-    filtRs.exists <- filtRs[file.exists(filtRs)]
+    # Second step: Learn error rates from filtered reads (conditional)
+    if (use_error_learning) {
+      # Get filtered file paths
+      filtFs.exists <- filtFs[file.exists(filtFs)]
+      filtRs.exists <- filtRs[file.exists(filtRs)]
 
-    # Learn and plot errors using filtered reads
-    err_results <- learn_error_rates(filtFs.exists, filtRs.exists, args[4], path_regional, region)
-    errF <- err_results$errF
-    errR <- err_results$errR
+      # Learn and plot errors using filtered reads
+      err_results <- learn_error_rates(filtFs.exists, filtRs.exists, args[4], path_regional, region)
+      errF <- err_results$errF
+      errR <- err_results$errR
 
-    # Save err matrix to file with locus prefix
-    write.table(errF, 
-                file = paste0(path_regional, region, "_error_rate_F.txt"),
-                append = FALSE, sep = "\t", 
-                quote = FALSE, row.names = FALSE, col.names = FALSE)
-    write.table(errR, 
-                file = paste0(path_regional, region, "_error_rate_R.txt"),
-                append = FALSE, sep = "\t", 
-                quote = FALSE, row.names = FALSE, col.names = FALSE)
+      # Save err matrix to file with locus prefix
+      write.table(errF, 
+                  file = paste0(path_regional, region, "_error_rate_F.txt"),
+                  append = FALSE, sep = "\t", 
+                  quote = FALSE, row.names = FALSE, col.names = FALSE)
+      write.table(errR, 
+                  file = paste0(path_regional, region, "_error_rate_R.txt"),
+                  append = FALSE, sep = "\t", 
+                  quote = FALSE, row.names = FALSE, col.names = FALSE)
+    }
 
     # Remove rows from the multiplex table where the amplicon column is empty
     multiplex[!multiplex[, AP[, a][2]] %in% "",] -> amplicon
@@ -135,9 +139,13 @@ main <- function(args) {
         # }
 
         # 核心運行:denoise
-        dadaFs <- dada(r1, err = errF, multithread = TRUE)
-        dadaRs <- dada(r2, err = errR, multithread = TRUE)
-
+        if (use_error_learning) {
+          dadaFs <- dada(r1, err = errF, multithread = TRUE)
+          dadaRs <- dada(r2, err = errR, multithread = TRUE)
+        } else {
+          dadaFs <- dada(r1, err=NULL, selfConsist = TRUE, multithread = TRUE)
+          dadaRs <- dada(r2, err=NULL, selfConsist = TRUE, multithread = TRUE)
+        }
 
         paste0(rep(header, length(dadaFs[["clustering"]][["abundance"]])), "_", numbers[1:length(dadaFs[["clustering"]][["abundance"]])], rep("_r1_", length(dadaFs[["clustering"]][["abundance"]])), sprintf(dadaFs[["clustering"]][["abundance"]] / sum(dadaFs[["clustering"]][["abundance"]]), fmt = '%#.3f'), rep("_abundance_", length(dadaFs[["clustering"]][["abundance"]])), dadaFs[["clustering"]][["abundance"]]) -> r1list
         cbind(r1list, dadaFs[["clustering"]][["sequence"]], dadaFs[["clustering"]][["abundance"]]) -> r1fas

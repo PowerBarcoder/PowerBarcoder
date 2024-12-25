@@ -1,5 +1,5 @@
 """
-此腳本預計置於 dada2_denoise_PE_newprimer.r 後執行，
+此腳本預計置於 dada2_denoise.r 後執行，
     用以篩選出潛在的污染序列，並將符合條件之置檔名其輸出至一 txt 檔案中。
 """
 
