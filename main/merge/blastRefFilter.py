@@ -23,6 +23,7 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
         original_line_count = len(lines)
 
     # Filter 1: Use sets for r1_set, r2_set, and r1r2_set
+    # 過濾步驟 1：根據 r1 和 r2 的標記，將比對結果分別存入兩個集合，並找出兩者的交集
     r1_set = set()
     r2_set = set()
 
@@ -53,10 +54,33 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
                 file.write(line)
 
     # Filter 2: Use constants for indices
+    # 過濾步驟 2：根據交集結果，計算每個比對對應的 overlap長度 和 identity 比率，並存入字典。
+    # (將共有的序列按ASV_ref的方式分類，整理每筆blast結果在檔案內的行數，並計算該配對的overlap長度、identity乘積，取出最佳者)
+    # 計算方法：
+    #     # r1 r2方向經過10Ncat後都一致了，不需要rc，
+    #     # 按照ref的方向會有兩種情況
+    #     # 先用r1 send - r1 sstart判斷方向，>0者，必為正向
+    #     # overlapRange = (r1 send - r2 sstart)*1
+    #     # 再用r1 send -r1 sstart判斷方向，<0者，乘負號轉正向
+    #     # overlapRange = (r1 send - r2 sstart)*-1
+
     with open(intersection_file_path, encoding='iso-8859-1') as f:
         lines = f.readlines()
 
     r_who_ref_pair_dict = {}
+    """
+    example:
+    {
+        "Pronephrium_parishii_Wade5807_KTHU2139_02_0.398_abundance_840":{
+            "Diplazium_fraxinifolium":[
+                                        [9430], # r1 line number
+                                        [200411], # r2 line number
+                                        [185] # overlap length
+                                        [9147.859749000001] # r1 identity * r2 identity
+                                    ],...
+        }
+    }
+    """
 
     for line_number in range(0, len(lines)):
         if not lines[line_number].strip():
@@ -94,7 +118,7 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
             r_who_ref_pair_dict[key][key2][2].append(overlap_range)
             r_who_ref_pair_dict[key][key2][3].append(r1_identity * r2_identity)
 
-    # Filter 3: Use constants for indices
+    # Filter 3: Use constants for indices (同ASV名稱的，取出overlap最大者留在dict裡，其他的刪除)
     keys_to_delete = []  # Create a list to store keys to be deleted
     for key in r_who_ref_pair_dict.keys():
         overlap_range_list = []  # [218, 217, 216, 216, 217, 215,...]
@@ -111,7 +135,7 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
     for key, key2 in keys_to_delete:
         del r_who_ref_pair_dict[key][key2]
 
-    # Filter 4: Use constants for indices
+    # Filter 4: Use constants for indices (同ASV名稱的，若overlap最大者超過1個，就取出identity最大者留在dict裡，其他的刪除)
     keys_to_delete = []  # Create a list to store keys to be deleted
     for key in r_who_ref_pair_dict.keys():
         identity_list = []
