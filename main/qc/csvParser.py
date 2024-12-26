@@ -3,31 +3,32 @@ import hashlib
 import os
 import sys
 import traceback
-from constants import OVERALL_INFO_STEP_LIST, FILE_SET_PARAMETER_LIST, STEPS
-
-print(f"[INFO] Start to parse csv in {sys.argv[2]}!")
-
-INPUT_PATH = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.txt"
-DEMULTIPLEX_UNTRIMMED_PATH = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/untrimmed"
-DEMULTIPLEX_TRIMMED_PATH = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/trimmed"
-DEMULTIPLEX_FILTERED_PATH = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/filtered"
-DENOISE_PAIR_PATH = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_pairs.txt"
-BLAST_RESULT_PATH = sys.argv[1] + sys.argv[2] + "_result/blastResult/" + sys.argv[2] + "_blastResult.txt"
-DADA2_DENOISE_R1_PATH = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/r1/"
-DADA2_DENOISE_R2_PATH = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/r2/"
-DADA2_MERGED_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/dada2/merged/"
-DADA2_10N_CAT_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/"
-MERGER_MERGED_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/merged/"
-OUTPUT_PATH = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.csv"
-SEGMENTATION = "--------------------------------------------------------------------------------"
-BEST_ASV_INFO_COLUMN_NAMES = ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
+from main.qc.constants import OVERALL_INFO_STEP_LIST, FILE_SET_PARAMETER_LIST, STEPS
 
 
-def parsing_denoise_pair_into_dict():
+def init():
+    global INPUT_PATH, DEMULTIPLEX_UNTRIMMED_PATH, DEMULTIPLEX_TRIMMED_PATH, DEMULTIPLEX_FILTERED_PATH, DENOISE_PAIR_PATH, BLAST_RESULT_PATH, DADA2_DENOISE_R1_PATH, DADA2_DENOISE_R2_PATH, DADA2_MERGED_PATH, DADA2_10N_CAT_PATH, MERGER_MERGED_PATH, OUTPUT_PATH, SEGMENTATION, BEST_ASV_INFO_COLUMN_NAMES
+    INPUT_PATH = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.txt"
+    DEMULTIPLEX_UNTRIMMED_PATH = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/untrimmed"
+    DEMULTIPLEX_TRIMMED_PATH = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/trimmed"
+    DEMULTIPLEX_FILTERED_PATH = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/filtered"
+    DENOISE_PAIR_PATH = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/denoise_pairs.txt"
+    BLAST_RESULT_PATH = sys.argv[1] + sys.argv[2] + "_result/blastResult/" + sys.argv[2] + "_blastResult.txt"
+    DADA2_DENOISE_R1_PATH = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/r1/"
+    DADA2_DENOISE_R2_PATH = sys.argv[1] + sys.argv[2] + "_result/denoiseResult/r2/"
+    DADA2_MERGED_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/dada2/merged/"
+    DADA2_10N_CAT_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/nCatR1R2/"
+    MERGER_MERGED_PATH = sys.argv[1] + sys.argv[2] + "_result/mergeResult/merger/merged/"
+    OUTPUT_PATH = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.csv"
+    SEGMENTATION = "--------------------------------------------------------------------------------"
+    BEST_ASV_INFO_COLUMN_NAMES = ['ASV count', 'best ASV proportion', 'best ASV number', 'hash value']
+
+
+def parsing_denoise_pair_into_dict(path: str):
     maps = {}
     try:
         # Open the log.txt file for reading with the appropriate encoding
-        with open(DENOISE_PAIR_PATH, 'r', encoding='iso-8859-1') as file:
+        with open(path, 'r', encoding='iso-8859-1') as file:
             content = file.readlines()
             # Process each line in the content
             for line in content:
@@ -135,7 +136,7 @@ def parsing_overall_info_into_list(pipeline_step: str):
 
 # prepare the abundance info for "DADA2 denoise r1","DADA2 denoise r2","DADA2 merge","DADA2 10N concat"
 def process_abundance_file(file_path):
-    sequence_info = [0, 0.0, 0, 0]
+    sequence_info = [0, 0.0, 0, 0]  # [ASV count, best ASV proportion, best ASV number, hash value]
     abundance_count = []
     best_asv_abundance_proportion = []
     best_asv_abundance_number = []
@@ -199,7 +200,7 @@ def parsing_all_data_into_csv(destination: str):
 
         # Write file list info data
         file_set_list = [parsing_file_list_into_set(parameter) for parameter in file_set_parameter_list]
-        sequence_info_dict = parsing_denoise_pair_into_dict()
+        sequence_info_dict = parsing_denoise_pair_into_dict(DENOISE_PAIR_PATH)
 
         # Add each row by iterating the sample we have
         # Write file list info data (part from qc_report.txt)
@@ -400,6 +401,7 @@ def process_dada2_abundance_data(dada2_path, sample_name):
 
 
 def main():
+    print(f"[INFO] Start to parse csv in {sys.argv[2]}!")
     try:
         print(parsing_all_data_into_csv(OUTPUT_PATH))
     except Exception as unknown_exception:
@@ -409,4 +411,5 @@ def main():
 
 
 if __name__ == "__main__":
+    init()
     main()

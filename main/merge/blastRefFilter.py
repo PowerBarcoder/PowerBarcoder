@@ -1,6 +1,6 @@
 import os
 
-# Define constants
+# Define constants (TODO 添加更多參數，用於計算新的 identity)
 SSTART_INDEX = 9
 SEND_INDEX = 8
 IDENTITY_INDEX = 2
@@ -116,7 +116,7 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
                 overlap_range = 0
 
             r_who_ref_pair_dict[key][key2][2].append(overlap_range)
-            r_who_ref_pair_dict[key][key2][3].append(r1_identity * r2_identity)
+            r_who_ref_pair_dict[key][key2][3].append(r1_identity * r2_identity) # TODO： 1 - (r1 mismatch + r2 mismatch)/ (abs(r1 qstart-qend)+1 + abs(r2 qstart-qend)+1)
 
     # Filter 3: Use constants for indices (同ASV名稱的，取出overlap最大者留在dict裡，其他的刪除)
     keys_to_delete = []  # Create a list to store keys to be deleted
