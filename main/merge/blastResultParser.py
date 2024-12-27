@@ -3,7 +3,7 @@
 
 """
 這個檔案先呼叫blastref物件，
-把00_blastForRef執行的結果(refBlast.txt)parsing成blastResult.txt，
+把00_blastForRef執行的結果({loci}_refResult.txt)parsing成blastResult.txt，
 完成後再底下的"方法們"
 """
 

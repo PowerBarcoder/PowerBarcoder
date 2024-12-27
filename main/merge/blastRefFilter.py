@@ -1,11 +1,18 @@
 import os
 
-# Define constants (TODO 添加更多參數，用於計算新的 identity)
-SSTART_INDEX = 9
-SEND_INDEX = 8
-IDENTITY_INDEX = 2
-SSEQID_INDEX = 1
+# Define constants for refResult(TODO 添加更多參數，用於計算新的 identity)
 QSSEQID_INDEX = 0
+SSEQID_INDEX = 1
+IDENTITY_INDEX = 2
+LENGTH_INDEX = 3
+MISMATCH_INDEX = 4
+GAPOPEN_INDEX = 5
+QSTART_INDEX = 6
+QEND_INDEX = 7
+SEND_INDEX = 8
+SSTART_INDEX = 9
+EVALUE_INDEX = 10
+BITSCORE_INDEX = 11
 
 
 def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
@@ -108,6 +115,16 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
             r1_identity = float(lines[r_who_ref_pair_dict[key][key2][0][0]].split("\t")[IDENTITY_INDEX])
             r2_identity = float(lines[r_who_ref_pair_dict[key][key2][1][0]].split("\t")[IDENTITY_INDEX])
 
+            r1_mismatch = int(lines[r_who_ref_pair_dict[key][key2][0][0]].split("\t")[MISMATCH_INDEX])
+            r2_mismatch = int(lines[r_who_ref_pair_dict[key][key2][1][0]].split("\t")[MISMATCH_INDEX])
+            r1_qstart = int(lines[r_who_ref_pair_dict[key][key2][0][0]].split("\t")[QSTART_INDEX])
+            r1_qend = int(lines[r_who_ref_pair_dict[key][key2][0][0]].split("\t")[QEND_INDEX])
+            r2_qstart = int(lines[r_who_ref_pair_dict[key][key2][1][0]].split("\t")[QSTART_INDEX])
+            r2_qend = int(lines[r_who_ref_pair_dict[key][key2][1][0]].split("\t")[QEND_INDEX])
+
+            identity_score = 1 - (r1_mismatch + r2_mismatch) / (
+                        abs(r1_qstart - r1_qend) + 1 + abs(r2_qstart - r2_qend) + 1)
+
             if r1send - r1start > 0:
                 overlap_range = (r1send - r2start) * 1
             elif r1send - r1start < 0:
@@ -116,7 +133,7 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
                 overlap_range = 0
 
             r_who_ref_pair_dict[key][key2][2].append(overlap_range)
-            r_who_ref_pair_dict[key][key2][3].append(r1_identity * r2_identity) # TODO： 1 - (r1 mismatch + r2 mismatch)/ (abs(r1 qstart-qend)+1 + abs(r2 qstart-qend)+1)
+            r_who_ref_pair_dict[key][key2][3].append(identity_score)
 
     # Filter 3: Use constants for indices (同ASV名稱的，取出overlap最大者留在dict裡，其他的刪除)
     keys_to_delete = []  # Create a list to store keys to be deleted
