@@ -140,12 +140,12 @@ class BlastRef:
         """Sets the file encoding to use."""
         self._encoding = encoding
 
-    def _get_qseqid_file_dirs(self, load_dir: str) -> Dict[str, str]:
+    def _get_qseqid_file_dirs(self, load_dir: str, loci_name: str) -> Dict[str, str]:
         """Returns qseqid file directory paths."""
         return {
-            "r1": load_dir + "_result/mergeResult/merger/r1/",
-            "r2": load_dir + "_result/mergeResult/merger/r2/",
-            "cat": load_dir + "_result/mergeResult/merger/nCatR1R2/forSplit/"
+            "r1": os.path.join(load_dir, f"{loci_name}_result/mergeResult/merger/r1/"),
+            "r2": os.path.join(load_dir, f"{loci_name}_result/mergeResult/merger/r2/"),
+            "cat": os.path.join(load_dir, f"{loci_name}_result/mergeResult/merger/nCatR1R2/forSplit/")
         }
 
     def _get_qseqid_file_path(self, query_name: str, file_dirs: dict) -> str:
@@ -286,8 +286,8 @@ class BlastRef:
         """
         logging.info(f"Starting BLAST processing with mode: {blast_parsing_mode}")
 
-        file_dirs = self._get_qseqid_file_dirs(load_dir)
-        input_file_path = load_dir + f"_result/blastResult/{loci_name}{TARGET_FILE_NAME}"
+        file_dirs = self._get_qseqid_file_dirs(load_dir, loci_name)
+        input_file_path = os.path.join(load_dir, f"{loci_name}_result", "blastResult", f"{loci_name}{TARGET_FILE_NAME}")
 
         # Step 1: Read file
         self._cache_files(file_dirs)
@@ -328,6 +328,3 @@ class BlastRef:
                 )
 
         return results
-
-
-

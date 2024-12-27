@@ -27,9 +27,9 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
     Returns:
         dict: A dictionary containing the filtered blast results.
     """
-    input_file_path = os.path.join(load_dir + "_result/blastResult", f"{loci_name}_refResult.txt")
-    intersection_file_path = os.path.join(load_dir + "_result/blastResult", f"{loci_name}_refResult_intersection.txt")
-    filtered_file_path = os.path.join(load_dir + "_result/blastResult", f"{loci_name}_refResult_filtered.txt")
+    input_file_path = os.path.join(load_dir , f"{loci_name}_result/blastResult", f"{loci_name}_refResult.txt")
+    intersection_file_path = os.path.join(load_dir , f"{loci_name}_result/blastResult", f"{loci_name}_refResult_intersection.txt")
+    filtered_file_path = os.path.join(load_dir , f"{loci_name}_result/blastResult", f"{loci_name}_refResult_filtered.txt")
 
     print("[INFO] blast_parsing_mode = ", blast_parsing_mode)
     print("[INFO] blastRefFilter.py is running on loci: " + loci_name)
@@ -197,7 +197,7 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
 
 
 if __name__ == '__main__':
-    main_load_dir = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202312011906/trnLF"
+    main_load_dir = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202312011906/"
     main_loci_name = "trnLF"
     main_blast_parsing_mode = "2"
     print(f"execute file directly with path: {main_load_dir}")

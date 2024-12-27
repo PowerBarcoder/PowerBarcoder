@@ -5,8 +5,8 @@ into blastResult.txt. After that, it executes the methods below.
 
 import sys
 import os
-from BlastRef import BlastRef
-from blastRefFilter import blast_ref_filter
+from main.merge.BlastRef import BlastRef
+from main.merge.blastRefFilter import blast_ref_filter
 
 
 def main():
@@ -21,11 +21,11 @@ def main():
     print("[INFO] blastResultParser.py is running on loci: " + name_of_loci)
 
     # 先執行blastRefFilter.py，篩選出需要的序列
-    blast_ref_filter(result_data_path + name_of_loci, name_of_loci, blast_parsing_mode)
+    blast_ref_filter(result_data_path, name_of_loci, blast_parsing_mode)
 
     # 再執行parsing作業，這部分在20231202新增blastRefFilter.py後，雖有重工，但其產出檔案會給後續的qc使用，所以直接保留
     local_blast = BlastRef()
-    local_blast.blast_ref(result_data_path + name_of_loci, name_of_loci, blast_parsing_mode)
+    local_blast.blast_ref(result_data_path, name_of_loci, blast_parsing_mode)
 
     # Retrieve lists from the BlastRef object
     qseqid_list = local_blast.qseqid_list
