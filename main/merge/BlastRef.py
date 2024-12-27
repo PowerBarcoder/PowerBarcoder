@@ -1,279 +1,333 @@
-# blast參考物件，blastRef
+"""
+This module defines the `BlastRef` class for processing BLAST result files.
 
-# load_dir="C:/Users/123/"
-#  1.	 qseqid	 query (e.g., gene) sequence id                Microlepia_substrigosa_CYH20090514.016_514.016_01_0.997_abundance_2026_10Ncat
-#  2.	 sseqid	 subject (e.g., reference genome) sequence id  MH319942_Dennstaedtiaceae_Histiopteris_incisa
-#  3.	 pident	 percentage of identical matches               94.656
-#  4.	 length	 alignment length                              262
-#  5.	 mismatch	 number of mismatches                      13
-#  6.	 gapopen	 number of gap openings                    1
-#  7.	 qstart	 start of alignment in query                   1
-#  8.	 qend	 end of alignment in query                     262
-#  9.	 sstart	 start of alignment in subject                 558
-#  10.	 send	 end of alignment in subject                   818
-#  11.	 evalue	 expect value                                  3.03e-115
-#  12.	 bitscore	 bit score                                 405
+The `BlastRef` class:
+- Reads BLAST output files.
+- Extracts relevant data based on parsing modes.
+- Stores processed results in attributes for further analysis.
 
-# TARGET_FILE_NAME = "_refResult.txt"
+### Class:
+- `BlastRef`: Represents a processor for handling BLAST result files.
+
+### Example Usage:
+    load_dir = "path/to/blast/results"
+    loci_name = "gene_region"
+    parsing_mode = "2"  # Parsing modes: 0, 1, 2, or 3
+    blast_ref = BlastRef()
+    blast_ref.blast_ref(load_dir, loci_name, parsing_mode)
+
+### Data Fields:
+Field Name      | Input Format            | Output Attribute       | Description                            |
+----------------|-------------------------|------------------------|----------------------------------------|
+qseqid          | Tab-separated field     | qseqid_list            | Query sequence ID (e.g., gene name)    |
+sseqid          | Tab-separated field     | sseqid_list            | Subject sequence ID (reference genome) |
+pident          | Float value             | pident_list            | Percentage of identical matches (0~100)|
+length          | Integer value           | length_list            | Alignment length                       |
+mismatch        | Integer value           | mismatch_list          | Number of mismatches                   |
+gapopen         | Integer value           | gapopen_list           | Number of gap openings                 |
+qstart          | Integer value           | qstart_list            | Start position in query                |
+qend            | Integer value           | qend_list              | End position in query                  |
+sstart          | Integer value           | sstart_list            | Start position in subject              |
+send            | Integer value           | send_list              | End position in subject                |
+evalue          | Float value             | evalue_list            | Expect value                           |
+bitscore        | Float value             | bitscore_list          | Alignment bit score                    |
+-               | Calculated              | qstart_minus_qend_list | |qstart - qend|                        |
+-               | Calculated              | sstart_minus_send_list | |sstart - send|                        |
+-               | Determined              | rwho_list              | Read origin (r1/r2/cat)                |
+
+### Parsing Modes:
+- **Mode 0**: Prioritizes highest identity; ties resolved by maximum alignment length (`qstart-qend`).
+- **Mode 1**: Prioritizes maximum alignment length; ties resolved by highest identity.
+- **Mode 2**: Combines identity and alignment length as a product.
+- **Mode 3**: Prioritizes smallest e-value below 0.01 (high-confidence alignments).
+
+"""
+
+import os
+import logging
+from typing import Dict, List, Optional, Union, Any
+from dataclasses import dataclass
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# File related constants
 TARGET_FILE_NAME = "_refResult_filtered.txt"
+DEFAULT_ENCODING = 'utf-8'  # Changed from iso-8859-1
+FILE_CACHE_SIZE = 1000  # Maximum number of files to cache
+
+# BLAST result column indices
+QSEQID_IDX = 0
+SSEQID_IDX = 1
+PIDENT_IDX = 2
+LENGTH_IDX = 3
+MISMATCH_IDX = 4
+GAPOPEN_IDX = 5
+QSTART_IDX = 6
+QEND_IDX = 7
+SSTART_IDX = 8
+SEND_IDX = 9
+EVALUE_IDX = 10
+BITSCORE_IDX = 11
+QSTART_MINUS_QEND_IDX = 12
+SSTART_MINUS_SEND_IDX = 13
+RWHO_IDX = 14
+
+# Parsing mode constants
+MODE_IDENTITY_FIRST = "0"
+MODE_LENGTH_FIRST = "1"
+MODE_COMBINED = "2"
+MODE_EVALUE = "3"
+
+# Threshold values
+MAX_EVALUE_THRESHOLD = 0.01
+
+
+@dataclass
+class BlastResult:
+    """Data class for storing BLAST result values."""
+    qseqid: str
+    sseqid: str
+    pident: float
+    length: int
+    mismatch: int
+    gapopen: int
+    qstart: int
+    qend: int
+    sstart: int
+    send: int
+    evalue: float
+    bitscore: float
+    qstart_minus_qend: int
+    sstart_minus_send: int
+    rwho: str
 
 
 class BlastRef:
+    """
+    A class to represent the BlastRef object which processes BLAST results.
+    
+    Example:
+        >>> blast_ref = BlastRef()
+        >>> result = blast_ref.blast_ref("path/to/blast/results/", "trnLF", "0")
+        >>> isinstance(result, BlastRef)
+        True
+    """
 
-    def __init__(self):
-        self.qseqid_list = []
-        self.sseqid_list = []
-        self.pident_list = []
-        self.length_list = []  # 3
-        self.mismatch_list = []
-        self.gapopen_list = []
-        self.qstart_list = []  # 6
-        self.qend_list = []  # 7
-        self.sstart_list = []
-        self.send_list = []
-        self.evalue_list = []
-        self.bitscore_list = []
-        self.qstart_minus_qend_list = []  # 12
-        self.sstart_minus_send_list = []
-        self.rwho_list = []
-        self.ref_list = []
+    def __init__(self) -> None:
+        """
+        Initialize BlastRef with empty result lists and configuration.
+        """
+        self.qseqid_list: List[str] = []
+        self.sseqid_list: List[str] = []
+        self.pident_list: List[float] = []
+        self.length_list: List[int] = []
+        self.mismatch_list: List[int] = []
+        self.gapopen_list: List[int] = []
+        self.qstart_list: List[int] = []
+        self.qend_list: List[int] = []
+        self.sstart_list: List[int] = []
+        self.send_list: List[int] = []
+        self.evalue_list: List[float] = []
+        self.bitscore_list: List[float] = []
+        self.qstart_minus_qend_list: List[int] = []
+        self.sstart_minus_send_list: List[int] = []
+        self.rwho_list: List[str] = []
+        self._file_cache: Dict[str, List[str]] = {}
+        self._encoding: str = DEFAULT_ENCODING
 
-    def blast_ref(self, load_dir: str, loci_name: str, blast_parsing_mode: str):
-        """
-        Step 1 O(N)製作所有key(queryName)清單
-        Step 2 O(N)按key塞入所有refBlast的12個值+自己新增的四個值
-        Step 3 迴圈跑dict裡的所有key，取出值放進個別欄位的list裡(所以回傳出來16個list，每個list都是Object的一個properties)
-        """
-        qseqid_file_dir_r1 = load_dir + "_result/mergeResult/merger/r1/"
-        qseqid_file_dir_r2 = load_dir + "_result/mergeResult/merger/r2/"
-        qseqid_file_dir_cat = load_dir + "_result/mergeResult/merger/nCatR1R2/forSplit/"
-        # Step 1: Read file
-        with open(load_dir + "_result/blastResult/" + loci_name + TARGET_FILE_NAME, encoding='iso-8859-1') as f:
+    def set_encoding(self, encoding: str) -> None:
+        """Sets the file encoding to use."""
+        self._encoding = encoding
+
+    def _get_qseqid_file_dirs(self, load_dir: str) -> Dict[str, str]:
+        """Returns qseqid file directory paths."""
+        return {
+            "r1": load_dir + "_result/mergeResult/merger/r1/",
+            "r2": load_dir + "_result/mergeResult/merger/r2/",
+            "cat": load_dir + "_result/mergeResult/merger/nCatR1R2/forSplit/"
+        }
+
+    def _get_qseqid_file_path(self, query_name: str, file_dirs: dict) -> str:
+        """Returns the appropriate file path based on query name."""
+        if "_r1" in query_name:
+            return os.path.join(file_dirs["r1"], query_name)
+        elif "_r2" in query_name:
+            return os.path.join(file_dirs["r2"], query_name)
+        return os.path.join(file_dirs["cat"], query_name)
+
+    def _read_file_safe(self, file_path: str) -> Optional[List[str]]:
+        """Safely reads a file with error handling."""
+        try:
+            with open(file_path, encoding=self._encoding) as f:
+                return f.readlines()
+        except FileNotFoundError:
+            logging.error(f"File not found: {file_path}")
+            return None
+        except UnicodeDecodeError:
+            logging.warning(f"Unable to decode file with {self._encoding}, trying fallback encoding")
+            try:
+                with open(file_path, encoding='iso-8859-1') as f:
+                    return f.readlines()
+            except Exception as e:
+                logging.error(f"Failed to read file with fallback encoding: {e}")
+                return None
+        except Exception as e:
+            logging.error(f"Unexpected error reading file {file_path}: {e}")
+            return None
+
+    def _cache_files(self, file_dirs: Dict[str, str]) -> None:
+        """Pre-cache files for performance optimization."""
+        for dir_type, dir_path in file_dirs.items():
+            try:
+                files = os.listdir(dir_path)[:FILE_CACHE_SIZE]  # Limit cache size
+                for file_name in files:
+                    file_path = os.path.join(dir_path, file_name)
+                    if file_path not in self._file_cache:
+                        content = self._read_file_safe(file_path)
+                        if content:
+                            self._file_cache[file_path] = content
+                            logging.debug(f"Cached file: {file_path}")
+            except Exception as e:
+                logging.error(f"Error caching files from {dir_path}: {e}")
+
+    def _get_sequence_length(self, file_path: str) -> int:
+        """Returns the length of the sequence from a FASTA file."""
+        with open(file_path, encoding='utf-8') as f:
             lines = f.readlines()
+            return len(lines[1].strip())
 
-        # Step 2: Initialize the category dictionary and value list
-        default_value_list = ["", "", 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, "", ""]
-        cate = {}
+    def _determine_rwho(self, query_name: str) -> str:
+        """Determines the read origin (r1, r2, or rWho)."""
+        if "_r1" in query_name:
+            return "r1"
+        elif "_r2" in query_name:
+            return "r2"
+        return "rWho"
 
-        # Step 3: Process the lines and update the category dictionary
-        print("[INFO] blast_parsing_mode = ", blast_parsing_mode)
-        temp_query_name = ""  # 給第一個query_name用的，如果下一個query_name跟這個一樣，就不用再讀檔算qseqid序列長度了
+    def _parse_blast_line(self, line: str) -> Optional[BlastResult]:
+        """Parses a BLAST result line into a BlastResult object."""
+        try:
+            text_list = line.strip().split("\t")
+            if len(text_list) < 12:
+                return None
+
+            query_name = text_list[0] + ".fas"
+            values = text_list[1:12]
+            qstart_minus_qend = abs(int(values[5]) - int(values[6]))
+            sstart_minus_send = abs(int(values[7]) - int(values[8]))
+            rwho = self._determine_rwho(query_name)
+
+            return BlastResult(
+                qseqid=query_name,
+                sseqid=values[0],
+                pident=float(values[1]),
+                length=int(values[2]),
+                mismatch=int(values[3]),
+                gapopen=int(values[4]),
+                qstart=int(values[5]),
+                qend=int(values[6]),
+                sstart=int(values[7]),
+                send=int(values[8]),
+                evalue=float(values[9]),
+                bitscore=float(values[10]),
+                qstart_minus_qend=qstart_minus_qend,
+                sstart_minus_send=sstart_minus_send,
+                rwho=rwho
+            )
+        except (ValueError, IndexError) as e:
+            logging.error(f"Error parsing BLAST line: {e}")
+            return None
+
+    def _apply_parsing_mode(self, current: BlastResult, new: BlastResult, mode: str) -> BlastResult:
+        """Applies the parsing mode logic to determine which result to keep."""
+        if mode == MODE_IDENTITY_FIRST:
+            if new.pident > current.pident:
+                return new
+            elif new.pident == current.pident and new.qstart_minus_qend > current.qstart_minus_qend:
+                return new
+        elif mode == MODE_LENGTH_FIRST:
+            if new.qstart_minus_qend > current.qstart_minus_qend:
+                return new
+            elif new.qstart_minus_qend == current.qstart_minus_qend and new.pident > current.pident:
+                return new
+        elif mode == MODE_COMBINED:
+            if (new.qstart_minus_qend * new.pident) > (current.qstart_minus_qend * current.pident):
+                return new
+        elif mode == MODE_EVALUE:
+            if new.evalue < MAX_EVALUE_THRESHOLD and new.evalue < current.evalue:
+                return new
+        return current
+
+    def _update_attributes_from_results(self, results: Dict[str, BlastResult]) -> None:
+        """Updates object attributes from the results dictionary."""
+        self.qseqid_list = [r.qseqid for r in results.values()]
+        self.sseqid_list = [r.sseqid for r in results.values()]
+        self.pident_list = [r.pident for r in results.values()]
+        self.length_list = [r.length for r in results.values()]
+        self.mismatch_list = [r.mismatch for r in results.values()]
+        self.gapopen_list = [r.gapopen for r in results.values()]
+        self.qstart_list = [r.qstart for r in results.values()]
+        self.qend_list = [r.qend for r in results.values()]
+        self.sstart_list = [r.sstart for r in results.values()]
+        self.send_list = [r.send for r in results.values()]
+        self.evalue_list = [r.evalue for r in results.values()]
+        self.bitscore_list = [r.bitscore for r in results.values()]
+        self.qstart_minus_qend_list = [r.qstart_minus_qend for r in results.values()]
+        self.sstart_minus_send_list = [r.sstart_minus_send for r in results.values()]
+        self.rwho_list = [r.rwho for r in results.values()]
+
+    def blast_ref(self, load_dir: str, loci_name: str, blast_parsing_mode: str) -> Optional['BlastRef']:
+        """
+        Process BLAST results and populate object attributes.
+
+        Returns:
+            Optional[BlastRef]: The populated BlastRef object, or None if processing fails
+        """
+        logging.info(f"Starting BLAST processing with mode: {blast_parsing_mode}")
+
+        file_dirs = self._get_qseqid_file_dirs(load_dir)
+        input_file_path = load_dir + f"_result/blastResult/{loci_name}{TARGET_FILE_NAME}"
+
+        # Step 1: Read file
+        self._cache_files(file_dirs)
+        lines = self._read_file_safe(input_file_path)
+
+        if not lines:
+            logging.error("Failed to read input file")
+            return None
+
+        try:
+            # Step 2: Process the lines and update the category dictionary
+            results = self._process_blast_results(lines, blast_parsing_mode)
+            # Step 3: Assemble the results into object attributes
+            self._update_attributes_from_results(results)
+            logging.info(f"Successfully processed {len(results)} BLAST results")
+            return self
+        except Exception as e:
+            logging.error(f"Error processing BLAST results: {e}")
+            return None
+
+    def _process_blast_results(self, lines: List[str], blast_parsing_mode: str) -> Dict[str, BlastResult]:
+        """Process BLAST result lines into a dictionary of BlastResult objects."""
+        results: Dict[str, BlastResult] = {}
+
         for line in lines:
             if not line.strip():
-                break
+                continue
 
-            text_list = (line.split("\t"))
-            # print(text_list) # ['Arachniodes_aristata_122_12_2_01_0.632_abundance_127', 'Cu_po_JP_1', '100.000', '269', '0', '0', '286', '554', '135', '403', '6.28e-143', '497\n']
+            result = self._parse_blast_line(line)
+            if not result:
+                continue
 
-            # 20230619 因為所有abundance都要做，所以檔名直接用text_list[0]，不用再parsing了
-            query_name = text_list[0] + ".fas"
-            qseqid = query_name
-            sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue, bitscore = text_list[1:12]
-            qstart_minus_qend = abs(int(qstart) - int(qend))  # 20230702 應該是之前用到負數來比了，所以才會取反，這裡補上abs()
-            sstart_minus_send = abs(int(sstart) - int(send))
-
-            # r1r2 cat起來blast
-            rwho = "rWho"
-            # r1r2分開blast
-            if query_name.find("_r1") != -1:
-                rwho = "r1"
-            elif query_name.find("_r2") != -1:
-                rwho = "r2"
-
-            # # add default value in the category dictionary
-            if query_name not in cate:
-                cate[query_name] = default_value_list
-
-            value_list = [qseqid, sseqid, pident, length, mismatch, gapopen, qstart, qend, sstart, send, evalue,
-                          bitscore, qstart_minus_qend, sstart_minus_send, rwho]
-            # print(value_List)
-            # 20230715 修改float(cate[query_name][3])，改成去讀檔算長度，不然這裡的length其實是有align到的範圍的length
-            if query_name != temp_query_name:  # 不篩的話讀檔次數要從幾千變幾十萬
-                temp_query_name = query_name
-                # r1r2分開blast
-                if query_name.find("_r1") != -1:
-                    qseqid_file_path = qseqid_file_dir_r1 + query_name
-                elif query_name.find("_r2") != -1:
-                    qseqid_file_path = qseqid_file_dir_r2 + query_name
-                # r1r2 cat起來blast
-                else:
-                    qseqid_file_path = qseqid_file_dir_cat + query_name
-
-                # get fasta sequence length
-                with open(qseqid_file_path, encoding='iso-8859-1') as f:
-                    lines = f.readlines()
-                    qseqid_length = len(lines[1].strip())
-                    print(qseqid_file_path, str(qseqid_length))
-                    # /PowerBarcoder/data/result/202307150850/trnLF_result/mergeResult/merger/r1/Diplazium_sp._Wade5374_KTHU1451_02_0.387_abundance_251_r1.fas 271
-
-            # 一個Sample會blast到多筆，每讀出一行就要檢查是否有更符合條件的值，有的話就更新
-            # 使用blastParsingMode參數來決定使用以下四種情境之一 (20230702)
-            # cate[query_name][12]代表當前最高的qstartMinusQend
-            # 用float(cate[query_name][12]) < float(qstartMinusQend)可判斷新值是否比舊值大
-            # 同理，用float(cate[query_name][2]) == float(pident)可判斷新值是否跟舊值一樣
-            if blast_parsing_mode == "0":
-                # # 模式一:
-                # 1.identity: 用3排序，取最高者出來，但不低於85
-                # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半
-                if float(cate[query_name][2]) < float(pident):
-                    # if float(cate[query_name][2]) < float(pident) and float(pident) >= 85 and float(cate[query_name][12]) >= 0.5*float(qseqid_length):
-                    cate[query_name] = value_list
-                elif float(cate[query_name][2]) == float(pident):
-                    if float(cate[query_name][12]) < float(qstart_minus_qend):
-                        cate[query_name] = value_list
-            elif blast_parsing_mode == "1":
-                # # 模式二:
-                # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度(qseqid_length)的一半
-                # 2.identity: 用3排序，取最高者出來，但不低於85
-                if float(cate[query_name][12]) < float(qstart_minus_qend):
-                    # if float(cate[query_name][12]) < float(qstart_minus_qend) and float(pident) >= 85 and float(qstart_minus_qend) >= 0.5*float(qseqid_length):
-                    cate[query_name] = value_list
-                elif float(cate[query_name][12]) == float(qstart_minus_qend):
-                    if float(cate[query_name][2]) < float(pident):
-                        cate[query_name] = value_list
-            elif blast_parsing_mode == "2":
-                # # 模式三:
-                # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85
-                # if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstart_minus_qend)*float(pident) and float(pident) >= 85 and float(qstart_minus_qend) >= 0.5*float(qseqid_length):
-                if float(cate[query_name][12]) * float(cate[query_name][2]) < float(qstart_minus_qend) * float(pident):
-                    # if float(cate[query_name][12])*float(cate[query_name][2]) < float(qstart_minus_qend)*float(pident) and float(pident) >= 85:
-                    cate[query_name] = value_list
-            elif blast_parsing_mode == "3":
-                # # 模式四:
-                # 1. e-value, 越小越好，但不高於0.01，1/10000代表每10000次align才可能出現一次更好的結果
-                if float(cate[query_name][10]) > float(evalue) and float(evalue) < 0.01:
-                    # if float(cate[query_name][10]) > float(evalue) and float(evalue) < 0.01 and float(pident) >= 85 and float(qstart_minus_qend) >= 0.5*float(qseqid_length):
-                    cate[query_name] = value_list
+            if result.qseqid not in results:
+                results[result.qseqid] = result
             else:
-                print("can't choose the right blastParsingMode: " + query_name)
+                results[result.qseqid] = self._apply_parsing_mode(
+                    results[result.qseqid], result, blast_parsing_mode
+                )
 
-        # print(cate)
-        # print(len(cate.keys())) #這個數應該要跟nonmerge裡面的檔案數量一致，20230206 267沒錯
-        # print(len(cate.keys()))
-
-        # Step 4: 物件拼裝
-        qseqid_list = []
-        for key in cate:
-            qseqid_list.append(cate[key][0])
-        self.qseqid_list = qseqid_list
-
-        sseqid_list = []
-        for key in cate:
-            sseqid_list.append(cate[key][1])
-        self.sseqid_list = sseqid_list
-
-        pident_list = []
-        for key in cate:
-            pident_list.append(cate[key][2])
-        self.pident_list = pident_list
-
-        length_list = []
-        for key in cate:
-            length_list.append(cate[key][3])
-        self.length_list = length_list
-
-        mismatch_list = []
-        for key in cate:
-            mismatch_list.append(cate[key][4])
-        self.mismatch_list = mismatch_list
-
-        gapopen_list = []
-        for key in cate:
-            gapopen_list.append(cate[key][5])
-        self.gapopen_list = gapopen_list
-
-        qstart_list = []
-        for key in cate:
-            qstart_list.append(cate[key][6])
-        self.qstart_list = qstart_list
-
-        qend_list = []
-        for key in cate:
-            qend_list.append(cate[key][7])
-        self.qend_list = qend_list
-
-        sstart_list = []
-        for key in cate:
-            sstart_list.append(cate[key][8])
-        self.sstart_list = sstart_list
-
-        send_list = []
-        for key in cate:
-            send_list.append(cate[key][9])
-        self.send_list = send_list
-
-        evalue_list = []
-        for key in cate:
-            evalue_list.append(cate[key][10])
-        self.evalue_list = evalue_list
-
-        bitscore_list = []
-        for key in cate:
-            bitscore_list.append(str(cate[key][11]).replace("\n", ""))  # 這裡莫名其妙有個換行
-        self.bitscore_list = bitscore_list
-
-        qstart_minus_qend_list = []
-        for key in cate:
-            qstart_minus_qend_list.append(cate[key][12])
-        self.qstart_minus_qend_list = qstart_minus_qend_list
-
-        sstart_minus_send_list = []
-        for key in cate:
-            sstart_minus_send_list.append(cate[key][13])
-        self.sstart_minus_send_list = sstart_minus_send_list
-
-        rwho_list = []
-        for key in cate:
-            rwho_list.append(cate[key][14])
-        self.rwho_list = rwho_list
-
-        return self
-
-        #  1.	 qseqid	 query (e.g., gene) sequence id
-        #  2.	 sseqid	 subject (e.g., reference genome) sequence id
-        #  3.	 pident	 percentage of identical matches
-        #  4.	 length	 alignment length
-        #  5.	 mismatch	 number of mismatches
-        #  6.	 gapopen	 number of gap openings
-        #  7.	 qstart	 start of alignment in query
-        #  8.	 qend	 end of alignment in query
-        #  9.	 sstart	 start of alignment in subject
-        #  10.	 send	 end of alignment in subject
-        #  11.	 evalue	 expect value
-        #  12.	 bitscore	 bit score
-        #  13.   qstartMinusQend
-        #  14.   sstartMinusSend
-        #  15.   rwho_list(r1或r2)
-        #  16.   ref_list(???)
-
-    # r1 r2方向經過10Ncat後都一致了，不需要rc
-    # 所以有兩個情況
-    # 先用send-sstart判斷方向，>0者，必為正
-    # (r1 send - r2 sstart)*1
-    # 再用send-sstart判斷方向，<0者，乘負號轉正
-    # (r1 send - r2 sstart)*-1
-    # 兩個數值pool起來，取出最大者
+        return results
 
 
-if __name__ == '__main__':
-    test_load_dir = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/202311291745/trnLF"
-    test_loci_name = "trnLF"
-    test_blast_parsing_mode = "0"
-    blast_ref_instance = BlastRef()
-    blast_ref_instance.blast_ref(test_load_dir, test_loci_name, test_blast_parsing_mode)
-    # print(blast_ref_instance.qseqid_list)
-    # print(blast_ref_instance.sseqid_list)
-    # print(blast_ref_instance.pident_list)
-    # print(blast_ref_instance.length_list)
-    # print(blast_ref_instance.mismatch_list)
-    # print(blast_ref_instance.gapopen_list)
-    # print(blast_ref_instance.qstart_list)
-    # print(blast_ref_instance.qend_list)
-    # print(blast_ref_instance.sstart_list)
-    # print(blast_ref_instance.send_list)
-    # print(blast_ref_instance.evalue_list)
-    # print(blast_ref_instance.bitscore_list)
-    # print(blast_ref_instance.qstart_minus_qend_list)
-    # print(blast_ref_instance.sstart_minus_send_list)
-    # print(blast_ref_instance.rwho_list)
-    # print(blast_ref_instance.ref_list)
+

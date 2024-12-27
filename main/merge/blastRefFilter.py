@@ -1,6 +1,6 @@
 import os
 
-# Define constants for refResult(TODO 添加更多參數，用於計算新的 identity)
+# Define constants for refResult indices
 QSSEQID_INDEX = 0
 SSEQID_INDEX = 1
 IDENTITY_INDEX = 2
@@ -16,7 +16,17 @@ BITSCORE_INDEX = 11
 
 
 def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
-    # File paths using os.path.join
+    """
+    Filters the blast results based on specific criteria and writes the filtered results to a file.
+
+    Args:
+        load_dir (str): The directory where the blast results are stored.
+        loci_name (str): The name of the loci.
+        blast_parsing_mode (str): The mode of parsing to be used.
+
+    Returns:
+        dict: A dictionary containing the filtered blast results.
+    """
     input_file_path = os.path.join(load_dir + "_result/blastResult", f"{loci_name}_refResult.txt")
     intersection_file_path = os.path.join(load_dir + "_result/blastResult", f"{loci_name}_refResult_intersection.txt")
     filtered_file_path = os.path.join(load_dir + "_result/blastResult", f"{loci_name}_refResult_filtered.txt")
@@ -30,7 +40,6 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
         original_line_count = len(lines)
 
     # Filter 1: Use sets for r1_set, r2_set, and r1r2_set
-    # 過濾步驟 1：根據 r1 和 r2 的標記，將比對結果分別存入兩個集合，並找出兩者的交集
     r1_set = set()
     r2_set = set()
 
@@ -47,9 +56,9 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
             r2_set.add("_".join([query_name, text_list[SSEQID_INDEX]]))
 
     r1r2_set = r1_set.intersection(r2_set)
+
     # Output to refResult_intersection.txt
     with open(intersection_file_path, "a") as file:
-        # Clean the file
         file.truncate(0)
         file.seek(0)  # Move the cursor to the beginning
         for line in lines:
@@ -60,7 +69,7 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
             if query in r1r2_set:
                 file.write(line)
 
-    # Filter 2: Use constants for indices
+    # Filter 2: Calculate overlap length and identity ratio for each pair
     # 過濾步驟 2：根據交集結果，計算每個比對對應的 overlap長度 和 identity 比率，並存入字典。
     # (將共有的序列按ASV_ref的方式分類，整理每筆blast結果在檔案內的行數，並計算該配對的overlap長度、identity乘積，取出最佳者)
     # 計算方法：
@@ -135,43 +144,38 @@ def blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str):
             r_who_ref_pair_dict[key][key2][2].append(overlap_range)
             r_who_ref_pair_dict[key][key2][3].append(identity_score)
 
-    # Filter 3: Use constants for indices (同ASV名稱的，取出overlap最大者留在dict裡，其他的刪除)
-    keys_to_delete = []  # Create a list to store keys to be deleted
+    # Filter 3: Retain the entry with the maximum overlap for each ASV name, deleting the rest
+    keys_to_delete = []
     for key in r_who_ref_pair_dict.keys():
-        overlap_range_list = []  # [218, 217, 216, 216, 217, 215,...]
+        overlap_range_list = []
         for key2 in r_who_ref_pair_dict[key].keys():
             overlap_range_list.append(r_who_ref_pair_dict[key][key2][2][0])
         max_overlap_range = max(overlap_range_list)
 
-        # Mark keys for deletion
         for key2 in r_who_ref_pair_dict[key].keys():
             if r_who_ref_pair_dict[key][key2][2][0] < max_overlap_range:
                 keys_to_delete.append((key, key2))
 
-    # Delete marked keys
     for key, key2 in keys_to_delete:
         del r_who_ref_pair_dict[key][key2]
 
-    # Filter 4: Use constants for indices (同ASV名稱的，若overlap最大者超過1個，就取出identity最大者留在dict裡，其他的刪除)
-    keys_to_delete = []  # Create a list to store keys to be deleted
+    # Filter 4: Retain the entry with the maximum identity if multiple entries have the same maximum overlap, deleting the rest
+    keys_to_delete = []
     for key in r_who_ref_pair_dict.keys():
         identity_list = []
         for key2 in r_who_ref_pair_dict[key].keys():
             identity_list.append(r_who_ref_pair_dict[key][key2][3][0])
         max_identity = max(identity_list)
 
-        # Mark keys for deletion
         for key2 in r_who_ref_pair_dict[key].keys():
             if r_who_ref_pair_dict[key][key2][3][0] < max_identity:
                 keys_to_delete.append((key, key2))
 
-    # Delete marked keys
     for key, key2 in keys_to_delete:
         del r_who_ref_pair_dict[key][key2]
 
     # Write to refResult_filtered.txt
     with open(filtered_file_path, "a") as file:
-        # Clean the file
         file.truncate(0)
         file.seek(0)  # Move the cursor to the beginning
 
