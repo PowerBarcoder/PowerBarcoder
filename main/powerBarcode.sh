@@ -44,7 +44,8 @@ elif [ "$denoise_mode" == "2" ]; then
 
     # # -----------------------3.3.3. second denoise------------------
     echo "[INFO] start second dada2_denoise"
-    SECOND_ERROR_LEARN_PATH="${resultDataPath}/error_learning_2nd"
+    SECOND_ERROR_LEARN_PATH="${resultDataPath}/${locus}_result/demultiplexResult/error_learning_2nd"
+    echo "[INFO] SECOND_ERROR_LEARN_PATH: ${SECOND_ERROR_LEARN_PATH}"
     Rscript "${workingDirectory}/denoise/dada2_denoise.r" "$ampliconInfo" "TRUE" "$resultDataPath" "$SECOND_ERROR_LEARN_PATH" "$dada2BarcodeFile" "$amplicon_minimum_length" "$minimum_overlap_base_pair" "${nameOfLoci[@]}" "${primerFName[@]}" "${primerRName[@]}" "${minimumOverlapBasePair[@]}" "${maximumMismatchBasePair[@]}"
     echo "[INFO] end second dada2_denoise"
 fi
