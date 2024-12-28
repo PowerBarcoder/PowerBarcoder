@@ -1,14 +1,13 @@
 import os
 import sys
 
-import pytest
 from pathlib import Path
 
 # Add the project root directory to the PYTHONPATH
 project_root = Path(__file__).resolve().parents[2]
 sys.path.append(str(project_root))
 
-from main.merge.blastResultParser import main as blast_result_parser_main
+from main.merge.blast.blastResultParser import main as blast_result_parser_main
 
 
 def test_blast_result_parser(monkeypatch):

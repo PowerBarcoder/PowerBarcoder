@@ -1,4 +1,3 @@
-import os
 import sys
 import logging
 import pytest
@@ -8,7 +7,7 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parents[2]
 sys.path.append(str(project_root))
 
-from main.merge.BlastRef import BlastRef
+from main.merge.blast.secondary_blast_ref_filter import BlastRef
 
 # Configure test logging
 logging.basicConfig(level=logging.INFO)
@@ -32,7 +31,7 @@ def test_blast_ref_processing(blast_ref_instance):
     loci_name = "trnLF"
     blast_parsing_mode = "0"
 
-    result = blast_ref_instance.blast_ref(load_dir, loci_name, blast_parsing_mode)
+    result = blast_ref_instance.secondary_blast_ref_filter(load_dir, loci_name, blast_parsing_mode)
 
     # Verify processing was successful
     assert result is not None
@@ -42,7 +41,7 @@ def test_blast_ref_processing(blast_ref_instance):
     assert len(blast_ref_instance.length_list) > 0
 
 
-def test_blast_result_class():
+def test_primary_blast_result_class():
     """Test with real data path."""
     test_load_dir = r"C:\Users\kwz50\IdeaProjects\PowerBarcoder\tests\data\result\202412281411"
     test_loci_name = "trnLF"
@@ -50,7 +49,7 @@ def test_blast_result_class():
 
     logging.info("Starting BlastRef processing")
     blast_ref_instance = BlastRef()
-    result = blast_ref_instance.blast_ref(test_load_dir, test_loci_name, test_blast_parsing_mode)
+    result = blast_ref_instance.secondary_blast_ref_filter(test_load_dir, test_loci_name, test_blast_parsing_mode)
 
     if result:
         logging.info("Processing completed successfully")

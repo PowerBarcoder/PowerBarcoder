@@ -1,12 +1,15 @@
 """
-This script calls the BlastRef object to parse the results of 00_blastForRef ({loci}_refResult.txt)
-into blastResult.txt. After that, it executes the methods below.
+This script calls primary_blast_ref_filter and secondary_blast_ref_filter to parse the results of 00_blastForRef.
+step as follows:
+1. {loci}_refResult.txt -> primary_blast_ref_filter filter 1 -> {loci}_refResult_intersection.txt
+2. {loci}_refResult_intersection.txt -> primary_blast_ref_filter filter 2~4 -> {loci}_refResult_filtered.txt
+3. {loci}_refResult_filtered.txt -> secondary_blast_ref_filter -> {loci}_blastResult.txt
 """
 
 import sys
 import os
-from main.merge.BlastRef import BlastRef
-from main.merge.blastRefFilter import blast_ref_filter
+from main.merge.blast.secondary_blast_ref_filter import BlastRef
+from main.merge.blast.primary_blast_ref_filter import primary_blast_ref_filter
 
 
 def main():
@@ -20,12 +23,12 @@ def main():
 
     print("[INFO] blastResultParser.py is running on loci: " + name_of_loci)
 
-    # 先執行blastRefFilter.py，篩選出需要的序列
-    blast_ref_filter(result_data_path, name_of_loci, blast_parsing_mode)
+    # 先執行primary_blast_ref_filter.py，篩選出需要的序列
+    primary_blast_ref_filter(result_data_path, name_of_loci, blast_parsing_mode)
 
-    # 再執行parsing作業，這部分在20231202新增blastRefFilter.py後，雖有重工，但其產出檔案會給後續的qc使用，所以直接保留
+    # 再執行parsing作業，這部分在20231202新增primary_blast_ref_filter.py後，雖有重工，但其產出檔案會給後續的qc使用，所以直接保留
     local_blast = BlastRef()
-    local_blast.blast_ref(result_data_path, name_of_loci, blast_parsing_mode)
+    local_blast.secondary_blast_ref_filter(result_data_path, name_of_loci, blast_parsing_mode)
 
     # Retrieve lists from the BlastRef object
     qseqid_list = local_blast.qseqid_list

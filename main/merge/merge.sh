@@ -29,12 +29,12 @@ for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
     fi
 
     #  準備parsing各loci local blast的結果 --- input：10N seq 的 blast refResult; output：10N blastResult
-    python3 "${workingDirectory}"/merge/blastResultParser.py "$ampliconInfo" "$resultDataPath" "${blastParsingMode[i]}" "${nameOfLoci[i]}"
+    python3 "${workingDirectory}"/merge/blast/blastResultParser.py "$ampliconInfo" "$resultDataPath" "${blastParsingMode[i]}" "${nameOfLoci[i]}"
 
     # 20230107 10N，需按blast的結果做reverse complement後，輸出正確方向的ref(改動的部分不太確定有沒有對，因為這整批好像都沒有在做reverse compliment)
     # 20230215 10N，reverse complement已確認是只轉ref的部分
-    python3 "${workingDirectory}"/merge/alignmentPretreater.py "$ampliconInfo" "${sseqidFileName[i]}" "$resultDataPath" "${nameOfLoci[i]}"
-    python3 "${workingDirectory}"/merge/alignmenter.py "$ampliconInfo" "$resultDataPath" "${nameOfLoci[i]}"
+    python3 "${workingDirectory}"/merge/align/alignmentPretreater.py "$ampliconInfo" "${sseqidFileName[i]}" "$resultDataPath" "${nameOfLoci[i]}"
+    python3 "${workingDirectory}"/merge/align/alignmenter.py "$ampliconInfo" "$resultDataPath" "${nameOfLoci[i]}"
     python3 "${workingDirectory}"/merge/merger.py "$ampliconInfo" "$resultDataPath" "${nameOfLoci[i]}"
 
   else #沒有的就跳過

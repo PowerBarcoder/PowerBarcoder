@@ -14,7 +14,7 @@ The `BlastRef` class:
     loci_name = "gene_region"
     parsing_mode = "2"  # Parsing modes: 0, 1, 2, or 3
     blast_ref = BlastRef()
-    blast_ref.blast_ref(load_dir, loci_name, parsing_mode)
+    blast_ref.secondary_blast_ref_filter(load_dir, loci_name, parsing_mode)
 
 ### Data Fields:
 Field Name      | Input Format            | Output Attribute       | Description                            |
@@ -108,7 +108,7 @@ class BlastRef:
     
     Example:
         >>> blast_ref = BlastRef()
-        >>> result = blast_ref.blast_ref("path/to/blast/results/", "trnLF", "0")
+        >>> result = blast_ref.secondary_blast_ref_filter("path/to/blast/results/", "trnLF", "0")
         >>> isinstance(result, BlastRef)
         True
     """
@@ -260,7 +260,28 @@ class BlastRef:
         self.sstart_minus_send_list = [r.sstart_minus_send for r in results.values()]
         self.rwho_list = [r.rwho for r in results.values()]
 
-    def blast_ref(self, load_dir: str, loci_name: str, blast_parsing_mode: str) -> Optional['BlastRef']:
+    def _process_blast_results(self, lines: List[str], blast_parsing_mode: str) -> Dict[str, BlastResult]:
+        """Process BLAST result lines into a dictionary of BlastResult objects."""
+        results: Dict[str, BlastResult] = {}
+
+        for line in lines:
+            if not line.strip():
+                continue
+
+            result = self._parse_blast_line(line)
+            if not result:
+                continue
+
+            if result.qseqid not in results:
+                results[result.qseqid] = result
+            else:
+                results[result.qseqid] = self._apply_parsing_mode(
+                    results[result.qseqid], result, blast_parsing_mode
+                )
+
+        return results
+
+    def secondary_blast_ref_filter(self, load_dir: str, loci_name: str, blast_parsing_mode: str) -> Optional['BlastRef']:
         """
         Process BLAST results and populate object attributes.
 
@@ -289,24 +310,3 @@ class BlastRef:
         except Exception as e:
             logging.error(f"Error processing BLAST results: {e}")
             return None
-
-    def _process_blast_results(self, lines: List[str], blast_parsing_mode: str) -> Dict[str, BlastResult]:
-        """Process BLAST result lines into a dictionary of BlastResult objects."""
-        results: Dict[str, BlastResult] = {}
-
-        for line in lines:
-            if not line.strip():
-                continue
-
-            result = self._parse_blast_line(line)
-            if not result:
-                continue
-
-            if result.qseqid not in results:
-                results[result.qseqid] = result
-            else:
-                results[result.qseqid] = self._apply_parsing_mode(
-                    results[result.qseqid], result, blast_parsing_mode
-                )
-
-        return results
