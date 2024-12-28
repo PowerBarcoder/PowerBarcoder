@@ -24,7 +24,6 @@ def test_blast_ref_initialization(blast_ref_instance):
     """Test that BlastRef is properly initialized with empty lists."""
     assert len(blast_ref_instance.qseqid_list) == 0
     assert len(blast_ref_instance.sseqid_list) == 0
-    assert isinstance(blast_ref_instance._file_cache, dict)
 
 
 def test_blast_ref_processing(blast_ref_instance):

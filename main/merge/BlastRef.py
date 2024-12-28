@@ -43,10 +43,10 @@ bitscore        | Float value             | bitscore_list          | Alignment b
 
 """
 
-import os
 import logging
-from typing import Dict, List, Optional, Union, Any
+import os
 from dataclasses import dataclass
+from typing import Dict, List, Optional
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -54,7 +54,6 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # File related constants
 TARGET_FILE_NAME = "_refResult_filtered.txt"
 DEFAULT_ENCODING = 'utf-8'  # Changed from iso-8859-1
-FILE_CACHE_SIZE = 1000  # Maximum number of files to cache
 
 # BLAST result column indices
 QSEQID_IDX = 0
@@ -133,7 +132,6 @@ class BlastRef:
         self.qstart_minus_qend_list: List[int] = []
         self.sstart_minus_send_list: List[int] = []
         self.rwho_list: List[str] = []
-        self._file_cache: Dict[str, List[str]] = {}
         self._encoding: str = DEFAULT_ENCODING
 
     def set_encoding(self, encoding: str) -> None:
@@ -175,21 +173,6 @@ class BlastRef:
         except Exception as e:
             logging.error(f"Unexpected error reading file {file_path}: {e}")
             return None
-
-    def _cache_files(self, file_dirs: Dict[str, str]) -> None:
-        """Pre-cache files for performance optimization."""
-        for dir_type, dir_path in file_dirs.items():
-            try:
-                files = os.listdir(dir_path)[:FILE_CACHE_SIZE]  # Limit cache size
-                for file_name in files:
-                    file_path = os.path.join(dir_path, file_name)
-                    if file_path not in self._file_cache:
-                        content = self._read_file_safe(file_path)
-                        if content:
-                            self._file_cache[file_path] = content
-                            logging.debug(f"Cached file: {file_path}")
-            except Exception as e:
-                logging.error(f"Error caching files from {dir_path}: {e}")
 
     def _get_sequence_length(self, file_path: str) -> int:
         """Returns the length of the sequence from a FASTA file."""
@@ -290,7 +273,6 @@ class BlastRef:
         input_file_path = os.path.join(load_dir, f"{loci_name}_result", "blastResult", f"{loci_name}{TARGET_FILE_NAME}")
 
         # Step 1: Read file
-        self._cache_files(file_dirs)
         lines = self._read_file_safe(input_file_path)
 
         if not lines:
