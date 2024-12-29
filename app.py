@@ -4,6 +4,7 @@ import time
 import uuid
 import zipfile
 from datetime import datetime
+import re
 
 import flask_socketio as ws
 from flask import Flask, render_template, send_file
@@ -21,6 +22,16 @@ batch_name_set = set()
 
 def ws_emit_procedure_result(msg, room_name):
     ws.emit('procedure-result', "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + msg, room=room_name)
+
+
+def remove_ansi_escape_sequences(text):
+    """
+    處理 tqdm 的 ansi 字符
+    :param text:
+    :return:
+    """
+    ansi_escape = re.compile(r'(?:\x1B[@-_][0-?]*[ -/]*[@-~])')
+    return ansi_escape.sub('', text)
 
 
 @socketio.on('run-procedure')
@@ -63,15 +74,33 @@ def run_procedure(data):
     temp_line = ""
 
     for line in iter(p.stdout.readline, b''):
-        # Process each line of output
-        if int(time.time()) - throttle_seconds > 1:
-            temp_line += "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + line.decode('utf-8', 'ignore')
-            socketio.emit('procedure-result', temp_line, room=formatted_datetime)
-            temp_line = ""
+        decoded_line = line.decode('utf-8', 'ignore')
+        # Remove extra spaces from tqdm output
+        decoded_line = decoded_line.replace('                                                             ', '')
+        cleaned_line = remove_ansi_escape_sequences(decoded_line)
+        # Always add timestamp
+        timestamped_line = f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}]{cleaned_line}"
+
+        # If line contains tqdm output (progress bar), emit immediately
+        if '%|' in cleaned_line:
+            if temp_line:  # Emit accumulated non-progress lines first
+                socketio.emit('procedure-result', temp_line, room=formatted_datetime)
+                temp_line = ""
+            socketio.emit('procedure-result', timestamped_line, room=formatted_datetime)
             throttle_seconds = int(time.time())
         else:
-            temp_line += "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + line.decode('utf-8', 'ignore')
-    socketio.emit('procedure-result', temp_line, room=formatted_datetime)
+            # Accumulate non-progress lines with throttling
+            if int(time.time()) - throttle_seconds > 1:
+                temp_line += timestamped_line
+                socketio.emit('procedure-result', temp_line, room=formatted_datetime)
+                temp_line = ""
+                throttle_seconds = int(time.time())
+            else:
+                temp_line += timestamped_line
+
+    # Emit any remaining lines
+    if temp_line:
+        socketio.emit('procedure-result', temp_line, room=formatted_datetime)
 
     ws_emit_procedure_result('done\r\n', formatted_datetime)
     ws_emit_procedure_result('Find your results in data/result/ folder\r\n', formatted_datetime)
