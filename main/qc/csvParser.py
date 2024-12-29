@@ -28,7 +28,7 @@ def parsing_denoise_pair_into_dict(path: str):
     maps = {}
     try:
         # Open the log.txt file for reading with the appropriate encoding
-        with open(path, 'r', encoding='iso-8859-1') as file:
+        with open(path, 'r', encoding='utf-8') as file:
             content = file.readlines()
             # Process each line in the content
             for line in content:
@@ -56,7 +56,7 @@ def parsing_fastq_reads_number(path: str, prefix: str, file_name: str, rwho: str
 
 def parsing_blast_result_into_dict():
     data_dict = {}
-    with open(BLAST_RESULT_PATH, 'r', encoding='iso-8859-1') as file:
+    with open(BLAST_RESULT_PATH, 'r', encoding='utf-8') as file:
         for line in file:
             # TODO 如果r1 r2 blast到的最好的序列不一樣，那會有覆蓋問題，而且你不知道是誰覆蓋誰
             columns = line.strip().split('\t')
@@ -67,7 +67,7 @@ def parsing_blast_result_into_dict():
 
 
 def parsing_file_list_into_set(pipeline_step: str):
-    with open(INPUT_PATH, 'r', encoding='iso-8859-1') as file:
+    with open(INPUT_PATH, 'r', encoding='utf-8') as file:
         content = file.readlines()
         file_set = set()
         record_state = False
@@ -94,7 +94,7 @@ def parsing_merged_file_fasta_with_highest_abundance_into_list(filename_set: set
         # print("Highest abundance element:", highest_abundance_element)
         if not os.path.exists(MERGER_MERGED_PATH + highest_abundance_element):
             return ["N/A", "N/A"]
-        with open(MERGER_MERGED_PATH + highest_abundance_element, 'r', encoding='iso-8859-1') as file:
+        with open(MERGER_MERGED_PATH + highest_abundance_element, 'r', encoding='utf-8') as file:
             content = file.readlines()
             # Process each line in the content
             for line in content:
@@ -109,7 +109,7 @@ def parsing_merged_file_fasta_with_highest_abundance_into_list(filename_set: set
 
 
 def parsing_overall_info_into_list(pipeline_step: str):
-    with open(INPUT_PATH, 'r', encoding='iso-8859-1') as file:
+    with open(INPUT_PATH, 'r', encoding='utf-8') as file:
         content = file.readlines()
         file_name, num_seqs, sum_len, min_len, max_len, avg_q, err_q = "", "", "", "", "", "", ""
         record_state = False
@@ -351,7 +351,7 @@ def parsing_all_data_into_csv(destination: str):
 
     # Step 6 : Write successful rate info in the last row
     # Write successful rate info in the last row
-    with open(destination, 'r', encoding='iso-8859-1') as csvfile:
+    with open(destination, 'r', encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile)
         rows = list(reader)
         v_count_list = []

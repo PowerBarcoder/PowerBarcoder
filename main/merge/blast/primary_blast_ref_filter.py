@@ -310,7 +310,7 @@ def primary_blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: 
                     file.write(lines[metrics.r2_line_number])
 
         # Count lines
-        with open(filtered_file_path, encoding='iso-8859-1') as f:
+        with open(filtered_file_path, encoding='utf-8') as f:
             lines = f.readlines()
             final_line_count = len(lines)
 

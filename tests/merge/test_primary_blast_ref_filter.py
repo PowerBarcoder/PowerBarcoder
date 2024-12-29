@@ -102,7 +102,7 @@ def test_blast_ref_filter_integration():
 
 
 def test_primary_blast_result_class():
-    main_load_dir = r"C:\Users\kwz50\IdeaProjects\PowerBarcoder\data\result\202412272019"
+    main_load_dir = r"C:\Users\kwz50\IdeaProjects\PowerBarcoder\tests\data\result\202412281411"
     main_loci_name = "trnLF"
     main_blast_parsing_mode = "2"
     logging.info(f"Executing directly with path: {main_load_dir}")

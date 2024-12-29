@@ -53,7 +53,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # File related constants
 TARGET_FILE_NAME = "_refResult_filtered.txt"
-DEFAULT_ENCODING = 'utf-8'  # Changed from iso-8859-1
+DEFAULT_ENCODING = 'utf-8'  # Changed from utf-8
 
 # BLAST result column indices
 QSEQID_IDX = 0
@@ -165,7 +165,7 @@ class BlastRef:
         except UnicodeDecodeError:
             logging.warning(f"Unable to decode file with {self._encoding}, trying fallback encoding")
             try:
-                with open(file_path, encoding='iso-8859-1') as f:
+                with open(file_path, encoding='utf-8') as f:
                     return f.readlines()
             except Exception as e:
                 logging.error(f"Failed to read file with fallback encoding: {e}")

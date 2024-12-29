@@ -53,11 +53,11 @@ def nn_spliter(load_path, target_filename, r1_output_load_path, r2_output_load_p
         # print(seq_text_splitted)
         seq_text_r1 = seq_text_splitted[0]
         seq_text_r2 = seq_text_splitted[1]
-        with open(r1_output_load_path + target_filename, "w", encoding="iso-8859-1") as r1_file:
+        with open(r1_output_load_path + target_filename, "w", encoding="utf-8") as r1_file:
             r1_file.write(seq_header + "_r1" + "\n")
             r1_file.write(seq_text_r1 + "\n")  # r1結尾需要多補一個換行
         replace_filename_with_header(r1_output_load_path + target_filename, r1_output_load_path, True)
-        with open(r2_output_load_path + target_filename, "w", encoding="iso-8859-1") as r2_file:
+        with open(r2_output_load_path + target_filename, "w", encoding="utf-8") as r2_file:
             r2_file.write(seq_header + "_r2" + "\n")
             r2_file.write(seq_text_r2)
         replace_filename_with_header(r2_output_load_path + target_filename, r2_output_load_path, True)
