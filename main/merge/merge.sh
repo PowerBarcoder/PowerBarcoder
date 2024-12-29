@@ -11,7 +11,7 @@ else #沒有的就跳過
   echo "[INFO] blastReadChoosingMode is 0, run nnSpliter.py after blast "
 fi
 
-bash "${workingDirectory}"/merge/00_blastForRef.sh "$1" #先blast，內部自帶迴圈處理
+bash "${workingDirectory}"/merge/blast/00_blastForRef.sh "$1" #先blast，內部自帶迴圈處理
 
 for ((i = 0; i < ${#nameOfLoci[@]}; i++)); do
   count=0
