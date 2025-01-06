@@ -276,6 +276,12 @@ def download_result(room_name):
     return send_file(zip_file_path, as_attachment=True)
 
 
+# health check
+@app.route('/health')
+def health():
+    return 'OK'
+
+
 if __name__ == '__main__':
     # app.run(debug=True, host='0.0.0.0')
     app.config['CORS_HEADERS'] = 'Content-Type'
