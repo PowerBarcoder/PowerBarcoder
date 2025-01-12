@@ -33,3 +33,18 @@ git pull origin feature-gbifDataPaper_20240202
 
 docker run -d -p 5000:5000 -v ${PWD}:/PowerBarcoder --name powerbarcoder --cpus=8 powerbarcoder
 docker run -d -p 5000:5000 -v ${PWD}:/PowerBarcoder --name powerbarcoder --restart=unless-stopped --cpus=8 powerbarcoder
+
+
+    - Build the docker image for amd64:
+      ```bash
+      docker build -t powerbarcoder .
+      docker run -d -p 5000:5000 -v ${PWD}:/PowerBarcoder --name powerbarcoder powerbarcoder
+      docker exec -it powerbarcoder bash
+      ```
+    - Build the docker image for arm64:
+      ```bash
+      docker build -t powerbarcoder --platform linux/arm64 .
+      docker inspect powerbarcoder | grep Architecture
+      docker run -d -p 15000:15000 -v ${PWD}:/PowerBarcoder --name powerbarcoder --platform linux/arm64/v8 powerbarcoder
+      ```
+
