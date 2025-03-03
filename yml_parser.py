@@ -46,8 +46,8 @@ def parsing_yml_to_shell(batch_name: str):
     for i in range(len(config['nameOfLoci'])):
         script += f"### loci:{str(config['nameOfLoci'][i]).strip()} ###\n"
         script += f"nameOfLoci+=('{str(config['nameOfLoci'][i]).strip()}')\n"  # nameOfLoci
-        script += f"errorRateCutadaptor+=('{str(config['errorRateCutadaptor'][i]).strip()}')\n"  # errorRateCutadaptor
-        script += f"minimumLengthCutadaptor+=('{str(config['minimumLengthCutadaptor'][i]).strip()}')\n"  # minimumLengthCutadaptor
+        script += f"errorRateCutadapt+=('{str(config['errorRateCutadapt'][i]).strip()}')\n"  # errorRateCutadapt
+        script += f"minimumLengthCutadapt+=('{str(config['minimumLengthCutadapt'][i]).strip()}')\n"  # minimumLengthCutadapt
         script += f"primerF+=('{str(config['primerF'][i]).strip()}')\n"  # primerF
         script += f"primerFName+=('{str(config['primerFName'][i]).strip()}')\n"  # primerFName
         script += f"primerR+=('{str(config['primerR'][i]).strip()}')\n"  # primerR
@@ -57,7 +57,7 @@ def parsing_yml_to_shell(batch_name: str):
         script += f"barcodesFile1+=('{str(config['barcodesFile1'][i]).strip()}')\n"  # barcodesFile1
         script += f"barcodesFile2+=('{str(config['barcodesFile2'][i]).strip()}')\n"  # barcodesFile2
         script += f"sseqidFileName+=('{str(config['sseqidFileName'][i]).strip()}')\n"  # sseqidFileName
-        script += f"minimumLengthCutadaptorInLoop+=('{str(config['minimumLengthCutadaptorInLoop'][i]).strip()}')\n"  # minimumLengthCutadaptorInLoop
+        script += f"minimumLengthCutadaptInLoop+=('{str(config['minimumLengthCutadaptInLoop'][i]).strip()}')\n"  # minimumLengthCutadaptInLoop
         script += f"customizedCoreNumber+=('{str(config['customizedCoreNumber'][i]).strip()}')\n"  # customizedCoreNumber
         # Dev Only
         script += f"blastReadChoosingMode+=('{str(config['blastReadChoosingMode'][i]).strip()}')\n"

@@ -23,8 +23,8 @@ dada2BarcodeFile="multiplex_cpDNAbarcode_clean.txt" # under dir. ampliconInfo
 
 ## first dataset (We need at least on dataset)
 #nameOfLoci+=("rbcLC") # name of loci
-#errorRateCutadaptor+=(0.125) # error rate in cutadaptor
-#minimumLengthCutadaptor+=(70) # minimum output sequence length in cutadaptor
+#errorRateCutadapt+=(0.125) # error rate in cutadapt
+#minimumLengthCutadapt+=(70) # minimum output sequence length in cutadapt
 #primerF+=("TAGGTCTGTCTGCYAARAATTATGG") # front-end primer
 #primerR+=("GTTCCCCYTCTAGTTTRCCTACTAC") # back-end primer
 #amplicon_r1+=("rbcLC_amplicon_r1.fq") # amplicon files name  # under dir. ampliconInfo
@@ -32,13 +32,13 @@ dada2BarcodeFile="multiplex_cpDNAbarcode_clean.txt" # under dir. ampliconInfo
 #barcodesFile1+=('barcodes_rbcLC_start_0.fasta') # barcode files name  # under dir. ampliconInfo
 #barcodesFile2+=('barcodes_rbcLC_start2_0.fasta') # barcode files name  # under dir. ampliconInfo
 #sseqidFileName+=("fermalies_rbcL.fasta") # local blast reference file name  # under dir. ampliconInfo
-#minimumLengthCutadaptorInLoop+=(150) # minimum output sequence length in cutadaptor
+#minimumLengthCutadaptInLoop+=(150) # minimum output sequence length in cutadapt
 #customizedThreadNumber+=(30) # customized thread numbers
 
 # second dataset (Comment out if you don't need)
 nameOfLoci+=("rbcLN")
-errorRateCutadaptor+=(0.125)
-minimumLengthCutadaptor+=(70)
+errorRateCutadapt+=(0.125)
+minimumLengthCutadapt+=(70)
 primerF+=("GAGACTAAAGCAGGTGTTGGATTCA")
 primerR+=("TCAAGTCCACCRCGAAGRCATTC")
 amplicon_r1+=("rbcLN_amplicon_r1.fq")
@@ -46,13 +46,13 @@ amplicon_r2+=("rbcLN_amplicon_r2.fq")
 barcodesFile1+=('barcodes_rbcL_start_0.fasta')
 barcodesFile2+=('barcodes_rbcLN_start2_0.fasta')
 sseqidFileName+=("fermalies_rbcL.fasta")
-minimumLengthCutadaptorInLoop+=(150)
+minimumLengthCutadaptInLoop+=(150)
 customizedThreadNumber+=(30)
 
 ## third dataset (Comment out if you don't need)
 #nameOfLoci+=("trnL")
-#errorRateCutadaptor+=(0.125)
-#minimumLengthCutadaptor+=(70)
+#errorRateCutadapt+=(0.125)
+#minimumLengthCutadapt+=(70)
 #primerF+=("GGCAATCCTGAGCCAAATC")
 #primerR+=("TAGAGGGANTCGAACCCTCA")
 #amplicon_r1+=("trnL_amplicon_r1.fq")
@@ -61,13 +61,13 @@ customizedThreadNumber+=(30)
 #barcodesFile2+=('barcodes_trnL_3exonEND_0.fasta')
 ##sseqidFileName+=("ftol_sanger_alignment_trnLLF_full_f_with_manual_blast.fasta")
 #sseqidFileName+=("ftol_sanger_alignment_trnLLF_full_f.fasta")
-#minimumLengthCutadaptorInLoop+=(150)
+#minimumLengthCutadaptInLoop+=(150)
 #customizedThreadNumber+=(30)
 #
 ## fourth dataset (Comment out if you don't need)
 #nameOfLoci+=("trnLF")
-#errorRateCutadaptor+=(0.125)
-#minimumLengthCutadaptor+=(70)
+#errorRateCutadapt+=(0.125)
+#minimumLengthCutadapt+=(70)
 #primerF+=("TGAGGGTTCGANTCCCTCTA")
 #primerR+=("GGATTTTCAGTCCYCTGCTCT")
 #amplicon_r1+=("trnLF_amplicon_r1.fq")
@@ -76,7 +76,7 @@ customizedThreadNumber+=(30)
 #barcodesFile2+=('barcodes_trnF_0.fasta')
 ##sseqidFileName+=("ftol_sanger_alignment_trnLLF_full_f_with_manual_blast.fasta")
 #sseqidFileName+=("ftol_sanger_alignment_trnLLF_full_f.fasta")
-#minimumLengthCutadaptorInLoop+=(150)
+#minimumLengthCutadaptInLoop+=(150)
 #customizedThreadNumber+=(30)
 
 # Where is our PowerBarcoder ?

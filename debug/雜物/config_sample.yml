@@ -19,17 +19,17 @@ customizedCoreNumber:
 - '30'
 dada2BarcodeFile: multiplex_cpDNAbarcode_clean.txt
 dada2LearnErrorFile: /PowerBarcoder/data/dada2LearnErrorFile/
-errorRateCutadaptor:
+errorRateCutadapt:
 - '0.125'
 - '0.125'
 - '0.125'
 - '0.125'
-minimumLengthCutadaptor:
+minimumLengthCutadapt:
 - '70'
 - '70'
 - '70'
 - '70'
-minimumLengthCutadaptorInLoop:
+minimumLengthCutadaptInLoop:
 - '150'
 - '150'
 - '150'

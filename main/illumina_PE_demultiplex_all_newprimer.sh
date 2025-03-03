@@ -11,8 +11,8 @@ for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
   # first step: demultiplex by locus primer,
   # create two files: ${nameOfLoci[i]}_amplicon_r1.fq and ${nameOfLoci[i]}_amplicon_r2.fq
   # in path: ${resultDataPath}${nameOfLoci[i]}_result/
-  ${myCutadaptPath}cutadapt -e "${errorRateCutadaptor[i]}" --no-indels --discard-untrimmed --pair-filter=both --minimum-length "${minimumLengthCutadaptor[i]}" --pair-adapters -g "${primerF[i]}" -G "${primerR[i]}" --action=none -o "${resultDataPath}${nameOfLoci[i]}.1_R1" -p "${resultDataPath}${nameOfLoci[i]}.1_R2" "${resultDataPath}trim_R1FastqGz.gz" "${resultDataPath}trim_R2FastqGz.gz" -j "${customizedCoreNumber[i]}"
-  ${myCutadaptPath}cutadapt -e "${errorRateCutadaptor[i]}" --no-indels --discard-untrimmed --pair-filter=both --minimum-length "${minimumLengthCutadaptor[i]}" --pair-adapters -g "${primerR[i]}" -G "${primerF[i]}" --action=none -o "${resultDataPath}${nameOfLoci[i]}.2_R1" -p "${resultDataPath}${nameOfLoci[i]}.2_R2" "${resultDataPath}trim_R1FastqGz.gz" "${resultDataPath}trim_R2FastqGz.gz" -j "${customizedCoreNumber[i]}"
+  ${myCutadaptPath}cutadapt -e "${errorRateCutadapt[i]}" --no-indels --discard-untrimmed --pair-filter=both --minimum-length "${minimumLengthCutadapt[i]}" --pair-adapters -g "${primerF[i]}" -G "${primerR[i]}" --action=none -o "${resultDataPath}${nameOfLoci[i]}.1_R1" -p "${resultDataPath}${nameOfLoci[i]}.1_R2" "${resultDataPath}trim_R1FastqGz.gz" "${resultDataPath}trim_R2FastqGz.gz" -j "${customizedCoreNumber[i]}"
+  ${myCutadaptPath}cutadapt -e "${errorRateCutadapt[i]}" --no-indels --discard-untrimmed --pair-filter=both --minimum-length "${minimumLengthCutadapt[i]}" --pair-adapters -g "${primerR[i]}" -G "${primerF[i]}" --action=none -o "${resultDataPath}${nameOfLoci[i]}.2_R1" -p "${resultDataPath}${nameOfLoci[i]}.2_R2" "${resultDataPath}trim_R1FastqGz.gz" "${resultDataPath}trim_R2FastqGz.gz" -j "${customizedCoreNumber[i]}"
   cat "${resultDataPath}${nameOfLoci[i]}.1_R1" "${resultDataPath}${nameOfLoci[i]}.2_R2" >"${resultDataPath}${nameOfLoci[i]}_result/${nameOfLoci[i]}_amplicon_r1.fq"
   cat "${resultDataPath}${nameOfLoci[i]}.1_R2" "${resultDataPath}${nameOfLoci[i]}.2_R1" >"${resultDataPath}${nameOfLoci[i]}_result/${nameOfLoci[i]}_amplicon_r2.fq"
   rm "${resultDataPath}${nameOfLoci[i]}"*_R*
@@ -38,7 +38,7 @@ for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
     out_file="${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/trimmed/trim_$(basename ${r1_file})"
 
     # Run cutadapt with parallel processing
-    ${myCutadaptPath}cutadapt -e "${errorRateCutadaptor[i]}" --no-indels --minimum-length "${minimumLengthCutadaptorInLoop[i]}" -g "${primerF[i]}" -o "${out_file}" "${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/untrimmed/$(basename ${r1_file})" -j "${core_numbers}" &
+    ${myCutadaptPath}cutadapt -e "${errorRateCutadapt[i]}" --no-indels --minimum-length "${minimumLengthCutadaptInLoop[i]}" -g "${primerF[i]}" -o "${out_file}" "${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/untrimmed/$(basename ${r1_file})" -j "${core_numbers}" &
 
   done
 
@@ -48,7 +48,7 @@ for ((i = 0; i < "${#nameOfLoci[@]}"; i++)); do
     out_file="${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/trimmed/trim_$(basename ${r2_file})"
 
     # Run cutadapt with parallel processing
-    ${myCutadaptPath}cutadapt -e "${errorRateCutadaptor[i]}" --no-indels --minimum-length "${minimumLengthCutadaptorInLoop[i]}" -g "${primerR[i]}" -o "${out_file}" "${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/untrimmed/$(basename ${r2_file})" -j "${core_numbers}" &
+    ${myCutadaptPath}cutadapt -e "${errorRateCutadapt[i]}" --no-indels --minimum-length "${minimumLengthCutadaptInLoop[i]}" -g "${primerR[i]}" -o "${out_file}" "${resultDataPath}${nameOfLoci[i]}_result/demultiplexResult/untrimmed/$(basename ${r2_file})" -j "${core_numbers}" &
   done
 
   # Wait for all processes to finish

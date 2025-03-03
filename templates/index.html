@@ -22,141 +22,64 @@
     <!-- font awesome   -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <!-- Define host URL for SocketIO -->
+    <script>
+        const HOST_URL = "{{ request.host_url }}";
+
+        // Define configuration object with all template variables
+        const CONFIG = {
+            // Path settings
+            default_amplicon_info: "{{ default_amplicon_info }}",
+            default_r1_fastq_gz: "{{ default_r1_fastq_gz }}",
+            default_r2_fastq_gz: "{{ default_r2_fastq_gz }}",
+            default_dada2_learn_error_file: "{{ default_dada2_learn_error_file }}",
+            default_dada2_barcode_file: "{{ default_dada2_barcode_file }}",
+            dev_mode: "{{ dev_mode }}",
+            amplicon_minimum_length: "{{ amplicon_minimum_length }}",
+            minimum_overlap_base_pair: "{{ minimum_overlap_base_pair }}",
+
+            // rbcL settings
+            rbcl_name_of_loci: "{{ rbcl_name_of_loci }}",
+            rbcl_error_rate_cutadapt: "{{ rbcl_error_rate_cutadapt }}",
+            rbcl_minimum_length_cutadapt: "{{ rbcl_minimum_length_cutadapt }}",
+            rbcl_primer_f_name: "{{ rbcl_primer_f_name }}",
+            rbcl_primer_f: "{{ rbcl_primer_f }}",
+            rbcl_primer_r_name: "{{ rbcl_primer_r_name }}",
+            rbcl_primer_r: "{{ rbcl_primer_r }}",
+            rbcl_barcodes_file1: "{{ rbcl_barcodes_file1 }}",
+            rbcl_barcodes_file2: "{{ rbcl_barcodes_file2 }}",
+            rbcl_sseqid_file_name: "{{ rbcl_sseqid_file_name }}",
+            rbcl_minimum_length_cutadapt_in_loop: "{{ rbcl_minimum_length_cutadapt_in_loop }}",
+            rbcl_customized_core_number: "{{ rbcl_customized_core_number }}",
+            rbcl_blast_read_choosing_mode: "{{ rbcl_blast_read_choosing_mode }}",
+            rbcl_blast_parsing_mode: "{{ rbcl_blast_parsing_mode }}",
+            rbcl_minimum_overlap_base_pair: "{{  rbcl_minimum_overlap_base_pair  }}",
+            rbcl_maximum_mismatch_base_pair: "{{ rbcl_maximum_mismatch_base_pair }}",
+
+            // trnLF settings
+            trnlf_name_of_loci: "{{ trnlf_name_of_loci }}",
+            trnlf_error_rate_cutadapt: "{{ trnlf_error_rate_cutadapt }}",
+            trnlf_minimum_length_cutadapt: "{{ trnlf_minimum_length_cutadapt }}",
+            trnlf_primer_f_name: "{{ trnlf_primer_f_name }}",
+            trnlf_primer_f: "{{ trnlf_primer_f }}",
+            trnlf_primer_r_name: "{{ trnlf_primer_r_name }}",
+            trnlf_primer_r: "{{ trnlf_primer_r }}",
+            trnlf_barcodes_file1: "{{ trnlf_barcodes_file1 }}",
+            trnlf_barcodes_file2: "{{ trnlf_barcodes_file2 }}",
+            trnlf_sseqid_file_name: "{{ trnlf_sseqid_file_name }}",
+            trnlf_minimum_length_cutadapt_in_loop: "{{ trnlf_minimum_length_cutadapt_in_loop }}",
+            trnlf_customized_core_number: "{{ trnlf_customized_core_number }}",
+            trnlf_blast_read_choosing_mode: "{{ trnlf_blast_read_choosing_mode }}",
+            trnlf_blast_parsing_mode: "{{ trnlf_blast_parsing_mode }}",
+            trnlf_minimum_overlap_base_pair: "{{ trnlf_minimum_overlap_base_pair }}",
+            trnlf_maximum_mismatch_base_pair: "{{ trnlf_maximum_mismatch_base_pair }}",
+        };
+    </script>
+
     <title>PowerBarcoder</title>
-    <style>
-        .dropdown-toggle::after {
-            display: inline-block;
-            margin-left: .255em;
-            vertical-align: .255em;
-            content: "";
-            border-top: .3em solid;
-            border-right: .3em solid transparent;
-            border-bottom: 0;
-            border-left: .3em solid transparent;
-        }
-
-        .information {
-            display: block;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 1s ease-in-out;
-        }
-
-        #tooltip99:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip98:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip97:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip96:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip95:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip94:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip0:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip1:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip2:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip3:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip4:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip5:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip6:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip7:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip8:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip9:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip10:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip11:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip12:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip13:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip14:hover + .information {
-            max-height: 1000px;
-        }
-
-        #tooltip15:hover + .information {
-            max-height: 1000px;
-        }
-
-        /*隱藏scroll bar*/
-        pre code.hljs {
-            overflow-x: hidden;
-        }
-
-        /*自動換行*/
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .advanceMode {
-            color: red;
-        }
-
-        .showAdvanceMode {
-            display: block;
-
-        }
-
-        .hideAdvanceMode {
-            display: none;
-        }
-
-
-    </style>
-
 </head>
 <body>
 <div class="container">
@@ -181,52 +104,6 @@
                 </button>
             </div>
             <div id="pathFormContainer" class="mt-3 collapse">
-                <!--                                <div class="form-group">-->
-                <!--                                    <label for="myCutadaptPath">Cutadapt path:</label>-->
-                <!--                                    <div class="row">-->
-                <!--                                        <div class="col-12">-->
-                <!--                                            <input type="text" class="form-control" id="myCutadaptPath" name="myCutadaptPath"-->
-                <!--                                                   placeholder='{{default_mycutadapt_path}}' disabled>-->
-                <!--                                        </div>-->
-                <!--                                    </div>-->
-                <!--                                </div>-->
-                <!--                <div class="form-group">-->
-                <!--                    <label for="myFastpPath">Fastp path:</label>-->
-                <!--                    <div class="row">-->
-                <!--                        <div class="col-12">-->
-                <!--                            <input type="text" class="form-control" id="myFastpPath" name="myFastpPath"-->
-                <!--                                   placeholder="{{default_myfastp_path}}" disabled>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="form-group">-->
-                <!--                    <label for="localBlastToolDir">Blast path:</label>-->
-                <!--                    <div class="row">-->
-                <!--                        <div class="col-12">-->
-                <!--                            <input type="text" class="form-control" id="localBlastToolDir" name="localBlastToolDir"-->
-                <!--                                   placeholder="{{default_localblast_tool_dir}}" disabled>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="form-group">-->
-                <!--                    <label for="resultDataPath">Result path:</label>-->
-                <!--                    <div class="row">-->
-                <!--                        <div class="col-12">-->
-                <!--                            <input type="text" class="form-control" id="resultDataPath" name="resultDataPath"-->
-                <!--                                   placeholder="{{default_result_data_path}}" disabled>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <!--                <div class="form-group">-->
-                <!--                    <label for="missList">Missing list path:</label>-->
-                <!--                    <div class="row">-->
-                <!--                        <div class="col-12">-->
-                <!--                            <input type="text" class="form-control" id="missList" name="missList"-->
-                <!--                                   placeholder="{{default_miss_list}}" disabled>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-
                 <div class="form-group">
                     <label for="ampliconInfo">
                         <span id="tooltip99">Raw Files Folder Path: <i class="fa fa-question-circle"></i></span>
@@ -344,6 +221,25 @@
                     </div>
                 </div>
 
+                <!--denoise_mode default = 0-->
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="denoise_mode">
+                        <span id="tooltip100">Denoise Mode: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The denoise mode, default is 0, no error learning is 1, 2nd error learning is 2
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control denoise_mode" id="denoise_mode" name="denoise_mode"
+                                   required="required" value="{{default_denoise_mode}}"
+                                   placeholder="{{default_denoise_mode}}">
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="form-group advanceMode hideAdvanceMode">
                     <label for="amplicon_minimum_length">
@@ -365,28 +261,6 @@
                     </div>
                 </div>
 
-
-                <div class="form-group advanceMode hideAdvanceMode">
-                    <label for="minimum_overlap_base_pair">
-                        <span id="tooltip96">Minimum Overlap Base Pair: <i class="fa fa-question-circle"></i></span>
-                        <span class="text-secondary information">
-                            <i>
-                                The minimum overlap base pair, default is 4
-                            </i>
-                        </span>
-                    </label>
-
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control minimum_overlap_base_pair" id="minimum_overlap_base_pair"
-                                   name="minimum_overlap_base_pair"
-                                   required="required" value="{{minimum_overlap_base_pair}}"
-                                   placeholder="{{minimum_overlap_base_pair}}">
-                        </div>
-                    </div>
-                </div>
-
-
                 <br>
                 <div class="d-flex align-items-center">
                     <button id="autoCompletePath" class="btn btn-warning" type="button"
@@ -396,39 +270,6 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            function autoCompleteWithDefaultPath() {
-                // document.getElementById('myCutadaptPath').value='{{default_mycutadapt_path}}'
-                // document.getElementById('myFastpPath').value='{{default_myfastp_path}}'
-                // document.getElementById('localBlastToolDir').value='{{default_localblast_tool_dir}}'
-                document.getElementById('ampliconInfo').value = '{{default_amplicon_info}}'
-                // document.getElementById('resultDataPath').value='{{default_result_data_path}}'
-                // document.getElementById('missList').value='{{default_miss_list}}'
-                document.getElementById('R1FastqGz').value = '{{default_r1_fastq_gz}}'
-                document.getElementById('R2FastqGz').value = '{{default_r2_fastq_gz}}'
-                // document.getElementById('summaryJsonFileName').value='{{default_summary_json_file_name}}'
-                // document.getElementById('summaryHtmlFileName').value='{{default_summary_html_file_name}}'
-                document.getElementById('dada2LearnErrorFile').value = '{{default_dada2_learn_error_file}}'
-                document.getElementById('dada2BarcodeFile').value = '{{default_dada2_barcode_file}}'
-                addRawFolderPath()
-            }
-
-            function openAdvanceMode() {
-                let advanceMode = document.getElementsByClassName("advanceMode");
-                for (let i = 0; i < advanceMode.length; i++) {
-                    if (advanceMode[i].classList.contains("showAdvanceMode")) {
-                        advanceMode[i].classList.remove("showAdvanceMode");
-                        advanceMode[i].classList.add("hideAdvanceMode");
-                    } else {
-                        advanceMode[i].classList.add("showAdvanceMode");
-                        advanceMode[i].classList.remove("hideAdvanceMode");
-                    }
-                }
-            };
-
-        </script>
-
 
         <!-- blank div -->
         <hr>
@@ -573,8 +414,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="errorRateCutadaptor">
-                        <span id="tooltip5">Error Rate Cutadaptor: <i class="fa fa-question-circle"></i></span>
+                    <label for="errorRateCutadapt">
+                        <span id="tooltip5"> Cutadapt Error Rate: <i class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
                                 Trimming sensitivity for cutadapt, details can be found in cutadapt manual
@@ -583,15 +424,15 @@
                     </label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control errorRateCutadaptor" id="errorRateCutadaptor"
-                                   name="errorRateCutadaptor" required="required"
-                                   placeholder="{{rbcl_error_rate_cutadaptor}}">
+                            <input type="text" class="form-control errorRateCutadapt" id="errorRateCutadapt"
+                                   name="errorRateCutadapt" required="required"
+                                   placeholder="{{rbcl_error_rate_cutadapt}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="minimumLengthCutadaptor">
-                        <span id="tooltip6">Minimum Length Cutadaptor: <i class="fa fa-question-circle"></i></span>
+                    <label for="minimumLengthCutadapt">
+                        <span id="tooltip6">Cutadapt Minimum Length: <i class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
                                 Trimming length threshold for cutadapt, details can be found in cutadapt manual
@@ -600,15 +441,15 @@
                     </label>
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control minimumLengthCutadaptor" id="minimumLengthCutadaptor"
-                                   name="minimumLengthCutadaptor" required="required"
-                                   placeholder="{{rbcl_minimum_length_cutadaptor}}">
+                            <input type="text" class="form-control minimumLengthCutadapt" id="minimumLengthCutadapt"
+                                   name="minimumLengthCutadapt" required="required"
+                                   placeholder="{{rbcl_minimum_length_cutadapt}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="minimumLengthCutadaptorInLoop">
-                        <span id="tooltip14">Minimum Length Cutadaptor In Loop: <i
+                    <label for="minimumLengthCutadaptInLoop">
+                        <span id="tooltip14"> Cutadapt Minimum Length In Loop: <i
                                 class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
@@ -619,20 +460,21 @@
 
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" class="form-control minimumLengthCutadaptorInLoop"
-                                   id="minimumLengthCutadaptorInLoop"
-                                   name="minimumLengthCutadaptorInLoop"
+                            <input type="text" class="form-control minimumLengthCutadaptInLoop"
+                                   id="minimumLengthCutadaptInLoop"
+                                   name="minimumLengthCutadaptInLoop"
                                    required="required"
-                                   placeholder="{{rbcl_minimum_length_cutadaptor_in_loop}}">
+                                   placeholder="{{rbcl_minimum_length_cutadapt_in_loop}}">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="customizedCoreNumber">
-                        <span id="tooltip15">Customized Core Number: <i class="fa fa-question-circle"></i></span>
+                        <span id="tooltip15"> Cutadapt Customized Core Number: <i
+                                class="fa fa-question-circle"></i></span>
                         <span class="text-secondary information">
                             <i>
-                                PowerBarcoder supports multi-threading, set proper core number to speed up the analysis.
+                                PowerBarcoder supports multi-threading, set proper core number to speed up the analysis in Cutadapt.
                             </i>
                         </span>
                     </label>
@@ -646,6 +488,50 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="minimum_overlap_base_pair">
+                        <span id="tooltip96"> DADA2 Minimum Overlap Base Pair: <i
+                                class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The minimum overlap base pair, default is 12 in DADA2
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control minimum_overlap_base_pair"
+                                   id="minimum_overlap_base_pair"
+                                   name="minimum_overlap_base_pair" required="required"
+                                   placeholder="{{rbcl_minimum_overlap_base_pair}}">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="minimum_overlap_base_pair">
+                        <span id="tooltip93"> DADA2 Maximum Mismatch Base Pair: <i
+                                class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The maximum mismatch base pair, default is 0 in DADA2
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control maximum_mismatch_base_pair"
+                                   id="maximum_mismatch_base_pair"
+                                   name="maximum_mismatch_base_pair" required="required"
+                                   placeholder="{{rbcl_maximum_mismatch_base_pair}}">
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="form-group advanceMode hideAdvanceMode">
                     <label for="blastReadChoosingMode">
@@ -661,8 +547,8 @@
                         <div class="col-12">
                             <input type="text" class="form-control blastReadChoosingMode" id="blastReadChoosingMode"
                                    name="blastReadChoosingMode"
-                                   required="required" value="{{blastReadChoosingMode}}"
-                                   placeholder="{{blastReadChoosingMode}}">
+                                   value="1"
+                                   placeholder="1">
                         </div>
                     </div>
                 </div>
@@ -691,8 +577,8 @@
                         <div class="col-12">
                             <input type="text" class="form-control blastParsingMode" id="blastParsingMode"
                                    name="blastParsingMode"
-                                   required="required" value="{{blastParsingMode}}"
-                                   placeholder="{{blastParsingMode}}">
+                                   required="required" value="2"
+                                   placeholder="2">
                         </div>
                     </div>
                 </div>
@@ -711,50 +597,6 @@
                 </div>
             </div>
         </div>
-
-
-        <script>
-            function autoCompleteWithRBCLLoci() {
-                document.getElementById('nameOfLoci').value = '{{rbcl_name_of_loci}}'
-                document.getElementById('errorRateCutadaptor').value = '{{rbcl_error_rate_cutadaptor}}'
-                document.getElementById('minimumLengthCutadaptor').value = '{{rbcl_minimum_length_cutadaptor}}'
-                document.getElementById('primerFName').value = '{{rbcl_primer_f_name}}'
-                document.getElementById('primerF').value = '{{rbcl_primer_f}}'
-                document.getElementById('primerRName').value = '{{rbcl_primer_r_name}}'
-                document.getElementById('primerR').value = '{{rbcl_primer_r}}'
-                // document.getElementById('amplicon_r1').value = '{{rbcL_amplicon_r1}}'
-                // document.getElementById('amplicon_r2').value = '{{rbcL_amplicon_r2}}'
-                document.getElementById('barcodesFile1').value = '{{rbcl_barcodes_file1}}'
-                document.getElementById('barcodesFile2').value = '{{rbcl_barcodes_file2}}'
-                document.getElementById('sseqidFileName').value = '{{rbcl_sseqid_file_name}}'
-                document.getElementById('minimumLengthCutadaptorInLoop').value = '{{rbcl_minimum_length_cutadaptor_in_loop}}'
-                document.getElementById('customizedCoreNumber').value = '{{rbcl_customized_core_number}}'
-                document.getElementById('blastReadChoosingMode').value = '{{rbcl_blast_read_choosing_mode}}'
-                document.getElementById('blastParsingMode').value = '{{rbcl_blast_parsing_mode}}'
-                addRawFolderPath()
-            }
-
-            function autoCompleteWithTRNLFLoci() {
-                document.getElementById('nameOfLoci').value = '{{trnlf_name_of_loci}}'
-                document.getElementById('errorRateCutadaptor').value = '{{trnlf_error_rate_cutadaptor}}'
-                document.getElementById('minimumLengthCutadaptor').value = '{{trnlf_minimum_length_cutadaptor}}'
-                document.getElementById('primerFName').value = '{{trnlf_primer_f_name}}'
-                document.getElementById('primerF').value = '{{trnlf_primer_f}}'
-                document.getElementById('primerRName').value = '{{trnlf_primer_r_name}}'
-                document.getElementById('primerR').value = '{{trnlf_primer_r}}'
-                // document.getElementById('amplicon_r1').value = '{{trnLF_amplicon_r1}}'
-                // document.getElementById('amplicon_r2').value = '{{trnLF_amplicon_r2}}'
-                document.getElementById('barcodesFile1').value = '{{trnlf_barcodes_file1}}'
-                document.getElementById('barcodesFile2').value = '{{trnlf_barcodes_file2}}'
-                document.getElementById('sseqidFileName').value = '{{trnlf_sseqid_file_name}}'
-                document.getElementById('minimumLengthCutadaptorInLoop').value = '{{trnlf_minimum_length_cutadaptor_in_loop}}'
-                document.getElementById('customizedCoreNumber').value = '{{trnlf_customized_core_number}}'
-                document.getElementById('blastReadChoosingMode').value = '{{trnlf_blast_read_choosing_mode}}'
-                document.getElementById('blastParsingMode').value = '{{trnlf_blast_parsing_mode}}'
-                addRawFolderPath()
-            }
-        </script>
-
 
         <div id="locusContainer1"></div>
         <hr id="locusHr1" class="d-none">
@@ -818,6 +660,8 @@
                             </div>
                         </div>
                         <div class="col-sm d-md-flex justify-content-md-end">
+                            <button class="btn btn-warning" id="downloadButton" disabled>Download Result</button>
+                            &nbsp;
                             <button class="btn btn-secondary" id="clearButton">Clear Log</button>
                             &nbsp;
                             <button class="btn btn-primary" id="saveButton">Save Execution Log</button>
@@ -825,441 +669,13 @@
                     </div>
                 </div>
             </div>
-            <!--    save the execution log   -->
-            <script>
-                let removedData = [];
-                let max_lines = 50; // Maximum number of lines to display
-
-                // btn for saving the console
-                document.getElementById('saveButton').addEventListener('click', function () {
-
-                    // Combine the removed data and code element text
-                    let removedLogContent = removedData.join('\n') + '\n';
-                    let codeElement = document.getElementById('console');
-                    let codeElementCopy = codeElement.cloneNode(true);
-                    let divToRemove = codeElementCopy.querySelector("#loadPreviousDiv");
-                    if (divToRemove) {
-                        codeElementCopy.removeChild(divToRemove);
-                    }
-                    let innerText = (removedLogContent + codeElementCopy.innerText)
-                        .replaceAll("                ", "")
-                        .replace("                    [", "[")
-                        .replaceAll("<", "&lt;")
-                        .replaceAll(">", "&gt;");
-                    // Create a temporary anchor element to trigger the file download
-                    let downloadLink = document.createElement('a');
-                    downloadLink.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(innerText);
-                    downloadLink.download = 'log.txt';
-                    downloadLink.style.display = 'none';
-                    document.body.appendChild(downloadLink);
-                    // Simulate a click on the anchor element to trigger the file download
-                    downloadLink.click();
-                    // Clean up the temporary anchor element
-                    document.body.removeChild(downloadLink);
-                });
-
-                // btn for clearing the console
-                document.getElementById('clearButton').addEventListener('click', function () {
-                    // $("#console").empty();
-                    $("#console").children().not("#loadPreviousDiv").remove();
-                    removedData = []
-                });
-
-                let socket = io.connect('{{ request.host_url }}', {
-                    withCredentials: true,
-                });
-
-                socket.on('procedure-result', function (data) {
-                    // update console with data by appending the new <div> to the console element
-                    let newDiv = $("<code>");
-                    newDiv.text(data);
-                    $("#console").append(newDiv);
-                    newDiv.addClass("shellsession");
-
-                    // don't forget to highlight the div if dark mode is on
-                    if ($('#darkModeToggle').is(":checked")) {
-                        hljs.highlightAll();
-                    }
-
-                    // Remove older content if necessary
-                    let lines = $("#console").find("code").length;
-                    console.log(lines)
-                    if (lines > max_lines) {
-                        let firstLine = $("#console").find("code:first");
-                        let removedLine = firstLine.text().trim(); // Adjust based on your needs
-                        removedData.push(removedLine);
-                        firstLine.remove();
-                        $("#loadPreviousButton").show();
-
-                    }
-
-                    // // Scroll to the bottom of the output div
-                    // let consoleDiv = document.getElementById('consoleDiv');
-                    // let modalBodyDiv = document.getElementById('modalBodyDiv');
-                    // modalBodyDiv.scrollTo({
-                    //     top: consoleDiv.scrollHeight,
-                    //     behavior: 'smooth'
-                    // })
-                });
-
-                // Event listener for the button click event
-                $("#loadPreviousButton").click(function () {
-                    // Function to load and prepend previous data to the console content
-                    if (removedData.length > 0) {
-                        let previousData = removedData.pop();
-                        let newDiv = $("<code>");
-                        newDiv.text(previousData + "\n");
-                        newDiv.insertBefore($("#console code:first"));
-                        newDiv.addClass("shellsession");
-                        max_lines += 1;
-                    }
-                    // Update the button visibility
-                    if (removedData.length === 0) {
-                        $("#loadPreviousButton").hide();
-                    }
-                });
-
-                $('#darkModeToggle').on("change", function (event) {
-                    if ($(this).is(":checked")) {
-                        $('code').each(function () {
-                            hljs.highlightElement(this);
-                        });
-                    } else {
-                        $('.hljs').removeClass('hljs');
-                        $('.hljs').removeClass('language-shell');
-                    }
-                });
-
-                $(document).on("submit", 'form', function (event) {
-                    // Prevent default form submission
-                    event.preventDefault();
-
-                    // Collect form data
-                    const formData = {
-                        // 'myCutadaptPath': $('#myCutadaptPath').val(),
-                        // 'myFastpPath': $('#myFastpPath').val(),
-                        // 'localBlastToolDir': $('#localBlastToolDir').val(),
-                        'ampliconInfo': $('#ampliconInfo').val(),
-                        // 'resultDataPath': $('#resultDataPath').val(),
-                        // 'missList': $('#missList').val(),
-                        'R1FastqGz': $('#R1FastqGz').val(),
-                        'R2FastqGz': $('#R2FastqGz').val(),
-                        // 'summaryJsonFileName': $('#summaryJsonFileName').val(),
-                        // 'summaryHtmlFileName': $('#summaryHtmlFileName').val(),
-                        'dada2LearnErrorFile': $('#dada2LearnErrorFile').val(),
-                        'dada2BarcodeFile': $('#dada2BarcodeFile').val(),
-                        'dev_mode': $('#dev_mode').val(),
-                        'amplicon_minimum_length': $('#amplicon_minimum_length').val(),
-                        'minimum_overlap_base_pair': $('#minimum_overlap_base_pair').val(),
-
-                        'nameOfLoci': $('.nameOfLoci').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'errorRateCutadaptor': $('.errorRateCutadaptor').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'minimumLengthCutadaptor': $('.minimumLengthCutadaptor').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'primerFName': $('.primerFName').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'primerF': $('.primerF').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'primerRName': $('.primerRName').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'primerR': $('.primerR').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        // 'amplicon_r1': $('.amplicon_r1').map(function () {
-                        //     return $(this).val();
-                        // }).get(),
-                        // 'amplicon_r2': $('.amplicon_r2').map(function () {
-                        //     return $(this).val();
-                        // }).get(),
-                        'barcodesFile1': $('.barcodesFile1').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'barcodesFile2': $('.barcodesFile2').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'sseqidFileName': $('.sseqidFileName').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'minimumLengthCutadaptorInLoop': $('.minimumLengthCutadaptorInLoop').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'customizedCoreNumber': $('.customizedCoreNumber').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'blastReadChoosingMode': $('.blastReadChoosingMode').map(function () {
-                            return $(this).val();
-                        }).get(),
-                        'blastParsingMode': $('.blastParsingMode').map(function () {
-                            return $(this).val();
-                        }).get(),
-                    }
-
-                    // Serialize form data
-                    // let formData = $('form').serialize();
-                    console.log(formData)
-
-                    // Show the modal
-                    $("#myModal").modal("show")
-                    $("#showModalButton").removeClass("d-none")
-                    socket.emit('run-procedure', formData);
-
-                    // Disable the submit button
-                    $('#submitButton').prop('disabled', true);
-                    // Show the countdown text
-                    $('#submitButton').val('Please wait...');
-
-                    // Start the countdown
-                    let seconds = 70;
-                    let countdownInterval = setInterval(function () {
-                        seconds--;
-                        if (seconds > 0) {
-                            $('#submitButton').val('Please wait... ' + seconds + 's');
-                        } else {
-                            // Enable the submit button and restore its original value
-                            $('#submitButton').prop('disabled', false).val('Submit');
-                            clearInterval(countdownInterval);
-                        }
-                    }, 1000);
-                });
-            </script>
         </div>
     </div>
 </div>
 <hr>
 
-
-<script>
-    let locusContainerCount = 0;
-
-    // Get the button element
-    const addButton = document.getElementById('addLocusButton');
-
-
-    // Add an event listener to the button
-    addButton.addEventListener('click', function () {
-        locusContainerCount++
-        let idString = 'locusContainer' + locusContainerCount.toString();
-        // Get the container element where the new DOM will be appended
-        const container = document.getElementById(idString);
-
-        // Create a new div element
-        const newDiv = document.createElement('div');
-
-        // Create the content for the new div element
-        const content = `
-<div class="border border-gray p-3 bg-light">
-            <div class="d-flex align-items-center">
-                <h4 class="m-0">Locus</h4>
-                <button id="locusFormContainerToggleBtn${locusContainerCount.toString()}" class="btn btn-primary dropdown-toggle ms-auto" type="button"
-                        data-bs-toggle="collapse" href="#locusFormContainer${locusContainerCount.toString()}" aria-expanded="false" aria-controls="pathFormContainer">
-                    Hide the Locus Form
-                </button>
-            </div>
-            <div id="locusFormContainer${locusContainerCount.toString()}" class="mt-3  collapse">
-                <div class="form-group">
-                    <label for="nameOfLoci">Name of Loci:</label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control nameOfLoci" id="nameOfLoci" required="required" name="nameOfLoci" placeholder="{{rbcl_name_of_loci}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="primerF">
-                        <span id="tooltip7">Primer F: <i class="fa fa-question-circle"></i></span>
-                        <span class="text-secondary information">
-                            <i>
-                                Primer F sequence for this locus
-                            </i>
-                        </span>
-                    </label>
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control primerFName" required="required"
-                                   placeholder="{{rbcl_primer_f_name}}" id="primerFName" name="primerFName">
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control primerF" id="primerF"
-                                   name="primerF" required="required"
-                                   placeholder="{{rbcl_primer_f}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="primerR">
-                        <span id="tooltip8">Primer R: <i class="fa fa-question-circle"></i></span>
-                        <span class="text-secondary information">
-                            <i>
-                                Primer R sequence for this locus
-                            </i>
-                        </span>
-                    </label>
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control primerRName" required="required"
-                                   placeholder="{{rbcl_primer_r_name}}" id="primerRName" name="primerRName">
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control primerR" id="primerR"
-                                   name="primerR" required="required"
-                                   placeholder="{{rbcl_primer_r}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="barcodesFile1">Barcodes File 1:</label>
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control rawFolderPath" required="required"
-                                   placeholder="{{TODO}}"  disabled="disabled">
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control barcodesFile1" id="barcodesFile1" required="required"
-                                   name="barcodesFile1" placeholder="{{rbcl_barcodes_file1}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="barcodesFile2">Barcodes File 2:</label>
-                    <div class="row">
-                         <div class="col">
-                            <input type="text" class="form-control rawFolderPath" required="required"
-                                   placeholder="{{TODO}}"  disabled="disabled">
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control barcodesFile2"
-                                   id="barcodesFile2" required="required"
-                                   name="barcodesFile2" placeholder="{{rbcl_barcodes_file2}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="sseqidFileName">Sseqid File:</label>
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control rawFolderPath" required="required"
-                                   placeholder="{{TODO}}"  disabled="disabled">
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control sseqidFileName"
-                                   id="sseqidFileName" required="required"
-                                   name="sseqidFileName" placeholder="{{rbcl_sseqid_file_name}}">
-                        </div>
-                    </div>
-                </div>
-                                <div class="form-group">
-                    <label for="errorRateCutadaptor">Error Rate Cutadaptor:</label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control errorRateCutadaptor" id="errorRateCutadaptor" required="required"
-                                   name="errorRateCutadaptor" placeholder="{{rbcl_error_rate_cutadaptor}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="minimumLengthCutadaptor">Minimum Length Cutadaptor:</label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control minimumLengthCutadaptor" id="minimumLengthCutadaptor" required="required"
-                                   name="minimumLengthCutadaptor" placeholder="{{rbcL_minimumLengthCutadaptor}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="minimumLengthCutadaptorInLoop">Minimum Length
-                        Cutadaptor In
-                        Loop:</label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control minimumLengthCutadaptorInLoop"
-                                   id="minimumLengthCutadaptorInLoop" required="required"
-                                   name="minimumLengthCutadaptorInLoop" placeholder="{{rbcl_minimum_length_cutadaptor_in_loop}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="customizedCoreNumber">Customized Core
-                        Number:</label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control customizedCoreNumber"
-                                   id="customizedCoreNumber" required="required"
-                                   name="customizedCoreNumber" placeholder="{{rbcl_customized_core_number}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group advanceMode hideAdvanceMode">
-                    <label for="blastReadChoosingMode">
-                        <span id="tooltip95">Blast Read Choosing Mode: <i class="fa fa-question-circle"></i></span>
-                        <span class="text-secondary information">
-                            <i>
-                                Blast Read Choosing Mode, details can be found in PowerBarcoder manual.
-                            </i>
-                        </span>
-                    </label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control advanceMode" id="blastReadChoosingMode"
-                                   name="blastReadChoosingMode"
-                                   required="required" value="{{blastReadChoosingMode}}"
-                                   placeholder="{{blastReadChoosingMode}}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group advanceMode hideAdvanceMode">
-                    <label for="blastParsingMode">
-                        <span id="tooltip94">Blast Parsing Mode: <i class="fa fa-question-circle"></i></span>
-                        <span class="text-secondary information">
-                            <i>
-                                Blast Parsing Mode, details can be found in PowerBarcoder manual.
-                            </i>
-                        </span>
-                    </label>
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="text" class="form-control advanceMode" id="blastParsingMode"
-                                   name="blastParsingMode"
-                                   required="required" value="{{blastParsingMode}}"
-                                   placeholder="{{blastParsingMode}}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-`;
-
-        // Set the innerHTML of the new div element to the content
-        newDiv.innerHTML = content;
-        // Append the new div element to the container element
-        container.appendChild(newDiv);
-
-        // disable the add button if the number of locus container is 4
-        if (locusContainerCount === 4) {
-            addButton.disabled = true;
-        }
-
-        addRawFolderPath()
-
-    });
-
-</script>
-<script>
-    function addRawFolderPath() {
-        let rawFolderPathOriginDiv = document.getElementById("ampliconInfo");
-        let rawFolderPathDestinationDivCollection = document.getElementsByClassName("rawFolderPath");
-        for (let rawFolderPathDestinationDiv of rawFolderPathDestinationDivCollection) {
-            rawFolderPathDestinationDiv.value = rawFolderPathOriginDiv.value;
-        }
-    }
-</script>
+<!-- Custom JavaScript -->
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
 </body>
 </html>
