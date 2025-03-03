@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Socket I/O JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          crossorigin="anonymous">
+
+    <!--  Beautify output  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/obsidian.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+
+    <!-- font awesome   -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <title>PowerBarcoder</title>
+</head>
+<body>
+<div class="container">
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 d-md-flex justify-content-md-end">
+                <button type="button" class=" btn btn-secondary" onclick="openAdvanceMode()"> v.<i>Beta</i></button>
+            </div>
+        </div>
+    </div>
+    <h1>PowerBarcoder GUI</h1>
+    <p class="lead">Please fill out the following form and submit to start the analysis.</p>
+    <form method="post">
+        <div class="border border-gray p-3 bg-light">
+            <div class="d-flex align-items-center">
+                <h4 class="m-0">Path</h4>
+                <button id="pathFormContainerToggleBtn" class="btn btn-primary dropdown-toggle ms-auto" type="button"
+                        data-bs-toggle="collapse" href="#pathFormContainer" aria-expanded="false"
+                        aria-controls="pathFormContainer">
+                    Hide the Path Form
+                </button>
+            </div>
+            <div id="pathFormContainer" class="mt-3 collapse">
+                <div class="form-group">
+                    <label for="ampliconInfo">
+                        <span id="tooltip99">Raw Files Folder Path: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The path of the raw data file within,
+                                including "R1 fastq.gz", "R2 fastq.gz",
+                                "Dada2 Barcode file", "Barcodes File 1",
+                                "Barcodes File 2", and "Sseqid File".
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control" id="ampliconInfo" name="ampliconInfo"
+                                   required="required"
+                                   placeholder="{{default_amplicon_info}}" onkeyup="addRawFolderPath()">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="R1FastqGz">
+                        <span id="tooltip0">R1 fastq.gz file path: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Raw data (.gz) path within the mounted folder "../amplicon_data/"
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath" required="required"
+                                   placeholder="{{TODO}}" disabled="disabled">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" id="R1FastqGz" name="R1FastqGz" required="required"
+                                   placeholder="{{default_r1_fastq_gz}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="R2FastqGz">
+                        <span id="tooltip1">R2 fastq.gz file path: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Raw data (.gz) path within the mounted folder "../amplicon_data/"
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath" required="required"
+                                   placeholder="{{TODO}}" disabled="disabled">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" id="R2FastqGz" name="R2FastqGz" required="required"
+                                   placeholder="{{default_r2_fastq_gz}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dada2LearnErrorFile">
+                        <span id="tooltip2">Dada2 Learn Error Files Folder Path: <i
+                                class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                File path within the mounted folder for DADA2 learning error, remember to put the fastq files under this path
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control" id="dada2LearnErrorFile" name="dada2LearnErrorFile"
+                                   required="required"
+                                   placeholder="{{default_dada2_learn_error_file}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dada2BarcodeFile">
+                        <span id="tooltip3">Dada2 Barcode File: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                File name within the mounted folder "../amplicon_data/" for DADA2 learning error
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control" id="dada2BarcodeFile" name="dada2BarcodeFile"
+                                   required="required"
+                                   placeholder="{{default_dada2_barcode_file}}">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="dev_mode">
+                        <span id="tooltip98">Develop Mode: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                If you want to use the develop mode, please set it to "1", otherwise, set it to "0<br>
+                                # 0: off (keep all the intermediate files),<br>
+                                # 1: on  (cleanup all the intermediate files)
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control dev_mode" id="dev_mode" name="dev_mode"
+                                   required="required" value="{{dev_mode}}"
+                                   placeholder="{{dev_mode}}">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="amplicon_minimum_length">
+                        <span id="tooltip97">Amplicon Minimum Length: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The minimum length of amplicon, default is 1
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control amplicon_minimum_length" id="amplicon_minimum_length"
+                                   name="amplicon_minimum_length"
+                                   required="required" value="{{amplicon_minimum_length}}"
+                                   placeholder="{{amplicon_minimum_length}}">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="minimum_overlap_base_pair">
+                        <span id="tooltip96">Minimum Overlap Base Pair: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                The minimum overlap base pair, default is 4
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control minimum_overlap_base_pair" id="minimum_overlap_base_pair"
+                                   name="minimum_overlap_base_pair"
+                                   required="required" value="{{minimum_overlap_base_pair}}"
+                                   placeholder="{{minimum_overlap_base_pair}}">
+                        </div>
+                    </div>
+                </div>
+
+
+                <br>
+                <div class="d-flex align-items-center">
+                    <button id="autoCompletePath" class="btn btn-warning" type="button"
+                            onclick="autoCompleteWithDefaultPath()">
+                        Use Demo Path
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- blank div -->
+        <hr>
+        <div class="border border-gray p-3 bg-light">
+            <div class="d-flex align-items-center">
+                <h4 class="m-0">Locus</h4>
+                <button id="locusFormContainerToggleBtn" class="btn btn-primary dropdown-toggle ms-auto" type="button"
+                        data-bs-toggle="collapse" href="#locusFormContainer" aria-expanded="false"
+                        aria-controls="pathFormContainer">
+                    Hide the Locus Form
+                </button>
+            </div>
+            <div id="locusFormContainer" class="mt-3  collapse">
+                <div class="form-group">
+                    <label for="nameOfLoci">
+                        <span id="tooltip4">Name of Loci: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Locus name for your data
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control nameOfLoci" id="nameOfLoci" name="nameOfLoci"
+                                   required="required"
+                                   placeholder="{{rbcl_name_of_loci}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="primerF">
+                        <span id="tooltip7">Primer F: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Primer F sequence for this locus
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control primerFName" required="required"
+                                   placeholder="{{rbcl_primer_f_name}}" id="primerFName" name="primerFName">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control primerF" id="primerF"
+                                   name="primerF" required="required"
+                                   placeholder="{{rbcl_primer_f}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="primerR">
+                        <span id="tooltip8">Primer R: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Primer R sequence for this locus
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control primerRName" required="required"
+                                   placeholder="{{rbcl_primer_r_name}}" id="primerRName" name="primerRName">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control primerR" id="primerR"
+                                   name="primerR" required="required"
+                                   placeholder="{{rbcl_primer_r}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="barcodesFile1">
+                        <span id="tooltip11">Barcodes File 1: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Barcodes file within the mounted folder "../amplicon_data/" for R1 fastq, should be prepared by yourself
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath" required="required"
+                                   placeholder="{{TODO}}" disabled="disabled">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control barcodesFile1" id="barcodesFile1"
+                                   name="barcodesFile1" required="required"
+                                   placeholder="{{rbcl_barcodes_file1}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="barcodesFile2">
+                        <span id="tooltip12">Barcodes File 2: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Barcodes file within the mounted folder "../amplicon_data/" for R2 fastq, should be prepared by yourself
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath" required="required"
+                                   placeholder="{{TODO}}" disabled="disabled">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control barcodesFile2"
+                                   id="barcodesFile2"
+                                   name="barcodesFile2" required="required"
+                                   placeholder="{{rbcl_barcodes_file2}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sseqidFileName">
+                        <span id="tooltip13">Sseqid File: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Library file within the mounted folder "../amplicon_data/" for local BLAST,
+                                should be prepared by yourself.
+                                We suggest user to use close related species as the library.
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control rawFolderPath" required="required"
+                                   placeholder="{{TODO}}" disabled="disabled">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control sseqidFileName"
+                                   id="sseqidFileName"
+                                   name="sseqidFileName"
+                                   required="required"
+                                   placeholder="{{rbcl_sseqid_file_name}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="errorRateCutadaptor">
+                        <span id="tooltip5">Error Rate Cutadaptor: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Trimming sensitivity for cutadapt, details can be found in cutadapt manual
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control errorRateCutadaptor" id="errorRateCutadaptor"
+                                   name="errorRateCutadaptor" required="required"
+                                   placeholder="{{rbcl_error_rate_cutadaptor}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="minimumLengthCutadaptor">
+                        <span id="tooltip6">Minimum Length Cutadaptor: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Trimming length threshold for cutadapt, details can be found in cutadapt manual
+                            </i>
+                        </span>
+                    </label>
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control minimumLengthCutadaptor" id="minimumLengthCutadaptor"
+                                   name="minimumLengthCutadaptor" required="required"
+                                   placeholder="{{rbcl_minimum_length_cutadaptor}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="minimumLengthCutadaptorInLoop">
+                        <span id="tooltip14">Minimum Length Cutadaptor In Loop: <i
+                                class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                I'm thinking about to remove this parameter, but I'm not sure yet.
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control minimumLengthCutadaptorInLoop"
+                                   id="minimumLengthCutadaptorInLoop"
+                                   name="minimumLengthCutadaptorInLoop"
+                                   required="required"
+                                   placeholder="{{rbcl_minimum_length_cutadaptor_in_loop}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="customizedCoreNumber">
+                        <span id="tooltip15">Customized Core Number: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                PowerBarcoder supports multi-threading, set proper core number to speed up the analysis.
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control customizedCoreNumber"
+                                   id="customizedCoreNumber"
+                                   name="customizedCoreNumber" required="required"
+                                   placeholder="{{rbcl_customized_core_number}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="blastReadChoosingMode">
+                        <span id="tooltip95">Blast Read Choosing Mode: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Blast Read Choosing Mode, details can be found in PowerBarcoder manual.
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control blastReadChoosingMode" id="blastReadChoosingMode"
+                                   name="blastReadChoosingMode"
+                                   required="required" value="{{blastReadChoosingMode}}"
+                                   placeholder="{{blastReadChoosingMode}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group advanceMode hideAdvanceMode">
+                    <label for="blastParsingMode">
+                        <span id="tooltip94">Blast Parsing Mode: <i class="fa fa-question-circle"></i></span>
+                        <span class="text-secondary information">
+                            <i>
+                                Blast Parsing Mode, details can be found in PowerBarcoder manual.<br>
+                                # # blast_parsing_mode == "0":<br>
+                                # 1.identity: 用3排序，取最高者出來，但不低於85<br>
+                                # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半<br>
+                                # # blast_parsing_mode == "1":<br>
+                                # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度(qseqid_length)的一半<br>
+                                # 2.identity: 用3排序，取最高者出來，但不低於85<br>
+                                # # blast_parsing_mode == "2":<br>
+                                # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85<br>
+                                # # blast_parsing_mode == "3":<br>
+                                # 1. e-value, 越小越好，但不高於0.01，1/10000代表每10000次align才可能出現一次更好的結果
+                            </i>
+                        </span>
+                    </label>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="form-control blastParsingMode" id="blastParsingMode"
+                                   name="blastParsingMode"
+                                   required="required" value="{{blastParsingMode}}"
+                                   placeholder="{{blastParsingMode}}">
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="d-flex align-items-center">
+                    <button id="autoCompleteWithRBCL" class="btn btn-warning" type="button"
+                            onclick="autoCompleteWithRBCLLoci()">
+                        Demo rbcL
+                    </button>
+                    &nbsp;
+                    <button id="autoCompleteWithTRNLF" class="btn btn-warning" type="button"
+                            onclick="autoCompleteWithTRNLFLoci()">
+                        Demo trnLF
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="locusContainer1"></div>
+        <hr id="locusHr1" class="d-none">
+        <div id="locusContainer2"></div>
+        <hr id="locusHr2" class="d-none">
+        <div id="locusContainer3"></div>
+        <hr id="locusHr3" class="d-none">
+        <div id="locusContainer4"></div>
+        <hr id="locusHr4" class="d-none">
+
+        <br>
+
+        <input id="addLocusButton" type="button" class=" btn btn-secondary" value="add new locus">
+
+        <!-- blank div -->
+        <hr>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 d-md-flex justify-content-md-end">
+                    <input id="showModalButton" type="button" class=" btn btn-success d-none" value="View logs"
+                           onclick="$('#myModal').modal('show')"> &nbsp;
+                    <input id="submitButton" type="submit" class="btn btn-primary" value="Submit">
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Form submitted successfully!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBodyDiv" style="padding-bottom: 0rem">
+                <div class="text-center mb-3">
+                </div>
+                <div id="consoleDiv">
+                <pre style="margin-bottom: 0rem" id="console">
+                    <div class="d-flex justify-content-center" id="loadPreviousDiv">
+                        <button class="btn btn-success" id="loadPreviousButton"
+                                style="display: none;">Load Previous</button>
+                    </div>
+                </pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+                            <span>&nbsp</span>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="darkModeToggle">
+                                <label class="form-check-label" for="darkModeToggle">Dark Mode</label>
+                            </div>
+                        </div>
+                        <div class="col-sm d-md-flex justify-content-md-end">
+                            <button class="btn btn-secondary" id="clearButton">Clear Log</button>
+                            &nbsp;
+                            <button class="btn btn-primary" id="saveButton">Save Execution Log</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+
+<!-- Custom JavaScript -->
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+</body>
+</html>
