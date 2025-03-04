@@ -1,0 +1,210 @@
+<div class="border border-gray p-3 bg-light">
+    <div class="d-flex align-items-center">
+        <h4 class="m-0">Locus {{ locus_index }}</h4>
+        <button id="locusFormContainerToggleBtn{{ locus_index }}" class="btn btn-primary dropdown-toggle ms-auto" type="button"
+                data-bs-toggle="collapse" href="#locusFormContainer{{ locus_index }}" aria-expanded="false" aria-controls="pathFormContainer">
+            Hide the Locus Form
+        </button>
+    </div>
+    <div id="locusFormContainer{{ locus_index }}" class="mt-3 show">
+        <div class="form-group">
+            <label for="nameOfLoci{{ locus_index }}">Name of Loci:</label>
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" class="form-control nameOfLoci" id="nameOfLoci{{ locus_index }}" required="required" name="nameOfLoci" placeholder="{{ rbcl_name_of_loci }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="primerF{{ locus_index }}">
+                <span id="tooltip7{{ locus_index }}">Primer F: <i class="fa fa-question-circle"></i></span>
+                <span class="text-secondary information">
+                    <i>
+                        Primer F sequence for this locus
+                    </i>
+                </span>
+            </label>
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control primerFName" required="required"
+                           placeholder="{{ rbcl_primer_f_name }}" id="primerFName{{ locus_index }}" name="primerFName">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control primerF" id="primerF{{ locus_index }}"
+                           name="primerF" required="required"
+                           placeholder="{{ rbcl_primer_f }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="primerR{{ locus_index }}">
+                <span id="tooltip8{{ locus_index }}">Primer R: <i class="fa fa-question-circle"></i></span>
+                <span class="text-secondary information">
+                    <i>
+                        Primer R sequence for this locus
+                    </i>
+                </span>
+            </label>
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control primerRName" required="required"
+                           placeholder="{{ rbcl_primer_r_name }}" id="primerRName{{ locus_index }}" name="primerRName">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control primerR" id="primerR{{ locus_index }}"
+                           name="primerR" required="required"
+                           placeholder="{{ rbcl_primer_r }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="barcodesFile1{{ locus_index }}">Barcodes File 1:</label>
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control rawFolderPath" required="required"
+                           placeholder="" disabled="disabled">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control barcodesFile1" id="barcodesFile1{{ locus_index }}" required="required"
+                           name="barcodesFile1" placeholder="{{ rbcl_barcodes_file1 }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="barcodesFile2{{ locus_index }}">Barcodes File 2:</label>
+            <div class="row">
+                 <div class="col">
+                    <input type="text" class="form-control rawFolderPath" required="required"
+                           placeholder="" disabled="disabled">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control barcodesFile2"
+                           id="barcodesFile2{{ locus_index }}" required="required"
+                           name="barcodesFile2" placeholder="{{ rbcl_barcodes_file2 }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="sseqidFileName{{ locus_index }}">Sseqid File:</label>
+            <div class="row">
+                <div class="col">
+                    <input type="text" class="form-control rawFolderPath" required="required"
+                           placeholder="" disabled="disabled">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control sseqidFileName"
+                           id="sseqidFileName{{ locus_index }}" required="required"
+                           name="sseqidFileName" placeholder="{{ rbcl_sseqid_file_name }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="errorRateCutadapt{{ locus_index }}">Cutadapt Error Rate:</label>
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" class="form-control errorRateCutadapt" id="errorRateCutadapt{{ locus_index }}" required="required"
+                           name="errorRateCutadapt" placeholder="{{ rbcl_error_rate_cutadapt }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="minimumLengthCutadapt{{ locus_index }}">Cutadapt Minimum Length:</label>
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" class="form-control minimumLengthCutadapt" id="minimumLengthCutadapt{{ locus_index }}" required="required"
+                           name="minimumLengthCutadapt" placeholder="{{ rbcl_minimum_length_cutadapt }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="minimumLengthCutadaptInLoop{{ locus_index }}">Cutadapt Minimum Length In Loop:</label>
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" class="form-control minimumLengthCutadaptInLoop"
+                           id="minimumLengthCutadaptInLoop{{ locus_index }}" required="required"
+                           name="minimumLengthCutadaptInLoop" placeholder="{{ rbcl_minimum_length_cutadapt_in_loop }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="customizedCoreNumber{{ locus_index }}">Cutadapt Customized Core Number:</label>
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" class="form-control customizedCoreNumber"
+                           id="customizedCoreNumber{{ locus_index }}" required="required"
+                           name="customizedCoreNumber" placeholder="{{ rbcl_customized_core_number }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="minimum_overlap_base_pair{{ locus_index }}"> DADA2 Minimum Overlap Base Pair:</label>
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" class="form-control minimum_overlap_base_pair"
+                           id="minimum_overlap_base_pair{{ locus_index }}"
+                           name="minimum_overlap_base_pair" required="required"
+                           placeholder="{{ rbcl_minimum_overlap_base_pair }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="minimum_overlap_base_pair{{ locus_index }}"> DADA2 Maximum Mismatch Base Pair:</label>
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" class="form-control maximum_mismatch_base_pair"
+                           id="maximum_mismatch_base_pair{{ locus_index }}"
+                           name="maximum_mismatch_base_pair" required="required"
+                           placeholder="{{ rbcl_maximum_mismatch_base_pair }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group advanceMode hideAdvanceMode">
+            <label for="blastReadChoosingMode{{ locus_index }}">
+                <span id="tooltip95{{ locus_index }}">Blast Read Choosing Mode: <i class="fa fa-question-circle"></i></span>
+                <span class="text-secondary information">
+                    <i>
+                        Blast Read Choosing Mode, details can be found in PowerBarcoder manual.
+                    </i>
+                </span>
+            </label>
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" class="form-control blastReadChoosingMode" id="blastReadChoosingMode{{ locus_index }}"
+                           name="blastReadChoosingMode"
+                           required="required" value="{{ rbcl_blast_read_choosing_mode }}"
+                           placeholder="{{ rbcl_blast_read_choosing_mode }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group advanceMode hideAdvanceMode">
+            <label for="blastParsingMode{{ locus_index }}">
+                <span id="tooltip94{{ locus_index }}">Blast Parsing Mode: <i class="fa fa-question-circle"></i></span>
+                <span class="text-secondary information">
+                    <i>
+                        Blast Parsing Mode, details can be found in PowerBarcoder manual.
+                    </i>
+                </span>
+            </label>
+            <div class="row">
+                <div class="col-12">
+                    <input type="text" class="form-control blastParsingMode" id="blastParsingMode{{ locus_index }}"
+                           name="blastParsingMode"
+                           required="required" value="{{ rbcl_blast_parsing_mode }}"
+                           placeholder="{{ rbcl_blast_parsing_mode }}">
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="d-flex align-items-center">
+            <button id="autoCompleteWithRBCL{{ locus_index }}" class="btn btn-warning" type="button"
+                    onclick="populateLocusWithRBCL({{ locus_index }})">
+                Demo rbcL
+            </button>
+            &nbsp;
+            <button id="autoCompleteWithTRNLF{{ locus_index }}" class="btn btn-warning" type="button"
+                    onclick="populateLocusWithTRNLF({{ locus_index }})">
+                Demo trnLF
+            </button>
+        </div>
+    </div>
+</div>
