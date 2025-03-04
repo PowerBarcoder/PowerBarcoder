@@ -232,29 +232,9 @@
     transition: max-height 1s ease-in-out;
 }
 
-#tooltip99:hover + .information,
-#tooltip98:hover + .information,
-#tooltip97:hover + .information,
-#tooltip96:hover + .information,
-#tooltip95:hover + .information,
-#tooltip94:hover + .information,
-#tooltip0:hover + .information,
-#tooltip1:hover + .information,
-#tooltip2:hover + .information,
-#tooltip3:hover + .information,
-#tooltip4:hover + .information,
-#tooltip5:hover + .information,
-#tooltip6:hover + .information,
-#tooltip7:hover + .information,
-#tooltip8:hover + .information,
-#tooltip9:hover + .information,
-#tooltip10:hover + .information,
-#tooltip11:hover + .information,
-#tooltip12:hover + .information,
-#tooltip13:hover + .information,
-#tooltip14:hover + .information,
-#tooltip15:hover + .information {
+[id^="tooltip"]:hover + .information {
     max-height: 1000px;
+    white-space: pre-line;
 }
 
 /* Styles for the dark mode and shell session */
