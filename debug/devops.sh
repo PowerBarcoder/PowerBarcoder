@@ -1,0 +1,3 @@
+bash powerBarcode.sh 202412120855
+bash powerBarcode_2ndLearnError.sh202412120855
+bash powerBarcode_noLearnError.sh 202412120855

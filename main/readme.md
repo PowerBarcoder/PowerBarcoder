@@ -13,7 +13,7 @@
 5. 效能瓶頸排除：
    1. dada2
    2. cutadapt(V done by parallel computing)
-   3. mergeModule(V done by coroutine)
+   3. merge(V done by coroutine)
 
 ## Pending
 
@@ -109,7 +109,7 @@ title: Execution order
     A[start] -->B[checkRequirement.sh]
     B --> C[checkDirectory.sh]
     C --> D[illumina_PE_demultiplex_all_newprimer.sh]
-    D --> E[dada2_denoise_PE_newprimer.r]
+    D --> E[dada2_denoise.r]
     E --> F[00_blastForRef.sh]
     F --> G[blastResultParser.py]
     G --> H[alignmentPretreater.py]
