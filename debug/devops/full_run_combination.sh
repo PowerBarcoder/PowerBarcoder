@@ -1,0 +1,1 @@
+# TODO : use folder 'full_run' to run all combinations that thesis needs

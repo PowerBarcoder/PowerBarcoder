@@ -3,34 +3,63 @@ R1FastqGz: RUN1-5_R1.fastq.gz
 R2FastqGz: RUN1-5_R2.fastq.gz
 ampliconInfo: /PowerBarcoder/data/amplicon_data/
 barcodesFile1:
-- barcodes_rbcL_start_0.fasta
 - barcodes_trnL_3exonSTART_0.fasta
+- barcodes_trnL_3exonSTART_0.fasta
+barcodesFile1Helper:
+- /PowerBarcoder/data/amplicon_data/
+- /PowerBarcoder/data/amplicon_data/
 barcodesFile2:
-- barcodes_rbcLN_start2_0.fasta
 - barcodes_trnF_0.fasta
+- barcodes_trnF_0.fasta
+barcodesFile2Helper:
+- /PowerBarcoder/data/amplicon_data/
+- /PowerBarcoder/data/amplicon_data/
+blastParsingMode:
+- '2'
+- '2'
+blastReadChoosingMode:
+- '1'
+- '1'
 customizedCoreNumber:
 - '30'
 - '30'
 dada2BarcodeFile: multiplex_cpDNAbarcode_clean.txt
 dada2LearnErrorFile: /PowerBarcoder/data/dada2LearnErrorFile/
-errorRateCutadaptor:
+denoise_mode: '0'
+dev_mode: '1'
+errorRateCutadapt:
 - '0.125'
 - '0.125'
-minimumLengthCutadaptor:
+maximum_mismatch_base_pair:
+- '0'
+- '0'
+minimumLengthCutadapt:
 - '70'
 - '70'
-minimumLengthCutadaptorInLoop:
+minimumLengthCutadaptInLoop:
 - '150'
 - '150'
+minimum_overlap_base_pair:
+- '12'
+- '12'
 nameOfLoci:
-- rbcLN
+- trnLF
 - trnLF
 primerF:
-- GAGACTAAAGCAGGTGTTGGATTCA
 - TGAGGGTTCGANTCCCTCTA
+- TGAGGGTTCGANTCCCTCTA
+primerFName:
+- L5675
+- L5675
 primerR:
-- TCAAGTCCACCRCGAAGRCATTC
 - GGATTTTCAGTCCYCTGCTCT
+- GGATTTTCAGTCCYCTGCTCT
+primerRName:
+- F4121
+- F4121
+sseqidFileHelper:
+- /PowerBarcoder/data/amplicon_data/
+- /PowerBarcoder/data/amplicon_data/
 sseqidFileName:
-- fermalies_rbcL.fasta
+- ftol_sanger_alignment_trnLLF_full_f.fasta
 - ftol_sanger_alignment_trnLLF_full_f.fasta
