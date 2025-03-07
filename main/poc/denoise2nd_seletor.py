@@ -29,6 +29,11 @@ output_path_failed = "C:/Users/kwz50/IdeaProjects/PowerBarcoder/data/result/2023
 
 
 def copy_folder_content(output_path, candidate_list):
+    """
+    @brief Copy selected files from the input folder to the output folder.
+    @param output_path: The path to the output folder.
+    @param candidate_list: The list of candidate file names to copy.
+    """
     # get all file name in input_url
     file_list = os.listdir(input_path)
     print(file_list)  # 'trim_trnLF_L5675_br01_F4121_br01_r1.fq'
@@ -55,6 +60,10 @@ def copy_folder_content(output_path, candidate_list):
 
 
 def atcg_checker(output_path):
+    """
+    @brief Check if files in the output folder contain only A, T, C, G in specific lines.
+    @param output_path: The path to the output folder.
+    """
     # print file name in output_url folder
     output_file_list = os.listdir(output_path)
     # check if files in output_url folder have any alphabet not in ['A', 'T', 'C', 'G'] in 2, 6, 10, 14, 18, 22, 26, 30, 34, 38... lines

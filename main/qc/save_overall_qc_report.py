@@ -1,3 +1,7 @@
+"""
+@file save_overall_qc_report.py
+@brief This module saves overall QC report data to an SQLite database and exports it to a CSV file.
+"""
 import csv
 import sqlite3
 import os
@@ -7,6 +11,13 @@ OVERALL_QC_DB = "overallQcReport.db"
 
 
 def create_overall_qc_report_table(cursor):
+    """
+    Create the overall QC report table in the SQLite database if it does not exist.
+
+    :param cursor: The cursor object for executing SQL queries.
+    :type cursor: sqlite3.Cursor
+    :raises sqlite3.Error: If there is an error executing the SQL query.
+    """
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS overallQcReport (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,6 +33,16 @@ def create_overall_qc_report_table(cursor):
 
 
 def insert_overall_qc_report(cursor, data):
+    """
+    Insert overall QC report data into the SQLite database.
+
+    :param cursor: The cursor object for executing SQL queries.
+    :type cursor: sqlite3.Cursor
+    :param data: A tuple containing the data to be inserted into the table.
+                 The order of data should match the table's column order.
+    :type data: tuple
+    :raises sqlite3.Error: If there is an error executing the SQL query.
+    """
     cursor.execute('''
         INSERT INTO overallQcReport (step, avg_q, err_q, num_seqs, sum_len, min_len, max_len)
         VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -29,6 +50,14 @@ def insert_overall_qc_report(cursor, data):
 
 
 def read_and_store_qc_report(file_path, db_path):
+    """
+    Read QC report data from a file, store it in an SQLite database, and export it to a CSV file.
+
+    :param file_path: Path to the QC report file.
+    :type file_path: str
+    :param db_path: Path to the SQLite database.
+    :type db_path: str
+    """
     steps = [
         "Raw data r1",
         "Raw data r2",
@@ -80,6 +109,14 @@ def read_and_store_qc_report(file_path, db_path):
 
 # TODO 待與 sql_to_csv 的  method合併
 def export_to_csv(db_path, csv_path):
+    """
+    Export data from an SQLite database table to a CSV file.
+
+    :param db_path: Path to the SQLite database.
+    :type db_path: str
+    :param csv_path: Path to the output CSV file.
+    :type csv_path: str
+    """
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM overallQcReport")
