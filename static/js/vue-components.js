@@ -1,11 +1,6 @@
-// Initialize removedData globally to prevent reference errors
-window.removedData = [];
-
 // Import the form fields configuration
 import locusFields from './locus-fields.js';
 import pathFields from './path-fields.js';
-
-// 修改引入位置，指向新的模板 JS module
 import formGroupTemplate from '../js/templates/form-group.js';
 import modalTemplate from '../js/templates/modal.js';
 import pathFormTemplate from '../js/templates/path-form.js';
@@ -205,6 +200,8 @@ new Vue({
         pathFormVisible: true,
         locusFormVisible: true,
         locusFields: locusFields, // Add locusFields to the main Vue instance
+        removedData: [],
+        maxLines: 10,
     },
     methods: {
         handleFormSubmission() {
@@ -220,6 +217,9 @@ new Vue({
             this.submitButtonText = 'Please wait...';
 
             const formData = this.formData;
+
+            // // 添加 console.log 輸出完整表單數據
+            // console.log('Form data being submitted:', JSON.stringify(formData, null, 2));
 
             $("#myModal").modal("show");
             $("#showModalButton").removeClass("d-none");
@@ -239,10 +239,6 @@ new Vue({
         },
         
         validateAllInputs() {
-            // Perform custom validation if needed
-            // The browser's built-in validation will handle most cases since we added 'required'
-            // This function can be expanded for more complex validation rules
-            
             // Basic path validation
             if (!this.formData.ampliconInfo || !this.formData.R1FastqGz || !this.formData.R2FastqGz || 
                 !this.formData.dada2LearnErrorFile || !this.formData.dada2BarcodeFile) {
@@ -267,26 +263,6 @@ new Vue({
                 element.classList.toggle('hideAdvanceMode');
                 element.classList.toggle('showAdvanceMode');
             });
-        },
-        addRawFolderPath() {
-            // This method is called when typing in the Raw Files Folder Path
-            // It can be used to automatically populate related paths based on the folder
-            const basePath = this.formData.ampliconInfo;
-            if (basePath && basePath.trim() !== '') {
-                // Only set these values if they're empty to avoid overwriting user input
-                if (!this.formData.R1FastqGz) {
-                    this.formData.R1FastqGz = basePath + '/raw_data_R1.fastq.gz';
-                }
-                if (!this.formData.R2FastqGz) {
-                    this.formData.R2FastqGz = basePath + '/raw_data_R2.fastq.gz';
-                }
-                if (!this.formData.dada2LearnErrorFile) {
-                    this.formData.dada2LearnErrorFile = basePath + '/dada2_learn_error';
-                }
-                if (!this.formData.dada2BarcodeFile) {
-                    this.formData.dada2BarcodeFile = basePath + '/dada2_barcode.txt';
-                }
-            }
         },
         autoCompleteWithDefaultPath() {
             // Use direct DOM approach to update fields
@@ -354,9 +330,6 @@ new Vue({
                     if (!["barcodesFile1Helper", "barcodesFile2Helper", "sseqidFileHelper"].includes(field.secondary.name)) {
                         const secKey = field.secondary.configKey || `${prefix}_${toSnakeCase(field.secondary.name)}`;
                         this.formData[field.secondary.name][index] = CONFIG[secKey];
-                        console.log(`Updated ${field.secondary.name}[${index}] with ${secKey}:`, CONFIG[secKey]);
-                    } else {
-                        console.log(`Skipped updating ${field.secondary.name}[${index}]`);
                     }
                 }
             }
@@ -435,8 +408,8 @@ new Vue({
             $("#myModal").modal("show");
         },
         loadPrevious() {
-            if (window.removedData && window.removedData.length > 0) {
-                let previousData = window.removedData.pop();
+            if (this.removedData && this.removedData.length > 0) {
+                let previousData = this.removedData.pop();
                 let newDiv = $("<code>");
                 newDiv.text(previousData + "\n");
                 newDiv.insertBefore($("#console code:first"));
@@ -446,17 +419,17 @@ new Vue({
                     hljs.highlightElement(newDiv[0]);
                 }
                 
-                if (window.removedData.length === 0) {
+                if (this.removedData.length === 0) {
                     $("#loadPreviousButton").hide();
                 }
             }
         },
         clearLog() {
             $("#console").children().not("#loadPreviousDiv").remove();
-            window.removedData = [];
+            this.removedData = [];
         },
         saveLog() {
-            let removedLogContent = window.removedData.join('\n') + '\n';
+            let removedLogContent = this.removedData.join('\n') + '\n';
             let codeElement = document.getElementById('console');
             let codeElementCopy = codeElement.cloneNode(true);
             let divToRemove = codeElementCopy.querySelector("#loadPreviousDiv");
@@ -538,10 +511,10 @@ new Vue({
             }
 
             let lines = $("#console").find("code").length;
-            if (lines > 50) {
+            if (lines > this.maxLines) {
                 let firstLine = $("#console").find("code:first");
                 let removedLine = firstLine.text().trim();
-                window.removedData.push(removedLine);
+                this.removedData.push(removedLine);
                 firstLine.remove();
                 $("#loadPreviousButton").show();
             }
@@ -583,11 +556,7 @@ new Vue({
         // Add explicit event listener for trnLF button
         const autoTRNLFBtn = document.getElementById('autoCompleteWithTRNLF');
         if (autoTRNLFBtn) {
-            autoTRNLFBtn.addEventListener('click', () => {
-                this.autoCompleteWithTRNLFLoci();
-            });
             autoTRNLFBtn.addEventListener('click', this.autoCompleteWithTRNLFLoci.bind(this));
-            autoTRNLFBtn.removeEventListener('click', this.autoCompleteWithTRNLFLoci);
         } else {
             console.warn("Element 'autoCompleteWithTRNLF' not found in mounted.");
         }
@@ -595,11 +564,7 @@ new Vue({
         // Add explicit event listener for rbcL button
         const autoRBCLBtn = document.getElementById('autoCompleteWithRBCL');
         if (autoRBCLBtn) {
-            autoRBCLBtn.addEventListener('click', () => {
-                this.autoCompleteWithRBCLLoci();
-            });
             autoRBCLBtn.addEventListener('click', this.autoCompleteWithRBCLLoci.bind(this));
-            autoRBCLBtn.removeEventListener('click', this.autoCompleteWithRBCLLoci);
         } else {
             console.warn("Element 'autoCompleteWithRBCL' not found in mounted.");
         }
