@@ -1,4 +1,6 @@
 """
+@file primary_blast_ref_filter.py
+@brief Implements filtering of BLAST results for paired-end sequences (r1/r2).
 BLAST Reference Filter Module
 
 This module implements filtering of BLAST results for paired-end sequences (r1/r2).
@@ -138,7 +140,14 @@ class AsvBlastResults:
 
 
 def read_blast_results(file_path: Path, encoding: str = DEFAULT_ENCODING) -> List[str]:
-    """Read and filter empty lines from blast results file."""
+    """
+    @brief Read and filter empty lines from blast results file.
+    @param file_path: The path to the BLAST results file.
+    @param encoding: The encoding of the file.
+    @return: A list of non-empty lines from the file.
+    @exception FileNotFoundError: If the file is not found.
+    @exception Exception: If an error occurs while reading the file.
+    """
     try:
         if not file_path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
@@ -149,7 +158,11 @@ def read_blast_results(file_path: Path, encoding: str = DEFAULT_ENCODING) -> Lis
 
 
 def parse_blast_line(line: str) -> BlastEntry:
-    """Convert tab-separated blast result line to BlastEntry."""
+    """
+    @brief Convert tab-separated blast result line to BlastEntry.
+    @param line: A tab-separated line from the BLAST results file.
+    @return: A BlastEntry object containing the parsed data.
+    """
     columns = line.strip().split("\t")
     return BlastEntry(
         query=columns[QSSEQID_INDEX],
@@ -164,7 +177,11 @@ def parse_blast_line(line: str) -> BlastEntry:
 
 
 def filter_intersection(lines: List[str]) -> Tuple[set, set]:
-    """Build r1 and r2 reference pair sets."""
+    """
+    @brief Build r1 and r2 reference pair sets.
+    @param lines: A list of lines from the BLAST results file.
+    @return: Two sets containing r1 and r2 reference pairs.
+    """
     r1_set, r2_set = set(), set()
     for line in lines:
         if not line.strip():
@@ -181,7 +198,12 @@ def filter_intersection(lines: List[str]) -> Tuple[set, set]:
 
 
 def calculate_overlap_and_identity(r1_entry: BlastEntry, r2_entry: BlastEntry) -> Tuple[int, float]:
-    """Calculate overlap range and identity score."""
+    """
+    @brief Calculate overlap range and identity score.
+    @param r1_entry: The BLAST entry for r1.
+    @param r2_entry: The BLAST entry for r2.
+    @return: A tuple containing the overlap range and identity score.
+    """
     identity_score = 1 - (r1_entry.mismatch + r2_entry.mismatch) / (
             abs(r1_entry.qstart - r1_entry.qend) + 1 +
             abs(r2_entry.qstart - r2_entry.qend) + 1)
@@ -196,7 +218,12 @@ def calculate_overlap_and_identity(r1_entry: BlastEntry, r2_entry: BlastEntry) -
 
 
 def write_filtered_results(output_path: Path, filtered_lines: List[str]) -> None:
-    """Write filtered results to output file."""
+    """
+    @brief Write filtered results to output file.
+    @param output_path: The path to the output file.
+    @param filtered_lines: A list of filtered lines to write.
+    @exception Exception: If an error occurs while writing the file.
+    """
     try:
         with output_path.open("w", encoding=DEFAULT_ENCODING) as f:
             f.writelines(filtered_lines)
@@ -205,7 +232,11 @@ def write_filtered_results(output_path: Path, filtered_lines: List[str]) -> None
 
 
 def process_intersection_results(lines: List[str]) -> Dict[str, AsvBlastResults]:
-    """Process results and organize by ASV."""
+    """
+    @brief Process results and organize by ASV.
+    @param lines: A list of lines from the BLAST results file.
+    @return: A dictionary of ASV names to AsvBlastResults objects.
+    """
     results: Dict[str, AsvBlastResults] = {}
 
     for line_number, line in enumerate(lines):
@@ -222,7 +253,12 @@ def process_intersection_results(lines: List[str]) -> Dict[str, AsvBlastResults]
 
 
 def calculate_metrics_for_pairs(results: Dict[str, AsvBlastResults], lines: List[str]) -> Dict[str, AsvBlastResults]:
-    """Calculate overlap and identity metrics for all pairs."""
+    """
+    @brief Calculate overlap and identity metrics for all pairs.
+    @param results: A dictionary of ASV names to AsvBlastResults objects.
+    @param lines: A list of lines from the BLAST results file.
+    @return: The updated dictionary of ASV names to AsvBlastResults objects.
+    """
     for asv_result in results.values():
         for ref_name, metrics in asv_result.ref_pairs.items():
             r1_entry = parse_blast_line(lines[metrics.r1_line_number])
@@ -235,7 +271,11 @@ def calculate_metrics_for_pairs(results: Dict[str, AsvBlastResults], lines: List
 
 
 def filter_by_max_overlap(results: Dict[str, AsvBlastResults]) -> Dict[str, AsvBlastResults]:
-    """Keep only pairs with maximum overlap."""
+    """
+    @brief Keep only pairs with maximum overlap.
+    @param results: A dictionary of ASV names to AsvBlastResults objects.
+    @return: The updated dictionary of ASV names to AsvBlastResults objects.
+    """
     for asv_result in results.values():
         max_overlap = max(metrics.overlap_length or 0 for metrics in asv_result.ref_pairs.values())
 
@@ -250,7 +290,11 @@ def filter_by_max_overlap(results: Dict[str, AsvBlastResults]) -> Dict[str, AsvB
 
 
 def filter_by_max_identity(results: Dict[str, AsvBlastResults]) -> Dict[str, AsvBlastResults]:
-    """Keep only pairs with maximum identity among equal overlaps."""
+    """
+    @brief Keep only pairs with maximum identity among equal overlaps.
+    @param results: A dictionary of ASV names to AsvBlastResults objects.
+    @return: The updated dictionary of ASV names to AsvBlastResults objects.
+    """
     for asv_result in results.values():
         max_identity = max(metrics.identity_score or 0 for metrics in asv_result.ref_pairs.values())
 
@@ -265,7 +309,14 @@ def filter_by_max_identity(results: Dict[str, AsvBlastResults]) -> Dict[str, Asv
 
 
 def primary_blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: str) -> Dict[str, AsvBlastResults]:
-    """Execute BLAST reference filtering pipeline."""
+    """
+    @brief Execute BLAST reference filtering pipeline.
+    @param load_dir: The directory containing the BLAST results.
+    @param loci_name: The name of the loci.
+    @param blast_parsing_mode: The mode for parsing the BLAST results.
+    @return: A dictionary of ASV names to AsvBlastResults objects.
+    @exception Exception: If an error occurs during the filtering process.
+    """
     try:
         load_dir = Path(load_dir)
         result_dir = load_dir / f"{loci_name}_result" / BLAST_RESULT_DIR
@@ -322,5 +373,3 @@ def primary_blast_ref_filter(load_dir: str, loci_name: str, blast_parsing_mode: 
     except Exception as e:
         logging.error(f"Error in primary_blast_ref_filter: {str(e)}")
         return {}
-
-

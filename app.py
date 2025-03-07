@@ -21,14 +21,19 @@ batch_name_set = set()
 
 
 def ws_emit_procedure_result(msg, room_name):
+    """
+    @brief Emit procedure result to a specific WebSocket room.
+    @param msg: The message to emit.
+    @param room_name: The name of the WebSocket room.
+    """
     ws.emit('procedure-result', "[" + str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + "]" + msg, room=room_name)
 
 
 def remove_ansi_escape_sequences(text):
     """
-    處理 tqdm 的 ansi 字符
-    :param text:
-    :return:
+    @brief Remove ANSI escape sequences from the given text (used by tqdm). 
+    @param text: The text containing ANSI escape sequences.
+    @return: The text with ANSI escape sequences removed.
     """
     ansi_escape = re.compile(r'(?:\x1B[@-_][0-?]*[ -/]*[@-~])')
     return ansi_escape.sub('', text)
@@ -37,9 +42,10 @@ def remove_ansi_escape_sequences(text):
 @socketio.on('run-procedure')
 def run_procedure(data):
     """
-    Run PowerBarcoder procedure
+    @brief Run PowerBarcoder procedure.
+    @param data: The data containing form inputs.
+    @exception Exception: If an error occurs during the process.
     """
-
     # Get current datetime
     formatted_datetime = datetime.now().strftime("%Y%m%d%H%M")
 
@@ -113,10 +119,9 @@ def run_procedure(data):
 @app.route('/')
 def home():
     """
-    passing default value to html (some parameters are not used in demo, and are hard-coded in parsing_yml_to_shell() method)
-    :return:
+    @brief Render the home page with default values for the form. Some parameters are not used in demo, and are hard-coded in parsing_yml_to_shell() method
+    @return: The rendered home page template.
     """
-
     # Path
     default_mycutadapt_path = "/venv/cutadapt-venv/bin/"
     default_myfastp_path = "/usr/local/bin/"
@@ -227,17 +232,26 @@ def home():
 @app.route('/download/<room_name>', methods=['GET'])
 def download_result(room_name):
     """
-    Download result from {room} (e.g. 202402102048) by loci,
-    trnLF result:
-        - /PowerBarcoder/data/result/{room}/trnLF_result/qcResult/validator/best
-        - /PowerBarcoder/data/result/{room}/trnLF_result/qcResult/validator/all
-        - /PowerBarcoder/data/result/{room}/trnLF_result/qcResult/qcReport.csv
-    rbcL result:
-        - /PowerBarcoder/data/result/{room}/rbcL_result/qcResult/validator/best
-        - /PowerBarcoder/data/result/{room}/rbcL_result/qcResult/validator/all
-        - /PowerBarcoder/data/result/{room}/rbcL_result/qcResult/qcReport.csv
-    ... add more if more loci are added
-    zip the result folders and return the zip file
+    @brief Download result from a specific room by loci.
+
+    This function retrieves results stored in predefined folders and 
+    compresses them into a ZIP file for download.
+
+    ### trnLF result:
+    - `/PowerBarcoder/data/result/{room}/trnLF_result/qcResult/validator/best`
+    - `/PowerBarcoder/data/result/{room}/trnLF_result/qcResult/validator/all`
+    - `/PowerBarcoder/data/result/{room}/trnLF_result/qcResult/qcReport.csv`
+
+    ### rbcL result:
+    - `/PowerBarcoder/data/result/{room}/rbcL_result/qcResult/validator/best`
+    - `/PowerBarcoder/data/result/{room}/rbcL_result/qcResult/validator/all`
+    - `/PowerBarcoder/data/result/{room}/rbcL_result/qcResult/qcReport.csv`
+
+    More loci can be added in the future.
+
+    @param room_name The name of the room.
+    @return The ZIP file containing the result folders.
+    @exception Exception If an error occurs during the process.
     """
     # List all result folders in room_name folder
     room_name_folder = f'/PowerBarcoder/data/result/{room_name}'
@@ -279,6 +293,10 @@ def download_result(room_name):
 # health check
 @app.route('/health')
 def health():
+    """
+    @brief Health check endpoint.
+    @return: 'OK' if the server is running.
+    """
     return 'OK'
 
 

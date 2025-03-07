@@ -12,8 +12,17 @@ from subprocess import PIPE
 from FastaUnit import FastaUnit
 from Miseq import Miseq
 
+"""
+@file merger.py
+@brief This script performs the merging process for the specified loci.
+"""
 
 def get_files(loadpath):
+    """
+    @brief Get a list of candidate files from the specified load path.
+    @param loadpath: The path to load files from.
+    @return: A set of candidate file names.
+    """
     files = listdir(loadpath)
     candidate_list = set()
 
@@ -31,7 +40,11 @@ def get_files(loadpath):
 
 
 def write_to_file(output_filename, merge_seq):
-    """步驟六：收尾寫檔"""
+    """
+    @brief Write the merged sequence to the output files (步驟六：收尾寫檔).
+    @param output_filename: The name of the output file.
+    @param merge_seq: The merged sequence.
+    """
     mergepath = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/rawMerged/"
     degap_merge_path = sys.argv[2] + sys.argv[3] + "_result/mergeResult/merger/merged/"
 
@@ -46,6 +59,12 @@ def write_to_file(output_filename, merge_seq):
 
 
 def get_sequence_from_map(seq_map, keyword):
+    """
+    @brief Get the sequence and reference sequence from the sequence map based on the keyword.
+    @param seq_map: The sequence map.
+    @param keyword: The keyword to search for.
+    @return: A tuple containing the sequence and reference sequence.
+    """
     seq = ""
     ref_seq = ""
     for key, value in seq_map.items():
@@ -57,6 +76,10 @@ def get_sequence_from_map(seq_map, keyword):
 
 
 def merger():
+    """
+    @brief Perform the merging process for the specified loci.
+    @exception Exception: If an error occurs during the merging process.
+    """
     print("[INFO] merger.py is running on loci: " + sys.argv[3])
 
     ######################################

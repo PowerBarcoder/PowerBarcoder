@@ -28,13 +28,13 @@ HASH_VALUE_COL_INDEX_LIST = [DADA2_DENOISE_R1_HASH_VALUE_COL_INDEX, DADA2_DENOIS
 def get_csv_cells_content_map_by_column(file_path: str, start_row_index: int, key_col_index: int,
                                         value_col_index: int) -> dict[str, str] | None:
     """
-    Function to get all cell content in a specific column in a CSV file
-    :param file_path: the file path of the CSV file
-    :param start_row_index: the row index to start reading the file
-    :param key_col_index: the column index of the key
-    :param value_col_index: the column index of the value
-    :return: a dictionary of the cell content
-    e.g. {'trnLF_L5675_br01_F4121_br01': 'aad3b405edfeebe31da2f391fff81e5f'}
+    @brief Get all cell content in a specific column in a CSV file.
+    @param file_path: The file path of the CSV file.
+    @param start_row_index: The row index to start reading the file.
+    @param key_col_index: The column index of the key.
+    @param value_col_index: The column index of the value.
+    @return: A dictionary of the cell content.
+    @example {'trnLF_L5675_br01_F4121_br01': 'aad3b405edfeebe31da2f391fff81e5f'}
     """
     with open(file_path, newline='') as csvfile:
         reader = csv.reader(csvfile)
@@ -61,7 +61,14 @@ def get_batch_result_maps(batch_name: str, loci_name: str, start_row_index: int,
                           key_col_index: int, value_col_index: int,
                           total_run_number: int):
     """
-    Function to get a list of result maps for a batch of runs
+    @brief Get a list of result maps for a batch of runs.
+    @param batch_name: The name of the batch.
+    @param loci_name: The name of the loci.
+    @param start_row_index: The row index to start reading the file.
+    @param key_col_index: The column index of the key.
+    @param value_col_index: The column index of the value.
+    @param total_run_number: The total number of runs in the batch.
+    @return: A list of result maps for the batch.
     """
     batch_result_map_list = []
     for i in range(total_run_number):
@@ -74,7 +81,9 @@ def get_batch_result_maps(batch_name: str, loci_name: str, start_row_index: int,
 
 def __count_distinct_values(batch_result_map_list):
     """
-    Function to count distinct values for each key in a list of result maps
+    @brief Count distinct values for each key in a list of result maps.
+    @param batch_result_map_list: A list of result maps for the batch.
+    @return: A dictionary with the count of distinct values for each key.
     """
     aggregated_counts = {}
     for batch_result_map in batch_result_map_list:
@@ -87,7 +96,9 @@ def __count_distinct_values(batch_result_map_list):
 
 def __get_most_common_values(batch_result_map_list):
     """
-    Function to extract the most common value for each key in a list of result maps
+    @brief Extract the most common value for each key in a list of result maps.
+    @param batch_result_map_list: A list of result maps for the batch.
+    @return: A dictionary with the most common value for each key.
     """
     aggregated_map = {}
     for batch_result_map in batch_result_map_list:
@@ -101,9 +112,9 @@ def __get_most_common_values(batch_result_map_list):
 
 def __hash_to_color(hash_str):
     """
-    Function to convert a hash string to RGB color for visualization
-    :param hash_str:
-    :return: RGB color
+    @brief Convert a hash string to RGB color for visualization.
+    @param hash_str: The hash string.
+    @return: RGB color.
     """
     if 'N/A' in hash_str:
         return 0, 0, 0
@@ -124,7 +135,14 @@ def get_aggregated_csv_cells_content_counts_map_by_column_in_batch(batch_name: s
                                                                    key_col_index: int, value_col_index: int,
                                                                    total_run_number: int) -> dict:
     """
-    Function to aggregate the cell content of a specific column into distinctive count in a batch of runs
+    @brief Aggregate the cell content of a specific column into distinctive count in a batch of runs.
+    @param batch_name: The name of the batch.
+    @param loci_name: The name of the loci.
+    @param start_row_index: The row index to start reading the file.
+    @param key_col_index: The column index of the key.
+    @param value_col_index: The column index of the value.
+    @param total_run_number: The total number of runs in the batch.
+    @return: A dictionary with the count of distinct values for each key.
     """
     batch_result_map_list = get_batch_result_maps(batch_name, loci_name, start_row_index,
                                                   key_col_index, value_col_index,
@@ -137,7 +155,14 @@ def get_aggregated_csv_cells_content_most_show_value_map_by_column_in_batch(batc
                                                                             key_col_index: int, value_col_index: int,
                                                                             total_run_number: int) -> dict:
     """
-    Function to aggregate the cell content of a specific column into the highest frequency value in a batch of runs
+    @brief Aggregate the cell content of a specific column into the highest frequency value in a batch of runs.
+    @param batch_name: The name of the batch.
+    @param loci_name: The name of the loci.
+    @param start_row_index: The row index to start reading the file.
+    @param key_col_index: The column index of the key.
+    @param value_col_index: The column index of the value.
+    @param total_run_number: The total number of runs in the batch.
+    @return: A dictionary with the most common value for each key.
     """
     batch_result_map_list = get_batch_result_maps(batch_name, loci_name, start_row_index,
                                                   key_col_index, value_col_index,
@@ -147,18 +172,22 @@ def get_aggregated_csv_cells_content_most_show_value_map_by_column_in_batch(batc
 
 def __transpose_data_matrix(original_dict: dict) -> dict:
     """
-    :param original_dict:
-        {
+    @brief Transpose the data matrix.
+    @param original_dict: The original dictionary.
+    @return: The transposed dictionary.
+    @example
+    original_dict:
+    {
         "SuperRed_35": {'trnLF_L5675_br01_F4121_br01': (248, 30, 95), 'trnLF_L5675_br01_F4121_br02': (223, 149, 71)},
         "filtered": {'trnLF_L5675_br01_F4121_br01': (248, 30, 95), 'trnLF_L5675_br01_F4121_br02': (13, 146, 228)},
         "filtered_selected_pure": {'trnLF_L5675_br01_F4121_br01': (248, 30, 95), 'trnLF_L5675_br01_F4121_br02': (223, 149, 71)},
         "no_learn_error": {'trnLF_L5675_br01_F4121_br01': (248, 30, 95), 'trnLF_L5675_br01_F4121_br02': (223, 149, 71)}
-        }
-    :return:
-        {
+    }
+    transposed_dict:
+    {
         "trnLF_L5675_br01_F4121_br01": {"SuperRed_35": (248, 30, 95), "filtered": (248, 30, 95), "filtered_selected_pure": (248, 30, 95), "no_learn_error": (248, 30, 95)},
         "trnLF_L5675_br01_F4121_br02": {"SuperRed_35": (223, 149, 71), "filtered": (13, 146, 228), "filtered_selected_pure": (223, 149, 71), "no_learn_error": (223, 149, 71)}
-        }
+    }
     """
     transposed_dict = {}
     for outer_key, inner_dict in original_dict.items():
@@ -171,11 +200,11 @@ def __transpose_data_matrix(original_dict: dict) -> dict:
 
 def csv_to_excel_with_background_color(csv_file: str, excel_file: str):
     """
-    Convert a CSV file to an Excel file with background color
-    e.g. (0, 0, 0) is the color for white
-    :param csv_file: the file path of the CSV file
-    :param excel_file: the file path of the Excel file
-    :return: None
+    @brief Convert a CSV file to an Excel file with background color.
+    @param csv_file: The file path of the CSV file.
+    @param excel_file: The file path of the Excel file.
+    @return: None
+    @example (0, 0, 0) is the color for white.
     """
     # Load CSV file and create a workbook
     with open(csv_file, 'r') as file:

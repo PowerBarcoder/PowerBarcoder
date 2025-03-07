@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-prepare r1Ref & r2Ref for alignment
+@file alignmentPretreater.py
+@brief Prepare r1Ref & r2Ref for alignment.
 """
 
 import sys
@@ -11,46 +12,55 @@ POSITIVE_DIRECTION = "positive"
 NEGATIVE_DIRECTION = "negative"
 
 
-# 製造待測序列路徑的方法
 def qseqid_file(target_output_loadpath, r_who, file_name):
+    """
+    @brief Generate the path for the target sequence file.
+    @param target_output_loadpath: The base path for the output.
+    @param r_who: The direction of the sequence (r1, r2, or rWho).
+    @param file_name: The name of the file.
+    @return: The full path of the target sequence file.
+    """
     target_qseqid_file_dir = target_output_loadpath + r_who + "/"
     target_qseqid_file_name = file_name
     target_qseqid_file = target_qseqid_file_dir + target_qseqid_file_name
     return target_qseqid_file
 
 
-"""
-# 判斷正負的方法
-2022年的做法是看12跟13相乘：
-相乘為正就是positive，為負就是negative
-20230206-10N：(沒很懂，但好像跟之前的概念一樣)
-用 subject start 與 end 相減 正值或負值
-再與（query start 與 end 相減）相乘決定 是否方向一至
-"""
-
-
 def negative_test(a, b):
+    """
+    @brief Determine the direction based on the given values.
+    @param a: The first value.
+    @param b: The second value.
+    @return: The direction (positive or negative).
+    """
     if ((a[0] == "-") and (b[0] == "-")) or ((a[0] != "-") and (b[0] != "-")):
         return POSITIVE_DIRECTION
     elif ((a[0] != "-") and (b[0] == "-")) or ((a[0] == "-") and (b[0] != "-")):
         return NEGATIVE_DIRECTION
 
 
-# 反轉序列的方法
 def reverse_complement(seq):
-    # """Return reverse complement fastaID_seq_dic, ignore gaps"""
+    """
+    @brief Return the reverse complement of the given sequence, ignoring gaps.
+    @param seq: The input sequence.
+    @return: The reverse complement of the sequence.
+    """
     seq = seq.replace(' ', '')  # Remove space
     seq = seq.replace('\n', '')  # Remove LF
-    seq = seq[::-1]  # Reverse the fastaID_seq_dic
+    seq = seq[::-1]  # Reverse the sequence
     basecomplement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'N': 'N', 'R': 'Y', 'Y': 'R', 'M': 'K', 'K': 'M',
                       'S': 'S', 'W': 'W', 'H': 'D', 'B': 'V'}  # Make a dictionary for complement
-    letters = list(seq)  # Turn the fastaID_seq_dic into a list
+    letters = list(seq)  # Turn the sequence into a list
     letters = [basecomplement[base] for base in letters]
     return ''.join(letters) + '\n'  # Turn the list into a string
 
 
-# 兩條序列匯出成一檔的方法
 def create_ref_file(r_who, r_who_row_list):
+    """
+    @brief Write two sequences into a single file.
+    @param r_who: The direction of the sequence (r1, r2, or rWho).
+    @param r_who_row_list: The list of rows for the sequence.
+    """
     with open(output_loadpath + r_who + "Ref/" + qseqid, "w") as ref_file:
         final_row_list = r_who_row_list + target_row_list
         ref_file.writelines(final_row_list)
@@ -66,7 +76,6 @@ output_loadpath = sys.argv[3] + sys.argv[4] + "_result/mergeResult/merger/"
 fasta_file_dir = local_blast_loadpath + sys.argv[4] + "_result/blastResult/"
 fasta_file_name = sys.argv[4] + "_blastResult.txt"
 fasta_file = fasta_file_dir + fasta_file_name
-# print(fasta_file)
 
 # ref
 # sseqid_file_dir="/home/lykuo/lab_data/NGS_data/miseq/LIB810_S9/"
@@ -86,15 +95,12 @@ try:
         for line in lines:
             if not line.strip():
                 break
-            # print (line)
             line = line.replace("\n", "")
             line_split = line.split("\t")
-            # print(line_split)
             qseqid = line_split[0]
             sseqid = line_split[1]
             sign = negative_test(line_split[12], line_split[13])
             forward = line_split[14]
-            # print(qseqid+" "+sseqid+" "+sign+" "+forward)
 
             # 已獲得所有資訊，開始分四狀況來寫alignment了
             # 0514-016_CYH20090514-016_Microlepia_substrigosa_.fas
@@ -118,28 +124,19 @@ try:
                 elif forward == "rWho":
                     # 待測序列r1製作
                     qseqid_file_str = qseqid_file(output_loadpath, "r1", qseqid.replace(".fas", "_r1.fas"))
-                    # print(qseqid_file(loadpath,forward,qseqid))
                     r1_row_list = []
                     with open(qseqid_file_str, "r") as q_r1_file:
-                        # print(qseqid_file_str)
                         lines = q_r1_file.readlines()
-                        # print(lines)
                         r1_row_list += lines
-                        # print(r1_row_list)
 
                     # 待測序列r2製作
                     qseqid_file_str = qseqid_file(output_loadpath, "r2", qseqid.replace(".fas", "_r2.fas"))
-                    # print(qseqid_file(loadpath,forward,qseqid))
                     r2_row_list = []
                     with open(qseqid_file_str, "r") as q_r2_file:
-                        # print(qseqid_file_str)
                         lines = q_r2_file.readlines()
-                        # print(lines)
                         r2_row_list += lines
-                        # print(r2_row_list)
                 else:
                     print("forward error in alignmentPretreater.py 118: " + qseqid_file_str)
-
 
             except Exception as e:
                 print("[ERROR] An exception happen in " + sys.argv[4] + "： " + qseqid + " before alignment")
@@ -156,7 +153,6 @@ try:
                     if target_line.find(sseqid) != -1:
                         break
                 target_row_list += (lines[target_row_number:target_row_number + 2])
-                # print(target_row_list)
 
             # if else判斷方向(多行的fasta之後再處理成一行的)
 
@@ -172,12 +168,10 @@ try:
             #     target_row_list[1]=reverse_complement(target_row_list[1])
             #     r2_row_list[1]=reverse_complement(r2_row_list[1])
 
-            # 20230206-10N新版 TODO 需要用trnLF測試正確性
+            # 20230206-10N新版 TODO 需要用trnLF測試正確性            
             if sign == NEGATIVE_DIRECTION:
                 target_row_list[1] = reverse_complement(target_row_list[1])
-                # print("negative: " + fasta_file)
             elif sign == POSITIVE_DIRECTION:
-                # print("positive: "+fasta_file)
                 pass
 
             # # r1r2分開blast
