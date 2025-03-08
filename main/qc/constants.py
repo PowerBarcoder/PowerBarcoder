@@ -1,3 +1,7 @@
+"""
+@file constants.py
+@brief This module defines constant lists used in the QC process.
+"""
 OVERALL_INFO_STEP_LIST = [
     "Raw data r1",
     "Raw data r2",

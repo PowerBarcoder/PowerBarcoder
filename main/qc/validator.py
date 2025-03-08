@@ -1,3 +1,9 @@
+"""
+@file validator.py
+@brief This module validates the results of the DADA2 denoise and merger processes.
+It includes functions for sequence alignment, identifying the longest ATCG subsequence,
+and concatenating files.
+"""
 import os
 from Bio import Align, Seq, SeqIO
 import sys
@@ -17,12 +23,15 @@ output_best_path = f'{BASE_URL}qcResult/validator/best/'
 
 def reverse_complement_pairwise_alignment(query_seq: str, target_seq: str):
     """
-    Performs pairwise alignment between query_seq and target_seq.
+    Perform pairwise alignment between query_seq and target_seq.
     Returns the sequence with the longest ATCG subsequence.
 
     :param query_seq: Query sequence to align.
+    :type query_seq: str
     :param target_seq: Target sequence to align against.
+    :type target_seq: str
     :return: Alignment sequence with the longest ATCG subsequence.
+    :rtype: str
     """
     aligner = Align.PairwiseAligner(scoring="blastn")
 
@@ -44,10 +53,12 @@ def reverse_complement_pairwise_alignment(query_seq: str, target_seq: str):
 
 def longest_atcg_sequence(sequence: str):
     """
-    Returns the length of the longest consecutive ATCG subsequence in the given sequence.
+    Return the length of the longest consecutive ATCG subsequence in the given sequence.
 
     :param sequence: Input sequence.
+    :type sequence: str
     :return: Length of the longest consecutive ATCG subsequence.
+    :rtype: int
     """
     longest_length = 0
     current_length = 0
@@ -63,10 +74,12 @@ def longest_atcg_sequence(sequence: str):
 
 def concatenate_files_from_one_folder(folder_path, output_file):
     """
-    Concatenates files from a single folder into a single output file.
+    Concatenate files from a single folder into a single output file.
 
     :param folder_path: Path to the folder containing files to concatenate.
+    :type folder_path: str
     :param output_file: Output file to store the concatenated content.
+    :type output_file: str
     """
     with open(output_file, 'w') as output:
         for filename in os.listdir(folder_path):
@@ -78,11 +91,14 @@ def concatenate_files_from_one_folder(folder_path, output_file):
 
 def concatenate_files_from_two_files(folder_file1, folder_file2, output_file):
     """
-    Concatenates content from two files into a single output file.
+    Concatenate content from two files into a single output file.
 
     :param folder_file1: Path to the first file.
+    :type folder_file1: str
     :param folder_file2: Path to the second file.
+    :type folder_file2: str
     :param output_file: Output file to store the concatenated content.
+    :type output_file: str
     """
     with open(output_file, 'w') as output:
         if os.path.exists(folder_file1):
@@ -95,10 +111,12 @@ def concatenate_files_from_two_files(folder_file1, folder_file2, output_file):
 
 def concatenate_files_from_multiple_files(file_paths, output_file):
     """
-    Concatenates content from multiple files into a single output file.
+    Concatenate content from multiple files into a single output file.
 
     :param file_paths: List of paths to input files.
+    :type file_paths: list
     :param output_file: Output file to store the concatenated content.
+    :type output_file: str
     """
     with open(output_file, 'w') as output:
         for file_path in file_paths:
@@ -111,7 +129,7 @@ def concatenate_files_from_multiple_files(file_paths, output_file):
 
 def denoise_alignment():
     """
-    Aligns the dada2 denoise output sequences and writes the results to files.
+    Align the dada2 denoise output sequences and write the results to files.
     """
     alignment_file_list = os.listdir(input_r1_path)
     merger_file_list = os.listdir(input_ref_path)
@@ -159,7 +177,7 @@ def denoise_alignment():
 
 def merger_alignment():
     """
-    Aligns the merger and dada2 result sequences and writes the results to files.
+    Align the merger and dada2 result sequences and writes the results to files.
         如果ASV分別有5&6，那會有30種alignment結果，這裡只從中挑選成績最好的一組
         成績好壞：兩序列中，最高連續ATCG片段最長的作為該序列代表，跟align對象互比，找到較短的一方做為整組代表
         預設情境：兩序列若很不相似，則單次alignment中，會有一端出現gap很多，意味著該序列跟對象不相似，因此被選為代表後，會比不過其他組alignment
@@ -236,7 +254,7 @@ def merger_alignment():
 
 def concatenate_denoise_and_merger():
     """
-    Concatenates denoise and merger results into a single output file.
+    Concatenate denoise and merger results into a single output file.
     """
     output_denoise_file_list = os.listdir(output_denoise_path)
     for i in range(len(output_denoise_file_list)):

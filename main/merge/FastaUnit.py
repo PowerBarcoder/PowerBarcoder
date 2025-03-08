@@ -5,7 +5,14 @@ import os
 
 
 def save_fasta_unit_as_file(load_path, save_dir):
-    """把fasta存成一行一行的檔案"""
+    """
+    Saves a FASTA file as a series of line-by-line files.
+
+    :param load_path: Path to the input FASTA file.
+    :type load_path: str
+    :param save_dir: Directory where the line-by-line files will be saved.
+    :type save_dir: str
+    """
     file = load_path
     file_name = ""
     if "/" in file:
@@ -29,7 +36,12 @@ def save_fasta_unit_as_file(load_path, save_dir):
 
 def get_file_name_from_path(path):
     """
-    get file name from path without extension
+    Gets the file name from a path without the extension.
+
+    :param path: The file path.
+    :type path: str
+    :return: The file name without the extension.
+    :rtype: str
     """
     file_name = ""
     if "/" in path:
@@ -41,7 +53,12 @@ def get_file_name_from_path(path):
 
 def get_file_extension_from_path(path):
     """
-    get file extension from path
+    Gets the file extension from a path.
+
+    :param path: The file path.
+    :type path: str
+    :return: The file extension.
+    :rtype: str
     """
     extension = ""
     if "/" in path:
@@ -51,8 +68,14 @@ def get_file_extension_from_path(path):
 
 def replace_filename_with_header(load_path, output_dir, delete_original_file=False):
     """
-    Replace filename with the sequence header at the first line.
-    Notice: If you have multiple sequences, we only parse the file one's header
+    Replaces the filename with the sequence header from the first line of the file. Notice: If you have multiple sequences, we only parse the first file's header
+
+    :param load_path: Path to the input file.
+    :type load_path: str
+    :param output_dir: Directory where the renamed file will be saved.
+    :type output_dir: str
+    :param delete_original_file: Whether to delete the original file after renaming. Defaults to False.
+    :type delete_original_file: bool, optional
     """
     extension = get_file_extension_from_path(load_path)
     with open(load_path, "r") as input_file:
@@ -66,8 +89,12 @@ def replace_filename_with_header(load_path, output_dir, delete_original_file=Fal
 
 def split_multiple_seq_fasta_into_files(load_path, save_dir):
     """
-    Split a fasta with multiple sequences into separated file with one line header and one line sequence data.
-    Input supported for sequence data with multiple lines (such as the alignment result file in MAFFT).
+    Splits a FASTA file containing multiple sequences (such as the alignment result file from MAFFT) into separate files.
+
+    :param load_path: Path to the input FASTA file.
+    :type load_path: str
+    :param save_dir: Directory where the split files will be saved.
+    :type save_dir: str
     """
     file_name = get_file_name_from_path(load_path)
     extension = get_file_extension_from_path(load_path)
@@ -96,12 +123,25 @@ def split_multiple_seq_fasta_into_files(load_path, save_dir):
 
 
 class FastaUnit:
+    """
+    Represents a FASTA unit with a sequence map.
+    """
 
     def __init__(self):
+        """
+        Initializes a FastaUnit object.
+        """
         self.seq_map = {}
 
     def fasta_unit(self, load_path):
-        """把fasta轉成一行一行的map物件"""
+        """
+        Converts a FASTA file into a map object.
+
+        :param load_path: Path to the input FASTA file.
+        :type load_path: str
+        :return: The FastaUnit object with the populated sequence map.
+        :rtype: FastaUnit
+        """
         seq_map = {}
         # 製作所有序列的map
         seq_header = ""

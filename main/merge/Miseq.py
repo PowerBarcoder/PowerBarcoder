@@ -12,25 +12,51 @@ def zero_list_maker(n):
 
 
 class Miseq:
-    # 建構式
+    """
+    Represents Miseq sequencing data and performs sequence alignment and analysis.
+    """
+
     def __init__(self):
+        """
+        Initializes a Miseq object.
+        """
         self.forword = ""  # True表示放ref頭端，False表示放ref尾端
         self.stick_site = ""  # 拼接點(r1_p2或r2_p1)
         self.f_r_trim = "deprecated_parameter"  # 從尾trim頭部；從頭trim尾部
         self.del_site = "deprecated_parameter"  # del的位置跟長度
         self.in_site = ""  # in的位置跟長度
 
-    # 印出物件
     def show(self):
+        """
+        Prints the attributes of the Miseq object.
+
+        :return: A string representation of the Miseq object.
+        :rtype: str
+        :example: {'forword': True, 'stickSiteFinder': 166, 'F_Rtrim': 96, 'del': {45: 6, 173: 96}, 'in': {22: 7}}
+        """
         return f'forword: {self.forword}, stickSite(r1_p2,r2_p1): {self.stick_site}, F_Rtrim: {self.f_r_trim}, delSite: {self.del_site}, inSite: {self.in_site}'
 
-    # {'forword': True, 'stickSiteFinder': 166, 'F_Rtrim': 96, 'del': {45: 6, 173: 96}, 'in': {22: 7}}
+    
 
     # 定義一個方法用來創建初始陣列，長度為原序列長度，初始值皆為0
 
     # 因為是用ref當中介序列，所以不如直接用ref紀錄接合點位
     # 定義一個方法用產出拼接位點
     def stick_site_finder(self, filename, r, ref, r_who):
+        """
+        Finds the stick site for sequence alignment.
+
+        :param filename: The name of the file.
+        :type filename: str
+        :param r: The sequence to be aligned.
+        :type r: str
+        :param ref: The reference sequence.
+        :type ref: str
+        :param r_who: The direction of the sequence (r1 or r2).
+        :type r_who: str
+        :return: The Miseq object with updated attributes.
+        :rtype: Miseq
+        """
         # 陣列1：重疊判定陣列
         r_arr_overlap = zero_list_maker(len(ref))  # ref跟r都align了，所以長度是一樣的
 

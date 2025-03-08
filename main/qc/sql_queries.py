@@ -1,3 +1,9 @@
+"""
+@file sql_queries.py
+@brief This module defines SQL queries for creating and inserting data into SQLite tables
+for QC reports.
+"""
+
 CREATE_QC_REPORT_TABLE = '''
     CREATE TABLE IF NOT EXISTS qcReport (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

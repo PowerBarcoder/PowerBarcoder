@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """
+@file alignmenter.py
+@brief Aligns sequences using MAFFT based on BLAST results.
+
 We read the file {{locus}}_blastResult.txt to get the list of readsID,
 for each read, we aligned them with MAFFT.
 
@@ -28,8 +31,23 @@ fasta_file_dir = local_blast_loadpath + sys.argv[3] + "_result/blastResult/"
 fasta_file_name = sys.argv[3] + "_blastResult.txt"
 fasta_file = fasta_file_dir + fasta_file_name
 
-
+"""
+@brief Aligns the sequence using MAFFT.
+@param qseqid: The query sequence ID.
+@param forward: The direction of the sequence (r1, r2, or rwho).
+@return: None
+@exception Exception: If alignment fails.
+"""
 def align_sequence(qseqid: str, forward: str):
+    """
+    Aligns the sequence using MAFFT.
+
+    :param qseqid: The query sequence ID.
+    :type qseqid: str
+    :param forward: The direction of the sequence (r1, r2, or rwho).
+    :type forward: str
+    :raises Exception: If alignment fails.
+    """
     # we need to avoid the situation that the filename with special characters, so we add "'" around the path string
     try:
         # r1r2分開blast

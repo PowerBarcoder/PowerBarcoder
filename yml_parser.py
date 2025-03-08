@@ -5,6 +5,13 @@ import yaml
 
 # convert the formData to YAML
 def parsing_form_data_to_yml(data):
+    """
+    Convert the form data to YAML format and write it to a file.
+
+    :param data: A dictionary containing the form data.
+    :type data: dict
+    :raises Exception: If there is an error during YAML conversion or file writing.
+    """
     yaml_data = yaml.dump(data)
     with open('main/config.yml', 'w') as f:
         f.write("---\n")
@@ -13,6 +20,14 @@ def parsing_form_data_to_yml(data):
 
 # convert the YAML to shell script, with some fixed field
 def parsing_yml_to_shell(batch_name: str):
+    """
+    Convert the YAML configuration to a shell script.
+
+    :param batch_name: The name of the batch, used for creating result directories.
+    :type batch_name: str
+    :raises OSError: If the directory for the batch name cannot be created.
+    :raises Exception: If there is an error during YAML loading or shell script writing.
+    """
     # Load YAML file
     with open('main/config.yml', 'r') as file:
         config = yaml.safe_load(file)
@@ -66,17 +81,7 @@ def parsing_yml_to_shell(batch_name: str):
         script += f"blastReadChoosingMode[{i}]='{config['blastReadChoosingMode'][i] if config['blastReadChoosingMode'][i] == '0' else '1'}'\n"
         # blastReadChoosingMode (default: 1): 0: 10Ncat Blast, 1: split R1 R2 Blast
         script += f"blastParsingMode[{i}]='{config['blastParsingMode'][i] if config['blastParsingMode'][i] in ('0', '1', '2', '3') else '2'}'\n"
-        # blastParsingMode (default: 2)
-        # # blast_parsing_mode == "0":
-        # 1.identity: 用3排序，取最高者出來，但不低於85
-        # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半
-        # # blast_parsing_mode == "1":
-        # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度(qseqid_length)的一半
-        # 2.identity: 用3排序，取最高者出來，但不低於85
-        # # blast_parsing_mode == "2":
-        # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85
-        # # blast_parsing_mode == "3":
-        # 1. e-value, 越小越好，但不高於0.01，1/10000代表每10000次align才可能出現一次更好的結果
+
 
     script += 'echo \'[INFO] config imported!\'\n'
 

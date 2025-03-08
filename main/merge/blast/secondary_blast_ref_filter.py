@@ -1,5 +1,6 @@
 """
-This module defines the `BlastRef` class for processing BLAST result files.
+@file secondary_blast_ref_filter.py
+@brief This module defines the `BlastRef` class for processing BLAST result files.
 
 The `BlastRef` class:
 - Reads BLAST output files.
@@ -115,7 +116,7 @@ class BlastRef:
 
     def __init__(self) -> None:
         """
-        Initialize BlastRef with empty result lists and configuration.
+        Initializes BlastRef with empty result lists and configuration.
         """
         self.qseqid_list: List[str] = []
         self.sseqid_list: List[str] = []
@@ -283,10 +284,17 @@ class BlastRef:
 
     def secondary_blast_ref_filter(self, load_dir: str, loci_name: str, blast_parsing_mode: str) -> Optional['BlastRef']:
         """
-        Process BLAST results and populate object attributes.
+        Processes BLAST results and populates object attributes.
 
-        Returns:
-            Optional[BlastRef]: The populated BlastRef object, or None if processing fails
+        :param load_dir: The directory containing the BLAST results.
+        :type load_dir: str
+        :param loci_name: The name of the loci.
+        :type loci_name: str
+        :param blast_parsing_mode: The mode for parsing the BLAST results.
+        :type blast_parsing_mode: str
+        :return: The populated BlastRef object, or None if processing fails.
+        :rtype: Optional[BlastRef]
+        :raises Exception: If an error occurs during the process.
         """
         logging.info(f"Starting BLAST processing with mode: {blast_parsing_mode}")
 

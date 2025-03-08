@@ -1,3 +1,7 @@
+"""
+@file csvParser.py
+@brief This module provides functions to parse various data files and generate a CSV report.
+"""
 import csv
 import hashlib
 import os
@@ -5,8 +9,15 @@ import sys
 import traceback
 from main.qc.constants import OVERALL_INFO_STEP_LIST, FILE_SET_PARAMETER_LIST, STEPS
 
+"""
+@file csvParser.py
+@brief This module provides functions to parse various data files and generate a CSV report.
+"""
 
 def init():
+    """
+    Initialize global variables for file paths and constants.
+    """
     global INPUT_PATH, DEMULTIPLEX_UNTRIMMED_PATH, DEMULTIPLEX_TRIMMED_PATH, DEMULTIPLEX_FILTERED_PATH, DENOISE_PAIR_PATH, BLAST_RESULT_PATH, DADA2_DENOISE_R1_PATH, DADA2_DENOISE_R2_PATH, DADA2_MERGED_PATH, DADA2_10N_CAT_PATH, MERGER_MERGED_PATH, OUTPUT_PATH, SEGMENTATION, BEST_ASV_INFO_COLUMN_NAMES
     INPUT_PATH = sys.argv[1] + sys.argv[2] + "_result/qcResult/qcReport.txt"
     DEMULTIPLEX_UNTRIMMED_PATH = sys.argv[1] + sys.argv[2] + "_result/demultiplexResult/untrimmed"
@@ -25,6 +36,15 @@ def init():
 
 
 def parsing_denoise_pair_into_dict(path: str):
+    """
+    Parse the denoise pair file into a dictionary.
+
+    :param path: The path to the denoise pair file.
+    :type path: str
+    :return: A dictionary with key-value pairs from the denoise pair file.
+    :rtype: dict
+    :raises Exception: If there is an error decoding the file.
+    """
     maps = {}
     try:
         # Open the log.txt file for reading with the appropriate encoding
@@ -43,11 +63,26 @@ def parsing_denoise_pair_into_dict(path: str):
 
 def parsing_fastq_reads_number(path: str, prefix: str, file_name: str, rwho: str):
     """
-    DEMULTIPLEX_UNTRIMMED_PATH: "rbcLN_fVGF_br01_rECL_br01_r1.fq"
-    DEMULTIPLEX_TRIMMED_PATH: "trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
-    DEMULTIPLEX_FILTERED_PATH: "filtered_trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
+    Parse the number of reads in a FASTQ file.
+
+    :param path: The path to the FASTQ file.
+    :type path: str
+    :param prefix: The prefix of the file name.
+    :type prefix: str
+    :param file_name: The name of the file.
+    :type file_name: str
+    :param rwho: The read direction (r1 or r2).
+    :type rwho: str
+    :return: The number of reads in the FASTQ file.
+    :rtype: float
+    :raises FileNotFoundError: If the FASTQ file does not exist.
     """
     with open(path + "/" + prefix + file_name + "_" + rwho + ".fq", "r") as f:
+        """
+        DEMULTIPLEX_UNTRIMMED_PATH: "rbcLN_fVGF_br01_rECL_br01_r1.fq"
+        DEMULTIPLEX_TRIMMED_PATH: "trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
+        DEMULTIPLEX_FILTERED_PATH: "filtered_trim_rbcLN_fVGF_br01_rECL_br01_r1.fq"
+        """
         # calculate the number of lines
         num_lines = sum(1 for _ in f)
         fastq_reads_number = num_lines / 4
@@ -55,6 +90,13 @@ def parsing_fastq_reads_number(path: str, prefix: str, file_name: str, rwho: str
 
 
 def parsing_blast_result_into_dict():
+    """
+    Parse the BLAST result file into a dictionary.
+
+    :return: A dictionary with key-value pairs from the BLAST result file.
+    :rtype: dict
+    :raises FileNotFoundError: If the BLAST result file does not exist.
+    """
     data_dict = {}
     with open(BLAST_RESULT_PATH, 'r', encoding='utf-8') as file:
         for line in file:
@@ -67,6 +109,15 @@ def parsing_blast_result_into_dict():
 
 
 def parsing_file_list_into_set(pipeline_step: str):
+    """
+    Parse the file list for a specific pipeline step into a set.
+
+    :param pipeline_step: The pipeline step to parse.
+    :type pipeline_step: str
+    :return: A set of file names for the specified pipeline step.
+    :rtype: set
+    :raises FileNotFoundError: If the input file does not exist.
+    """
     with open(INPUT_PATH, 'r', encoding='utf-8') as file:
         content = file.readlines()
         file_set = set()
@@ -83,6 +134,16 @@ def parsing_file_list_into_set(pipeline_step: str):
 
 
 def parsing_merged_file_fasta_with_highest_abundance_into_list(filename_set: set, sample_name: str):
+    """
+    Parse the merged file with the highest abundance into a list.
+
+    :param filename_set: The set of file names.
+    :type filename_set: set
+    :param sample_name: The sample name to filter.
+    :type sample_name: str
+    :return: A list containing the header and sequence of the highest abundance element.
+    :rtype: list
+    """
     header = ""
     sequence = ""
     filtered_elements = [
@@ -109,6 +170,14 @@ def parsing_merged_file_fasta_with_highest_abundance_into_list(filename_set: set
 
 
 def parsing_overall_info_into_list(pipeline_step: str):
+    """
+    Parse the overall information for a specific pipeline step into a list.
+
+    :param pipeline_step: The pipeline step to parse.
+    :type pipeline_step: str
+    :return: A list containing the overall information for the specified pipeline step.
+    :rtype: list
+    """
     with open(INPUT_PATH, 'r', encoding='utf-8') as file:
         content = file.readlines()
         file_name, num_seqs, sum_len, min_len, max_len, avg_q, err_q = "", "", "", "", "", "", ""
@@ -134,8 +203,15 @@ def parsing_overall_info_into_list(pipeline_step: str):
     return data
 
 
-# prepare the abundance info for "DADA2 denoise r1","DADA2 denoise r2","DADA2 merge","DADA2 10N concat"
 def process_abundance_file(file_path):
+    """
+    Process the abundance file and extract sequence information for "DADA2 denoise r1","DADA2 denoise r2","DADA2 merge","DADA2 10N concat".
+
+    :param file_path: The path to the abundance file.
+    :type file_path: str
+    :return: A list containing sequence information.
+    :rtype: list
+    """
     sequence_info = [0, 0.0, 0, 0]  # [ASV count, best ASV proportion, best ASV number, hash value]
     abundance_count = []
     best_asv_abundance_proportion = []
@@ -169,6 +245,15 @@ def process_abundance_file(file_path):
 
 
 def parsing_all_data_into_csv(destination: str):
+    """
+    Parse all data and generate a CSV report.
+
+    :param destination: The destination path for the CSV report.
+    :type destination: str
+    :return: A message indicating the status of the CSV generation.
+    :rtype: str
+    :raises Exception: If an error occurs during the process.
+    """
     overall_info_step_list = OVERALL_INFO_STEP_LIST
     file_set_parameter_list = FILE_SET_PARAMETER_LIST
     steps = STEPS
@@ -347,7 +432,7 @@ def parsing_all_data_into_csv(destination: str):
                                 )
             except Exception as unknown_exception:
                 print(f"Error occurred when processing sample: {sample_name} in qcReport, {unknown_exception}")
-                print(traceback.print_exc())
+                print(traceback.print.exc())
 
     # Step 6 : Write successful rate info in the last row
     # Write successful rate info in the last row
@@ -378,6 +463,14 @@ def parsing_all_data_into_csv(destination: str):
 
 
 def _get_dash_list(number: int) -> list:
+    """
+    Generate a list of dashes.
+
+    :param number: The number of dashes to generate.
+    :type number: int
+    :return: A list of dashes.
+    :rtype: list
+    """
     return ["-"] * number
 
 
@@ -385,12 +478,12 @@ def process_dada2_abundance_data(dada2_path, sample_name):
     """
     Process DADA2 abundance data.
 
-    Parameters:
-    - dada2_path: The path to the DADA2 file.
-    - sample_name: The sample name.
-
-    Returns:
-    - A list containing abundance information.
+    :param dada2_path: The path to the DADA2 file.
+    :type dada2_path: str
+    :param sample_name: The sample name.
+    :type sample_name: str
+    :return: A list containing abundance information.
+    :rtype: list
     """
     dada2_file = dada2_path + sample_name + "_.fas"
     if os.path.exists(dada2_file):
@@ -401,12 +494,15 @@ def process_dada2_abundance_data(dada2_path, sample_name):
 
 
 def main():
+    """
+    Main function to parse CSV data.
+    """
     print(f"[INFO] Start to parse csv in {sys.argv[2]}!")
     try:
         print(parsing_all_data_into_csv(OUTPUT_PATH))
     except Exception as unknown_exception:
         print(f"[ERROR] Something went wrong when parsing csv in {sys.argv[2]}, {unknown_exception}")
-        print(traceback.print_exc())
+        print(traceback.print.exc())
     print(f"[INFO] End of parsing csv in {sys.argv[2]}!")
 
 

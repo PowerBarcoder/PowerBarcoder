@@ -203,3 +203,17 @@ docker exec -it powerbarcoder bash
      docker inspect powerbarcoder | grep Architecture
      docker run -d -p 15000:15000 -v ${PWD}:/PowerBarcoder --name powerbarcoder --platform linux/arm64/v8 powerbarcoder
    ```
+
+
+### Legacy parameters
+        # blastParsingMode (default: 2)
+        # # blast_parsing_mode == "0":
+        # 1.identity: 用3排序，取最高者出來，但不低於85
+        # 2.qstart-qend: 用abs(7-8)取最大，但不低於序列長度的一半
+        # # blast_parsing_mode == "1":
+        # 1.qstart-qend: 用abs(7-8)取最大，但不低於序列長度(qseqid_length)的一半
+        # 2.identity: 用3排序，取最高者出來，但不低於85
+        # # blast_parsing_mode == "2":
+        # 1.qstart-qend & identity 並行，用abs(7-8)*identity取最大，但不低於序列長度的一半，且identity要大於85
+        # # blast_parsing_mode == "3":
+        # 1. e-value, 越小越好，但不高於0.01，1/10000代表每10000次align才可能出現一次更好的結果

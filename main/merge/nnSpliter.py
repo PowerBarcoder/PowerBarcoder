@@ -40,6 +40,20 @@ nn_spliter使用時須確認檔案是否為單條序列，因為我們只讀前�
 
 
 def nn_spliter(load_path, target_filename, r1_output_load_path, r2_output_load_path):
+    """
+    Splits a FASTA file containing a single sequence into two files based on the 'NNNNNNNNNN' delimiter.
+
+    :param load_path: Path to the directory containing the input FASTA file.
+    :type load_path: str
+    :param target_filename: Name of the FASTA file to split.
+    :type target_filename: str
+    :param r1_output_load_path: Path to the directory where the R1 output file will be saved.
+    :type r1_output_load_path: str
+    :param r2_output_load_path: Path to the directory where the R2 output file will be saved.
+    :type r2_output_load_path: str
+    :raises FileNotFoundError: If the target file is not found.
+    :raises Exception: If any other error occurs during the splitting process.
+    """
     pattern_for_split = r'NNNNNNNNNN'
 
     try:

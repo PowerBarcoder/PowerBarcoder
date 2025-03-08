@@ -1,5 +1,6 @@
 """
-This script calls primary_blast_ref_filter and secondary_blast_ref_filter to parse the results of 00_blastForRef.
+@file blastResultParser.py
+@brief This script calls primary_blast_ref_filter and secondary_blast_ref_filter to parse the results of 00_blastForRef.
 step as follows:
 1. {loci}_refResult.txt -> primary_blast_ref_filter filter 1 -> {loci}_refResult_intersection.txt
 2. {loci}_refResult_intersection.txt -> primary_blast_ref_filter filter 2~4 -> {loci}_refResult_filtered.txt
@@ -15,6 +16,16 @@ from main.merge.blast.primary_blast_ref_filter import primary_blast_ref_filter
 def main():
     """
     Main function to execute the blast result parsing and filtering process.
+
+    :param amplicon_info: The path to the amplicon information.
+    :type amplicon_info: str
+    :param result_data_path: The path to the result data.
+    :type result_data_path: str
+    :param blast_parsing_mode: The mode for parsing the BLAST results.
+    :type blast_parsing_mode: str
+    :param name_of_loci: The name of the loci.
+    :type name_of_loci: str
+    :raises Exception: If an error occurs during the process.
     """
     amplicon_info = sys.argv[1]
     result_data_path = sys.argv[2]
@@ -49,13 +60,9 @@ def main():
 
     def determine_direction(list_index: int) -> str:
         """
-        Constructs a tab-separated string of blast result details for a given index.
-        
-        Args:
-            list_index (int): The index of the blast result.
-
-        Returns:
-            str: A tab-separated string of blast result details.
+        @brief Constructs a tab-separated string of blast result details for a given index.
+        @param list_index: The index of the blast result.
+        @return: A tab-separated string of blast result details.
         """
         return '\t'.join([
             str(qseqid_list[list_index]), str(sseqid_list[list_index]), str(pident_list[list_index]),
